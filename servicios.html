@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfiniHon - Servicios Profesionales IT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-mono-custom {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        body {
+            background-color: #020617;
+            background-image: radial-gradient(circle at 30% 40%, rgba(37, 99, 235, 0.08) 0%, transparent 40%),
+                              radial-gradient(circle at 70% 60%, rgba(6, 182, 212, 0.08) 0%, transparent 40%),
+                              radial-gradient(circle at 40% 80%, rgba(59, 130, 246, 0.08) 0%, transparent 40%);
+        }
+        
+        /* Animación de entrada para las tarjetas */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .bento-card {
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+        
+        .bento-card:nth-child(1) { animation-delay: 0.1s; }
+        .bento-card:nth-child(2) { animation-delay: 0.2s; }
+        .bento-card:nth-child(3) { animation-delay: 0.3s; }
+        .bento-card:nth-child(4) { animation-delay: 0.4s; }
+        .bento-card:nth-child(5) { animation-delay: 0.5s; }
+        .bento-card:nth-child(6) { animation-delay: 0.6s; }
+    </style>
+</head>
+<body class="min-h-screen relative overflow-x-hidden">
+
+<!-- Gradientes de fondo animados -->
+<div class="fixed inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute top-20 left-10 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl animate-pulse"></div>
+    <div class="absolute bottom-20 right-10 w-80 h-80 bg-cyan-600/10 rounded-full blur-3xl animate-pulse animation-delay-2000"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-500/5 rounded-full blur-3xl"></div>
+</div>
+
+<!-- Header/Navigation -->
+<nav class="relative z-10 border-b border-white/5 bg-[#020617]/50 backdrop-blur-sm sticky top-0">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <!-- Logo: imagen (sin cuadrado) + texto con colores originales -->
+            <a href="index.html" class="flex items-center space-x-2">
+
+                <!-- Texto con colores originales de InfiniHon -->
+                <span class="text-white font-bold text-xl tracking-tight">
+                    Infini<span class="text-blue-400">Hon</span>
+                </span>
+            </a>
+            
+            <!-- Menú de navegación (sin cambios) -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Inicio</a>
+                <a href="#" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Servicios</a>
+                <a href="#" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Tecnologías</a>
+                <a href="#" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Contacto</a>
+            </div>
+            
+            <!-- Botón Contactar (sin cambios) -->
+            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all">
+                Contactar
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section de Servicios -->
+<section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="text-center mb-16">
+        <div class="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-4 py-2 mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            <span class="text-blue-400 text-sm font-medium">Soluciones Enterprise</span>
+        </div>
+        <h1 class="text-4xl lg:text-5xl font-bold text-white mb-6">
+            Servicios de Infraestructura<br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Tecnología de Alto Rendimiento</span>
+        </h1>
+        <p class="text-gray-400 max-w-2xl mx-auto text-lg">
+            Implementamos soluciones robustas y escalables para empresas que exigen lo mejor en infraestructura IT
+        </p>
+    </div>
+
+    <!-- Bento Grid Principal -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
+        
+        <!-- Tarjeta 1: Administración de Redes MikroTik (doble altura) -->
+        <div class="bento-card md:row-span-2 group relative overflow-hidden rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-blue-400/50 transition-all duration-500 hover:shadow-[0_0_30px_rgba(59,130,246,0.3)]">
+            <div class="absolute inset-0 bg-gradient-to-b from-blue-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent"></div>
+            
+            <div class="relative p-8 h-full flex flex-col">
+                <div class="mb-6">
+                    <div class="w-14 h-14 bg-blue-500/20 rounded-2xl flex items-center justify-center border border-blue-500/30 group-hover:border-blue-400/60 transition-all group-hover:scale-110 duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="2" width="20" height="20" rx="2" ry="2"></rect>
+                            <line x1="8" y1="2" x2="8" y2="22"></line>
+                            <line x1="16" y1="2" x2="16" y2="22"></line>
+                            <line x1="2" y1="8" x2="22" y2="8"></line>
+                            <line x1="2" y1="16" x2="22" y2="16"></line>
+                            <circle cx="12" cy="12" r="2" fill="#60a5fa" stroke="none"></circle>
+                        </svg>
+                    </div>
+                </div>
+                
+                <h3 class="text-2xl font-bold text-white mb-3">Administración de Redes MikroTik</h3>
+                <p class="text-gray-400 mb-6 leading-relaxed">
+                    Gestión profesional de infraestructura de red con RouterOS. Configuración avanzada de VPNs, firewalls, QoS y enrutamiento dinámico para empresas.
+                </p>
+                
+                <ul class="space-y-3 mb-8 flex-1">
+                    <li class="flex items-center gap-3 text-gray-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <span class="text-sm">Configuración de RouterOS y SwOS</span>
+                    </li>
+                    <li class="flex items-center gap-3 text-gray-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <span class="text-sm">Implementación de MPLS y BGP</span>
+                    </li>
+                    <li class="flex items-center gap-3 text-gray-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <span class="text-sm">Monitorización con The Dude</span>
+                    </li>
+                </ul>
+                
+                <button class="group/btn relative overflow-hidden bg-transparent border border-blue-500/30 hover:border-blue-400 text-blue-400 hover:text-white px-6 py-3 rounded-xl text-sm font-medium transition-all w-fit">
+                    <span class="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-600 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></span>
+                    <span class="relative flex items-center gap-2">
+                        Configurar red
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover/btn:translate-x-1 transition-transform"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Tarjeta 2: Implementación de Clusters Raspberry Pi -->
+        <div class="bento-card group relative overflow-hidden rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-purple-400/50 transition-all duration-500 hover:shadow-[0_0_30px_rgba(168,85,247,0.3)]">
+            <div class="absolute inset-0 bg-gradient-to-b from-purple-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent"></div>
+            
+            <div class="relative p-6 h-full flex flex-col">
+                <div class="mb-4">
+                    <div class="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center border border-purple-500/30 group-hover:border-purple-400/60 transition-all group-hover:scale-110 duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                            <line x1="8" y1="21" x2="16" y2="21"></line>
+                            <line x1="12" y1="17" x2="12" y2="21"></line>
+                            <circle cx="6" cy="10" r="1" fill="#c084fc" stroke="none"></circle>
+                            <circle cx="18" cy="10" r="1" fill="#c084fc" stroke="none"></circle>
+                        </svg>
+                    </div>
+                </div>
+                
+                <h3 class="text-xl font-bold text-white mb-2">Clusters Raspberry Pi</h3>
+                <p class="text-gray-400 text-sm mb-4 flex-1">
+                    Implementación de clusters de alto rendimiento para edge computing, Kubernetes y procesamiento paralelo.
+                </p>
+                
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="text-xs bg-purple-500/10 text-purple-400 px-2 py-1 rounded-full border border-purple-500/20">K3s</span>
+                    <span class="text-xs bg-purple-500/10 text-purple-400 px-2 py-1 rounded-full border border-purple-500/20">Docker</span>
+                    <span class="text-xs bg-purple-500/10 text-purple-400 px-2 py-1 rounded-full border border-purple-500/20">HA</span>
+                </div>
+                
+                <button class="text-purple-400 hover:text-white border border-purple-500/30 hover:border-purple-400 px-4 py-2 rounded-lg text-sm font-medium transition-all w-fit flex items-center gap-2">
+                    Implementar
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Tarjeta 3: Seguridad y Auditoría de Servidores -->
+        <div class="bento-card row-span-2 group relative overflow-hidden rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-cyan-400/50 transition-all duration-500 hover:shadow-[0_0_30px_rgba(6,182,212,0.3)]">
+            <div class="absolute inset-0 bg-gradient-to-b from-cyan-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent"></div>
+            
+            <div class="relative p-8 h-full flex flex-col">
+                <div class="mb-6">
+                    <div class="w-14 h-14 bg-cyan-500/20 rounded-2xl flex items-center justify-center border border-cyan-500/30 group-hover:border-cyan-400/60 transition-all group-hover:scale-110 duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            <path d="M12 8v4"></path>
+                            <path d="M12 16h.01"></path>
+                        </svg>
+                    </div>
+                </div>
+                
+                <h3 class="text-2xl font-bold text-white mb-3">Seguridad y Auditoría</h3>
+                <p class="text-gray-400 mb-6 leading-relaxed">
+                    Auditoría completa de servidores, hardening de sistemas, implementación de políticas de seguridad y cumplimiento normativo.
+                </p>
+                
+                <div class="grid grid-cols-2 gap-3 mb-8 flex-1">
+                    <div class="bg-white/5 rounded-lg p-3 border border-white/10">
+                        <div class="text-cyan-400 font-mono-custom text-lg font-bold">100%</div>
+                        <div class="text-gray-400 text-xs">Cobertura</div>
+                    </div>
+                    <div class="bg-white/5 rounded-lg p-3 border border-white/10">
+                        <div class="text-cyan-400 font-mono-custom text-lg font-bold">24/7</div>
+                        <div class="text-gray-400 text-xs">Monitoreo</div>
+                    </div>
+                </div>
+                
+                <button class="group/btn relative overflow-hidden bg-transparent border border-cyan-500/30 hover:border-cyan-400 text-cyan-400 hover:text-white px-6 py-3 rounded-xl text-sm font-medium transition-all w-fit">
+                    <span class="absolute inset-0 bg-gradient-to-r from-cyan-600 to-blue-600 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></span>
+                    <span class="relative flex items-center gap-2">
+                        Auditar sistemas
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Tarjeta 4: Consultoría Cloud (adicional para completar grid) -->
+        <div class="bento-card group relative overflow-hidden rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-blue-400/50 transition-all duration-500 hover:shadow-[0_0_30px_rgba(59,130,246,0.3)]">
+            <div class="absolute inset-0 bg-gradient-to-b from-blue-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            
+            <div class="relative p-6">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center border border-blue-500/30">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 2v20"></path><path d="M2 12h20"></path></svg>
+                    </div>
+                    <span class="text-xs bg-blue-500/10 text-blue-400 px-2 py-1 rounded-full">Nuevo</span>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">Consultoría Cloud</h3>
+                <p class="text-gray-400 text-sm mb-4">Estrategias de migración y optimización en AWS, Azure y Google Cloud.</p>
+                <button class="text-blue-400 hover:text-white text-sm flex items-center gap-1">
+                    Explorar <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Tarjeta 5: Automatización DevOps -->
+        <div class="bento-card group relative overflow-hidden rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-purple-400/50 transition-all duration-500">
+            <div class="absolute inset-0 bg-gradient-to-b from-purple-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            
+            <div class="relative p-6">
+                <div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center border border-purple-500/30 mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="1.5"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">Automatización DevOps</h3>
+                <p class="text-gray-400 text-sm mb-4">CI/CD, infraestructura como código y automatización con Ansible.</p>
+                <button class="text-purple-400 hover:text-white text-sm flex items-center gap-1">
+                    Automatizar <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección de Tecnologías Soportadas -->
+    <div class="mt-20 text-center">
+        <p class="text-gray-400 text-sm mb-6 font-mono-custom">TECNOLOGÍAS QUE IMPLEMENTAMOS</p>
+        <div class="flex flex-wrap justify-center gap-8 items-center opacity-60">
+            <span class="text-gray-500 text-xl font-mono-custom">MikroTik</span>
+            <span class="text-gray-500 text-xl font-mono-custom">Raspberry Pi</span>
+            <span class="text-gray-500 text-xl font-mono-custom">Docker</span>
+            <span class="text-gray-500 text-xl font-mono-custom">Kubernetes</span>
+            <span class="text-gray-500 text-xl font-mono-custom">Ansible</span>
+            <span class="text-gray-500 text-xl font-mono-custom">Terraform</span>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="bg-gradient-to-r from-blue-600/20 to-cyan-600/20 rounded-3xl border border-white/10 p-12 backdrop-blur-sm text-center">
+        <h2 class="text-3xl font-bold text-white mb-4">¿Listo para transformar tu infraestructura?</h2>
+        <p class="text-gray-300 mb-8 max-w-2xl mx-auto">
+            Nuestro equipo de expertos está listo para diseñar la solución perfecta para tus necesidades
+        </p>
+        <div class="flex flex-wrap gap-4 justify-center">
+            <button class="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white px-8 py-4 rounded-xl font-medium transition-all flex items-center gap-2">
+                Solicitar consultoría gratuita
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </button>
+            <button class="border border-white/20 hover:border-white/40 text-white px-8 py-4 rounded-xl font-medium transition-all">
+                Ver casos de éxito
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Footer (manteniendo consistencia) -->
+<footer class="relative z-10 border-t border-white/5 bg-[#020617]/50 backdrop-blur-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid md:grid-cols-4 gap-8">
+            <div>
+                <div class="flex items-center space-x-2 mb-4">
+                    <div class="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
+                        <span class="text-black font-bold text-xl">I</span>
+                    </div>
+                    <span class="text-white font-bold text-xl">InfiniHon</span>
+                </div>
+                <p class="text-gray-400 text-sm">
+                    Infraestructura IT de grado industrial para empresas modernas.
+                </p>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-4">Servicios</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Redes MikroTik</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Clusters Raspberry</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Seguridad</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Cloud</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-4">Compañía</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Sobre nosotros</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Carreras</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Blog</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-4">Contacto</h4>
+                <ul class="space-y-2">
+                    <li class="text-gray-400 text-sm">info@infinihon.com</li>
+                    <li class="text-gray-400 text-sm">+1 (555) 123-4567</li>
+                </ul>
+            </div>
+        </div>
+        <div class="mt-8 pt-8 border-t border-white/10 text-center text-gray-400 text-sm">
+            © 2024 InfiniHon. Todos los derechos reservados.
+        </div>
+    </div>
+</footer>
+
+<!-- Estilos adicionales -->
+<style>
+    @keyframes pulse {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 0.6; }
+    }
+    .animate-pulse {
+        animation: pulse 4s ease-in-out infinite;
+    }
+    .animation-delay-2000 {
+        animation-delay: 2s;
+    }
+</style>
+</body>
+</html>
