@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfiniHon Store - Hardware Especializado</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace !important;
+        }
+        body {
+            background-color: #020617;
+            background-image: radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.08) 0%, transparent 50%),
+                              radial-gradient(circle at 80% 70%, rgba(6, 182, 212, 0.08) 0%, transparent 50%);
+        }
+        
+        /* Efecto de reflejo para imágenes */
+        .product-image-container {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+            transform: translateX(-100%);
+            animation: shine 3s infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes shine {
+            100% {
+                transform: translateX(100%);
+            }
+        }
+        
+        /* Efecto de reflejo espejo */
+        .mirror-effect {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .mirror-effect::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: -50%;
+            background: linear-gradient(to bottom, transparent 0%, rgba(59, 130, 246, 0.1) 50%, transparent 100%);
+            transform: scaleY(-1);
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        
+        /* Scrollbar personalizada */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(59, 130, 246, 0.3);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(59, 130, 246, 0.5);
+        }
+        
+        /* Animación para especificaciones */
+        .specs-collapsible {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        
+        .specs-collapsible.open {
+            max-height: 300px;
+        }
+        
+        /* Hover efecto para tarjetas */
+        .product-card {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(37, 99, 235, 0.3);
+        }
+    </style>
+</head>
+<body class="min-h-screen relative overflow-x-hidden">
+
+<!-- Header con carrito -->
+<nav class="relative z-30 border-b border-white/5 bg-[#020617]/80 backdrop-blur-xl sticky top-0">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center space-x-2">
+                
+                <span class="text-white font-bold text-xl tracking-tight">Infini<span class="text-blue-400">Hon</span></span>
+                <span class="ml-4 text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full border border-blue-500/30">Store</span>
+            </div>
+            <div class="flex items-center gap-6">
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Inicio</a>
+                    <a href="#" class="text-white transition-colors text-sm font-medium border-b-2 border-blue-400 pb-1">Tienda</a>
+                    <a href="#" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Soporte</a>
+                </div>
+                <button class="relative">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
+                    <span class="absolute -top-2 -right-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">3</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Contenido principal -->
+<main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Título y breadcrumb -->
+    <div class="mb-8">
+        <div class="flex items-center gap-2 text-sm text-gray-400 mb-2">
+            <a href="#" class="hover:text-blue-400 transition">Inicio</a>
+            <span>/</span>
+            <span class="text-blue-400">Tienda de Hardware</span>
+        </div>
+        <h1 class="text-3xl font-bold text-white">Hardware Especializado</h1>
+        <p class="text-gray-400 mt-1">Componentes de alta calidad para infraestructura profesional</p>
+    </div>
+
+    <div class="flex flex-col lg:flex-row gap-8">
+        
+        <!-- Sidebar de filtros - transparente -->
+        <aside class="lg:w-64 flex-shrink-0">
+            <div class="sticky top-24 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-6">
+                <h2 class="text-white font-semibold mb-4 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+                    Filtros
+                </h2>
+                
+                <!-- Categorías -->
+                <div class="mb-6">
+                    <h3 class="text-sm font-medium text-gray-300 mb-3">Categorías</h3>
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2 text-gray-400 hover:text-white transition cursor-pointer">
+                            <input type="checkbox" class="rounded border-white/20 bg-white/5 text-blue-500 focus:ring-blue-500/20" checked>
+                            <span class="text-sm">Routers MikroTik</span>
+                            <span class="text-xs text-gray-500 ml-auto">12</span>
+                        </label>
+                        <label class="flex items-center gap-2 text-gray-400 hover:text-white transition cursor-pointer">
+                            <input type="checkbox" class="rounded border-white/20 bg-white/5 text-blue-500 focus:ring-blue-500/20">
+                            <span class="text-sm">Placas Raspberry Pi</span>
+                            <span class="text-xs text-gray-500 ml-auto">8</span>
+                        </label>
+                        <label class="flex items-center gap-2 text-gray-400 hover:text-white transition cursor-pointer">
+                            <input type="checkbox" class="rounded border-white/20 bg-white/5 text-blue-500 focus:ring-blue-500/20">
+                            <span class="text-sm">Accesorios</span>
+                            <span class="text-xs text-gray-500 ml-auto">15</span>
+                        </label>
+                        <label class="flex items-center gap-2 text-gray-400 hover:text-white transition cursor-pointer">
+                            <input type="checkbox" class="rounded border-white/20 bg-white/5 text-blue-500 focus:ring-blue-500/20">
+                            <span class="text-sm">Servidores</span>
+                            <span class="text-xs text-gray-500 ml-auto">6</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Rendimiento -->
+                <div class="mb-6">
+                    <h3 class="text-sm font-medium text-gray-300 mb-3">Rendimiento</h3>
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2 text-gray-400 hover:text-white transition cursor-pointer">
+                            <input type="radio" name="performance" class="border-white/20 bg-white/5 text-blue-500 focus:ring-blue-500/20" checked>
+                            <span class="text-sm">Todos</span>
+                        </label>
+                        <label class="flex items-center gap-2 text-gray-400 hover:text-white transition cursor-pointer">
+                            <input type="radio" name="performance" class="border-white/20 bg-white/5 text-blue-500 focus:ring-blue-500/20">
+                            <span class="text-sm">Alto rendimiento</span>
+                        </label>
+                        <label class="flex items-center gap-2 text-gray-400 hover:text-white transition cursor-pointer">
+                            <input type="radio" name="performance" class="border-white/20 bg-white/5 text-blue-500 focus:ring-blue-500/20">
+                            <span class="text-sm">Empresarial</span>
+                        </label>
+                        <label class="flex items-center gap-2 text-gray-400 hover:text-white transition cursor-pointer">
+                            <input type="radio" name="performance" class="border-white/20 bg-white/5 text-blue-500 focus:ring-blue-500/20">
+                            <span class="text-sm">Profesional</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Rango de precio -->
+                <div class="mb-6">
+                    <h3 class="text-sm font-medium text-gray-300 mb-3">Precio</h3>
+                    <div class="flex items-center gap-2">
+                        <input type="number" placeholder="Min" class="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500">
+                        <span class="text-gray-500">-</span>
+                        <input type="number" placeholder="Max" class="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+
+                <button class="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white py-2 rounded-lg text-sm font-medium hover:from-blue-700 hover:to-cyan-700 transition-all">
+                    Aplicar filtros
+                </button>
+            </div>
+        </aside>
+
+        <!-- Grid de productos -->
+        <div class="flex-1">
+            <!-- Cabecera de resultados -->
+            <div class="flex justify-between items-center mb-6">
+                <p class="text-gray-400 text-sm">Mostrando <span class="text-white font-medium">12</span> productos</p>
+                <select class="bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-blue-500">
+                    <option class="bg-gray-900">Ordenar por: Destacados</option>
+                    <option class="bg-gray-900">Precio: menor a mayor</option>
+                    <option class="bg-gray-900">Precio: mayor a menor</option>
+                    <option class="bg-gray-900">Novedades</option>
+                </select>
+            </div>
+
+            <!-- Productos Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Producto 1 - Router MikroTik -->
+                <div class="product-card bg-[#0a0f1f] rounded-2xl border border-white/5 overflow-hidden">
+                    <div class="product-image-container p-6 bg-gradient-to-b from-blue-500/5 to-transparent">
+                        <div class="mirror-effect aspect-square flex items-center justify-center">
+                            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/rb4011-7TvM2Vxif5agQ3a0ebm26lrvR3kFkP.png" alt="MikroTik RB4011" class="w-full h-full object-contain drop-shadow-2xl">
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-white font-semibold">MikroTik RB4011</h3>
+                            <span class="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full">Router</span>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-3">Router de 10 puertos Gigabit, CPU quad-core</p>
+                        <div class="flex items-center gap-1 mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#374151" stroke="#9ca3af"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <span class="text-gray-400 text-xs ml-1">(24)</span>
+                        </div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-2xl font-bold text-white">$299<small class="text-gray-400 text-sm font-normal">.99</small></span>
+                            <span class="text-xs text-green-400 bg-green-400/10 px-2 py-1 rounded-full">En stock</span>
+                        </div>
+
+                        <!-- Especificaciones colapsables -->
+                        <div class="mb-4">
+                            <button onclick="toggleSpecs(this)" class="flex items-center gap-2 text-gray-400 hover:text-blue-400 transition text-sm w-full justify-between">
+                                <span class="font-mono text-xs">Especificaciones técnicas</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="transition-transform"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <div class="specs-collapsible mt-3 text-xs text-gray-400 space-y-1">
+                                <div class="flex justify-between py-1 border-b border-white/5">
+                                    <span class="font-mono">CPU</span>
+                                    <span class="text-white">Quad-core 1.4GHz</span>
+                                </div>
+                                <div class="flex justify-between py-1 border-b border-white/5">
+                                    <span class="font-mono">RAM</span>
+                                    <span class="text-white">1GB</span>
+                                </div>
+                                <div class="flex justify-between py-1 border-b border-white/5">
+                                    <span class="font-mono">Puertos</span>
+                                    <span class="text-white">10x Gigabit</span>
+                                </div>
+                                <div class="flex justify-between py-1">
+                                    <span class="font-mono">PoE</span>
+                                    <span class="text-white">Sí</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="w-full bg-gradient-to-r from-[#1e40af] to-[#3b82f6] hover:from-[#1e3a8a] hover:to-[#2563eb] text-white py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 group">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:scale-110 transition"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
+                            Añadir al carrito
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Producto 2 - Raspberry Pi 5 -->
+                <div class="product-card bg-[#0a0f1f] rounded-2xl border border-white/5 overflow-hidden">
+                    <div class="product-image-container p-6 bg-gradient-to-b from-purple-500/5 to-transparent">
+                        <div class="mirror-effect aspect-square flex items-center justify-center">
+                            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/raspberry-pi-5-GQJkXl1ltjqRWC6UO9qChvMds3Jruw.png" alt="Raspberry Pi 5" class="w-full h-full object-contain drop-shadow-2xl">
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-white font-semibold">Raspberry Pi 5</h3>
+                            <span class="text-xs bg-purple-500/20 text-purple-400 px-2 py-1 rounded-full">Placa</span>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-3">4GB RAM, CPU Cortex-A76, GPU VideoCore VII</p>
+                        <div class="flex items-center gap-1 mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#374151" stroke="#9ca3af"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <span class="text-gray-400 text-xs ml-1">(56)</span>
+                        </div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-2xl font-bold text-white">$79<small class="text-gray-400 text-sm font-normal">.99</small></span>
+                            <span class="text-xs text-yellow-400 bg-yellow-400/10 px-2 py-1 rounded-full">Stock bajo</span>
+                        </div>
+
+                        <div class="mb-4">
+                            <button onclick="toggleSpecs(this)" class="flex items-center gap-2 text-gray-400 hover:text-purple-400 transition text-sm w-full justify-between">
+                                <span class="font-mono text-xs">Especificaciones técnicas</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="transition-transform"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <div class="specs-collapsible mt-3 text-xs text-gray-400 space-y-1">
+                                <div class="flex justify-between py-1 border-b border-white/5">
+                                    <span class="font-mono">CPU</span>
+                                    <span class="text-white">Cortex-A76</span>
+                                </div>
+                                <div class="flex justify-between py-1 border-b border-white/5">
+                                    <span class="font-mono">RAM</span>
+                                    <span class="text-white">4GB LPDDR4X</span>
+                                </div>
+                                <div class="flex justify-between py-1 border-b border-white/5">
+                                    <span class="font-mono">GPU</span>
+                                    <span class="text-white">VideoCore VII</span>
+                                </div>
+                                <div class="flex justify-between py-1">
+                                    <span class="font-mono">Puertos</span>
+                                    <span class="text-white">2x HDMI 4K</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="w-full bg-gradient-to-r from-[#1e40af] to-[#3b82f6] hover:from-[#1e3a8a] hover:to-[#2563eb] text-white py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 group">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:scale-110 transition"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
+                            Añadir al carrito
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Producto 3 - MikroTik hAP ax² -->
+                <div class="product-card bg-[#0a0f1f] rounded-2xl border border-white/5 overflow-hidden">
+                    <div class="product-image-container p-6 bg-gradient-to-b from-blue-500/5 to-transparent">
+                        <div class="mirror-effect aspect-square flex items-center justify-center">
+                            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/hap-ax2-H6yrA2zWyQK7SKCJvUyTfA3IHDbWJv.png" alt="MikroTik hAP ax²" class="w-full h-full object-contain drop-shadow-2xl">
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-white font-semibold">MikroTik hAP ax²</h3>
+                            <span class="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full">Accesorio</span>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-3">Router WiFi 6 dual-band, 5 puertos Gigabit</p>
+                        <div class="flex items-center gap-1 mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <span class="text-gray-400 text-xs ml-1">(18)</span>
+                        </div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-2xl font-bold text-white">$159<small class="text-gray-400 text-sm font-normal">.99</small></span>
+                            <span class="text-xs text-green-400 bg-green-400/10 px-2 py-1 rounded-full">En stock</span>
+                        </div>
+
+                        <div class="mb-4">
+                            <button onclick="toggleSpecs(this)" class="flex items-center gap-2 text-gray-400 hover:text-blue-400 transition text-sm w-full justify-between">
+                                <span class="font-mono text-xs">Especificaciones técnicas</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="transition-transform"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <div class="specs-collapsible mt-3 text-xs text-gray-400 space-y-1">
+                                <div class="flex justify-between py-1 border-b border-white/5">
+                                    <span class="font-mono">WiFi</span>
+                                    <span class="text-white">AX3000</span>
+                                </div>
+                                <div class="flex justify-between py-1 border-b border-white/5">
+                                    <span class="font-mono">Puertos</span>
+                                    <span class="text-white">5x Gigabit</span>
+                                </div>
+                                <div class="flex justify-between py-1 border-b border-white/5">
+                                    <span class="font-mono">USB</span>
+                                    <span class="text-white">3.0</span>
+                                </div>
+                                <div class="flex justify-between py-1">
+                                    <span class="font-mono">PoE</span>
+                                    <span class="text-white">Sí</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="w-full bg-gradient-to-r from-[#1e40af] to-[#3b82f6] hover:from-[#1e3a8a] hover:to-[#2563eb] text-white py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 group">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:scale-110 transition"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
+                            Añadir al carrito
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Producto 4 - Raspberry Pi PoE+ HAT -->
+                <div class="product-card bg-[#0a0f1f] rounded-2xl border border-white/5 overflow-hidden">
+                    <div class="product-image-container p-6 bg-gradient-to-b from-purple-500/5 to-transparent">
+                        <div class="mirror-effect aspect-square flex items-center justify-center">
+                            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/poe-hat-PQex9XkH7aDjagHK94BhyK0NaGutRr.png" alt="Raspberry Pi PoE+ HAT" class="w-full h-full object-contain drop-shadow-2xl">
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-white font-semibold">PoE+ HAT</h3>
+                            <span class="text-xs bg-purple-500/20 text-purple-400 px-2 py-1 rounded-full">Accesorio</span>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-3">Módulo PoE+ para Raspberry Pi, ventilador incluido</p>
+                        <div class="flex items-center gap-1 mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <span class="text-gray-400 text-xs ml-1">(12)</span>
+                        </div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-2xl font-bold text-white">$29<small class="text-gray-400 text-sm font-normal">.99</small></span>
+                            <span class="text-xs text-green-400 bg-green-400/10 px-2 py-1 rounded-full">En stock</span>
+                        </div>
+
+                        <div class="mb-4">
+                            <button onclick="toggleSpecs(this)" class="flex items-center gap-2 text-gray-400 hover:text-purple-400 transition text-sm w-full justify-between">
+                                <span class="font-mono text-xs">Especificaciones técnicas</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="transition-transform"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <div class="specs-collapsible mt-3 text-xs text-gray-400 space-y-1">
+                                <div class="flex justify-between py-1 border-b border-white/5">
+                                    <span class="font-mono">Voltaje</span>
+                                    <span class="text-white">5V DC</span>
+                                </div>
+                                <div class="flex justify-between py-1 border-b border-white/5">
+                                    <span class="font-mono">Potencia</span>
+                                    <span class="text-white">25W</span>
+                                </div>
+                                <div class="flex justify-between py-1 border-b border-white/5">
+                                    <span class="font-mono">Ventilador</span>
+                                    <span class="text-white">25x25mm</span>
+                                </div>
+                                <div class="flex justify-between py-1">
+                                    <span class="font-mono">Compatibilidad</span>
+                                    <span class="text-white">Pi 3B+,4,5</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="w-full bg-gradient-to-r from-[#1e40af] to-[#3b82f6] hover:from-[#1e3a8a] hover:to-[#2563eb] text-white py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 group">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:scale-110 transition"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
+                            Añadir al carrito
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Producto 5 - MikroTik CSS610 -->
+                <div class="product-card bg-[#0a0f1f] rounded-2xl border border-white/5 overflow-hidden">
+                    <div class="product-image-container p-6 bg-gradient-to-b from-blue-500/5 to-transparent">
+                        <div class="mirror-effect aspect-square flex items-center justify-center">
+                            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/css610-8Uc3dQk7GtyLeQfz36uRudCYoQ82Lb.png" alt="MikroTik CSS610" class="w-full h-full object-contain drop-shadow-2xl">
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-white font-semibold">MikroTik CSS610</h3>
+                            <span class="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full">Switch</span>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-3">Switch Gigabit 8 puertos, gestión en la nube</p>
+                        <div class="flex items-center gap-1 mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <span class="text-gray-400 text-xs ml-1">(8)</span>
+                        </div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-2xl font-bold text-white">$189<small class="text-gray-400 text-sm font-normal">.99</small></span>
+                            <span class="text-xs text-green-400 bg-green-400/10 px-2 py-1 rounded-full">En stock</span>
+                        </div>
+
+                        <div class="mb-4">
+                            <button onclick="toggleSpecs(this)" class="flex items-center gap-2 text-gray-400 hover:text-blue-400 transition text-sm w-full justify-between">
+                                <span class="font-mono text-xs">Especificaciones técnicas</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="transition-transform"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <div class="specs-collapsible mt-3 text-xs text-gray-400 space-y-1">
+                                <div class="flex justify-between py-1 border-b border-white/5">
+                                    <span class="font-mono">Puertos</span>
+                                    <span class="text-white">8x Gigabit</span>
+                                </div>
+                                <div class="flex justify-between py-1 border-b border-white/5">
+                                    <span class="font-mono">SFP</span>
+                                    <span class="text-white">2x</span>
+                                </div>
+                                <div class="flex justify-between py-1 border-b border-white/5">
+                                    <span class="font-mono">SwOS</span>
+                                    <span class="text-white">Sí</span>
+                                </div>
+                                <div class="flex justify-between py-1">
+                                    <span class="font-mono">PoE</span>
+                                    <span class="text-white">No</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="w-full bg-gradient-to-r from-[#1e40af] to-[#3b82f6] hover:from-[#1e3a8a] hover:to-[#2563eb] text-white py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 group">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:scale-110 transition"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
+                            Añadir al carrito
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Producto 6 - Raspberry Pi 4 8GB -->
+                <div class="product-card bg-[#0a0f1f] rounded-2xl border border-white/5 overflow-hidden">
+                    <div class="product-image-container p-6 bg-gradient-to-b from-purple-500/5 to-transparent">
+                        <div class="mirror-effect aspect-square flex items-center justify-center">
+                            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/raspberry-pi-4-jYxL8II4xUtWygNnHhIAGnO6xXj7Un.png" alt="Raspberry Pi 4 8GB" class="w-full h-full object-contain drop-shadow-2xl">
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-white font-semibold">Raspberry Pi 4 8GB</h3>
+                            <span class="text-xs bg-purple-500/20 text-purple-400 px-2 py-1 rounded-full">Placa</span>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-3">8GB RAM, USB 3.0, dual HDMI 4K</p>
+                        <div class="flex items-center gap-1 mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <span class="text-gray-400 text-xs ml-1">(34)</span>
+                        </div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-2xl font-bold text-white">$119<small class="text-gray-400 text-sm font-normal">.99</small></span>
+                            <span class="text-xs text-green-400 bg-green-400/10 px-2 py-1 rounded-full">En stock</span>
+                        </div>
+
+                        <div class="mb-4">
+                            <button onclick="toggleSpecs(this)" class="flex items-center gap-2 text-gray-400 hover:text-purple-400 transition text-sm w-full justify-between">
+                                <span class="font-mono text-xs">Especificaciones técnicas</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="transition-transform"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <div class="specs-collapsible mt-3 text-xs text-gray-400 space-y-1">
+                                <div class="flex justify-between py-1 border-b border-white/5">
+                                    <span class="font-mono">CPU</span>
+                                    <span class="text-white">Cortex-A72</span>
+                                </div>
+                                <div class="flex justify-between py-1 border-b border-white/5">
+                                    <span class="font-mono">RAM</span>
+                                    <span class="text-white">8GB LPDDR4</span>
+                                </div>
+                                <div class="flex justify-between py-1 border-b border-white/5">
+                                    <span class="font-mono">USB 3.0</span>
+                                    <span class="text-white">2 puertos</span>
+                                </div>
+                                <div class="flex justify-between py-1">
+                                    <span class="font-mono">Ethernet</span>
+                                    <span class="text-white">Gigabit</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="w-full bg-gradient-to-r from-[#1e40af] to-[#3b82f6] hover:from-[#1e3a8a] hover:to-[#2563eb] text-white py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 group">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:scale-110 transition"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
+                            Añadir al carrito
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Paginación -->
+            <div class="flex justify-center items-center gap-2 mt-12">
+                <button class="w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:border-blue-500 transition flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                <button class="w-10 h-10 rounded-lg bg-blue-600 text-white flex items-center justify-center">1</button>
+                <button class="w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:border-blue-500 transition">2</button>
+                <button class="w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:border-blue-500 transition">3</button>
+                <button class="w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:border-blue-500 transition">4</button>
+                <span class="text-gray-500">...</span>
+                <button class="w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:border-blue-500 transition">12</button>
+                <button class="w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:border-blue-500 transition flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="relative z-10 border-t border-white/5 bg-[#020617]/50 backdrop-blur-sm mt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid md:grid-cols-4 gap-8">
+            <div>
+                <div class="flex items-center space-x-2 mb-4">
+                    <div class="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
+                        <span class="text-black font-bold text-xl">I</span>
+                    </div>
+                    <span class="text-white font-bold text-xl">InfiniHon</span>
+                </div>
+                <p class="text-gray-400 text-sm">
+                    Hardware especializado para infraestructura IT profesional.
+                </p>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-4">Categorías</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Routers MikroTik</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Raspberry Pi</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Accesorios</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Switches</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-4">Soporte</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Centro de ayuda</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Garantías</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Envíos</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Contacto</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-4">Newsletter</h4>
+                <p class="text-gray-400 text-sm mb-3">Recibe las últimas novedades y ofertas</p>
+                <div class="flex">
+                    <input type="email" placeholder="Tu email" class="flex-1 bg-white/5 border border-white/10 rounded-l-lg px-4 py-2 text-white text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500">
+                    <button class="bg-gradient-to-r from-[#1e40af] to-[#3b82f6] text-white px-4 py-2 rounded-r-lg text-sm hover:from-[#1e3a8a] hover:to-[#2563eb] transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="mt-8 pt-8 border-t border-white/10 text-center text-gray-400 text-sm">
+            © 2024 InfiniHon Store. Todos los derechos reservados.
+        </div>
+    </div>
+</footer>
+
+<!-- Script para funcionalidad de especificaciones colapsables -->
+<script>
+    function toggleSpecs(button) {
+        const specs = button.nextElementSibling;
+        const icon = button.querySelector('svg');
+        
+        specs.classList.toggle('open');
+        
+        if (specs.classList.contains('open')) {
+            icon.style.transform = 'rotate(180deg)';
+        } else {
+            icon.style.transform = 'rotate(0deg)';
+        }
+    }
+
+    // Inicializar especificaciones (todas cerradas por defecto)
+    document.addEventListener('DOMContentLoaded', function() {
+        const specButtons = document.querySelectorAll('.specs-collapsible');
+        specButtons.forEach(spec => {
+            spec.classList.remove('open');
+        });
+    });
+</script>
+</body>
+</html>
