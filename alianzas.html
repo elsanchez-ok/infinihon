@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfiniHon - Alianzas y Ecosistema</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background-color: #020617;
+            background-image: radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.15) 0%, transparent 40%),
+                              radial-gradient(circle at 80% 70%, rgba(6, 182, 212, 0.15) 0%, transparent 40%),
+                              radial-gradient(circle at 40% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+            min-height: 100vh;
+        }
+        
+        /* Glassmorphism extremo */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .glass-card:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 8px 40px rgba(59, 130, 246, 0.2);
+        }
+        
+        /* Animaciones de revelado */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .reveal-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .reveal-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .reveal-scale.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        /* Retrasos de animación */
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
+        .delay-4 { transition-delay: 0.4s; }
+        .delay-5 { transition-delay: 0.5s; }
+        
+        /* Botón con efecto de brillo */
+        .glow-button {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(6, 182, 212, 0.2));
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .glow-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.4), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .glow-button:hover {
+            border-color: rgba(59, 130, 246, 0.8);
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .glow-button:hover::before {
+            left: 100%;
+        }
+        
+        /* Degradados azul a plata */
+        .blue-silver-gradient {
+            background: linear-gradient(135deg, #1e40af, #64748b, #1e40af);
+            background-size: 200% 200%;
+            animation: gradientShift 8s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        /* Scroll suave */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Estilo para bordes cobalto */
+        .cobalt-border {
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            transition: border-color 0.3s ease;
+        }
+        
+        .cobalt-border:hover {
+            border-color: rgba(59, 130, 246, 0.8);
+        }
+        
+        /* Fondo con partículas */
+        .particle-bg {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .particle-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 30%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="relative">
+
+<!-- Header minimalista -->
+<nav class="relative z-50 border-b border-white/5 bg-[#020617]/80 backdrop-blur-sm sticky top-0">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-20">
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
+                    <span class="text-black font-bold text-xl">I</span>
+                </div>
+                <span class="text-white font-light text-xl tracking-tight">INFINI<span class="font-medium text-blue-400">HON</span></span>
+            </div>
+            <div class="hidden md:flex items-center space-x-12">
+                <a href="#" class="text-gray-400 hover:text-white transition-colors text-sm font-light tracking-wide">INICIO</a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors text-sm font-light tracking-wide">SERVICIOS</a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors text-sm font-light tracking-wide">SOBRE NOSOTROS</a>
+                <a href="#" class="text-white transition-colors text-sm font-medium tracking-wide border-b border-blue-400 pb-1">ALIANZAS</a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors text-sm font-light tracking-wide">CONTACTO</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section - Texto centrado con glassmorphism -->
+<section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 particle-bg">
+    <div class="glass-card max-w-4xl mx-auto rounded-3xl p-16 text-center reveal active">
+        <span class="text-blue-400 text-sm font-mono tracking-[0.2em] mb-6 block">// ALIANZAS ESTRATÉGICAS</span>
+        <h1 class="text-5xl lg:text-7xl font-light text-white mb-8 leading-tight">
+            Conectando Visiones,<br>
+            <span class="font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Potenciando Infraestructuras</span>
+        </h1>
+        <p class="text-gray-300 text-lg max-w-2xl mx-auto font-light leading-relaxed">
+            Construimos un ecosistema de partners tecnológicos para ofrecer soluciones integrales 
+            de vanguardia en infraestructura IT.
+        </p>
+        
+        <!-- Indicador scroll -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+    </div>
+</section>
+
+<!-- Módulos de Socios - Tarjetas traslúcidas -->
+<section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+    <div class="text-center mb-16 reveal">
+        <span class="text-blue-400 text-sm font-mono tracking-[0.2em] mb-4 block">// NUESTRO ECOSISTEMA</span>
+        <h2 class="text-4xl font-light text-white mb-4">Socios Estratégicos</h2>
+        <p class="text-gray-400 max-w-2xl mx-auto font-light">
+            Colaboramos con líderes tecnológicos para ofrecer soluciones integrales
+        </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Socio 1 - MikroTik -->
+        <div class="glass-card rounded-2xl p-8 text-center cobalt-border reveal-scale delay-1 group">
+            <div class="w-24 h-24 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-blue-500/20 to-transparent flex items-center justify-center border border-blue-500/30 group-hover:border-blue-400 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"></rect><line x1="8" y1="2" x2="8" y2="22"></line><line x1="16" y1="2" x2="16" y2="22"></line><line x1="2" y1="8" x2="22" y2="8"></line><line x1="2" y1="16" x2="22" y2="16"></line></svg>
+            </div>
+            <h3 class="text-xl font-medium text-white mb-2">MikroTik</h3>
+            <p class="text-gray-400 text-sm font-light">Platinum Partner</p>
+            <p class="text-gray-500 text-xs mt-4 font-mono">DESDE 2025</p>
+        </div>
+
+        <!-- Socio 2 - Raspberry Pi -->
+        <div class="glass-card rounded-2xl p-8 text-center cobalt-border reveal-scale delay-2 group">
+            <div class="w-24 h-24 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-purple-500/20 to-transparent flex items-center justify-center border border-purple-500/30 group-hover:border-purple-400 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line><circle cx="6" cy="10" r="1" fill="#c084fc" stroke="none"></circle><circle cx="18" cy="10" r="1" fill="#c084fc" stroke="none"></circle></svg>
+            </div>
+            <h3 class="text-xl font-medium text-white mb-2">Raspberry Pi</h3>
+            <p class="text-gray-400 text-sm font-light">Design Partner</p>
+            <p class="text-gray-500 text-xs mt-4 font-mono">DESDE 2026</p>
+        </div>
+
+        <!-- Socio 3 - Nation II -->
+        <div class="glass-card rounded-2xl p-8 text-center cobalt-border reveal-scale delay-3 group">
+            <div class="w-24 h-24 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-transparent flex items-center justify-center border border-cyan-500/30 group-hover:border-cyan-400 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6" y2="18"></line><line x1="12" y1="6" x2="12" y2="18"></line><line x1="18" y1="6" x2="18" y2="18"></line></svg>
+            </div>
+            <h3 class="text-xl font-medium text-white mb-2">Nation II</h3>
+            <p class="text-gray-400 text-sm font-light">Strategic Partner</p>
+            <p class="text-gray-500 text-xs mt-4 font-mono">DESDE 2027</p>
+        </div>
+
+        <!-- Socio 4 - AWS -->
+        <div class="glass-card rounded-2xl p-8 text-center cobalt-border reveal-scale delay-4 group">
+            <div class="w-24 h-24 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-orange-500/20 to-transparent flex items-center justify-center border border-orange-500/30 group-hover:border-orange-400 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 2v20"></path><path d="M2 12h20"></path></svg>
+            </div>
+            <h3 class="text-xl font-medium text-white mb-2">AWS</h3>
+            <p class="text-gray-400 text-sm font-light">Advanced Partner</p>
+            <p class="text-gray-500 text-xs mt-4 font-mono">DESDE 2026</p>
+        </div>
+    </div>
+
+    <!-- Fila adicional de socios -->
+    <div class="grid md:grid-cols-3 gap-6 mt-6">
+        <div class="glass-card rounded-2xl p-6 text-center cobalt-border reveal-scale delay-1">
+            <div class="text-white font-medium">Cisco</div>
+            <div class="text-gray-400 text-xs mt-2 font-mono">GOLD PARTNER</div>
+        </div>
+        <div class="glass-card rounded-2xl p-6 text-center cobalt-border reveal-scale delay-2">
+            <div class="text-white font-medium">Dell Technologies</div>
+            <div class="text-gray-400 text-xs mt-2 font-mono">TITANIUM PARTNER</div>
+        </div>
+        <div class="glass-card rounded-2xl p-6 text-center cobalt-border reveal-scale delay-3">
+            <div class="text-white font-medium">Red Hat</div>
+            <div class="text-gray-400 text-xs mt-2 font-mono">PREMIER PARTNER</div>
+        </div>
+    </div>
+</section>
+
+<!-- Sección de Homenaje - Diseño asimétrico -->
+<section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <!-- Columna izquierda - Foto placeholder con efecto glass -->
+        <div class="reveal-left">
+            <div class="relative">
+                <!-- Efecto de degradado detrás -->
+                <div class="absolute -inset-4 blue-silver-gradient rounded-3xl opacity-30 blur-2xl"></div>
+                
+                <!-- Contenedor de imagen con glassmorphism -->
+                <div class="relative glass-card rounded-3xl overflow-hidden aspect-[4/5]">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-blue-600/20 via-transparent to-cyan-600/20"></div>
+                    
+                    <!-- Placeholder de imagen profesional (simulado con gradiente) -->
+                    <div class="w-full h-full bg-gradient-to-br from-slate-700 to-slate-900 flex items-end">
+                        <div class="p-8 glass-card border-0 border-t border-white/10 w-full">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-full bg-blue-500/20 border border-blue-400/30 flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                </div>
+                                <div>
+                                    <div class="text-white font-medium">Joseph Sanchez</div>
+                                    <div class="text-gray-400 text-sm">Fundador & CEO</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Efecto de brillo esquina -->
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/20 rounded-full blur-3xl"></div>
+                </div>
+                
+                <!-- Elementos decorativos asimétricos -->
+                <div class="absolute -bottom-6 -right-6 w-24 h-24 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-full opacity-20 blur-2xl"></div>
+                <div class="absolute -top-6 -left-6 w-24 h-24 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full opacity-20 blur-2xl"></div>
+            </div>
+        </div>
+        
+        <!-- Columna derecha - Texto sobre filosofía -->
+        <div class="reveal-right">
+            <span class="text-blue-400 text-sm font-mono tracking-[0.2em] mb-6 block">// NUESTRA FILOSOFÍA</span>
+            <h2 class="text-4xl lg:text-5xl font-light text-white mb-8 leading-tight">
+                Construimos más que<br>
+                <span class="font-medium bg-gradient-to-r from-blue-400 via-silver to-cyan-400 bg-clip-text text-transparent">infraestructura</span>
+            </h2>
+            
+            <div class="space-y-6 text-gray-300 font-light leading-relaxed">
+                <p>
+                    En InfiniHon creemos que la verdadera innovación surge de la colaboración auténtica. 
+                    Cada alianza que formamos está basada en la confianza mutua y el compromiso con la excelencia técnica.
+                </p>
+                <p>
+                    Nuestra filosofía de trabajo se centra en tres pilares fundamentales: 
+                    <span class="text-blue-400">transparencia absoluta</span>, 
+                    <span class="text-cyan-400">innovación continua</span> y 
+                    <span class="text-blue-300">compromiso inquebrantable</span> con la calidad.
+                </p>
+                <p>
+                    No buscamos socios, buscamos visionarios que compartan nuestra pasión por construir 
+                    el futuro de la infraestructura tecnológica.
+                </p>
+            </div>
+            
+            <!-- Métricas de alianzas -->
+            <div class="grid grid-cols-3 gap-6 mt-12">
+                <div>
+                    <div class="text-3xl font-light text-white">25+</div>
+                    <div class="text-gray-400 text-xs font-mono">SOCIOS ACTIVOS</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-light text-white">15</div>
+                    <div class="text-gray-400 text-xs font-mono">PAÍSES</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-light text-white">3</div>
+                    <div class="text-gray-400 text-xs font-mono">CONTINENTES</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Sección de Beneficios para Socios -->
+<section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+    <div class="glass-card rounded-3xl p-16 reveal">
+        <div class="text-center mb-16">
+            <span class="text-blue-400 text-sm font-mono tracking-[0.2em] mb-4 block">// VENTAJAS EXCLUSIVAS</span>
+            <h2 class="text-4xl font-light text-white mb-4">¿Por qué ser socio de InfiniHon?</h2>
+        </div>
+        
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="text-center reveal-scale delay-1">
+                <div class="w-16 h-16 mx-auto mb-6 rounded-2xl bg-blue-500/10 flex items-center justify-center border border-blue-500/30">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5"><path d="M12 2v20"></path><path d="M2 12h20"></path><path d="M12 2a10 10 0 0 1 10 10"></path></svg>
+                </div>
+                <h3 class="text-xl text-white mb-2">Acceso Prioritario</h3>
+                <p class="text-gray-400 text-sm font-light">A nuevas tecnologías y desarrollos antes de su lanzamiento al mercado</p>
+            </div>
+            
+            <div class="text-center reveal-scale delay-2">
+                <div class="w-16 h-16 mx-auto mb-6 rounded-2xl bg-cyan-500/10 flex items-center justify-center border border-cyan-500/30">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><circle cx="12" cy="8" r="0.5" fill="#22d3ee" stroke="none"></circle></svg>
+                </div>
+                <h3 class="text-xl text-white mb-2">Formación Continua</h3>
+                <p class="text-gray-400 text-sm font-light">Programas de capacitación técnica y certificaciones exclusivas</p>
+            </div>
+            
+            <div class="text-center reveal-scale delay-3">
+                <div class="w-16 h-16 mx-auto mb-6 rounded-2xl bg-purple-500/10 flex items-center justify-center border border-purple-500/30">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><path d="M12 22V12"></path><path d="M3.3 7 12 12l8.7-5"></path></svg>
+                </div>
+                <h3 class="text-xl text-white mb-2">Soporte Dedicado</h3>
+                <p class="text-gray-400 text-sm font-light">Equipo de atención exclusivo para socios estratégicos 24/7</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA - Botón Convertirse en Socio -->
+<section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
+    <div class="reveal-scale">
+        <span class="text-blue-400 text-sm font-mono tracking-[0.2em] mb-6 block">// ÚNETE AL ECOSISTEMA</span>
+        <h2 class="text-4xl font-light text-white mb-8">Forma parte de nuestra red de partners</h2>
+        
+        <button class="glow-button px-12 py-6 rounded-2xl text-white text-lg font-light tracking-wide">
+            Convertirse en Socio Estratégico
+        </button>
+        
+        <p class="text-gray-400 text-sm mt-8 font-light">
+            Únete a las empresas líderes que ya confían en nosotros
+        </p>
+    </div>
+</section>
+
+<!-- Footer minimalista -->
+<footer class="relative z-10 border-t border-white/5 bg-[#020617]/50 backdrop-blur-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="flex justify-between items-center">
+            <div class="text-gray-500 text-xs font-mono">
+                © 2025 INFINIHON · ALIANZAS Y ECOSISTEMA
+            </div>
+            <div class="flex gap-8">
+                <a href="#" class="text-gray-400 hover:text-white text-xs font-mono transition-colors">PRIVACIDAD</a>
+                <a href="#" class="text-gray-400 hover:text-white text-xs font-mono transition-colors">TÉRMINOS</a>
+                <a href="#" class="text-gray-400 hover:text-white text-xs font-mono transition-colors">CONTACTO</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Script para animaciones de revelado al hacer scroll -->
+<script>
+    // Función para verificar si un elemento está visible en el viewport
+    function isElementInViewport(el) {
+        const rect = el.getBoundingClientRect();
+        return (
+            rect.top <= (window.innerHeight || document.documentElement.clientHeight) * 0.85 &&
+            rect.bottom >= 0
+        );
+    }
+    
+    // Función para activar elementos revelados
+    function handleReveal() {
+        const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+        
+        revealElements.forEach(element => {
+            if (isElementInViewport(element)) {
+                element.classList.add('active');
+            }
+        });
+    }
+    
+    // Escuchar eventos de scroll
+    window.addEventListener('scroll', handleReveal);
+    window.addEventListener('resize', handleReveal);
+    
+    // Activar elementos visibles al cargar la página
+    document.addEventListener('DOMContentLoaded', handleReveal);
+    
+    // Activar elementos que ya están visibles
+    setTimeout(handleReveal, 100);
+</script>
+</body>
+</html>
