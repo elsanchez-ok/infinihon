@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfiniHon - Infraestructura IT de Grado Industrial</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-mono-custom {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        body {
+            background-color: #020617;
+        }
+    </style>
+</head>
+<body class="bg-[#020617] min-h-screen relative overflow-x-hidden">
+
+<!-- Gradientes sutiles de fondo -->
+<div class="fixed inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/30 rounded-full blur-3xl"></div>
+    <div class="absolute top-60 -left-20 w-60 h-60 bg-cyan-500/20 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-20 right-20 w-72 h-72 bg-blue-600/25 rounded-full blur-3xl"></div>
+</div>
+
+<!-- Header/Navigation -->
+<nav class="relative z-10 border-b border-white/5 bg-[#020617]/50 backdrop-blur-sm sticky top-0">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <!-- Logo: imagen (sin cuadrado) + texto con colores originales -->
+            <a href="index.html" class="flex items-center space-x-2">
+
+                <!-- Texto con colores originales de InfiniHon -->
+                <span class="text-white font-bold text-xl tracking-tight">
+                    Infini<span class="text-blue-400">Hon</span>
+                </span>
+            </a>
+            
+            <!-- Menú de navegación (sin cambios) -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Inicio</a>
+                <a href="#" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Servicios</a>
+                <a href="#" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Tecnologías</a>
+                <a href="#" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Contacto</a>
+            </div>
+            
+            <!-- Botón Contactar (sin cambios) -->
+            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all">
+                Contactar
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section con Glassmorphism -->
+<section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+    <div class="backdrop-blur-xl bg-white/5 border border-white/10 rounded-3xl p-8 lg:p-12 shadow-2xl">
+        <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            <div>
+                <div class="inline-flex items-center px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 mb-6">
+                    <span class="text-blue-400 text-sm font-medium">Administración de Sistemas Profesional</span>
+                </div>
+                
+                <h1 class="text-4xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+                    Infraestructura de 
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 block sm:inline">
+                        Grado Industrial
+                    </span>
+                </h1>
+                
+                <p class="text-gray-400 text-lg mb-8 leading-relaxed max-w-lg">
+                    Potenciamos tu negocio con infraestructura IT de alto rendimiento. 
+                    Especialistas en MicroTik, Raspberry Pi y servidores enterprise.
+                </p>
+                
+                <div class="flex flex-wrap gap-4">
+                    <button class="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white px-6 py-3 rounded-lg font-medium flex items-center gap-2 transition-all group">
+                        Comenzar ahora 
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </button>
+                    <button class="border border-white/20 hover:border-white/40 text-white px-6 py-3 rounded-lg font-medium transition-all">
+                        Ver demo
+                    </button>
+                </div>
+            </div>
+            
+            <div class="relative">
+                <div class="aspect-square rounded-2xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-white/10 backdrop-blur-sm p-6 lg:p-8">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-white/5 rounded-xl p-4 border border-white/10">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-2"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6" y2="18"></line><line x1="12" y1="6" x2="12" y2="18"></line><line x1="18" y1="6" x2="18" y2="18"></line></svg>
+                            <div class="h-2 bg-white/10 rounded w-3/4 mb-2"></div>
+                            <div class="h-2 bg-white/10 rounded w-1/2"></div>
+                        </div>
+                        <div class="bg-white/5 rounded-xl p-4 border border-white/10">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-2"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6" y2="18"></line><line x1="12" y1="6" x2="12" y2="18"></line><line x1="18" y1="6" x2="18" y2="18"></line></svg>
+                            <div class="h-2 bg-white/10 rounded w-3/4 mb-2"></div>
+                            <div class="h-2 bg-white/10 rounded w-1/2"></div>
+                        </div>
+                        <div class="bg-white/5 rounded-xl p-4 border border-white/10">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-2"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6" y2="18"></line><line x1="12" y1="6" x2="12" y2="18"></line><line x1="18" y1="6" x2="18" y2="18"></line></svg>
+                            <div class="h-2 bg-white/10 rounded w-3/4 mb-2"></div>
+                            <div class="h-2 bg-white/10 rounded w-1/2"></div>
+                        </div>
+                        <div class="bg-white/5 rounded-xl p-4 border border-white/10">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-2"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6" y2="18"></line><line x1="12" y1="6" x2="12" y2="18"></line><line x1="18" y1="6" x2="18" y2="18"></line></svg>
+                            <div class="h-2 bg-white/10 rounded w-3/4 mb-2"></div>
+                            <div class="h-2 bg-white/10 rounded w-1/2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Core Technologies -->
+<section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+    <h2 class="text-3xl font-bold text-white text-center mb-4">Core Technologies</h2>
+    <p class="text-gray-400 text-center mb-12 max-w-2xl mx-auto">
+        Implementamos las tecnologías más robustas y confiables del mercado
+    </p>
+    
+    <div class="grid md:grid-cols-3 gap-6 lg:gap-8">
+        <!-- MicroTik Card -->
+        <div class="group relative bg-white/5 backdrop-blur-sm rounded-2xl p-6 lg:p-8 border border-blue-500/20 hover:border-blue-500/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(59,130,246,0.5)]">
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-4"><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="2" x2="9" y2="4"></line><line x1="15" y1="2" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="22"></line><line x1="15" y1="20" x2="15" y2="22"></line><line x1="20" y1="9" x2="22" y2="9"></line><line x1="20" y1="14" x2="22" y2="14"></line><line x1="2" y1="9" x2="4" y2="9"></line><line x1="2" y1="14" x2="4" y2="14"></line></svg>
+            <h3 class="text-xl font-semibold text-white mb-2">MicroTik</h3>
+            <p class="text-gray-400 text-sm">RouterOS y switches enterprise con rendimiento superior y alta disponibilidad.</p>
+        </div>
+
+        <!-- Raspberry Pi Card -->
+        <div class="group relative bg-white/5 backdrop-blur-sm rounded-2xl p-6 lg:p-8 border border-purple-500/20 hover:border-purple-500/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(168,85,247,0.5)]">
+            <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-4"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="22" x2="12" y2="18"></line><polyline points="4 12 8 8 12 12 16 8 20 12"></polyline><polyline points="4 18 8 14 12 18 16 14 20 18"></polyline></svg>
+            <h3 class="text-xl font-semibold text-white mb-2">Raspberry Pi</h3>
+            <p class="text-gray-400 text-sm">Clusters de alto rendimiento para edge computing y automatización.</p>
+        </div>
+
+        <!-- Servidores Nation II Card -->
+        <div class="group relative bg-white/5 backdrop-blur-sm rounded-2xl p-6 lg:p-8 border border-cyan-500/20 hover:border-cyan-500/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(6,182,212,0.5)]">
+            <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-4"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6" y2="18"></line><line x1="12" y1="6" x2="12" y2="18"></line><line x1="18" y1="6" x2="18" y2="18"></line></svg>
+            <h3 class="text-xl font-semibold text-white mb-2">Servidores Nation II</h3>
+            <p class="text-gray-400 text-sm">Infraestructura bare-metal optimizada para cargas críticas.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Metrics Section para inversionistas -->
+<section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+    <div class="bg-gradient-to-br from-blue-900/30 to-cyan-900/30 rounded-3xl border border-white/10 p-8 lg:p-12 backdrop-blur-sm">
+        <div class="text-center mb-12">
+            <div class="inline-flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/20 rounded-full px-4 py-2 mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <span class="text-yellow-400 text-sm font-medium">Métricas para inversionistas</span>
+            </div>
+            <h2 class="text-3xl font-bold text-white mb-4">Rendimiento Comprobado</h2>
+            <p class="text-gray-400 max-w-2xl mx-auto">
+                Nuestra infraestructura garantiza los más altos estándares de la industria
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+            <!-- Uptime Metric -->
+            <div class="text-center group hover:scale-105 transition-transform">
+                <div class="relative inline-block">
+                    <div class="absolute inset-0 bg-green-500/20 blur-2xl rounded-full group-hover:bg-green-500/30 transition-all"></div>
+                    <div class="relative bg-white/5 border border-green-500/20 rounded-full p-6 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    </div>
+                </div>
+                <div class="font-mono-custom text-4xl font-bold text-white mb-2">99.99%</div>
+                <div class="text-green-400 font-medium mb-2">Uptime Garantizado</div>
+                <p class="text-gray-400 text-sm">SLA enterprise con redundancia total</p>
+            </div>
+
+            <!-- Security Metric -->
+            <div class="text-center group hover:scale-105 transition-transform">
+                <div class="relative inline-block">
+                    <div class="absolute inset-0 bg-blue-500/20 blur-2xl rounded-full group-hover:bg-blue-500/30 transition-all"></div>
+                    <div class="relative bg-white/5 border border-blue-500/20 rounded-full p-6 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    </div>
+                </div>
+                <div class="font-mono-custom text-4xl font-bold text-white mb-2">100%</div>
+                <div class="text-blue-400 font-medium mb-2">Seguridad</div>
+                <p class="text-gray-400 text-sm">Certificaciones ISO 27001 y encriptación avanzada</p>
+            </div>
+
+            <!-- Efficiency Metric -->
+            <div class="text-center group hover:scale-105 transition-transform">
+                <div class="relative inline-block">
+                    <div class="absolute inset-0 bg-cyan-500/20 blur-2xl rounded-full group-hover:bg-cyan-500/30 transition-all"></div>
+                    <div class="relative bg-white/5 border border-cyan-500/20 rounded-full p-6 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                    </div>
+                </div>
+                <div class="font-mono-custom text-4xl font-bold text-white mb-2">40%</div>
+                <div class="text-cyan-400 font-medium mb-2">Mayor Eficiencia</div>
+                <p class="text-gray-400 text-sm">Optimización de recursos y reducción de costos</p>
+            </div>
+        </div>
+
+        <!-- Additional metrics for investors -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 pt-8 border-t border-white/10">
+            <div class="flex items-center gap-3 text-left">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                <div>
+                    <div class="font-mono-custom text-white font-semibold">500+</div>
+                    <div class="text-gray-400 text-xs">Clientes Activos</div>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 text-left">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                <div>
+                    <div class="font-mono-custom text-white font-semibold">15</div>
+                    <div class="text-gray-400 text-xs">Países</div>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 text-left">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6" y2="18"></line><line x1="12" y1="6" x2="12" y2="18"></line><line x1="18" y1="6" x2="18" y2="18"></line></svg>
+                <div>
+                    <div class="font-mono-custom text-white font-semibold">1000+</div>
+                    <div class="text-gray-400 text-xs">Proyectos</div>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 text-left">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <div>
+                    <div class="font-mono-custom text-white font-semibold">10+</div>
+                    <div class="text-gray-400 text-xs">Años de experiencia</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="relative z-10 border-t border-white/5 bg-[#020617]/50 backdrop-blur-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid md:grid-cols-4 gap-8">
+            <div>
+                <div class="flex items-center space-x-2 mb-4">
+                    <div class="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
+                        <span class="text-black font-bold text-xl">I</span>
+                    </div>
+                    <span class="text-white font-bold text-xl">InfiniHon</span>
+                </div>
+                <p class="text-gray-400 text-sm">
+                    Infraestructura IT de grado industrial para empresas modernas.
+                </p>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-4">Productos</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Servidores</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Redes</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Cloud</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-4">Compañía</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Sobre nosotros</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Carreras</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Blog</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-4">Legal</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Privacidad</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Términos</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Cookies</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="mt-8 pt-8 border-t border-white/10 text-center text-gray-400 text-sm">
+            © 2024 InfiniHon. Todos los derechos reservados.
+        </div>
+    </div>
+</footer>
+
+<!-- Inicializar iconos de Lucide -->
+<script>
+    lucide.createIcons();
+</script>
+</body>
+</html>
