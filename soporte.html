@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfiniHon - Centro de Soporte Técnico</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .font-mono-custom {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        body {
+            background-color: #020617;
+            background-image: radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.08) 0%, transparent 40%),
+                              radial-gradient(circle at 80% 70%, rgba(6, 182, 212, 0.08) 0%, transparent 40%);
+            min-height: 100vh;
+        }
+        
+        /* Glassmorphism */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(59, 130, 246, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            border-color: rgba(59, 130, 246, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Header */
+        .main-header {
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.15);
+        }
+        
+        /* Tarjetas de contacto */
+        .contact-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid rgba(59, 130, 246, 0.1);
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(8px);
+        }
+        
+        .contact-card:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            background: rgba(59, 130, 246, 0.05);
+            transform: translateY(-2px);
+        }
+        
+        .contact-icon {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 1.2rem;
+            background: rgba(59, 130, 246, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .contact-card:hover .contact-icon {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.4);
+            transform: scale(1.05);
+        }
+        
+        /* Artículos de ayuda */
+        .help-article {
+            padding: 1rem;
+            border-radius: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+        
+        .help-article:hover {
+            background: rgba(59, 130, 246, 0.05);
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+        
+        /* Badges */
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            font-weight: 500;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .badge-blue {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+        }
+        
+        .badge-green {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #10b981;
+        }
+        
+        .badge-purple {
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            color: #a855f7;
+        }
+        
+        .badge-orange {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #f59e0b;
+        }
+        
+        /* Estado en vivo */
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 2rem;
+        }
+        
+        .live-dot {
+            width: 0.6rem;
+            height: 0.6rem;
+            background: #10b981;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+        
+        /* Inputs */
+        .support-input {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 1rem;
+            padding: 0.75rem 1rem;
+            color: white;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .support-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+        
+        .support-input::placeholder {
+            color: rgba(148, 163, 184, 0.3);
+        }
+        
+        /* Botones */
+        .btn-primary {
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: rgba(59, 130, 246, 0.6);
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(59, 130, 246, 0.3);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(59, 130, 246, 0.5);
+        }
+        
+        /* Animaciones */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-card {
+            animation: slideIn 0.5s ease forwards;
+            opacity: 0;
+        }
+        
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+    </style>
+</head>
+<body>
+
+<!-- Header completo con logo y navegación -->
+<header class="main-header sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-20">
+            <!-- Logo y nombre -->
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+                    <span class="text-black font-bold text-2xl">I</span>
+                </div>
+                <div>
+                    <span class="text-white font-light text-2xl tracking-tight">INFINI<span class="font-bold text-blue-400">HON</span></span>
+                    <span class="text-xs text-gray-400 font-mono block">Soporte Técnico</span>
+                </div>
+            </div>
+            
+            <!-- Navegación -->
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="#" class="text-gray-300 hover:text-white transition-colors text-sm font-light">INICIO</a>
+                <a href="#" class="text-white transition-colors text-sm font-medium border-b-2 border-blue-400 pb-1">SOPORTE</a>
+                <a href="#" class="text-gray-300 hover:text-white transition-colors text-sm font-light">DOCUMENTACIÓN</a>
+                <a href="#" class="text-gray-300 hover:text-white transition-colors text-sm font-light">FORO</a>
+                <a href="#" class="text-gray-300 hover:text-white transition-colors text-sm font-light">CONTACTO</a>
+            </nav>
+            
+            <!-- Acciones -->
+            <div class="flex items-center gap-4">
+                <div class="live-indicator">
+                    <span class="live-dot"></span>
+                    <span class="text-green-400 text-sm font-mono hidden sm:block">5 AGENTES ONLINE</span>
+                </div>
+                
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
+                    <span class="text-white font-medium">SU</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Contenido principal -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Hero de soporte -->
+    <div class="glass-panel rounded-3xl p-8 mb-8 animate-card">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+            <div>
+                <h1 class="text-3xl lg:text-4xl font-light text-white mb-2">
+                    Centro de Soporte Técnico
+                </h1>
+                <p class="text-gray-400 text-sm max-w-2xl">
+                    Estamos aquí para ayudarte 24/7. Consulta nuestra base de conocimiento, abre un ticket o contacta directamente con nuestro equipo de expertos.
+                </p>
+            </div>
+            
+            <!-- Buscador -->
+            <div class="w-full md:w-96">
+                <div class="relative">
+                    <input type="text" placeholder="Buscar en la base de conocimiento..." class="support-input pl-12 pr-4 py-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" class="absolute left-4 top-1/2 transform -translate-y-1/2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </div>
+                <p class="text-xs text-gray-500 mt-2 font-mono">Ej: "configuración MikroTik", "Raspberry Pi cluster", "Nation II servidores"</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Grid principal de contacto -->
+    <div class="grid lg:grid-cols-3 gap-8 mb-8">
+        
+        <!-- Columna izquierda - Contacto directo -->
+        <div class="lg:col-span-2 space-y-6">
+            
+            <!-- Título de sección -->
+            <div class="flex items-center gap-3">
+                <div class="w-1 h-6 bg-blue-400 rounded-full"></div>
+                <h2 class="text-white text-xl font-light">Contacto Directo</h2>
+                <span class="badge badge-blue">RESPUESTA INMEDIATA</span>
+            </div>
+            
+            <!-- Grid de contactos -->
+            <div class="grid md:grid-cols-2 gap-4">
+                
+                <!-- Teléfono -->
+                <div class="contact-card animate-card delay-1" onclick="window.location.href='tel:+34931234567'">
+                    <div class="contact-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-xs text-gray-400 font-mono mb-1">TELÉFONO 24/7</p>
+                        <p class="text-2xl text-white font-light tracking-tight">+34 93 123 45 67</p>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span class="badge badge-green">Emergencias</span>
+                            <span class="text-xs text-gray-400">Llamada gratuita</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- WhatsApp -->
+                <div class="contact-card animate-card delay-1" onclick="window.location.href='https://wa.me/34612345678'">
+                    <div class="contact-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-xs text-gray-400 font-mono mb-1">WHATSAPP</p>
+                        <p class="text-2xl text-white font-light tracking-tight">+34 612 345 678</p>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span class="badge badge-green">● Online</span>
+                            <span class="text-xs text-gray-400">Respuesta inmediata</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Email -->
+                <div class="contact-card animate-card delay-2" onclick="window.location.href='mailto:soporte@infinihon.com'">
+                    <div class="contact-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5"><circle cx="12" cy="12" r="4"></circle><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"></path></svg>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-xs text-gray-400 font-mono mb-1">EMAIL</p>
+                        <p class="text-xl text-white font-light">soporte@infinihon.com</p>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span class="badge badge-blue">Respuesta < 2h</span>
+                            <span class="text-xs text-gray-400">SLA garantizado</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Chat en vivo -->
+                <div class="contact-card animate-card delay-2" onclick="openChat()">
+                    <div class="contact-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-xs text-gray-400 font-mono mb-1">CHAT EN VIVO</p>
+                        <p class="text-xl text-white font-light">Iniciar conversación</p>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span class="live-dot"></span>
+                            <span class="text-xs text-green-400">3 agentes disponibles</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Horarios detallados -->
+            <div class="glass-card rounded-2xl p-6 animate-card delay-3">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-white font-light flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        Horarios de atención
+                    </h3>
+                    <span class="badge badge-green">SOPORTE 24/7 PARA ENTERPRISE</span>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="space-y-3">
+                        <div class="flex justify-between py-2 border-b border-white/5">
+                            <span class="text-gray-400">Lunes a Viernes</span>
+                            <span class="text-white">24 horas</span>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-white/5">
+                            <span class="text-gray-400">Sábados</span>
+                            <span class="text-white">8:00 - 20:00</span>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-white/5">
+                            <span class="text-gray-400">Domingos</span>
+                            <span class="text-white">10:00 - 18:00</span>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <div class="flex justify-between py-2 border-b border-white/5">
+                            <span class="text-gray-400">Festivos nacionales</span>
+                            <span class="text-white">10:00 - 16:00</span>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-white/5">
+                            <span class="text-gray-400">Emergencias</span>
+                            <span class="text-green-400">24/7</span>
+                        </div>
+                        <div class="flex justify-between py-2">
+                            <span class="text-gray-400">SLA Enterprise</span>
+                            <span class="text-blue-400">15 minutos</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Columna derecha - Tickets recientes y estadísticas -->
+        <div class="space-y-6">
+            
+            <!-- Estado del sistema -->
+            <div class="glass-card rounded-2xl p-6 animate-card delay-3">
+                <h3 class="text-white font-light mb-4 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                    Estado del sistema
+                </h3>
+                
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-400 text-sm">API Principal</span>
+                        <span class="text-green-400 text-sm flex items-center gap-1">
+                            <span class="live-dot"></span> Operacional
+                        </span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-400 text-sm">Panel de control</span>
+                        <span class="text-green-400 text-sm flex items-center gap-1">
+                            <span class="live-dot"></span> Operacional
+                        </span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-400 text-sm">Servidores MikroTik</span>
+                        <span class="text-green-400 text-sm flex items-center gap-1">
+                            <span class="live-dot"></span> Operacional
+                        </span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-400 text-sm">Base de datos</span>
+                        <span class="text-yellow-400 text-sm">Mantenimiento (2h)</span>
+                    </div>
+                </div>
+                
+                <div class="mt-4 pt-4 border-t border-white/5">
+                    <div class="flex justify-between text-xs text-gray-400">
+                        <span>Última actualización: 10:32</span>
+                        <span class="text-blue-400">Ver todos</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tickets recientes -->
+            <div class="glass-card rounded-2xl p-6 animate-card delay-4">
+                <h3 class="text-white font-light mb-4 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    Tickets recientes
+                </h3>
+                
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between p-2 hover:bg-white/5 rounded-lg transition">
+                        <div>
+                            <p class="text-white text-sm">#TKT-2024-2341</p>
+                            <p class="text-gray-400 text-xs">Configuración VPN</p>
+                        </div>
+                        <span class="badge badge-blue">En proceso</span>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-2 hover:bg-white/5 rounded-lg transition">
+                        <div>
+                            <p class="text-white text-sm">#TKT-2024-2340</p>
+                            <p class="text-gray-400 text-xs">Router no responde</p>
+                        </div>
+                        <span class="badge badge-green">Resuelto</span>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-2 hover:bg-white/5 rounded-lg transition">
+                        <div>
+                            <p class="text-white text-sm">#TKT-2024-2339</p>
+                            <p class="text-gray-400 text-xs">Actualización firmware</p>
+                        </div>
+                        <span class="badge badge-purple">Pendiente</span>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-2 hover:bg-white/5 rounded-lg transition">
+                        <div>
+                            <p class="text-white text-sm">#TKT-2024-2338</p>
+                            <p class="text-gray-400 text-xs">Cluster Raspberry</p>
+                        </div>
+                        <span class="badge badge-orange">Urgente</span>
+                    </div>
+                </div>
+                
+                <button class="btn-secondary w-full mt-4 py-2 rounded-xl text-sm text-gray-300">
+                    Ver todos los tickets
+                </button>
+            </div>
+            
+            <!-- Métricas de soporte -->
+            <div class="glass-card rounded-2xl p-6 animate-card delay-5">
+                <h3 class="text-white font-light mb-4">Métricas de soporte</h3>
+                
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-400">Tiempo de respuesta</span>
+                            <span class="text-white font-mono">2.5 minutos</span>
+                        </div>
+                        <div class="h-2 bg-white/5 rounded-full overflow-hidden">
+                            <div class="h-full w-3/4 bg-green-400 rounded-full"></div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-400">Satisfacción</span>
+                            <span class="text-white font-mono">98.5%</span>
+                        </div>
+                        <div class="h-2 bg-white/5 rounded-full overflow-hidden">
+                            <div class="h-full w-[98%] bg-blue-400 rounded-full"></div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-400">Resolución primera llamada</span>
+                            <span class="text-white font-mono">87%</span>
+                        </div>
+                        <div class="h-2 bg-white/5 rounded-full overflow-hidden">
+                            <div class="h-full w-[87%] bg-purple-400 rounded-full"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="pt-2">
+                        <div class="flex justify-between text-xs text-gray-400">
+                            <span>Tickets abiertos: 23</span>
+                            <span>Resueltos hoy: 45</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Base de conocimiento -->
+    <div class="glass-panel rounded-3xl p-8 mb-8 animate-card">
+        <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-3">
+                <div class="w-1 h-8 bg-blue-400 rounded-full"></div>
+                <h2 class="text-white text-xl font-light">Base de conocimiento</h2>
+            </div>
+            <span class="badge badge-blue">248 artículos</span>
+        </div>
+        
+        <div class="grid md:grid-cols-4 gap-4">
+            <div class="help-article">
+                <div class="flex items-center gap-2 mb-2">
+                    <div class="w-6 h-6 rounded bg-blue-500/20 flex items-center justify-center">
+                        <span class="text-blue-400 text-xs">MT</span>
+                    </div>
+                    <span class="text-white text-sm">MikroTik</span>
+                </div>
+                <p class="text-gray-400 text-xs mb-2">Configuración básica de RouterOS, VPN, Firewall</p>
+                <span class="text-xs text-blue-400">45 artículos →</span>
+            </div>
+            
+            <div class="help-article">
+                <div class="flex items-center gap-2 mb-2">
+                    <div class="w-6 h-6 rounded bg-purple-500/20 flex items-center justify-center">
+                        <span class="text-purple-400 text-xs">RP</span>
+                    </div>
+                    <span class="text-white text-sm">Raspberry Pi</span>
+                </div>
+                <p class="text-gray-400 text-xs mb-2">Clusters, Kubernetes, automatización, GPIO</p>
+                <span class="text-xs text-purple-400">67 artículos →</span>
+            </div>
+            
+            <div class="help-article">
+                <div class="flex items-center gap-2 mb-2">
+                    <div class="w-6 h-6 rounded bg-cyan-500/20 flex items-center justify-center">
+                        <span class="text-cyan-400 text-xs">N2</span>
+                    </div>
+                    <span class="text-white text-sm">Nation II</span>
+                </div>
+                <p class="text-gray-400 text-xs mb-2">Servidores, almacenamiento, alta disponibilidad</p>
+                <span class="text-xs text-cyan-400">89 artículos →</span>
+            </div>
+            
+            <div class="help-article">
+                <div class="flex items-center gap-2 mb-2">
+                    <div class="w-6 h-6 rounded bg-green-500/20 flex items-center justify-center">
+                        <span class="text-green-400 text-xs">SE</span>
+                    </div>
+                    <span class="text-white text-sm">Seguridad</span>
+                </div>
+                <p class="text-gray-400 text-xs mb-2">Hardening, auditorías, certificados SSL</p>
+                <span class="text-xs text-green-400">47 artículos →</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Formulario de ticket avanzado -->
+    <div class="glass-panel rounded-3xl p-8 animate-card">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-1 h-8 bg-blue-400 rounded-full"></div>
+            <h2 class="text-white text-xl font-light">Abrir nuevo ticket</h2>
+            <span class="badge badge-green">SOPORTE PRIORITARIO</span>
+        </div>
+        
+        <div class="grid md:grid-cols-2 gap-6">
+            <div class="space-y-4">
+                <input type="text" placeholder="Nombre completo" class="support-input">
+                <input type="email" placeholder="Email corporativo" class="support-input">
+                <input type="text" placeholder="Empresa" class="support-input">
+                
+                <select class="support-input">
+                    <option class="bg-gray-900">Seleccionar producto</option>
+                    <option class="bg-gray-900">MikroTik Router</option>
+                    <option class="bg-gray-900">Raspberry Pi</option>
+                    <option class="bg-gray-900">Nation II Server</option>
+                    <option class="bg-gray-900">Accesorios</option>
+                </select>
+            </div>
+            
+            <div class="space-y-4">
+                <select class="support-input">
+                    <option class="bg-gray-900">Prioridad</option>
+                    <option class="bg-gray-900">Baja</option>
+                    <option class="bg-gray-900">Normal</option>
+                    <option class="bg-gray-900">Alta</option>
+                    <option class="bg-gray-900">Urgente</option>
+                </select>
+                
+                <input type="text" placeholder="Asunto" class="support-input">
+                <textarea rows="4" placeholder="Describe tu problema en detalle..." class="support-input"></textarea>
+            </div>
+            
+            <div class="md:col-span-2 flex justify-end gap-4">
+                <button class="btn-secondary px-6 py-3 rounded-xl text-gray-300">
+                    Cancelar
+                </button>
+                <button class="btn-primary px-8 py-3 rounded-xl text-white">
+                    Enviar ticket
+                </button>
+            </div>
+        </div>
+        
+        <p class="text-xs text-gray-400 mt-4 font-mono">
+            Tiempo estimado de respuesta: <span class="text-green-400">< 30 minutos para tickets prioritarios</span>
+        </p>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="border-t border-white/5 bg-[#020617]/50 backdrop-blur-sm mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-4">
+                <div class="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
+                    <span class="text-black font-bold text-sm">I</span>
+                </div>
+                <span class="text-gray-400 text-xs font-mono">© 2024 INFINIHON · SOPORTE TÉCNICO</span>
+            </div>
+            
+            <div class="flex gap-8">
+                <a href="#" class="text-gray-400 hover:text-white text-xs font-mono transition-colors">TÉRMINOS</a>
+                <a href="#" class="text-gray-400 hover:text-white text-xs font-mono transition-colors">PRIVACIDAD</a>
+                <a href="#" class="text-gray-400 hover:text-white text-xs font-mono transition-colors">COOKIES</a>
+                <a href="#" class="text-gray-400 hover:text-white text-xs font-mono transition-colors">LEGAL</a>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <span class="text-xs text-gray-500">ID: SOP-2024-03-05</span>
+                <span class="text-xs text-green-400">● Sistema operacional</span>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Modal de chat -->
+<div id="chatModal" class="fixed inset-0 flex items-end justify-end z-50 hidden p-6">
+    <div class="glass-panel rounded-2xl w-96 overflow-hidden border border-blue-500/30">
+        <div class="p-4 border-b border-white/5 flex justify-between items-center bg-gradient-to-r from-blue-600/20 to-cyan-600/20">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
+                    <span class="text-black font-bold text-sm">I</span>
+                </div>
+                <div>
+                    <span class="text-white text-sm font-medium">Soporte InfiniHon</span>
+                    <div class="flex items-center gap-1 mt-1">
+                        <span class="live-dot"></span>
+                        <span class="text-xs text-green-400">Online</span>
+                    </div>
+                </div>
+            </div>
+            <button onclick="closeChat()" class="text-gray-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+        
+        <div class="p-4 h-80 overflow-y-auto bg-white/2">
+            <!-- Mensaje del agente -->
+            <div class="flex gap-2 mb-4">
+                <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-xs text-blue-400">CA</div>
+                <div class="glass-card rounded-2xl p-3 max-w-[80%]">
+                    <p class="text-white text-xs">Hola, soy Carlos del equipo de soporte. ¿En qué puedo ayudarte hoy?</p>
+                    <p class="text-gray-400 text-xs mt-1">10:32</p>
+                </div>
+            </div>
+            
+            <!-- Mensaje del usuario -->
+            <div class="flex gap-2 mb-4 justify-end">
+                <div class="glass-card rounded-2xl p-3 max-w-[80%] bg-blue-500/10">
+                    <p class="text-white text-xs">Tengo un problema con mi router MikroTik, no consigo configurar la VPN</p>
+                    <p class="text-gray-400 text-xs mt-1">10:33</p>
+                </div>
+                <div class="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center text-xs text-purple-400">TU</div>
+            </div>
+            
+            <!-- Respuesta del agente -->
+            <div class="flex gap-2 mb-4">
+                <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-xs text-blue-400">CA</div>
+                <div class="glass-card rounded-2xl p-3 max-w-[80%]">
+                    <p class="text-white text-xs">Entiendo. ¿Podrías decirme qué modelo de router tienes y qué versión de RouterOS estás usando?</p>
+                    <p class="text-gray-400 text-xs mt-1">10:34</p>
+                </div>
+            </div>
+            
+            <!-- Indicador de escritura -->
+            <div class="flex items-center gap-2 text-gray-400 text-xs">
+                <span class="live-dot"></span>
+                <span>Carlos está escribiendo...</span>
+            </div>
+        </div>
+        
+        <div class="p-4 border-t border-white/5">
+            <div class="flex gap-2">
+                <input type="text" placeholder="Escribe tu mensaje..." class="flex-1 bg-white/5 border border-white/10 rounded-full px-4 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-blue-500">
+                <button class="w-10 h-10 rounded-full btn-primary flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                </button>
+            </div>
+            <p class="text-xs text-gray-500 mt-2 font-mono">Tiempo de respuesta estimado: < 2 minutos</p>
+        </div>
+    </div>
+</div>
+
+<!-- Script -->
+<script>
+    function openChat() {
+        document.getElementById('chatModal').classList.remove('hidden');
+    }
+    
+    function closeChat() {
+        document.getElementById('chatModal').classList.add('hidden');
+    }
+    
+    // Cerrar modal con Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeChat();
+        }
+    });
+    
+    // Simular llamada
+    function makeCall() {
+        alert('Llamando al +34 93 123 45 67');
+    }
+    
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+</script>
+</body>
+</html>
