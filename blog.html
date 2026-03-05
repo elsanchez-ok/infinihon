@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfiniHon - Publicidad y Contenido</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .font-mono-custom {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        body {
+            background-color: #020617;
+            background-image: radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.08) 0%, transparent 40%),
+                              radial-gradient(circle at 80% 70%, rgba(6, 182, 212, 0.08) 0%, transparent 40%);
+            min-height: 100vh;
+        }
+        
+        /* Glassmorphism */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(59, 130, 246, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        /* Grid de publicaciones */
+        .publication-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .publication-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .publication-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .publication-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 1rem;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(59, 130, 246, 0.1);
+        }
+        
+        .publication-item:hover {
+            transform: scale(1.02);
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+        }
+        
+        .publication-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.5s ease;
+        }
+        
+        .publication-item:hover .publication-image {
+            transform: scale(1.1);
+        }
+        
+        .publication-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(2, 6, 23, 0.9), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 1.5rem;
+        }
+        
+        .publication-item:hover .publication-overlay {
+            opacity: 1;
+        }
+        
+        .publication-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(59, 130, 246, 0.9);
+            backdrop-filter: blur(4px);
+            padding: 0.25rem 0.75rem;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 10;
+        }
+        
+        .publication-stats {
+            display: flex;
+            gap: 1rem;
+            color: white;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+        
+        .publication-stats span {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        /* Header de perfil */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            padding: 2rem;
+            border-radius: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1e40af, #3b82f6, #22d3ee);
+            padding: 4px;
+        }
+        
+        .profile-avatar-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: #020617;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .profile-stats {
+            display: flex;
+            gap: 3rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: white;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: #9ca3af;
+        }
+        
+        /* Categorías */
+        .category-tabs {
+            display: flex;
+            gap: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+        }
+        
+        .category-tab {
+            padding: 0.5rem 1rem;
+            color: #9ca3af;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .category-tab:hover {
+            color: white;
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .category-tab.active {
+            color: #3b82f6;
+            background: rgba(59, 130, 246, 0.15);
+        }
+        
+        /* Modal de detalle */
+        .modal-overlay {
+            background: rgba(2, 6, 23, 0.9);
+            backdrop-filter: blur(12px);
+        }
+        
+        .modal-content {
+            max-width: 1000px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        /* Botones */
+        .btn-primary {
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(59, 130, 246, 0.3);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header simple -->
+<nav class="sticky top-0 z-50 border-b border-white/5 bg-[#020617]/80 backdrop-blur-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
+                    <span class="text-black font-bold text-xl">I</span>
+                </div>
+                <span class="text-white font-light text-xl tracking-tight">INFINI<span class="font-medium text-blue-400">HON</span></span>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-sm text-gray-400">Publicidad y Contenido</span>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Contenido principal -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Header de perfil -->
+    <div class="glass-panel profile-header">
+        <div class="profile-avatar">
+            <div class="profile-avatar-inner">
+                <span class="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">I</span>
+            </div>
+        </div>
+        
+        <div class="flex-1">
+            <div class="flex items-center gap-4 mb-4">
+                <h1 class="text-3xl font-light text-white">InfiniHon</h1>
+                <span class="glass-card px-3 py-1 rounded-full text-xs text-blue-400">Verificado</span>
+                <button class="btn-primary px-4 py-1 rounded-full text-sm text-white">
+                    Seguir
+                </button>
+            </div>
+            
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <div class="stat-number">248</div>
+                    <div class="stat-label">publicaciones</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">45.2K</div>
+                    <div class="stat-label">seguidores</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">189</div>
+                    <div class="stat-label">siguiendo</div>
+                </div>
+            </div>
+            
+            <p class="text-gray-300 text-sm mt-4 max-w-2xl">
+                Infraestructura IT de grado industrial | MikroTik • Raspberry Pi • Nation II 
+                | Innovación tecnológica para empresas
+            </p>
+            <p class="text-blue-400 text-xs mt-2">www.infinihon.com</p>
+        </div>
+    </div>
+    
+    <!-- Categorías / Filtros -->
+    <div class="category-tabs">
+        <span class="category-tab active">Todas</span>
+        <span class="category-tab">MikroTik</span>
+        <span class="category-tab">Raspberry Pi</span>
+        <span class="category-tab">Nation II</span>
+        <span class="category-tab">Eventos</span>
+        <span class="category-tab">Tutoriales</span>
+    </div>
+    
+    <!-- Grid de publicaciones -->
+    <div class="publication-grid">
+        
+        <!-- Publicación 1 - MikroTik RB4011 -->
+        <div class="publication-item" onclick="openModal(1)">
+            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/rb4011-7TvM2Vxif5agQ3a0ebm26lrvR3kFkP.png" alt="MikroTik RB4011" class="publication-image">
+            <span class="publication-badge">Nuevo</span>
+            <div class="publication-overlay">
+                <h3 class="text-white font-medium">MikroTik RB4011</h3>
+                <p class="text-gray-300 text-xs">Router 10 puertos</p>
+                <div class="publication-stats">
+                    <span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                        234
+                    </span>
+                    <span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        45
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Publicación 2 - Raspberry Pi 5 -->
+        <div class="publication-item" onclick="openModal(2)">
+            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/raspberry-pi-5-GQJkXl1ltjqRWC6UO9qChvMds3Jruw.png" alt="Raspberry Pi 5" class="publication-image">
+            <span class="publication-badge">Popular</span>
+            <div class="publication-overlay">
+                <h3 class="text-white font-medium">Raspberry Pi 5</h3>
+                <p class="text-gray-300 text-xs">4GB RAM</p>
+                <div class="publication-stats">
+                    <span>❤️ 567</span>
+                    <span>💬 89</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Publicación 3 - Nation II Servers -->
+        <div class="publication-item" onclick="openModal(3)">
+            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/css610-8Uc3dQk7GtyLeQfz36uRudCYoQ82Lb.png" alt="Nation II Servers" class="publication-image">
+            <span class="publication-badge">Lanzamiento</span>
+            <div class="publication-overlay">
+                <h3 class="text-white font-medium">Nation II Gen2</h3>
+                <p class="text-gray-300 text-xs">Servidores Enterprise</p>
+                <div class="publication-stats">
+                    <span>❤️ 892</span>
+                    <span>💬 156</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Publicación 4 - MikroTik hAP ax² -->
+        <div class="publication-item" onclick="openModal(4)">
+            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/hap-ax2-H6yrA2zWyQK7SKCJvUyTfA3IHDbWJv.png" alt="MikroTik hAP ax²" class="publication-image">
+            <div class="publication-overlay">
+                <h3 class="text-white font-medium">MikroTik hAP ax²</h3>
+                <p class="text-gray-300 text-xs">WiFi 6</p>
+                <div class="publication-stats">
+                    <span>❤️ 342</span>
+                    <span>💬 67</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Publicación 5 - PoE+ HAT -->
+        <div class="publication-item" onclick="openModal(5)">
+            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/poe-hat-PQex9XkH7aDjagHK94BhyK0NaGutRr.png" alt="PoE+ HAT" class="publication-image">
+            <div class="publication-overlay">
+                <h3 class="text-white font-medium">PoE+ HAT</h3>
+                <p class="text-gray-300 text-xs">Para Raspberry Pi</p>
+                <div class="publication-stats">
+                    <span>❤️ 203</span>
+                    <span>💬 34</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Publicación 6 - Evento InfiniHon -->
+        <div class="publication-item" onclick="openModal(6)">
+            <div class="w-full h-full bg-gradient-to-br from-blue-600 to-cyan-600 flex items-center justify-center">
+                <span class="text-white text-4xl font-bold">IH</span>
+            </div>
+            <span class="publication-badge">Evento</span>
+            <div class="publication-overlay">
+                <h3 class="text-white font-medium">InfiniHon Day 2024</h3>
+                <p class="text-gray-300 text-xs">Conferencia anual</p>
+                <div class="publication-stats">
+                    <span>❤️ 1.2K</span>
+                    <span>💬 234</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Publicación 7 - Tutorial MikroTik -->
+        <div class="publication-item" onclick="openModal(7)">
+            <div class="w-full h-full bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center">
+                <span class="text-white text-2xl font-bold">📚</span>
+            </div>
+            <span class="publication-badge">Tutorial</span>
+            <div class="publication-overlay">
+                <h3 class="text-white font-medium">Configuración Básica</h3>
+                <p class="text-gray-300 text-xs">MikroTik RouterOS</p>
+                <div class="publication-stats">
+                    <span>❤️ 567</span>
+                    <span>💬 89</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Publicación 8 - Cluster Raspberry -->
+        <div class="publication-item" onclick="openModal(8)">
+            <div class="w-full h-full bg-gradient-to-br from-green-600 to-cyan-600 flex items-center justify-center">
+                <span class="text-white text-4xl font-bold">⚡</span>
+            </div>
+            <span class="publication-badge">Proyecto</span>
+            <div class="publication-overlay">
+                <h3 class="text-white font-medium">Cluster Kubernetes</h3>
+                <p class="text-gray-300 text-xs">8 Raspberry Pi</p>
+                <div class="publication-stats">
+                    <span>❤️ 789</span>
+                    <span>💬 123</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Publicación 9 - Seguridad -->
+        <div class="publication-item" onclick="openModal(9)">
+            <div class="w-full h-full bg-gradient-to-br from-red-600 to-orange-600 flex items-center justify-center">
+                <span class="text-white text-4xl font-bold">🔒</span>
+            </div>
+            <span class="publication-badge">Guía</span>
+            <div class="publication-overlay">
+                <h3 class="text-white font-medium">Hardening de Servidores</h3>
+                <p class="text-gray-300 text-xs">Seguridad Enterprise</p>
+                <div class="publication-stats">
+                    <span>❤️ 445</span>
+                    <span>💬 78</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Botón cargar más -->
+    <div class="flex justify-center mt-8">
+        <button class="btn-secondary px-8 py-3 rounded-xl text-gray-300 text-sm flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            Cargar más publicaciones
+        </button>
+    </div>
+</main>
+
+<!-- Modal de detalle de publicación -->
+<div id="publicationModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+    <div class="absolute inset-0 modal-overlay" onclick="closeModal()"></div>
+    <div class="relative glass-panel modal-content rounded-2xl p-6 border border-blue-500/30">
+        <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white z-10">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+        
+        <div class="grid md:grid-cols-2 gap-6">
+            <!-- Imagen -->
+            <div class="rounded-xl overflow-hidden">
+                <img id="modalImage" src="" alt="Publicación" class="w-full h-auto">
+            </div>
+            
+            <!-- Detalles -->
+            <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
+                        <span class="text-white font-bold">I</span>
+                    </div>
+                    <div>
+                        <h3 class="text-white font-medium">InfiniHon</h3>
+                        <p class="text-gray-400 text-xs">Hace 2 horas</p>
+                    </div>
+                </div>
+                
+                <p id="modalDescription" class="text-gray-300 text-sm leading-relaxed">
+                    Descripción de la publicación...
+                </p>
+                
+                <div class="flex gap-4">
+                    <span class="text-blue-400 text-xs">#MikroTik</span>
+                    <span class="text-blue-400 text-xs">#NuevoProducto</span>
+                    <span class="text-blue-400 text-xs">#Router</span>
+                </div>
+                
+                <div class="flex items-center gap-4 pt-4 border-t border-white/5">
+                    <button class="flex items-center gap-2 text-gray-300 hover:text-blue-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                        <span>234</span>
+                    </button>
+                    
+                    <button class="flex items-center gap-2 text-gray-300 hover:text-blue-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        <span>45</span>
+                    </button>
+                    
+                    <button class="flex items-center gap-2 text-gray-300 hover:text-blue-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                        <span>12</span>
+                    </button>
+                </div>
+                
+                <!-- Comentarios -->
+                <div class="space-y-3 max-h-60 overflow-y-auto">
+                    <div class="flex gap-3">
+                        <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-xs text-blue-400">JC</div>
+                        <div>
+                            <p class="text-white text-xs"><span class="font-medium">Juan Carlos</span> ¿Qué velocidad de VPN soporta?</p>
+                            <p class="text-gray-500 text-xs">2h</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-3">
+                        <div class="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center text-xs text-purple-400">MG</div>
+                        <div>
+                            <p class="text-white text-xs"><span class="font-medium">María García</span> Excelente producto, lo recomiendo</p>
+                            <p class="text-gray-500 text-xs">1h</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Input comentario -->
+                <div class="flex gap-2 pt-2">
+                    <input type="text" placeholder="Añadir comentario..." class="flex-1 bg-white/5 border border-white/10 rounded-full px-4 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500">
+                    <button class="text-blue-400 text-sm font-medium">Publicar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script -->
+<script>
+    // Datos de las publicaciones
+    const publications = {
+        1: {
+            image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/rb4011-7TvM2Vxif5agQ3a0ebm26lrvR3kFkP.png",
+            description: "Presentamos el nuevo MikroTik RB4011 - Router de 10 puertos Gigabit con CPU quad-core. Ideal para empresas que necesitan alto rendimiento y confiabilidad."
+        },
+        2: {
+            image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/raspberry-pi-5-GQJkXl1ltjqRWC6UO9qChvMds3Jruw.png",
+            description: "Ya disponible la Raspberry Pi 5 con 4GB RAM. Hasta 3x más rápida que la generación anterior. Perfecta para proyectos profesionales y clusters."
+        },
+        3: {
+            image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/css610-8Uc3dQk7GtyLeQfz36uRudCYoQ82Lb.png",
+            description: "Nation II Gen2: Nueva arquitectura de servidores con procesadores AMD EPYC y almacenamiento NVMe. 40% más eficiente y 99.99% uptime garantizado."
+        }
+    };
+    
+    // Abrir modal
+    function openModal(id) {
+        const modal = document.getElementById('publicationModal');
+        const modalImage = document.getElementById('modalImage');
+        const modalDescription = document.getElementById('modalDescription');
+        
+        if (publications[id]) {
+            modalImage.src = publications[id].image;
+            modalDescription.textContent = publications[id].description;
+        }
+        
+        modal.classList.remove('hidden');
+    }
+    
+    // Cerrar modal
+    function closeModal() {
+        document.getElementById('publicationModal').classList.add('hidden');
+    }
+    
+    // Categorías
+    const tabs = document.querySelectorAll('.category-tab');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            tabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            // Aquí iría el filtrado real de publicaciones
+        });
+    });
+    
+    // Cerrar con Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeModal();
+        }
+    });
+</script>
+
+<!-- Estilos adicionales -->
+<style>
+    .btn-secondary {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        transition: all 0.3s ease;
+    }
+    
+    .btn-secondary:hover {
+        background: rgba(59, 130, 246, 0.1);
+        border-color: rgba(59, 130, 246, 0.6);
+    }
+    
+    .tag {
+        background: rgba(59, 130, 246, 0.1);
+        border: 1px solid rgba(59, 130, 246, 0.2);
+        color: #60a5fa;
+        padding: 0.25rem 0.5rem;
+        border-radius: 1rem;
+        font-size: 0.75rem;
+    }
+</style>
+</body>
+</html>
