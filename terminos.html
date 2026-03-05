@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfiniHon - Términos y Condiciones</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .font-mono-custom {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        body {
+            background-color: #020617;
+            background-image: radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.08) 0%, transparent 40%),
+                              radial-gradient(circle at 80% 70%, rgba(6, 182, 212, 0.08) 0%, transparent 40%);
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* Glassmorphism */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(59, 130, 246, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Secciones interactivas */
+        .terms-section {
+            transition: all 0.3s ease;
+            scroll-margin-top: 100px;
+        }
+        
+        .terms-section:hover {
+            transform: translateX(5px);
+        }
+        
+        /* Números de sección */
+        .section-number {
+            font-family: 'JetBrains Mono', monospace;
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+        
+        .terms-section:hover .section-number {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        /* Tabla de contenidos interactiva */
+        .toc-item {
+            position: relative;
+            padding-left: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .toc-item::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #3b82f6;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+        }
+        
+        .toc-item:hover {
+            color: white;
+            padding-left: 2rem;
+        }
+        
+        .toc-item:hover::before {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .toc-item.active {
+            color: #3b82f6;
+            font-weight: 500;
+        }
+        
+        /* Barra de progreso de lectura */
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, #1e40af, #3b82f6, #22d3ee);
+            z-index: 100;
+            transition: width 0.1s ease;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+        
+        /* Tooltip de definiciones */
+        .definition-tooltip {
+            position: relative;
+            border-bottom: 1px dashed #3b82f6;
+            cursor: help;
+        }
+        
+        .definition-tooltip:hover::after {
+            content: attr(data-definition);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(2, 6, 23, 0.95);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            color: #e5e7eb;
+            white-space: nowrap;
+            z-index: 50;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Badges de actualización */
+        .update-badge {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        /* Checkbox de aceptación */
+        .accept-checkbox {
+            appearance: none;
+            width: 1.5rem;
+            height: 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            border-radius: 0.4rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .accept-checkbox:checked {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");
+            background-size: 1rem;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        /* Animaciones */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-section {
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+        }
+        
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+        
+        /* Scrollbar personalizada */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(59, 130, 246, 0.3);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(59, 130, 246, 0.5);
+        }
+        
+        /* Enlaces internos suaves */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="relative">
+
+<!-- Barra de progreso de lectura -->
+<div id="readingProgress" class="reading-progress"></div>
+
+<!-- Header minimalista -->
+<nav class="relative z-50 border-b border-white/5 bg-[#020617]/80 backdrop-blur-sm sticky top-0">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-20">
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
+                    <span class="text-black font-bold text-xl">I</span>
+                </div>
+                <span class="text-white font-light text-xl tracking-tight">INFINI<span class="font-medium text-blue-400">HON</span></span>
+            </div>
+            <div class="hidden md:flex items-center space-x-12">
+                <a href="#" class="text-gray-400 hover:text-white transition-colors text-sm font-light tracking-wide">INICIO</a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors text-sm font-light tracking-wide">SERVICIOS</a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors text-sm font-light tracking-wide">SOBRE NOSOTROS</a>
+                <a href="#" class="text-white transition-colors text-sm font-medium tracking-wide border-b border-blue-400 pb-1">TÉRMINOS</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Contenido principal -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    
+    <!-- Hero de la página -->
+    <div class="text-center mb-16 animate-section">
+        <span class="text-blue-400 text-sm font-mono tracking-[0.2em] mb-4 block">// DOCUMENTO LEGAL</span>
+        <h1 class="text-4xl lg:text-5xl font-light text-white mb-6 leading-tight">
+            Términos y Condiciones<br>
+            <span class="font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">de InfiniHon</span>
+        </h1>
+        <p class="text-gray-400 max-w-2xl mx-auto text-sm leading-relaxed">
+            Última actualización: 15 de marzo de 2024 · Versión 2.5.0
+        </p>
+        
+        <!-- Badges informativos -->
+        <div class="flex flex-wrap justify-center gap-3 mt-8">
+            <span class="update-badge px-4 py-2">📋 15 secciones</span>
+            <span class="update-badge px-4 py-2">⚖️ Marco legal vigente</span>
+            <span class="update-badge px-4 py-2">🔒 Protección de datos</span>
+            <span class="update-badge px-4 py-2">🌐 Aplicación internacional</span>
+        </div>
+    </div>
+    
+    <div class="grid lg:grid-cols-4 gap-8">
+        <!-- Tabla de contenidos lateral - Sticky -->
+        <aside class="lg:col-span-1">
+            <div class="sticky top-24 glass-panel rounded-2xl p-6">
+                <h3 class="text-white font-medium mb-4 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="18" x2="20" y2="18"></line></svg>
+                    Contenido
+                </h3>
+                <nav class="space-y-2 text-sm">
+                    <a href="#seccion-1" class="toc-item text-gray-400 block">1. Aceptación de términos</a>
+                    <a href="#seccion-2" class="toc-item text-gray-400 block">2. Servicios</a>
+                    <a href="#seccion-3" class="toc-item text-gray-400 block">3. Registro y cuentas</a>
+                    <a href="#seccion-4" class="toc-item text-gray-400 block">4. Privacidad y datos</a>
+                    <a href="#seccion-5" class="toc-item text-gray-400 block">5. Propiedad intelectual</a>
+                    <a href="#seccion-6" class="toc-item text-gray-400 block">6. Uso aceptable</a>
+                    <a href="#seccion-7" class="toc-item text-gray-400 block">7. Limitación responsabilidad</a>
+                    <a href="#seccion-8" class="toc-item text-gray-400 block">8. Facturación y pagos</a>
+                    <a href="#seccion-9" class="toc-item text-gray-400 block">9. Cancelación y reembolsos</a>
+                    <a href="#seccion-10" class="toc-item text-gray-400 block">10. Soporte técnico</a>
+                    <a href="#seccion-11" class="toc-item text-gray-400 block">11. Modificaciones</a>
+                    <a href="#seccion-12" class="toc-item text-gray-400 block">12. Legislación aplicable</a>
+                    <a href="#seccion-13" class="toc-item text-gray-400 block">13. Resolución conflictos</a>
+                    <a href="#seccion-14" class="toc-item text-gray-400 block">14. Contacto legal</a>
+                    <a href="#seccion-15" class="toc-item text-gray-400 block">15. Anexos</a>
+                </nav>
+                
+                <!-- Tiempo estimado de lectura -->
+                <div class="mt-6 pt-4 border-t border-white/5">
+                    <div class="flex items-center gap-2 text-gray-400 text-xs">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        <span>Tiempo de lectura: 8 minutos</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Contenido principal de términos -->
+        <div class="lg:col-span-3 space-y-8">
+            
+            <!-- Sección 1 - Introducción interactiva -->
+            <section id="seccion-1" class="terms-section glass-card rounded-2xl p-8 animate-section delay-1">
+                <div class="flex items-start gap-4 mb-4">
+                    <span class="section-number text-4xl font-bold">01</span>
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-light text-white mb-4">Aceptación de los Términos</h2>
+                        <div class="prose prose-invert max-w-none">
+                            <p class="text-gray-300 text-sm leading-relaxed mb-4">
+                                Al acceder o utilizar los servicios de <span class="definition-tooltip text-blue-400" data-definition="InfiniHon Technologies S.L., empresa registrada en España con CIF B-12345678">InfiniHon</span>, usted acepta quedar vinculado por estos Términos y Condiciones, así como por todas las leyes y regulaciones aplicables. Si no está de acuerdo con alguno de estos términos, no podrá utilizar nuestros servicios.
+                            </p>
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                Estos términos constituyen un acuerdo legal vinculante entre usted y InfiniHon. Lea detenidamente todas las disposiciones antes de utilizar nuestros servicios.
+                            </p>
+                        </div>
+                        
+                        <!-- Versiones anteriores -->
+                        <div class="mt-6 flex items-center gap-3">
+                            <span class="text-xs text-gray-500">Versiones:</span>
+                            <button class="text-xs text-gray-400 hover:text-blue-400 transition">v2.4 (2023)</button>
+                            <button class="text-xs text-gray-400 hover:text-blue-400 transition">v2.3 (2022)</button>
+                            <button class="text-xs text-gray-400 hover:text-blue-400 transition">v2.2 (2021)</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Sección 2 - Servicios -->
+            <section id="seccion-2" class="terms-section glass-card rounded-2xl p-8 animate-section delay-2">
+                <div class="flex items-start gap-4">
+                    <span class="section-number text-4xl font-bold">02</span>
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-light text-white mb-4">Descripción de los Servicios</h2>
+                        
+                        <!-- Tarjetas de servicios interactivas -->
+                        <div class="grid md:grid-cols-2 gap-4 mb-4">
+                            <div class="glass-panel rounded-xl p-4 hover:border-blue-500/30 transition">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <div class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"></rect><line x1="8" y1="2" x2="8" y2="22"></line><line x1="16" y1="2" x2="16" y2="22"></line></svg>
+                                    </div>
+                                    <h3 class="text-white text-sm font-medium">Infraestructura Cloud</h3>
+                                </div>
+                                <p class="text-gray-400 text-xs">Servicios de computación en la nube, almacenamiento y redes gestionadas.</p>
+                            </div>
+                            
+                            <div class="glass-panel rounded-xl p-4 hover:border-purple-500/30 transition">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <div class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                                    </div>
+                                    <h3 class="text-white text-sm font-medium">Clusters Raspberry Pi</h3>
+                                </div>
+                                <p class="text-gray-400 text-xs">Implementación y gestión de clusters de alto rendimiento.</p>
+                            </div>
+                            
+                            <div class="glass-panel rounded-xl p-4 hover:border-cyan-500/30 transition">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <div class="w-8 h-8 rounded-lg bg-cyan-500/20 flex items-center justify-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6" y2="18"></line><line x1="12" y1="6" x2="12" y2="18"></line><line x1="18" y1="6" x2="18" y2="18"></line></svg>
+                                    </div>
+                                    <h3 class="text-white text-sm font-medium">Servidores Nation II</h3>
+                                </div>
+                                <p class="text-gray-400 text-xs">Servidores dedicados de alto rendimiento con arquitectura propia.</p>
+                            </div>
+                            
+                            <div class="glass-panel rounded-xl p-4 hover:border-green-500/30 transition">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <div class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                                    </div>
+                                    <h3 class="text-white text-sm font-medium">Seguridad Gestionada</h3>
+                                </div>
+                                <p class="text-gray-400 text-xs">Auditorías, hardening y monitoreo de seguridad 24/7.</p>
+                            </div>
+                        </div>
+                        
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            InfiniHon se reserva el derecho de modificar, suspender o discontinuar cualquier aspecto de los servicios en cualquier momento, incluyendo la disponibilidad de características o funcionalidades.
+                        </p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Sección 3 - Registro y cuentas -->
+            <section id="seccion-3" class="terms-section glass-card rounded-2xl p-8 animate-section delay-3">
+                <div class="flex items-start gap-4">
+                    <span class="section-number text-4xl font-bold">03</span>
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-light text-white mb-4">Registro y Cuentas de Usuario</h2>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <span class="text-blue-400 text-xs font-bold">1</span>
+                                </div>
+                                <p class="text-gray-300 text-sm">Debe ser mayor de 18 años para crear una cuenta.</p>
+                            </div>
+                            
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <span class="text-blue-400 text-xs font-bold">2</span>
+                                </div>
+                                <p class="text-gray-300 text-sm">Es responsable de mantener la confidencialidad de sus credenciales.</p>
+                            </div>
+                            
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <span class="text-blue-400 text-xs font-bold">3</span>
+                                </div>
+                                <p class="text-gray-300 text-sm">Debe proporcionar información precisa y actualizada.</p>
+                            </div>
+                            
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <span class="text-blue-400 text-xs font-bold">4</span>
+                                </div>
+                                <p class="text-gray-300 text-sm">Notificará inmediatamente cualquier uso no autorizado.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Alerta de seguridad -->
+                        <div class="mt-6 bg-yellow-500/5 border border-yellow-500/20 rounded-xl p-4">
+                            <div class="flex items-start gap-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                                <div>
+                                    <h4 class="text-yellow-400 text-sm font-medium mb-1">Responsabilidad de cuenta</h4>
+                                    <p class="text-gray-400 text-xs">InfiniHon no será responsable por pérdidas derivadas del uso no autorizado de su cuenta.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Sección 4 - Privacidad y datos -->
+            <section id="seccion-4" class="terms-section glass-card rounded-2xl p-8 animate-section delay-4">
+                <div class="flex items-start gap-4">
+                    <span class="section-number text-4xl font-bold">04</span>
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-light text-white mb-4">Privacidad y Protección de Datos</h2>
+                        
+                        <p class="text-gray-300 text-sm leading-relaxed mb-4">
+                            En InfiniHon, la privacidad de sus datos es nuestra prioridad. Cumplimos estrictamente con el 
+                            <span class="definition-tooltip text-blue-400" data-definition="Reglamento General de Protección de Datos de la Unión Europea">RGPD</span> 
+                            y demás normativas aplicables.
+                        </p>
+                        
+                        <!-- Acordeón de privacidad -->
+                        <div class="space-y-2">
+                            <div class="glass-panel rounded-xl p-4">
+                                <button onclick="toggleAccordion(this)" class="flex justify-between items-center w-full">
+                                    <span class="text-white text-sm">📊 Datos que recopilamos</span>
+                                    <svg class="accordion-icon w-4 h-4 text-blue-400 transition-transform" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                </button>
+                                <div class="accordion-content mt-3 text-gray-400 text-xs space-y-2 hidden">
+                                    <p>• Información de identificación (nombre, email, empresa)</p>
+                                    <p>• Datos de uso y métricas de servicios</p>
+                                    <p>• Información de facturación</p>
+                                    <p>• Logs de acceso y seguridad</p>
+                                </div>
+                            </div>
+                            
+                            <div class="glass-panel rounded-xl p-4">
+                                <button onclick="toggleAccordion(this)" class="flex justify-between items-center w-full">
+                                    <span class="text-white text-sm">🔒 Cómo protegemos tus datos</span>
+                                    <svg class="accordion-icon w-4 h-4 text-blue-400 transition-transform" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                </button>
+                                <div class="accordion-content mt-3 text-gray-400 text-xs space-y-2 hidden">
+                                    <p>• Cifrado AES-256 en reposo y TLS 1.3 en tránsito</p>
+                                    <p>• Autenticación de dos factores obligatoria</p>
+                                    <p>• Auditorías de seguridad trimestrales</p>
+                                    <p>• Certificación ISO 27001</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Secciones adicionales (resumidas para no alargar el código) -->
+            <section id="seccion-5" class="terms-section glass-card rounded-2xl p-8 animate-section delay-5">
+                <div class="flex items-start gap-4">
+                    <span class="section-number text-4xl font-bold">05</span>
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-light text-white mb-4">Propiedad Intelectual</h2>
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            Todo el contenido, incluyendo pero no limitado a textos, gráficos, logos, iconos, imágenes y software, es propiedad exclusiva de InfiniHon o de sus licenciantes y está protegido por leyes de propiedad intelectual.
+                        </p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Sección 15 - Anexos interactivos -->
+            <section id="seccion-15" class="terms-section glass-card rounded-2xl p-8">
+                <div class="flex items-start gap-4">
+                    <span class="section-number text-4xl font-bold">15</span>
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-light text-white mb-4">Anexos y Documentación</h2>
+                        
+                        <!-- Tarjetas de descarga -->
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="glass-panel rounded-xl p-4 flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+                                    <div>
+                                        <p class="text-white text-sm">Anexo Técnico</p>
+                                        <p class="text-gray-400 text-xs">Especificaciones técnicas</p>
+                                    </div>
+                                </div>
+                                <button class="text-blue-400 hover:text-blue-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                </button>
+                            </div>
+                            
+                            <div class="glass-panel rounded-xl p-4 flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                    <div>
+                                        <p class="text-white text-sm">Política de Privacidad</p>
+                                        <p class="text-gray-400 text-xs">Documento completo</p>
+                                    </div>
+                                </div>
+                                <button class="text-blue-400 hover:text-blue-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Línea de tiempo de versiones -->
+            <div class="glass-panel rounded-2xl p-6 mt-8">
+                <h3 class="text-white font-medium mb-4 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    Historial de versiones
+                </h3>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-4 text-sm">
+                        <span class="text-blue-400 font-mono">v2.5.0</span>
+                        <span class="text-gray-400">15 marzo 2024</span>
+                        <span class="text-gray-300">Actualización de cláusulas de privacidad</span>
+                    </div>
+                    <div class="flex items-center gap-4 text-sm">
+                        <span class="text-blue-400 font-mono">v2.4.2</span>
+                        <span class="text-gray-400">10 enero 2024</span>
+                        <span class="text-gray-300">Correcciones menores</span>
+                    </div>
+                    <div class="flex items-center gap-4 text-sm">
+                        <span class="text-blue-400 font-mono">v2.4.0</span>
+                        <span class="text-gray-400">1 diciembre 2023</span>
+                        <span class="text-gray-300">Nuevos servicios añadidos</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Aceptación de términos -->
+            <div class="glass-panel rounded-2xl p-8 mt-8 border-blue-500/30">
+                <div class="flex items-start gap-4">
+                    <input type="checkbox" id="acceptTerms" class="accept-checkbox mt-1">
+                    <div>
+                        <label for="acceptTerms" class="text-white text-sm font-medium cursor-pointer">
+                            He leído y acepto los Términos y Condiciones
+                        </label>
+                        <p class="text-gray-400 text-xs mt-1">
+                            Al marcar esta casilla, confirma que ha leído, entendido y acepta estar vinculado por todos los términos y condiciones establecidos en este documento.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="flex gap-4 mt-6">
+                    <button class="btn-primary px-8 py-3 rounded-xl text-white text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed" id="acceptButton" disabled>
+                        Aceptar y Continuar
+                    </button>
+                    <button class="btn-secondary px-8 py-3 rounded-xl text-gray-300 text-sm">
+                        Imprimir PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="relative z-10 border-t border-white/5 bg-[#020617]/50 backdrop-blur-sm mt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="text-gray-500 text-xs font-mono">
+                © 2024 INFINIHON · TODOS LOS DERECHOS RESERVADOS
+            </div>
+            <div class="flex gap-8">
+                <a href="#" class="text-gray-400 hover:text-white text-xs font-mono transition-colors">PRIVACIDAD</a>
+                <a href="#" class="text-gray-400 hover:text-white text-xs font-mono transition-colors">COOKIES</a>
+                <a href="#" class="text-gray-400 hover:text-white text-xs font-mono transition-colors">CONTACTO LEGAL</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script>
+    // Barra de progreso de lectura
+    window.addEventListener('scroll', function() {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        document.getElementById('readingProgress').style.width = scrolled + '%';
+    });
+    
+    // Resaltar sección activa en TOC
+    const sections = document.querySelectorAll('section');
+    const tocItems = document.querySelectorAll('.toc-item');
+    
+    window.addEventListener('scroll', function() {
+        let current = '';
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (scrollY >= (sectionTop - 200)) {
+                current = section.getAttribute('id');
+            }
+        });
+        
+        tocItems.forEach(item => {
+            item.classList.remove('active');
+            if (item.getAttribute('href') === '#' + current) {
+                item.classList.add('active');
+            }
+        });
+    });
+    
+    // Toggle acordeones
+    function toggleAccordion(button) {
+        const content = button.nextElementSibling;
+        const icon = button.querySelector('.accordion-icon');
+        
+        content.classList.toggle('hidden');
+        icon.classList.toggle('rotate-180');
+    }
+    
+    // Checkbox de aceptación
+    const acceptCheckbox = document.getElementById('acceptTerms');
+    const acceptButton = document.getElementById('acceptButton');
+    
+    acceptCheckbox.addEventListener('change', function() {
+        acceptButton.disabled = !this.checked;
+        if (this.checked) {
+            acceptButton.classList.remove('opacity-50', 'cursor-not-allowed');
+        } else {
+            acceptButton.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+    });
+    
+    // Botón de aceptar
+    acceptButton.addEventListener('click', function() {
+        if (!this.disabled) {
+            alert('Gracias por aceptar los términos. Será redirigido al dashboard.');
+            // Aquí iría la redirección real
+        }
+    });
+    
+    // Smooth scroll para TOC
+    document.querySelectorAll('.toc-item').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            
+            if (targetElement) {
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+    
+    // Tooltips para definiciones
+    const tooltips = document.querySelectorAll('.definition-tooltip');
+    tooltips.forEach(tooltip => {
+        tooltip.addEventListener('mouseenter', function() {
+            // El CSS maneja la visualización
+        });
+    });
+</script>
+
+<!-- Estilos adicionales para animaciones -->
+<style>
+    .rotate-180 {
+        transform: rotate(180deg);
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #1e40af, #3b82f6);
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover:not(:disabled) {
+        background: linear-gradient(135deg, #1e3a8a, #2563eb);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+    
+    .btn-secondary {
+        background: transparent;
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        transition: all 0.3s ease;
+    }
+    
+    .btn-secondary:hover {
+        background: rgba(59, 130, 246, 0.1);
+        border-color: rgba(59, 130, 246, 0.6);
+    }
+</style>
+</body>
+</html>
