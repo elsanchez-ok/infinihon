@@ -8,7 +8,7 @@
   
   [![Website](https://img.shields.io/badge/Website-infinihon.com-blue?style=for-the-badge&logo=google-chrome)](infinihon.vercel.app)
   [![GitHub](https://img.shields.io/badge/GitHub-InfiniHon-181717?style=for-the-badge&logo=github)](https://github.com/infinihon)
-  [![Twitter](https://img.shields.io/badge/Twitter-@InfiniHon-1DA1F2?style=for-the-badge&logo=twitter)](https://twitter.com/infinihon)
+  [![Instagram](https://img.shields.io/badge/Twitter-@InfiniHon-1DA1F2?style=for-the-badge&logo=twitter)](https://twitter.com/infinihon)
   [![LinkedIn](https://img.shields.io/badge/LinkedIn-InfiniHon-0077B5?style=for-the-badge&logo=linkedin)](https://linkedin.com/company/infinihon)
 
   [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
