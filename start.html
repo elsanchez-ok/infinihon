@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InfiniHon - Industrial Premium Loading</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>InfiniHon - Cargando Infraestructura Industrial</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,347 +14,293 @@
         }
 
         body {
-            min-height: 100vh;
-            background: #030712;
+            font-family: 'Inter', sans-serif;
+            background: #0a0c10;
             overflow: hidden;
-            font-family: 'Montserrat', sans-serif;
+            height: 100vh;
+            width: 100vw;
         }
 
-        /* Overlay industrial */
-        .industrial-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
+        /* Contenedor principal - Estética industrial */
+        .industrial-loader {
+            position: relative;
             width: 100%;
-            height: 100%;
-            background: 
-                repeating-linear-gradient(0deg, 
-                    rgba(0, 255, 255, 0.02) 0px, 
-                    rgba(0, 255, 255, 0.02) 2px,
-                    transparent 2px, 
-                    transparent 4px),
-                repeating-linear-gradient(90deg, 
-                    rgba(255, 0, 255, 0.02) 0px, 
-                    rgba(255, 0, 255, 0.02) 2px,
-                    transparent 2px, 
-                    transparent 4px);
-            pointer-events: none;
-            z-index: 10;
+            height: 100vh;
+            background: linear-gradient(135deg, #030712 0%, #111827 50%, #030712 100%);
+            overflow: hidden;
         }
 
-        /* Fondo con textura industrial */
-        .industrial-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(0, 150, 255, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 80% 70%, rgba(255, 0, 150, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 40% 80%, rgba(100, 255, 255, 0.1) 0%, transparent 50%),
-                url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48cGF0aCBkPSJNMCAwaDEwdjEwSDB6TTEwIDEwaDEwdjEwSDEwek0yMCAwaDEwdjEwSDIwek0zMCAxMGgxMHYxMEgzMHpNNDAgMGgxMHYxMEg0MHpNNTAgMTBoMTB2MTBINTB6TTYwIDBoMTB2MTBINjB6TTcwIDEwaDEwdjEwSDcwek0wIDIwaDEwdjEwSDB6TTEwIDMwaDEwdjEwSDEwek0yMCAyMGgxMHYxMEgyMHpNMzAgMzBoMTB2MTBIMHpNNDAgMjBoMTB2MTBINDB6TTUwIDMwaDEwdjEwSDUwek02MCAyMGgxMHYxMEg2MHpNNzAgMzBoMTB2MTBINzB6TTAgNDBoMTB2MTBIMHpNMTAgNTBoMTB2MTBIMTB6TTIwIDQwaDEwdjEwSDIwek0zMCA1MGgxMHYxMEgzMHpNNDAgNDBoMTB2MTBINDB6TTUwIDUwaDEwdjEwSDUwek02MCA0MGgxMHYxMEg2MHpNNzAgNTBoMTB2MTBINzB6TTAgNjBoMTB2MTBIMHpNMTAgNzBoMTB2MTBIMTB6TTIwIDYwaDEwdjEwSDIwek0zMCA3MGgxMHYxMEgzMHpNNDAgNjBoMTB2MTBINDB6TTUwIDcwaDEwdjEwSDUwek02MCA2MGgxMHYxMEg2MHpNNzAgNzBoMTB2MTBINzB6IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDIiLz48L3N2Zz4=');
+        /* Capa de engranajes de fondo */
+        .gears-bg {
+            position: absolute;
+            inset: 0;
+            opacity: 0.15;
             z-index: 1;
-            animation: bgMove 60s linear infinite;
         }
 
-        @keyframes bgMove {
-            0% { background-position: 0 0; }
-            100% { background-position: 80px 80px; }
-        }
-
-        /* Efecto de escaneo industrial */
-        .scan-line {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(180deg, 
-                transparent 0%, 
-                rgba(0, 255, 255, 0.05) 50%, 
-                transparent 100%);
-            transform: translateY(-100%);
-            animation: scan 8s linear infinite;
-            z-index: 5;
-            pointer-events: none;
-        }
-
-        @keyframes scan {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(200%); }
-        }
-
-        /* Contenedor principal */
-        .industrial-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 20;
-        }
-
-        /* Panel central industrial */
-        .industrial-panel {
-            width: 800px;
-            height: 600px;
-            background: rgba(3, 7, 18, 0.95);
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            box-shadow: 
-                0 0 50px rgba(0, 255, 255, 0.2),
-                inset 0 0 30px rgba(0, 255, 255, 0.1);
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-        }
-
-        /* Esquinas industriales */
-        .corner {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            border: 3px solid #00ffff;
-            filter: drop-shadow(0 0 10px #00ffff);
-        }
-
-        .corner-tl {
-            top: 20px;
-            left: 20px;
-            border-right: none;
-            border-bottom: none;
-        }
-
-        .corner-tr {
-            top: 20px;
-            right: 20px;
-            border-left: none;
-            border-bottom: none;
-        }
-
-        .corner-bl {
-            bottom: 20px;
-            left: 20px;
-            border-right: none;
-            border-top: none;
-        }
-
-        .corner-br {
-            bottom: 20px;
-            right: 20px;
-            border-left: none;
-            border-top: none;
-        }
-
-        /* Header del panel */
-        .panel-header {
-            padding: 30px 40px 20px;
-            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .system-title {
-            font-family: 'Rajdhani', sans-serif;
-            color: #00ffff;
-            font-size: 14px;
-            letter-spacing: 4px;
-            font-weight: 600;
-            text-transform: uppercase;
-            text-shadow: 0 0 10px #00ffff;
-        }
-
-        .system-status {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .status-led {
-            width: 12px;
-            height: 12px;
-            background: #00ff00;
-            border-radius: 50%;
-            box-shadow: 0 0 20px #00ff00;
-            animation: ledPulse 2s ease infinite;
-        }
-
-        @keyframes ledPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .status-text {
-            color: #00ff00;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 12px;
-            letter-spacing: 2px;
-        }
-
-        /* Contenido principal */
-        .panel-content {
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* Logo industrial */
-        .industrial-logo {
-            width: 180px;
-            height: 180px;
-            margin-bottom: 40px;
-            position: relative;
-        }
-
-        .logo-base {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #001122, #000814);
-            border: 3px solid #00ffff;
-            box-shadow: 
-                0 0 50px rgba(0, 255, 255, 0.3),
-                inset 0 0 30px rgba(0, 255, 255, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .logo-base::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, 
-                transparent 30%, 
-                rgba(0, 255, 255, 0.1) 50%, 
-                transparent 70%);
-            animation: logoShine 4s linear infinite;
-        }
-
-        @keyframes logoShine {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-        }
-
-        .logo-base span {
-            font-size: 80px;
-            font-weight: 900;
-            color: #00ffff;
-            text-shadow: 
-                0 0 30px #00ffff,
-                2px 2px 0 #ff00ff,
-                -2px -2px 0 #00ffff;
-            font-family: 'Montserrat', sans-serif;
-            letter-spacing: 10px;
-        }
-
-        /* Engranajes animados */
         .gear {
             position: absolute;
-            width: 40px;
-            height: 40px;
-            border: 3px solid #00ffff;
+            border: 2px solid #3b82f6;
             border-radius: 50%;
+            animation: rotateGear 20s linear infinite;
+        }
+
+        .gear::before, .gear::after {
+            content: '';
+            position: absolute;
+            background: #3b82f6;
         }
 
         .gear::before {
-            content: '';
+            width: 30%;
+            height: 6px;
+            top: 50%;
+            left: -15%;
+            transform: translateY(-50%);
+        }
+
+        .gear::after {
+            width: 6px;
+            height: 30%;
+            left: 50%;
+            top: -15%;
+            transform: translateX(-50%);
+        }
+
+        @keyframes rotateGear {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Líneas de alta tensión */
+        .power-lines {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+        }
+
+        .power-line {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, #3b82f6, #22d3ee, #3b82f6, transparent);
+            height: 2px;
+            width: 100%;
+            animation: powerPulse 4s ease-in-out infinite;
+        }
+
+        .power-line-vertical {
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(180deg, transparent, #3b82f6, #22d3ee, #3b82f6, transparent);
+        }
+
+        @keyframes powerPulse {
+            0%, 100% { opacity: 0.1; transform: scaleX(0.8); }
+            50% { opacity: 0.5; transform: scaleX(1.2); }
+        }
+
+        /* Centro de poder */
+        .power-core {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 15px;
-            height: 15px;
-            background: #00ffff;
+            width: 80vmin;
+            height: 80vmin;
             border-radius: 50%;
-            box-shadow: 0 0 20px #00ffff;
+            background: radial-gradient(circle at 30% 30%, 
+                rgba(59, 130, 246, 0.3) 0%,
+                rgba(6, 182, 212, 0.2) 30%,
+                transparent 70%);
+            filter: blur(40px);
+            z-index: 5;
+            animation: corePulse 5s ease-in-out infinite;
         }
 
-        .gear::after {
-            content: '';
+        @keyframes corePulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+        }
+
+        /* Anillos de energía */
+        .energy-rings {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60vmin;
+            height: 60vmin;
+            z-index: 10;
+        }
+
+        .ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            animation: ringExpand 4s ease-out infinite;
+        }
+
+        .ring:nth-child(1) { width: 30vmin; height: 30vmin; animation-delay: 0s; }
+        .ring:nth-child(2) { width: 45vmin; height: 45vmin; animation-delay: 1s; }
+        .ring:nth-child(3) { width: 60vmin; height: 60vmin; animation-delay: 2s; }
+
+        @keyframes ringExpand {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(0.3);
+                border-color: rgba(59, 130, 246, 0.8);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(1.5);
+                border-color: rgba(6, 182, 212, 0);
+            }
+        }
+
+        /* Contenido principal */
+        .industrial-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 30;
+            text-align: center;
+            width: 100%;
+            max-width: 800px;
+            padding: 2rem;
+        }
+
+        /* Logo con efecto metalizado */
+        .industrial-logo {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 2rem;
+            perspective: 1000px;
+        }
+
+        .logo-metal {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: metalFloat 8s ease-in-out infinite;
+        }
+
+        .metal-face {
             position: absolute;
             width: 100%;
             height: 100%;
-            border: 3px solid #00ffff;
-            border-radius: 50%;
-            animation: gearRotate 10s linear infinite;
-        }
-
-        .gear1 {
-            top: -20px;
-            right: -20px;
-        }
-
-        .gear2 {
-            bottom: -20px;
-            left: -20px;
-        }
-
-        .gear1::after {
-            border-color: #00ffff #ff00ff #00ffff #ff00ff;
-        }
-
-        .gear2::after {
-            border-color: #ff00ff #00ffff #ff00ff #00ffff;
-            animation-direction: reverse;
-        }
-
-        @keyframes gearRotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Sistema de barras de progreso industrial */
-        .industrial-progress {
-            width: 100%;
-            max-width: 500px;
-            margin: 30px 0;
-        }
-
-        .progress-item {
-            margin-bottom: 25px;
-        }
-
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-family: 'Rajdhani', sans-serif;
-            color: #94a3b8;
-            font-size: 12px;
-            letter-spacing: 1px;
-        }
-
-        .progress-label {
+            background: linear-gradient(135deg, 
+                #2a3f5e 0%,
+                #4a6b8f 25%,
+                #2a3f5e 50%,
+                #4a6b8f 75%,
+                #2a3f5e 100%);
+            background-size: 400% 400%;
+            border-radius: 20% 80% 80% 20% / 20% 20% 80% 80%;
+            box-shadow: 
+                0 0 50px rgba(59, 130, 246, 0.3),
+                inset 0 0 50px rgba(255, 255, 255, 0.2);
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            animation: metalShine 4s ease-in-out infinite;
         }
 
-        .progress-label i {
-            color: #00ffff;
-            font-size: 14px;
+        .metal-face::before {
+            content: 'I';
+            font-size: 6rem;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: 
+                0 0 30px rgba(59, 130, 246, 0.8),
+                2px 2px 0 rgba(0, 0, 0, 0.5);
+            transform: translateZ(20px);
         }
 
-        .progress-value {
-            color: #00ffff;
-            font-weight: 600;
-            font-family: 'Montserrat', monospace;
+        .metal-face-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(135deg, 
+                #1e2f4a 0%,
+                #3a5670 25%,
+                #1e2f4a 50%,
+                #3a5670 75%,
+                #1e2f4a 100%);
+        }
+
+        @keyframes metalFloat {
+            0%, 100% { transform: translateY(0) rotateY(0deg); }
+            25% { transform: translateY(-10px) rotateY(5deg); }
+            75% { transform: translateY(10px) rotateY(-5deg); }
+        }
+
+        @keyframes metalShine {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Texto industrial */
+        .industrial-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: transparent;
+            -webkit-text-stroke: 2px rgba(59, 130, 246, 0.5);
+            margin-bottom: 1rem;
+            letter-spacing: 0.5rem;
+            position: relative;
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+
+        .industrial-title span {
+            color: #fff;
+            -webkit-text-stroke: 0;
+            text-shadow: 0 0 30px rgba(59, 130, 246, 0.8);
+        }
+
+        .industrial-subtitle {
+            font-size: 1rem;
+            color: #9ca3af;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.3rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .industrial-subtitle::before,
+        .industrial-subtitle::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 2px;
+            background: #3b82f6;
+            top: 50%;
+        }
+
+        .industrial-subtitle::before { left: -70px; }
+        .industrial-subtitle::after { right: -70px; }
+
+        @keyframes titleGlow {
+            0%, 100% { text-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+            50% { text-shadow: 0 0 50px rgba(59, 130, 246, 0.8); }
+        }
+
+        /* Barra de progreso industrial */
+        .industrial-progress {
+            width: 80%;
+            max-width: 600px;
+            margin: 3rem auto;
+            position: relative;
         }
 
         .progress-track {
-            height: 20px;
-            background: rgba(0, 255, 255, 0.1);
-            border: 1px solid rgba(0, 255, 255, 0.3);
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.2);
             position: relative;
             overflow: hidden;
         }
@@ -361,491 +308,484 @@
         .progress-fill {
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, #00ffff, #ff00ff);
+            background: linear-gradient(90deg, 
+                #1e40af, 
+                #3b82f6, 
+                #22d3ee, 
+                #3b82f6, 
+                #1e40af);
+            background-size: 500% 100%;
             position: relative;
-            animation: progressPulse 2s ease infinite;
-            transition: width 0.3s ease;
+            animation: fillGlow 2s linear infinite;
+            transition: width 0.1s linear;
         }
 
-        .progress-fill::after {
+        @keyframes fillGlow {
+            0% { background-position: 0% 0; }
+            100% { background-position: 500% 0; }
+        }
+
+        .progress-markers {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: #4b5563;
+        }
+
+        .progress-marker {
+            position: relative;
+        }
+
+        .progress-marker.active {
+            color: #60a5fa;
+        }
+
+        .progress-marker::before {
             content: '';
             position: absolute;
-            top: 0;
-            right: 0;
-            width: 20px;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5));
-            filter: blur(5px);
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 10px;
+            background: currentColor;
         }
 
-        @keyframes progressPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-
-        /* Medidor industrial */
-        .industrial-meter {
-            width: 300px;
-            height: 300px;
-            margin: 30px 0;
-            position: relative;
-        }
-
-        .meter-circle {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 3px solid rgba(0, 255, 255, 0.3);
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .meter-fill {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            border-top: 3px solid #00ffff;
-            border-right: 3px solid #ff00ff;
-            animation: meterRotate 4s linear infinite;
-        }
-
-        @keyframes meterRotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .meter-center {
-            width: 150px;
-            height: 150px;
-            background: rgba(0, 255, 255, 0.05);
-            border-radius: 50%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid rgba(0, 255, 255, 0.3);
-        }
-
-        .meter-number {
-            font-size: 48px;
-            font-weight: 800;
-            color: #00ffff;
-            font-family: 'Montserrat', sans-serif;
-            text-shadow: 0 0 30px #00ffff;
-            line-height: 1;
-        }
-
-        .meter-unit {
-            color: #94a3b8;
-            font-size: 12px;
-            letter-spacing: 2px;
-            margin-top: 5px;
-        }
-
-        /* Sistema de líneas de datos */
-        .data-lines {
-            position: absolute;
-            bottom: 40px;
-            left: 40px;
-            right: 40px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .data-line {
-            width: 30%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #00ffff, transparent);
-            animation: dataPulse 2s ease infinite;
-        }
-
-        .data-line:nth-child(2) {
-            animation-delay: 0.5s;
-            background: linear-gradient(90deg, transparent, #ff00ff, transparent);
-        }
-
-        .data-line:nth-child(3) {
-            animation-delay: 1s;
-            background: linear-gradient(90deg, transparent, #00ffff, transparent);
-        }
-
-        @keyframes dataPulse {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
-        }
-
-        /* Footer del panel */
-        .panel-footer {
-            position: absolute;
-            bottom: 20px;
-            left: 40px;
-            right: 40px;
-            display: flex;
-            justify-content: space-between;
-            color: rgba(0, 255, 255, 0.5);
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 10px;
-            letter-spacing: 2px;
-        }
-
-        /* Overlay de finalización */
-        .completion-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #030712;
-            z-index: 100;
+        /* Medidores industriales */
+        .industrial-gauges {
             display: flex;
             justify-content: center;
-            align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 1s ease;
+            gap: 3rem;
+            margin-top: 3rem;
         }
 
-        .completion-overlay.show {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .final-logo-industrial {
+        .gauge {
             text-align: center;
-            transform: scale(0);
-            transition: transform 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .completion-overlay.show .final-logo-industrial {
-            transform: scale(1);
+        .gauge-number {
+            font-size: 2rem;
+            font-weight: 300;
+            font-family: 'JetBrains Mono', monospace;
+            color: #60a5fa;
+            text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
         }
 
-        .final-logo-industrial .logo-block {
-            width: 300px;
-            height: 300px;
-            background: linear-gradient(135deg, #001122, #000814);
-            border: 4px solid #00ffff;
-            box-shadow: 
-                0 0 100px rgba(0, 255, 255, 0.5),
-                inset 0 0 50px rgba(0, 255, 255, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 40px;
+        .gauge-label {
+            font-size: 0.7rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
+        }
+
+        /* Mensaje de sistema */
+        .system-message {
+            margin-top: 3rem;
+            padding: 1rem 2rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: #9ca3af;
             position: relative;
             overflow: hidden;
         }
 
-        .final-logo-industrial .logo-block span {
-            font-size: 120px;
-            font-weight: 900;
-            color: #00ffff;
-            text-shadow: 
-                0 0 50px #00ffff,
-                3px 3px 0 #ff00ff,
-                -3px -3px 0 #00ffff;
-            font-family: 'Montserrat', sans-serif;
-            letter-spacing: 15px;
+        .system-message::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.2), transparent);
+            animation: messageScan 3s linear infinite;
         }
 
-        .final-logo-industrial h2 {
-            color: white;
-            font-size: 48px;
+        @keyframes messageScan {
+            to { left: 100%; }
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.2rem;
+            background: #60a5fa;
+            margin-left: 5px;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Logo final */
+        .final-showcase {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            z-index: 50;
+            text-align: center;
+            opacity: 0;
+            transition: all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .final-showcase.active {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .final-logo-container {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+
+        .final-logo-ring {
+            position: absolute;
+            inset: 0;
+            border: 4px solid transparent;
+            border-top-color: #3b82f6;
+            border-right-color: #22d3ee;
+            border-radius: 50%;
+            animation: spinRing 3s linear infinite;
+        }
+
+        .final-logo-ring:nth-child(2) {
+            width: 80%;
+            height: 80%;
+            top: 10%;
+            left: 10%;
+            border-top-color: #22d3ee;
+            border-left-color: #3b82f6;
+            animation-direction: reverse;
+            animation-duration: 4s;
+        }
+
+        @keyframes spinRing {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .final-logo-core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, #1e40af, #3b82f6, #22d3ee);
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 100px rgba(59, 130, 246, 0.6);
+            animation: coreFloat 3s ease-in-out infinite;
+        }
+
+        .final-logo-core span {
+            font-size: 5rem;
             font-weight: 800;
-            margin-bottom: 15px;
-            letter-spacing: 8px;
-            text-shadow: 0 0 20px #00ffff;
+            color: white;
+            text-shadow: 0 0 50px rgba(255, 255, 255, 0.5);
         }
 
-        .final-logo-industrial p {
-            color: #00ffff;
-            font-size: 18px;
-            letter-spacing: 4px;
-            font-weight: 300;
+        @keyframes coreFloat {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.05); }
         }
 
-        /* Contador binario */
-        .binary-counter {
-            position: fixed;
-            top: 40px;
-            right: 40px;
-            color: rgba(0, 255, 255, 0.3);
-            font-family: 'Montserrat', monospace;
-            font-size: 12px;
-            z-index: 25;
-            writing-mode: vertical-rl;
-            text-orientation: upright;
-            letter-spacing: 5px;
+        .final-title {
+            font-size: 4rem;
+            font-weight: 800;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(59, 130, 246, 0.8);
+        }
+
+        .final-subtitle {
+            font-size: 1.2rem;
+            color: #60a5fa;
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 2rem;
+        }
+
+        .final-badge {
+            display: inline-block;
+            padding: 0.5rem 2rem;
+            background: linear-gradient(90deg, #1e40af, #3b82f6);
+            color: white;
+            font-weight: 600;
+            letter-spacing: 0.2rem;
+            font-size: 0.8rem;
+            clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+        }
+
+        /* Overlay final */
+        .final-overlay {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, transparent 0%, #030712 100%);
+            z-index: 45;
+            opacity: 0;
+            transition: opacity 1s ease;
+            pointer-events: none;
+        }
+
+        .final-overlay.active {
+            opacity: 1;
         }
     </style>
 </head>
 <body>
-    <!-- Overlay industrial -->
-    <div class="industrial-overlay"></div>
-
-    <!-- Fondo industrial -->
-    <div class="industrial-bg"></div>
-
-    <!-- Línea de escaneo -->
-    <div class="scan-line"></div>
-
-    <!-- Contador binario -->
-    <div class="binary-counter" id="binaryCounter">101010101010</div>
-
-    <!-- Contenedor principal -->
-    <div class="industrial-container" id="industrialContainer">
-        <div class="industrial-panel">
-            <!-- Esquinas industriales -->
-            <div class="corner corner-tl"></div>
-            <div class="corner corner-tr"></div>
-            <div class="corner corner-bl"></div>
-            <div class="corner corner-br"></div>
-
-            <!-- Header -->
-            <div class="panel-header">
-                <div class="system-title">INFINIHON INDUSTRIAL SYSTEMS v2.0</div>
-                <div class="system-status">
-                    <div class="status-led"></div>
-                    <span class="status-text">SYSTEM ONLINE</span>
+    <div class="industrial-loader" id="industrialLoader">
+        
+        <!-- Engranajes de fondo -->
+        <div class="gears-bg" id="gearsBg"></div>
+        
+        <!-- Líneas de alta tensión -->
+        <div class="power-lines">
+            <div class="power-line" style="top: 20%;"></div>
+            <div class="power-line" style="top: 50%;"></div>
+            <div class="power-line" style="top: 80%;"></div>
+            <div class="power-line power-line-vertical" style="left: 30%;"></div>
+            <div class="power-line power-line-vertical" style="left: 70%;"></div>
+        </div>
+        
+        <!-- Núcleo de energía -->
+        <div class="power-core"></div>
+        
+        <!-- Anillos de energía -->
+        <div class="energy-rings">
+            <div class="ring"></div>
+            <div class="ring"></div>
+            <div class="ring"></div>
+        </div>
+        
+        <!-- Contenido industrial -->
+        <div class="industrial-content" id="industrialContent">
+            <!-- Logo metalizado -->
+            <div class="industrial-logo">
+                <div class="logo-metal">
+                    <div class="metal-face"></div>
+                    <div class="metal-face metal-face-back"></div>
                 </div>
             </div>
-
-            <!-- Contenido -->
-            <div class="panel-content">
-                <!-- Logo con engranajes -->
-                <div class="industrial-logo">
-                    <div class="logo-base">
-                        <span>I</span>
-                    </div>
-                    <div class="gear gear1"></div>
-                    <div class="gear gear2"></div>
+            
+            <!-- Título industrial -->
+            <h1 class="industrial-title">
+                <span>INFINI</span>HON
+            </h1>
+            
+            <div class="industrial-subtitle">
+                INFRAESTRUCTURA DE GRADO INDUSTRIAL
+            </div>
+            
+            <!-- Barra de progreso -->
+            <div class="industrial-progress">
+                <div class="progress-track">
+                    <div class="progress-fill" id="progressFill"></div>
                 </div>
-
-                <!-- Medidor industrial -->
-                <div class="industrial-meter">
-                    <div class="meter-circle">
-                        <div class="meter-fill"></div>
-                        <div class="meter-center">
-                            <span class="meter-number" id="meterPercentage">0</span>
-                            <span class="meter-unit">POR CIENTO</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Barras de progreso -->
-                <div class="industrial-progress">
-                    <div class="progress-item">
-                        <div class="progress-header">
-                            <div class="progress-label">
-                                <i>⚡</i>
-                                <span>POWER CORE</span>
-                            </div>
-                            <span class="progress-value" id="powerValue">0%</span>
-                        </div>
-                        <div class="progress-track">
-                            <div class="progress-fill" id="powerBar" style="width: 0%"></div>
-                        </div>
-                    </div>
-
-                    <div class="progress-item">
-                        <div class="progress-header">
-                            <div class="progress-label">
-                                <i>🔷</i>
-                                <span>QUANTUM PROCESSOR</span>
-                            </div>
-                            <span class="progress-value" id="quantumValue">0%</span>
-                        </div>
-                        <div class="progress-track">
-                            <div class="progress-fill" id="quantumBar" style="width: 0%"></div>
-                        </div>
-                    </div>
-
-                    <div class="progress-item">
-                        <div class="progress-header">
-                            <div class="progress-label">
-                                <i>🔮</i>
-                                <span>NEURAL INTERFACE</span>
-                            </div>
-                            <span class="progress-value" id="neuralValue">0%</span>
-                        </div>
-                        <div class="progress-track">
-                            <div class="progress-fill" id="neuralBar" style="width: 0%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Líneas de datos -->
-                <div class="data-lines">
-                    <div class="data-line"></div>
-                    <div class="data-line"></div>
-                    <div class="data-line"></div>
+                <div class="progress-markers">
+                    <span class="progress-marker active">00%</span>
+                    <span class="progress-marker">25%</span>
+                    <span class="progress-marker">50%</span>
+                    <span class="progress-marker">75%</span>
+                    <span class="progress-marker">100%</span>
                 </div>
             </div>
-
-            <!-- Footer -->
-            <div class="panel-footer">
-                <span>SECURE CONNECTION: ESTABLISHED</span>
-                <span>ENCRYPTION: AES-256</span>
-                <span>STATUS: INITIALIZING</span>
+            
+            <!-- Medidores industriales -->
+            <div class="industrial-gauges">
+                <div class="gauge">
+                    <div class="gauge-number" id="powerGauge">0.0</div>
+                    <div class="gauge-label">POTENCIA (GW)</div>
+                </div>
+                <div class="gauge">
+                    <div class="gauge-number" id="tempGauge">0.0</div>
+                    <div class="gauge-label">TEMP (°C)</div>
+                </div>
+                <div class="gauge">
+                    <div class="gauge-number" id="loadGauge">0%</div>
+                    <div class="gauge-label">CARGA</div>
+                </div>
+            </div>
+            
+            <!-- Mensaje de sistema -->
+            <div class="system-message" id="systemMessage">
+                <span>></span> INICIALIZANDO SISTEMAS PRINCIPALES<span class="cursor"></span>
             </div>
         </div>
-    </div>
-
-    <!-- Overlay de finalización -->
-    <div class="completion-overlay" id="completionOverlay">
-        <div class="final-logo-industrial">
-            <div class="logo-block">
-                <span>I</span>
+        
+        <!-- Overlay final -->
+        <div class="final-overlay" id="finalOverlay"></div>
+        
+        <!-- Logo final -->
+        <div class="final-showcase" id="finalShowcase">
+            <div class="final-logo-container">
+                <div class="final-logo-ring"></div>
+                <div class="final-logo-ring"></div>
+                <div class="final-logo-core">
+                    <span>I</span>
+                </div>
             </div>
-            <h2>INFINIHON</h2>
-            <p>INDUSTRIAL PREMIUM SYSTEMS</p>
+            <h2 class="final-title">INFINIHON</h2>
+            <div class="final-subtitle">INDUSTRIAL GRADE INFRASTRUCTURE</div>
+            <div class="final-badge">EST. 2025</div>
+            <p class="text-gray-400 text-sm mt-8 font-mono">REDIRIGIENDO A LA PLATAFORMA...</p>
         </div>
     </div>
 
     <script>
-        // Datos de progreso
-        let progress = 0;
-        const powerBar = document.getElementById('powerBar');
-        const quantumBar = document.getElementById('quantumBar');
-        const neuralBar = document.getElementById('neuralBar');
-        const powerValue = document.getElementById('powerValue');
-        const quantumValue = document.getElementById('quantumValue');
-        const neuralValue = document.getElementById('neuralValue');
-        const meterPercentage = document.getElementById('meterPercentage');
-        const binaryCounter = document.getElementById('binaryCounter');
-        const industrialContainer = document.getElementById('industrialContainer');
-        const completionOverlay = document.getElementById('completionOverlay');
-
-        // Actualizar contador binario
-        function updateBinaryCounter(value) {
-            const binary = Math.floor(value).toString(2).padStart(12, '0');
-            binaryCounter.textContent = binary;
-        }
-
-        // Crear efecto de chispas
-        function createSpark() {
-            const spark = document.createElement('div');
-            spark.style.cssText = `
-                position: fixed;
-                width: 4px;
-                height: 4px;
-                background: #00ffff;
-                border-radius: 50%;
-                left: ${Math.random() * 100}%;
-                top: ${Math.random() * 100}%;
-                box-shadow: 0 0 20px #00ffff;
-                animation: sparkFade 1s ease forwards;
-                z-index: 30;
-            `;
-            document.body.appendChild(spark);
+        // Generar engranajes de fondo
+        function createGears() {
+            const gearsBg = document.getElementById('gearsBg');
+            const gearCount = 12;
             
-            setTimeout(() => {
-                spark.remove();
-            }, 1000);
-        }
-
-        // Añadir estilo de chispas
-        const sparkStyle = document.createElement('style');
-        sparkStyle.textContent = `
-            @keyframes sparkFade {
-                0% { transform: scale(1); opacity: 1; }
-                100% { transform: scale(3); opacity: 0; }
+            for (let i = 0; i < gearCount; i++) {
+                const gear = document.createElement('div');
+                gear.className = 'gear';
+                
+                const size = Math.random() * 150 + 50;
+                gear.style.width = `${size}px`;
+                gear.style.height = `${size}px`;
+                gear.style.left = `${Math.random() * 100}%`;
+                gear.style.top = `${Math.random() * 100}%`;
+                
+                const speed = Math.random() * 10 + 10;
+                gear.style.animationDuration = `${speed}s`;
+                
+                gear.style.opacity = Math.random() * 0.3;
+                
+                gearsBg.appendChild(gear);
             }
-        `;
-        document.head.appendChild(sparkStyle);
+        }
 
-        // Simular progreso industrial
-        const interval = setInterval(() => {
-            // Incremento variable para simular procesos industriales
-            const increment = Math.random() * 2 + 0.5;
-            progress += increment;
+        // Mensajes del sistema
+        const systemMessages = [
+            '> INICIALIZANDO SISTEMAS PRINCIPALES',
+            '> CARGANDO MÓDULOS DE INFRAESTRUCTURA',
+            '> ESTABLECIENDO CONEXIONES DE ALTA VELOCIDAD',
+            '> VERIFICANDO INTEGRIDAD DE SERVIDORES',
+            '> OPTIMIZANDO RENDIMIENTO INDUSTRIAL',
+            '> SISTEMAS OPERATIVOS EN LÍNEA',
+            '> INFINIHON - POTENCIA INDUSTRIAL',
+            '> BIENVENIDO A LA INFRAESTRUCTURA DEL FUTURO'
+        ];
+
+        // Variables de progreso
+        let progress = 0;
+        const progressFill = document.getElementById('progressFill');
+        const systemMessage = document.getElementById('systemMessage');
+        const powerGauge = document.getElementById('powerGauge');
+        const tempGauge = document.getElementById('tempGauge');
+        const loadGauge = document.getElementById('loadGauge');
+        const industrialContent = document.getElementById('industrialContent');
+        const finalShowcase = document.getElementById('finalShowcase');
+        const finalOverlay = document.getElementById('finalOverlay');
+        const markers = document.querySelectorAll('.progress-marker');
+
+        // Valores de los medidores
+        let power = 0;
+        let temp = 20;
+        let load = 0;
+
+        // Actualizar medidores
+        function updateGauges() {
+            // Potencia (0-9.9 GW)
+            power = (progress / 100) * 9.9;
+            powerGauge.textContent = power.toFixed(1);
             
-            if (progress >= 100) {
-                progress = 100;
-                clearInterval(interval);
+            // Temperatura (20-85°C)
+            temp = 20 + (progress / 100) * 65;
+            tempGauge.textContent = temp.toFixed(1);
+            
+            // Carga (0-100%)
+            load = progress;
+            loadGauge.textContent = Math.floor(load) + '%';
+        }
+
+        // Actualizar marcadores de progreso
+        function updateMarkers() {
+            markers.forEach((marker, index) => {
+                const value = index * 25;
+                if (progress >= value) {
+                    marker.classList.add('active');
+                    marker.textContent = value + '%';
+                } else {
+                    marker.classList.remove('active');
+                    marker.textContent = value + '%';
+                }
+            });
+        }
+
+        // Simular carga industrial
+        function industrialLoading() {
+            if (progress < 100) {
+                // Incremento más realista (a veces más rápido, a veces más lento)
+                const increment = Math.random() * 3 + 1;
+                progress += increment;
+                if (progress > 100) progress = 100;
                 
-                // Valores finales
-                powerBar.style.width = '100%';
-                quantumBar.style.width = '100%';
-                neuralBar.style.width = '100%';
-                powerValue.textContent = '100%';
-                quantumValue.textContent = '100%';
-                neuralValue.textContent = '100%';
-                meterPercentage.textContent = '100';
-                updateBinaryCounter(100);
+                // Actualizar barra
+                progressFill.style.width = `${progress}%`;
                 
-                // Cambiar texto de estado
-                document.querySelector('.status-text').textContent = 'SYSTEM READY';
-                document.querySelector('.panel-footer span:last-child').textContent = 'STATUS: COMPLETE';
+                // Actualizar medidores
+                updateGauges();
                 
-                // Mostrar overlay final
+                // Actualizar marcadores
+                updateMarkers();
+                
+                // Cambiar mensaje según progreso
+                const messageIndex = Math.floor((progress / 100) * (systemMessages.length - 1));
+                const message = systemMessages[messageIndex];
+                systemMessage.innerHTML = `${message}<span class="cursor"></span>`;
+                
+                // Llamar de nuevo con intervalo variable
+                setTimeout(industrialLoading, Math.random() * 100 + 50);
+            } else {
+                // Carga completada
+                systemMessage.innerHTML = '> SISTEMAS OPERATIVOS - LISTO PARA OPERAR<span class="cursor"></span>';
+                
+                // Efecto de finalización épico
                 setTimeout(() => {
-                    industrialContainer.style.opacity = '0';
-                    industrialContainer.style.transition = 'opacity 1s ease';
+                    // Desvanecer contenido
+                    industrialContent.style.transition = 'opacity 0.8s ease';
+                    industrialContent.style.opacity = '0';
                     
+                    // Activar overlay
+                    finalOverlay.classList.add('active');
+                    
+                    // Mostrar logo final
                     setTimeout(() => {
-                        completionOverlay.classList.add('show');
+                        finalShowcase.classList.add('active');
                         
-                        // Crear múltiples chispas
-                        for (let i = 0; i < 50; i++) {
-                            setTimeout(() => {
-                                createSpark();
-                            }, i * 50);
-                        }
+                        // Efecto de vibración al aparecer
+                        finalShowcase.style.animation = 'none';
+                        finalShowcase.offsetHeight;
+                        finalShowcase.style.animation = 'coreFloat 3s ease-in-out infinite';
                         
-                        // Redirigir
+                        // Redirigir después de 4 segundos
                         setTimeout(() => {
                             window.location.href = 'index.html';
-                        }, 3000);
-                    }, 1000);
-                }, 500);
-                
-                return;
+                        }, 4000);
+                    }, 800);
+                }, 800);
             }
-            
-            // Actualizar barras con variaciones industriales
-            const powerProgress = Math.min(progress + (Math.random() * 5 - 2.5), 100);
-            const quantumProgress = Math.min(progress + (Math.random() * 5 - 2.5), 100);
-            const neuralProgress = Math.min(progress + (Math.random() * 5 - 2.5), 100);
-            
-            powerBar.style.width = `${Math.max(0, powerProgress)}%`;
-            quantumBar.style.width = `${Math.max(0, quantumProgress)}%`;
-            neuralBar.style.width = `${Math.max(0, neuralProgress)}%`;
-            
-            powerValue.textContent = `${Math.floor(powerProgress)}%`;
-            quantumValue.textContent = `${Math.floor(quantumProgress)}%`;
-            neuralValue.textContent = `${Math.floor(neuralProgress)}%`;
-            meterPercentage.textContent = Math.floor(progress);
-            
-            // Actualizar contador binario
-            updateBinaryCounter(progress);
-            
-            // Crear chispas aleatorias
-            if (Math.random() > 0.7) {
-                createSpark();
-            }
-            
-        }, 100);
+        }
 
-        // Efecto de interferencia al mover el mouse
-        document.addEventListener('mousemove', (e) => {
-            const x = (e.clientX / window.innerWidth - 0.5) * 20;
-            const y = (e.clientY / window.innerHeight - 0.5) * 20;
-            
-            document.querySelector('.industrial-panel').style.transform = 
-                `perspective(1000px) rotateY(${x}deg) rotateX(${-y}deg)`;
-        });
-
-        // Precargar siguiente página
-        window.addEventListener('load', () => {
-            const link = document.createElement('link');
-            link.rel = 'prefetch';
-            link.href = 'index.html';
-            document.head.appendChild(link);
+        // Iniciar todo
+        window.addEventListener('load', function() {
+            createGears();
+            industrialLoading();
         });
     </script>
 </body>
