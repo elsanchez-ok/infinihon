@@ -3,9 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InfiniHon - Panel de Productos</title>
+    <title>InfiniHon - Panel de Productos Avanzado</title>
+    
+    <!-- Import Map para SQLite Cloud -->
+    <script type="importmap">
+        {
+            "imports": {
+                "@sqlitecloud/drivers": "https://esm.sh/@sqlitecloud/drivers@latest"
+            }
+        }
+    </script>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
             font-family: 'Inter', sans-serif;
@@ -22,7 +33,7 @@
             min-height: 100vh;
         }
         
-        /* Glassmorphism extremo */
+        /* Glassmorphism */
         .glass-panel {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(12px);
@@ -45,7 +56,7 @@
             box-shadow: 0 8px 32px rgba(59, 130, 246, 0.15);
         }
         
-        /* Sidebar estilo */
+        /* Sidebar */
         .sidebar {
             background: rgba(2, 6, 23, 0.8);
             backdrop-filter: blur(16px);
@@ -68,58 +79,7 @@
             border-left-color: #3b82f6;
         }
         
-        /* Tabla de productos mejorada */
-        .table-container {
-            overflow-x: auto;
-            border-radius: 1rem;
-        }
-        
-        .table-header {
-            background: rgba(59, 130, 246, 0.15);
-            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
-        }
-        
-        .table-row {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-            transition: all 0.3s ease;
-        }
-        
-        .table-row:hover {
-            background: rgba(59, 130, 246, 0.05);
-        }
-        
-        /* Badges de producto */
-        .badge-success {
-            background: rgba(16, 185, 129, 0.15);
-            color: #10b981;
-            border: 1px solid rgba(16, 185, 129, 0.3);
-        }
-        
-        .badge-warning {
-            background: rgba(245, 158, 11, 0.15);
-            color: #f59e0b;
-            border: 1px solid rgba(245, 158, 11, 0.3);
-        }
-        
-        .badge-danger {
-            background: rgba(239, 68, 68, 0.15);
-            color: #ef4444;
-            border: 1px solid rgba(239, 68, 68, 0.3);
-        }
-        
-        .badge-info {
-            background: rgba(59, 130, 246, 0.15);
-            color: #3b82f6;
-            border: 1px solid rgba(59, 130, 246, 0.3);
-        }
-        
-        .badge-purple {
-            background: rgba(168, 85, 247, 0.15);
-            color: #a855f7;
-            border: 1px solid rgba(168, 85, 247, 0.3);
-        }
-        
-        /* Inputs admin */
+        /* Inputs */
         .admin-input {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(59, 130, 246, 0.2);
@@ -137,7 +97,7 @@
             border-color: rgba(59, 130, 246, 0.4);
         }
         
-        /* Botones de acción */
+        /* Botones */
         .btn-primary {
             background: linear-gradient(135deg, #1e40af, #3b82f6);
             transition: all 0.3s ease;
@@ -150,7 +110,7 @@
         }
         
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(59, 130, 246, 0.3);
             transition: all 0.3s ease;
         }
@@ -171,32 +131,134 @@
             border-color: rgba(239, 68, 68, 0.6);
         }
         
-        /* Selector de categorías */
-        .category-pill {
-            background: rgba(59, 130, 246, 0.1);
-            border: 1px solid rgba(59, 130, 246, 0.2);
+        /* Upload área */
+        .upload-area {
+            border: 2px dashed rgba(59, 130, 246, 0.3);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
         
-        .category-pill:hover {
-            background: rgba(59, 130, 246, 0.2);
-            border-color: rgba(59, 130, 246, 0.4);
-        }
-        
-        .category-pill.active {
-            background: rgba(59, 130, 246, 0.3);
+        .upload-area:hover {
             border-color: rgba(59, 130, 246, 0.6);
+            background: rgba(59, 130, 246, 0.05);
         }
         
-        /* Modal glass */
-        .modal-glass {
-            background: rgba(2, 6, 23, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+        .upload-area.dragover {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Previsualización de imágenes */
+        .image-preview-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .image-preview-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .image-preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .image-preview-item .remove-image {
+            position: absolute;
+            top: 0.25rem;
+            right: 0.25rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            background: rgba(239, 68, 68, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .image-preview-item:hover .remove-image {
+            opacity: 1;
+        }
+        
+        /* Especificaciones dinámicas */
+        .spec-item {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Tags */
+        .tag-input-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 0.75rem;
+        }
+        
+        .tag {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2rem;
+            font-size: 0.875rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .tag .remove-tag {
+            cursor: pointer;
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+        }
+        
+        .tag .remove-tag:hover {
+            opacity: 1;
+        }
+        
+        /* Badges */
+        .badge-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+        
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+        
+        .badge-info {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
             border: 1px solid rgba(59, 130, 246, 0.2);
         }
         
-        /* Scrollbar personalizada */
+        /* Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
@@ -215,43 +277,58 @@
             background: rgba(59, 130, 246, 0.5);
         }
         
-        /* Upload area */
-        .upload-area {
-            border: 2px dashed rgba(59, 130, 246, 0.3);
+        .loading-spinner {
+            border: 3px solid rgba(59, 130, 246, 0.1);
+            border-radius: 50%;
+            border-top: 3px solid #3b82f6;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin: 1rem;
+        }
+
+        .success-message {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #10b981;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin: 1rem;
+        }
+
+        /* Tabla */
+        .table-header {
+            background: rgba(59, 130, 246, 0.1);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        
+        .table-row {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.3s ease;
         }
         
-        .upload-area:hover {
-            border-color: rgba(59, 130, 246, 0.6);
+        .table-row:hover {
             background: rgba(59, 130, 246, 0.05);
-        }
-        
-        /* Vista previa de imagen */
-        .image-preview {
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .image-preview::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
-            transform: translateX(-100%);
-            animation: shine 3s infinite;
-        }
-        
-        @keyframes shine {
-            100% { transform: translateX(100%); }
         }
     </style>
 </head>
-<body class="relative">
+<body>
 
-<!-- Panel Admin Productos -->
 <div class="flex h-screen overflow-hidden">
     
     <!-- Sidebar -->
@@ -263,631 +340,240 @@
                     <span class="text-black font-bold text-xl">I</span>
                 </div>
                 <span class="text-white font-light text-xl tracking-tight">INFINI<span class="font-medium text-blue-400">HON</span></span>
-                <span class="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full border border-blue-500/30 ml-2">PRODUCTS</span>
+                <span class="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full border border-blue-500/30 ml-2">PRODUCTOS</span>
             </div>
             
-            <!-- Menú de productos -->
+            <!-- Info de usuario -->
+            <div id="user-info" class="glass-card rounded-xl p-4 mb-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
+                        <span class="text-white font-medium" id="user-initials">AD</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="text-white text-sm font-medium truncate" id="user-name">Admin User</div>
+                        <div class="text-gray-400 text-xs font-mono truncate" id="user-email">admin@infinihon.com</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Menú -->
             <nav class="space-y-1">
                 <div class="text-xs font-mono text-gray-500 mb-4 tracking-wider px-4">GESTIÓN DE PRODUCTOS</div>
                 
-                <a href="#" class="sidebar-item active flex items-center gap-3 px-4 py-3 text-white rounded-lg">
+                <a href="#" onclick="mostrarSeccion('lista')" class="sidebar-item active flex items-center gap-3 px-4 py-3 text-white rounded-lg" id="menu-lista">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-                    <span class="text-sm">Todos los productos</span>
+                    <span class="text-sm">Lista de Productos</span>
                 </a>
                 
-                <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white rounded-lg">
+                <a href="#" onclick="mostrarSeccion('nuevo')" class="sidebar-item flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white rounded-lg" id="menu-nuevo">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                    <span class="text-sm">Añadir producto</span>
+                    <span class="text-sm">Nuevo Producto</span>
                 </a>
                 
-                <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white rounded-lg">
+                <a href="#" onclick="mostrarSeccion('categorias')" class="sidebar-item flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white rounded-lg" id="menu-categorias">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
                     <span class="text-sm">Categorías</span>
                 </a>
                 
-                <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white rounded-lg">
+                <a href="#" onclick="mostrarSeccion('stock')" class="sidebar-item flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white rounded-lg" id="menu-stock">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
-                    <span class="text-sm">Inventario</span>
-                </a>
-                
-                <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white rounded-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 7h-4.5A2.5 2.5 0 0 1 13 4.5V3"></path><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="9" x2="15" y2="15"></line><line x1="15" y1="9" x2="9" y2="15"></line></svg>
-                    <span class="text-sm">Ofertas</span>
+                    <span class="text-sm">Control de Stock</span>
                 </a>
                 
                 <div class="text-xs font-mono text-gray-500 mt-6 mb-4 tracking-wider px-4">REPORTES</div>
                 
-                <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white rounded-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12v-2a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v2"></path><circle cx="12" cy="16" r="5"></circle><path d="M12 11v5"></path></svg>
-                    <span class="text-sm">Stock bajo</span>
+                <a href="#" onclick="mostrarSeccion('mas-vendidos')" class="sidebar-item flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white rounded-lg" id="menu-mas-vendidos">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="20" x2="12" y2="10"></line><line x1="18" y1="20" x2="18" y2="4"></line><line x1="6" y1="20" x2="6" y2="16"></line></svg>
+                    <span class="text-sm">Más Vendidos</span>
                 </a>
                 
-                <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white rounded-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="20" x2="12" y2="10"></line><line x1="18" y1="20" x2="18" y2="4"></line><line x1="6" y1="20" x2="6" y2="16"></line></svg>
-                    <span class="text-sm">Estadísticas</span>
+                <a href="#" onclick="mostrarSeccion('stock-bajo')" class="sidebar-item flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white rounded-lg" id="menu-stock-bajo">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                    <span class="text-sm">Stock Bajo</span>
+                </a>
+                
+                <div class="text-xs font-mono text-gray-500 mt-6 mb-4 tracking-wider px-4">SISTEMA</div>
+                
+                <a href="#" onclick="cerrarSesion()" class="sidebar-item flex items-center gap-3 px-4 py-3 text-red-400 hover:text-white hover:bg-red-500/10 rounded-lg mt-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    <span class="text-sm">Cerrar sesión</span>
                 </a>
             </nav>
-            
-            <!-- Resumen rápido -->
-            <div class="absolute bottom-0 left-0 right-0 p-6 border-t border-white/5">
-                <div class="glass-card rounded-xl p-4">
-                    <div class="text-xs text-gray-400 font-mono mb-2">PRODUCTOS TOTALES</div>
-                    <div class="text-2xl text-white font-light">247</div>
-                    <div class="flex justify-between mt-3 text-xs">
-                        <span class="text-green-400">+12 este mes</span>
-                        <span class="text-gray-400">Actualizado</span>
-                    </div>
-                </div>
-            </div>
         </div>
     </aside>
     
     <!-- Contenido principal -->
     <main class="flex-1 overflow-y-auto">
-        <!-- Header superior -->
+        <!-- Header -->
         <header class="glass-panel sticky top-0 z-30 mx-4 mt-4 px-6 py-4 rounded-2xl">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <h1 class="text-white text-xl font-light">Gestión de Productos</h1>
-                    <span class="text-gray-400 text-sm font-mono">/ inventario y catálogo</span>
+                    <h1 class="text-white text-xl font-light" id="section-title">Gestión de Productos</h1>
+                    <span class="text-gray-400 text-sm font-mono" id="section-subtitle">/ lista de productos</span>
                 </div>
                 
                 <div class="flex items-center gap-4">
                     <!-- Buscador -->
                     <div class="relative">
-                        <input type="text" id="searchInput" placeholder="Buscar productos..." class="admin-input pl-10 pr-4 py-2 rounded-xl text-sm w-72">
+                        <input type="text" id="search-input" placeholder="Buscar productos..." class="admin-input pl-10 pr-4 py-2 rounded-xl text-sm w-64">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" class="absolute left-3 top-1/2 transform -translate-y-1/2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                     </div>
-                    
-                    <!-- Filtros rápidos -->
-                    <button class="btn-secondary px-3 py-2 rounded-xl flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
-                        <span class="text-sm">Filtros</span>
-                    </button>
                     
                     <!-- Notificaciones -->
                     <button class="relative">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-blue-500 rounded-full text-xs flex items-center justify-center text-white">3</span>
+                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-blue-500 rounded-full text-xs flex items-center justify-center text-white" id="notification-count">0</span>
                     </button>
+                    
+                    <!-- Fecha -->
+                    <div class="text-gray-400 text-sm font-mono border-l border-white/5 pl-4" id="current-date"></div>
                 </div>
             </div>
         </header>
         
-        <!-- Contenido del panel de productos -->
-        <div class="p-6 space-y-6">
-            
-            <!-- Filtros por categoría -->
-            <div class="glass-panel rounded-2xl p-4">
-                <div class="flex items-center gap-4 overflow-x-auto pb-2">
-                    <span class="text-gray-400 text-sm font-mono whitespace-nowrap">CATEGORÍAS:</span>
-                    <button class="category-pill active px-4 py-2 rounded-full text-sm text-white whitespace-nowrap">Todos</button>
-                    <button class="category-pill px-4 py-2 rounded-full text-sm text-gray-300 whitespace-nowrap">Routers MikroTik</button>
-                    <button class="category-pill px-4 py-2 rounded-full text-sm text-gray-300 whitespace-nowrap">Raspberry Pi</button>
-                    <button class="category-pill px-4 py-2 rounded-full text-sm text-gray-300 whitespace-nowrap">Switches</button>
-                    <button class="category-pill px-4 py-2 rounded-full text-sm text-gray-300 whitespace-nowrap">Accesorios</button>
-                    <button class="category-pill px-4 py-2 rounded-full text-sm text-gray-300 whitespace-nowrap">Servidores</button>
-                    <button class="category-pill px-4 py-2 rounded-full text-sm text-gray-300 whitespace-nowrap">Placas</button>
-                </div>
-            </div>
-            
-            <!-- Acciones masivas -->
-            <div class="flex justify-between items-center">
-                <div class="flex gap-2">
-                    <button class="btn-secondary px-4 py-2 rounded-xl text-sm text-gray-300 flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 6 5 6 21 6"></polygon><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                        Eliminar seleccionados
-                    </button>
-                    <button class="btn-secondary px-4 py-2 rounded-xl text-sm text-gray-300 flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><line x1="12" y1="22" x2="12" y2="12"></line></svg>
-                        Exportar
-                    </button>
-                </div>
-                
-                <button onclick="openProductModal()" class="btn-primary px-6 py-2 rounded-xl text-sm text-white flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                    Nuevo Producto
-                </button>
-            </div>
-            
-            <!-- Tabla de productos mejorada -->
-            <div class="glass-panel rounded-2xl p-6">
-                <div class="table-container">
-                    <table class="w-full">
-                        <thead class="table-header">
-                            <tr>
-                                <th class="py-4 px-4 text-left">
-                                    <input type="checkbox" class="rounded border-white/20 bg-white/5 text-blue-500">
-                                </th>
-                                <th class="py-4 px-4 text-left text-gray-300 text-sm font-medium">Producto</th>
-                                <th class="py-4 px-4 text-left text-gray-300 text-sm font-medium">SKU</th>
-                                <th class="py-4 px-4 text-left text-gray-300 text-sm font-medium">Categoría</th>
-                                <th class="py-4 px-4 text-left text-gray-300 text-sm font-medium">Precio</th>
-                                <th class="py-4 px-4 text-left text-gray-300 text-sm font-medium">Stock</th>
-                                <th class="py-4 px-4 text-left text-gray-300 text-sm font-medium">Estado</th>
-                                <th class="py-4 px-4 text-left text-gray-300 text-sm font-medium">Ventas</th>
-                                <th class="py-4 px-4 text-left text-gray-300 text-sm font-medium">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="productsTableBody">
-                            <!-- Router MikroTik RB4011 -->
-                            <tr class="table-row" data-id="1">
-                                <td class="py-4 px-4">
-                                    <input type="checkbox" class="rounded border-white/20 bg-white/5 text-blue-500">
-                                </td>
-                                <td class="py-4 px-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="image-preview w-12 h-12 bg-gradient-to-br from-blue-500/20 to-transparent rounded-xl flex items-center justify-center border border-blue-500/30">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"></rect><line x1="8" y1="2" x2="8" y2="22"></line><line x1="16" y1="2" x2="16" y2="22"></line></svg>
-                                        </div>
-                                        <div>
-                                            <p class="text-white text-sm font-medium">MikroTik RB4011</p>
-                                            <p class="text-gray-400 text-xs">Router 10 puertos Gigabit</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="py-4 px-4">
-                                    <span class="font-mono-custom text-gray-400 text-xs">MT-RB4011</span>
-                                </td>
-                                <td class="py-4 px-4">
-                                    <span class="badge-info text-xs px-2 py-1 rounded-full">Routers</span>
-                                </td>
-                                <td class="py-4 px-4">
-                                    <span class="text-white font-medium">$299.99</span>
-                                </td>
-                                <td class="py-4 px-4">
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-white">45</span>
-                                        <div class="w-16 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                                            <div class="h-full bg-green-400 rounded-full" style="width: 75%"></div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="py-4 px-4">
-                                    <span class="badge-success text-xs px-2 py-1 rounded-full">Activo</span>
-                                </td>
-                                <td class="py-4 px-4 text-gray-300">156</td>
-                                <td class="py-4 px-4">
-                                    <div class="flex gap-2">
-                                        <button onclick="editProduct(1)" class="text-blue-400 hover:text-blue-300 transition">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>
-                                        </button>
-                                        <button onclick="duplicateProduct(1)" class="text-purple-400 hover:text-purple-300 transition">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                                        </button>
-                                        <button onclick="deleteProduct(1)" class="text-red-400 hover:text-red-300 transition">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            
-                            <!-- Raspberry Pi 5 -->
-                            <tr class="table-row" data-id="2">
-                                <td class="py-4 px-4">
-                                    <input type="checkbox" class="rounded border-white/20 bg-white/5 text-blue-500">
-                                </td>
-                                <td class="py-4 px-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="image-preview w-12 h-12 bg-gradient-to-br from-purple-500/20 to-transparent rounded-xl flex items-center justify-center border border-purple-500/30">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-                                        </div>
-                                        <div>
-                                            <p class="text-white text-sm font-medium">Raspberry Pi 5</p>
-                                            <p class="text-gray-400 text-xs">4GB RAM, Cortex-A76</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="py-4 px-4">
-                                    <span class="font-mono-custom text-gray-400 text-xs">RPI5-4GB</span>
-                                </td>
-                                <td class="py-4 px-4">
-                                    <span class="badge-purple text-xs px-2 py-1 rounded-full">Placas</span>
-                                </td>
-                                <td class="py-4 px-4">
-                                    <span class="text-white font-medium">$79.99</span>
-                                </td>
-                                <td class="py-4 px-4">
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-white">12</span>
-                                        <div class="w-16 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                                            <div class="h-full bg-yellow-400 rounded-full" style="width: 25%"></div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="py-4 px-4">
-                                    <span class="badge-warning text-xs px-2 py-1 rounded-full">Stock bajo</span>
-                                </td>
-                                <td class="py-4 px-4 text-gray-300">342</td>
-                                <td class="py-4 px-4">
-                                    <div class="flex gap-2">
-                                        <button onclick="editProduct(2)" class="text-blue-400 hover:text-blue-300 transition">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>
-                                        </button>
-                                        <button onclick="duplicateProduct(2)" class="text-purple-400 hover:text-purple-300 transition">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                                        </button>
-                                        <button onclick="deleteProduct(2)" class="text-red-400 hover:text-red-300 transition">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            
-                            <!-- MikroTik hAP ax² -->
-                            <tr class="table-row" data-id="3">
-                                <td class="py-4 px-4">
-                                    <input type="checkbox" class="rounded border-white/20 bg-white/5 text-blue-500">
-                                </td>
-                                <td class="py-4 px-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="image-preview w-12 h-12 bg-gradient-to-br from-blue-500/20 to-transparent rounded-xl flex items-center justify-center border border-blue-500/30">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                                        </div>
-                                        <div>
-                                            <p class="text-white text-sm font-medium">MikroTik hAP ax²</p>
-                                            <p class="text-gray-400 text-xs">WiFi 6, 5 puertos</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="py-4 px-4">
-                                    <span class="font-mono-custom text-gray-400 text-xs">MT-HAP-AX2</span>
-                                </td>
-                                <td class="py-4 px-4">
-                                    <span class="badge-info text-xs px-2 py-1 rounded-full">Routers</span>
-                                </td>
-                                <td class="py-4 px-4">
-                                    <span class="text-white font-medium">$159.99</span>
-                                </td>
-                                <td class="py-4 px-4">
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-white">28</span>
-                                        <div class="w-16 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                                            <div class="h-full bg-green-400 rounded-full" style="width: 60%"></div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="py-4 px-4">
-                                    <span class="badge-success text-xs px-2 py-1 rounded-full">Activo</span>
-                                </td>
-                                <td class="py-4 px-4 text-gray-300">89</td>
-                                <td class="py-4 px-4">
-                                    <div class="flex gap-2">
-                                        <button onclick="editProduct(3)" class="text-blue-400 hover:text-blue-300 transition">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>
-                                        </button>
-                                        <button onclick="duplicateProduct(3)" class="text-purple-400 hover:text-purple-300 transition">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                                        </button>
-                                        <button onclick="deleteProduct(3)" class="text-red-400 hover:text-red-300 transition">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            
-                            <!-- MikroTik CSS610 -->
-                            <tr class="table-row" data-id="4">
-                                <td class="py-4 px-4">
-                                    <input type="checkbox" class="rounded border-white/20 bg-white/5 text-blue-500">
-                                </td>
-                                <td class="py-4 px-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="image-preview w-12 h-12 bg-gradient-to-br from-cyan-500/20 to-transparent rounded-xl flex items-center justify-center border border-cyan-500/30">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6" y2="18"></line><line x1="12" y1="6" x2="12" y2="18"></line><line x1="18" y1="6" x2="18" y2="18"></line></svg>
-                                        </div>
-                                        <div>
-                                            <p class="text-white text-sm font-medium">MikroTik CSS610</p>
-                                            <p class="text-gray-400 text-xs">Switch 8 puertos gestionable</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="py-4 px-4">
-                                    <span class="font-mono-custom text-gray-400 text-xs">MT-CSS610</span>
-                                </td>
-                                <td class="py-4 px-4">
-                                    <span class="badge-info text-xs px-2 py-1 rounded-full">Switches</span>
-                                </td>
-                                <td class="py-4 px-4">
-                                    <span class="text-white font-medium">$189.99</span>
-                                </td>
-                                <td class="py-4 px-4">
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-white">32</span>
-                                        <div class="w-16 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                                            <div class="h-full bg-green-400 rounded-full" style="width: 70%"></div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="py-4 px-4">
-                                    <span class="badge-success text-xs px-2 py-1 rounded-full">Activo</span>
-                                </td>
-                                <td class="py-4 px-4 text-gray-300">67</td>
-                                <td class="py-4 px-4">
-                                    <div class="flex gap-2">
-                                        <button onclick="editProduct(4)" class="text-blue-400 hover:text-blue-300 transition">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>
-                                        </button>
-                                        <button onclick="duplicateProduct(4)" class="text-purple-400 hover:text-purple-300 transition">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                                        </button>
-                                        <button onclick="deleteProduct(4)" class="text-red-400 hover:text-red-300 transition">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            
-                            <!-- PoE+ HAT -->
-                            <tr class="table-row" data-id="5">
-                                <td class="py-4 px-4">
-                                    <input type="checkbox" class="rounded border-white/20 bg-white/5 text-blue-500">
-                                </td>
-                                <td class="py-4 px-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="image-preview w-12 h-12 bg-gradient-to-br from-purple-500/20 to-transparent rounded-xl flex items-center justify-center border border-purple-500/30">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="1.5"><path d="M4 14.66A8 8 0 0 1 12 4a8 8 0 0 1 8 10.66M12 22v-8"></path><circle cx="12" cy="12" r="2"></circle><path d="M22 12h-4M6 12H2"></path></svg>
-                                        </div>
-                                        <div>
-                                            <p class="text-white text-sm font-medium">PoE+ HAT</p>
-                                            <p class="text-gray-400 text-xs">Para Raspberry Pi</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="py-4 px-4">
-                                    <span class="font-mono-custom text-gray-400 text-xs">RPI-POE+</span>
-                                </td>
-                                <td class="py-4 px-4">
-                                    <span class="badge-purple text-xs px-2 py-1 rounded-full">Accesorios</span>
-                                </td>
-                                <td class="py-4 px-4">
-                                    <span class="text-white font-medium">$29.99</span>
-                                </td>
-                                <td class="py-4 px-4">
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-white">78</span>
-                                        <div class="w-16 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                                            <div class="h-full bg-green-400 rounded-full" style="width: 90%"></div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="py-4 px-4">
-                                    <span class="badge-success text-xs px-2 py-1 rounded-full">Activo</span>
-                                </td>
-                                <td class="py-4 px-4 text-gray-300">203</td>
-                                <td class="py-4 px-4">
-                                    <div class="flex gap-2">
-                                        <button onclick="editProduct(5)" class="text-blue-400 hover:text-blue-300 transition">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>
-                                        </button>
-                                        <button onclick="duplicateProduct(5)" class="text-purple-400 hover:text-purple-300 transition">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                                        </button>
-                                        <button onclick="deleteProduct(5)" class="text-red-400 hover:text-red-300 transition">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            
-                            <!-- Raspberry Pi 4 8GB -->
-                            <tr class="table-row" data-id="6">
-                                <td class="py-4 px-4">
-                                    <input type="checkbox" class="rounded border-white/20 bg-white/5 text-blue-500">
-                                </td>
-                                <td class="py-4 px-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="image-preview w-12 h-12 bg-gradient-to-br from-purple-500/20 to-transparent rounded-xl flex items-center justify-center border border-purple-500/30">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-                                        </div>
-                                        <div>
-                                            <p class="text-white text-sm font-medium">Raspberry Pi 4</p>
-                                            <p class="text-gray-400 text-xs">8GB RAM, modelo B</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="py-4 px-4">
-                                    <span class="font-mono-custom text-gray-400 text-xs">RPI4-8GB</span>
-                                </td>
-                                <td class="py-4 px-4">
-                                    <span class="badge-purple text-xs px-2 py-1 rounded-full">Placas</span>
-                                </td>
-                                <td class="py-4 px-4">
-                                    <span class="text-white font-medium">$119.99</span>
-                                </td>
-                                <td class="py-4 px-4">
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-white">23</span>
-                                        <div class="w-16 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                                            <div class="h-full bg-green-400 rounded-full" style="width: 45%"></div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="py-4 px-4">
-                                    <span class="badge-success text-xs px-2 py-1 rounded-full">Activo</span>
-                                </td>
-                                <td class="py-4 px-4 text-gray-300">178</td>
-                                <td class="py-4 px-4">
-                                    <div class="flex gap-2">
-                                        <button onclick="editProduct(6)" class="text-blue-400 hover:text-blue-300 transition">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>
-                                        </button>
-                                        <button onclick="duplicateProduct(6)" class="text-purple-400 hover:text-purple-300 transition">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                                        </button>
-                                        <button onclick="deleteProduct(6)" class="text-red-400 hover:text-red-300 transition">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <!-- Paginación -->
-                <div class="flex justify-between items-center mt-6">
-                    <p class="text-gray-400 text-sm">Mostrando 1-6 de 247 productos</p>
-                    <div class="flex gap-2">
-                        <button class="btn-secondary w-10 h-10 rounded-xl flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                        </button>
-                        <button class="btn-primary w-10 h-10 rounded-xl flex items-center justify-center text-white">1</button>
-                        <button class="btn-secondary w-10 h-10 rounded-xl flex items-center justify-center text-gray-400">2</button>
-                        <button class="btn-secondary w-10 h-10 rounded-xl flex items-center justify-center text-gray-400">3</button>
-                        <button class="btn-secondary w-10 h-10 rounded-xl flex items-center justify-center text-gray-400">4</button>
-                        <span class="text-gray-500 flex items-center">...</span>
-                        <button class="btn-secondary w-10 h-10 rounded-xl flex items-center justify-center text-gray-400">12</button>
-                        <button class="btn-secondary w-10 h-10 rounded-xl flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Estadísticas rápidas de productos -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div class="glass-card rounded-xl p-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-                        </div>
-                        <div>
-                            <p class="text-gray-400 text-xs">Total productos</p>
-                            <p class="text-white text-xl font-light">247</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="glass-card rounded-xl p-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><circle cx="12" cy="8" r="0.5" fill="#10b981" stroke="none"></circle></svg>
-                        </div>
-                        <div>
-                            <p class="text-gray-400 text-xs">Stock óptimo</p>
-                            <p class="text-white text-xl font-light">189</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="glass-card rounded-xl p-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                        </div>
-                        <div>
-                            <p class="text-gray-400 text-xs">Stock bajo</p>
-                            <p class="text-white text-xl font-light">42</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="glass-card rounded-xl p-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><line x1="18" y1="6" x2="6" y2="18"></line></svg>
-                        </div>
-                        <div>
-                            <p class="text-gray-400 text-xs">Agotados</p>
-                            <p class="text-white text-xl font-light">16</p>
-                        </div>
-                    </div>
-                </div>
+        <!-- Contenedor de mensajes -->
+        <div id="message-container" class="mx-4 mt-4"></div>
+        
+        <!-- Contenido dinámico -->
+        <div class="p-6 space-y-6" id="content-area">
+            <!-- El contenido se carga dinámicamente según la sección -->
+            <div class="text-center py-12">
+                <div class="loading-spinner mx-auto mb-4"></div>
+                <p class="text-gray-400">Cargando panel de productos...</p>
             </div>
         </div>
     </main>
 </div>
 
-<!-- Modal de Nuevo/Editar Producto -->
+<!-- Modal de Producto -->
 <div id="productModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
-    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeProductModal()"></div>
-    <div class="relative modal-glass rounded-2xl p-8 max-w-2xl w-full mx-4 border border-blue-500/20 max-h-[90vh] overflow-y-auto">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="cerrarModal()"></div>
+    <div class="relative modal-glass rounded-2xl p-8 max-w-4xl w-full mx-4 border border-blue-500/20 max-h-[90vh] overflow-y-auto">
         <div class="flex justify-between items-center mb-6">
             <h3 id="modalTitle" class="text-2xl font-light text-white">Nuevo Producto</h3>
-            <button onclick="closeProductModal()" class="text-gray-400 hover:text-white">
+            <button onclick="cerrarModal()" class="text-gray-400 hover:text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
         </div>
         
         <form id="productForm" class="space-y-4">
+            <input type="hidden" id="productId">
+            
             <div class="grid grid-cols-2 gap-4">
-                <div class="col-span-2">
-                    <label class="text-gray-400 text-sm block mb-2">Nombre del producto *</label>
-                    <input type="text" id="productName" class="admin-input w-full px-4 py-3 rounded-xl" required>
-                </div>
-                
-                <div>
-                    <label class="text-gray-400 text-sm block mb-2">SKU *</label>
-                    <input type="text" id="productSku" class="admin-input w-full px-4 py-3 rounded-xl" required>
-                </div>
-                
-                <div>
-                    <label class="text-gray-400 text-sm block mb-2">Categoría *</label>
-                    <select id="productCategory" class="admin-input w-full px-4 py-3 rounded-xl">
-                        <option class="bg-gray-900">Routers MikroTik</option>
-                        <option class="bg-gray-900">Raspberry Pi</option>
-                        <option class="bg-gray-900">Switches</option>
-                        <option class="bg-gray-900">Accesorios</option>
-                        <option class="bg-gray-900">Servidores</option>
-                        <option class="bg-gray-900">Placas</option>
-                    </select>
-                </div>
-                
-                <div>
-                    <label class="text-gray-400 text-sm block mb-2">Precio *</label>
-                    <input type="number" id="productPrice" step="0.01" class="admin-input w-full px-4 py-3 rounded-xl" required>
-                </div>
-                
-                <div>
-                    <label class="text-gray-400 text-sm block mb-2">Stock *</label>
-                    <input type="number" id="productStock" class="admin-input w-full px-4 py-3 rounded-xl" required>
-                </div>
-                
-                <div>
-                    <label class="text-gray-400 text-sm block mb-2">Estado</label>
-                    <select id="productStatus" class="admin-input w-full px-4 py-3 rounded-xl">
-                        <option class="bg-gray-900">Activo</option>
-                        <option class="bg-gray-900">Stock bajo</option>
-                        <option class="bg-gray-900">Agotado</option>
-                        <option class="bg-gray-900">Oculto</option>
-                    </select>
-                </div>
-                
-                <div class="col-span-2">
-                    <label class="text-gray-400 text-sm block mb-2">Descripción corta</label>
-                    <input type="text" id="productShortDesc" class="admin-input w-full px-4 py-3 rounded-xl">
-                </div>
-                
-                <div class="col-span-2">
-                    <label class="text-gray-400 text-sm block mb-2">Descripción detallada</label>
-                    <textarea id="productDesc" rows="4" class="admin-input w-full px-4 py-3 rounded-xl"></textarea>
-                </div>
-                
-                <div class="col-span-2">
-                    <label class="text-gray-400 text-sm block mb-2">Imagen del producto</label>
-                    <div class="upload-area rounded-xl p-8 text-center">
-                        <input type="file" id="productImage" class="hidden" accept="image/*">
-                        <div onclick="document.getElementById('productImage').click()" class="cursor-pointer">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5" class="mx-auto mb-3"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-5-5L6 21"></path></svg>
-                            <p class="text-gray-400 text-sm">Haz clic o arrastra una imagen</p>
-                            <p class="text-gray-500 text-xs mt-1">PNG, JPG hasta 5MB</p>
+                <!-- Columna izquierda -->
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-gray-400 text-sm block mb-2">Nombre del producto *</label>
+                        <input type="text" id="productName" class="admin-input w-full px-4 py-3 rounded-xl" required>
+                    </div>
+                    
+                    <div>
+                        <label class="text-gray-400 text-sm block mb-2">SKU *</label>
+                        <input type="text" id="productSku" class="admin-input w-full px-4 py-3 rounded-xl" required>
+                    </div>
+                    
+                    <div>
+                        <label class="text-gray-400 text-sm block mb-2">Categoría *</label>
+                        <select id="productCategory" class="admin-input w-full px-4 py-3 rounded-xl" required>
+                            <option value="" class="bg-gray-900">Seleccionar categoría</option>
+                        </select>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="text-gray-400 text-sm block mb-2">Precio *</label>
+                            <input type="number" id="productPrice" step="0.01" class="admin-input w-full px-4 py-3 rounded-xl" required>
                         </div>
+                        <div>
+                            <label class="text-gray-400 text-sm block mb-2">Precio comparación</label>
+                            <input type="number" id="productComparePrice" step="0.01" class="admin-input w-full px-4 py-3 rounded-xl">
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="text-gray-400 text-sm block mb-2">Stock *</label>
+                            <input type="number" id="productStock" class="admin-input w-full px-4 py-3 rounded-xl" required>
+                        </div>
+                        <div>
+                            <label class="text-gray-400 text-sm block mb-2">Stock mínimo</label>
+                            <input type="number" id="productMinStock" value="5" class="admin-input w-full px-4 py-3 rounded-xl">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="text-gray-400 text-sm block mb-2">Estado</label>
+                        <select id="productStatus" class="admin-input w-full px-4 py-3 rounded-xl">
+                            <option value="activo" class="bg-gray-900">Activo</option>
+                            <option value="inactivo" class="bg-gray-900">Inactivo</option>
+                        </select>
                     </div>
                 </div>
                 
-                <div class="col-span-2">
-                    <label class="text-gray-400 text-sm block mb-2">Especificaciones técnicas</label>
-                    <div class="space-y-2">
-                        <input type="text" placeholder="Especificación 1" class="admin-input w-full px-4 py-2 rounded-xl">
-                        <input type="text" placeholder="Especificación 2" class="admin-input w-full px-4 py-2 rounded-xl">
-                        <input type="text" placeholder="Especificación 3" class="admin-input w-full px-4 py-2 rounded-xl">
+                <!-- Columna derecha -->
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-gray-400 text-sm block mb-2">Descripción corta</label>
+                        <input type="text" id="productShortDesc" class="admin-input w-full px-4 py-3 rounded-xl">
+                    </div>
+                    
+                    <div>
+                        <label class="text-gray-400 text-sm block mb-2">Descripción larga</label>
+                        <textarea id="productLongDesc" rows="4" class="admin-input w-full px-4 py-3 rounded-xl"></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" id="productFeatured" class="rounded border-white/20 bg-white/5 text-blue-500">
+                            <span class="text-gray-300 text-sm">Producto destacado</span>
+                        </label>
                     </div>
                 </div>
             </div>
             
+            <!-- Imágenes -->
+            <div>
+                <label class="text-gray-400 text-sm block mb-2">Imágenes del producto</label>
+                <div id="dropArea" class="upload-area">
+                    <input type="file" id="fileInput" multiple accept="image/*" class="hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5" class="mx-auto mb-3"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-5-5L6 21"></path></svg>
+                    <p class="text-gray-300 text-sm mb-1">Arrastra y suelta imágenes aquí</p>
+                    <p class="text-gray-500 text-xs mb-3">o</p>
+                    <button type="button" onclick="document.getElementById('fileInput').click()" class="btn-secondary px-4 py-2 rounded-lg text-sm">
+                        Seleccionar archivos
+                    </button>
+                    <p class="text-gray-500 text-xs mt-3">PNG, JPG, WEBP hasta 10MB</p>
+                </div>
+                <div id="imagePreview" class="image-preview-container"></div>
+            </div>
+            
+            <!-- Especificaciones técnicas -->
+            <div>
+                <label class="text-gray-400 text-sm block mb-2">Especificaciones técnicas</label>
+                <div id="specsContainer" class="space-y-2">
+                    <!-- Se agregan dinámicamente -->
+                </div>
+                <button type="button" onclick="agregarEspecificacion()" class="btn-secondary px-4 py-2 rounded-lg text-sm flex items-center gap-2 mt-2">
+                    <i class="fas fa-plus"></i>
+                    Agregar especificación
+                </button>
+            </div>
+            
+            <!-- Tags -->
+            <div>
+                <label class="text-gray-400 text-sm block mb-2">Tags / Características</label>
+                <div class="tag-input-container" id="tagContainer"></div>
+                <div class="flex gap-2 mt-3">
+                    <input type="text" id="tagInput" class="admin-input flex-1 px-4 py-2 rounded-xl" placeholder="Nueva tag">
+                    <button type="button" onclick="agregarTag()" class="btn-secondary px-4 py-2 rounded-lg">
+                        Agregar
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Botones -->
             <div class="flex gap-3 pt-4">
-                <button type="button" onclick="closeProductModal()" class="btn-secondary flex-1 py-3 rounded-xl text-gray-300">
+                <button type="button" onclick="cerrarModal()" class="btn-secondary flex-1 py-3 rounded-xl text-gray-300">
                     Cancelar
                 </button>
                 <button type="submit" class="btn-primary flex-1 py-3 rounded-xl text-white">
@@ -898,114 +584,1053 @@
     </div>
 </div>
 
-<!-- Toast de notificación -->
-<div id="toast" class="fixed bottom-4 right-4 glass-panel rounded-lg px-4 py-3 hidden transform transition-all duration-300 translate-y-0">
-    <div class="flex items-center gap-3">
-        <div id="toastIcon" class="text-green-400">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg>
+<!-- Modal de Categoría -->
+<div id="categoryModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="cerrarCategoryModal()"></div>
+    <div class="relative modal-glass rounded-2xl p-8 max-w-md w-full mx-4 border border-blue-500/20">
+        <div class="flex justify-between items-center mb-6">
+            <h3 id="categoryModalTitle" class="text-2xl font-light text-white">Nueva Categoría</h3>
+            <button onclick="cerrarCategoryModal()" class="text-gray-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
         </div>
-        <p id="toastMessage" class="text-white text-sm">Producto guardado correctamente</p>
+        
+        <form id="categoryForm" class="space-y-4">
+            <input type="hidden" id="categoryId">
+            
+            <div>
+                <label class="text-gray-400 text-sm block mb-2">Nombre de la categoría *</label>
+                <input type="text" id="categoryName" class="admin-input w-full px-4 py-3 rounded-xl" required>
+            </div>
+            
+            <div>
+                <label class="text-gray-400 text-sm block mb-2">Slug *</label>
+                <input type="text" id="categorySlug" class="admin-input w-full px-4 py-3 rounded-xl" required>
+                <p class="text-gray-500 text-xs mt-1">URL amigable: /categoria/ejemplo</p>
+            </div>
+            
+            <div>
+                <label class="text-gray-400 text-sm block mb-2">Descripción</label>
+                <textarea id="categoryDescription" rows="3" class="admin-input w-full px-4 py-3 rounded-xl"></textarea>
+            </div>
+            
+            <div class="flex gap-3 pt-4">
+                <button type="button" onclick="cerrarCategoryModal()" class="btn-secondary flex-1 py-3 rounded-xl text-gray-300">
+                    Cancelar
+                </button>
+                <button type="submit" class="btn-primary flex-1 py-3 rounded-xl text-white">
+                    Guardar categoría
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 
-<!-- Script de funcionalidad -->
-<script>
-    // Estado del modal
-    let currentProductId = null;
-    
-    // Abrir modal para nuevo producto
-    function openProductModal() {
-        document.getElementById('modalTitle').textContent = 'Nuevo Producto';
-        document.getElementById('productForm').reset();
-        currentProductId = null;
-        document.getElementById('productModal').classList.remove('hidden');
-    }
-    
-    // Abrir modal para editar producto
-    function editProduct(id) {
-        document.getElementById('modalTitle').textContent = 'Editar Producto';
-        currentProductId = id;
+<script type="module">
+// ===========================================
+// CONFIGURACIÓN DE SQLITE CLOUD
+// ===========================================
+import { Database } from '@sqlitecloud/drivers';
+
+const CONNECTION_STRING = 'sqlitecloud://cxaerd5fvk.g2.sqlite.cloud:8860/infinihon_store.db?apikey=cfHa2k4KOhBzxKL5g484dhAf4xlC4znLp5M6wzirgvc';
+
+let db = null;
+let currentUser = null;
+let currentSection = 'lista';
+let categorias = [];
+let especificaciones = [];
+let tags = [];
+let imagenes = [];
+let editProductId = null;
+let editCategoryId = null;
+
+// ===========================================
+// CONEXIÓN A SQLITE CLOUD
+// ===========================================
+async function conectarDB() {
+    try {
+        console.log('🔄 Conectando a SQLite Cloud...');
+        db = new Database(CONNECTION_STRING);
         
-        // Simular carga de datos del producto
-        const productName = document.querySelector(`tr[data-id="${id}"] td:nth-child(2) .text-white`).textContent;
-        document.getElementById('productName').value = productName;
+        const result = await db.sql`SELECT 1 as test`;
+        console.log('✅ Conectado a SQLite Cloud', result);
         
-        document.getElementById('productModal').classList.remove('hidden');
+        return true;
+    } catch (error) {
+        console.error('❌ Error de conexión:', error);
+        mostrarMensaje('error', 'Error de conexión a la base de datos');
+        return false;
+    }
+}
+
+// ===========================================
+// MOSTRAR MENSAJES
+// ===========================================
+function mostrarMensaje(tipo, texto) {
+    const container = document.getElementById('message-container');
+    if (!container) return;
+    
+    const className = tipo === 'error' ? 'error-message' : 'success-message';
+    container.innerHTML = `<div class="${className}">${texto}</div>`;
+    
+    setTimeout(() => {
+        container.innerHTML = '';
+    }, 5000);
+}
+
+// ===========================================
+// VERIFICAR AUTENTICACIÓN
+// ===========================================
+function verificarAuth() {
+    const savedUser = localStorage.getItem('user') || sessionStorage.getItem('user');
+    
+    if (!savedUser) {
+        window.location.href = 'login.html';
+        return false;
     }
     
-    // Cerrar modal
-    function closeProductModal() {
-        document.getElementById('productModal').classList.add('hidden');
-    }
-    
-    // Duplicar producto
-    function duplicateProduct(id) {
-        showToast('Producto duplicado correctamente', 'success');
-    }
-    
-    // Eliminar producto
-    function deleteProduct(id) {
-        if (confirm('¿Estás seguro de eliminar este producto?')) {
-            const row = document.querySelector(`tr[data-id="${id}"]`);
-            row.style.opacity = '0';
-            row.style.transform = 'translateX(20px)';
-            setTimeout(() => {
-                row.remove();
-                showToast('Producto eliminado correctamente', 'success');
-            }, 300);
+    try {
+        currentUser = JSON.parse(savedUser);
+        
+        if (currentUser.rol !== 'admin') {
+            window.location.href = 'tienda.html';
+            return false;
         }
+        
+        document.getElementById('user-name').textContent = `${currentUser.nombre} ${currentUser.apellido || ''}`;
+        document.getElementById('user-email').textContent = currentUser.email;
+        
+        const initials = (currentUser.nombre?.[0] || 'A') + (currentUser.apellido?.[0] || 'D');
+        document.getElementById('user-initials').textContent = initials;
+        
+        return true;
+        
+    } catch (e) {
+        window.location.href = 'login.html';
+        return false;
     }
+}
+
+// ===========================================
+// CERRAR SESIÓN
+// ===========================================
+window.cerrarSesion = function() {
+    localStorage.removeItem('user');
+    sessionStorage.removeItem('user');
+    window.location.href = 'login.html';
+};
+
+// ===========================================
+// CAMBIAR SECCIÓN
+// ===========================================
+window.mostrarSeccion = async function(seccion) {
+    currentSection = seccion;
     
-    // Mostrar toast
-    function showToast(message, type = 'success') {
-        const toast = document.getElementById('toast');
-        const toastMessage = document.getElementById('toastMessage');
-        const toastIcon = document.getElementById('toastIcon');
-        
-        toastMessage.textContent = message;
-        
-        if (type === 'success') {
-            toastIcon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg>';
-        } else {
-            toastIcon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
-        }
-        
-        toast.classList.remove('hidden');
-        setTimeout(() => {
-            toast.classList.add('hidden');
-        }, 3000);
-    }
-    
-    // Manejar envío del formulario
-    document.getElementById('productForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        closeProductModal();
-        showToast('Producto guardado correctamente', 'success');
+    document.querySelectorAll('.sidebar-item').forEach(item => {
+        item.classList.remove('active');
+        item.classList.add('text-gray-400');
     });
     
-    // Búsqueda en tiempo real
-    document.getElementById('searchInput').addEventListener('input', function(e) {
-        const searchTerm = e.target.value.toLowerCase();
-        const rows = document.querySelectorAll('#productsTableBody tr');
+    document.getElementById(`menu-${seccion}`)?.classList.remove('text-gray-400');
+    document.getElementById(`menu-${seccion}`)?.classList.add('active', 'text-white');
+    
+    const titles = {
+        'lista': 'Lista de Productos',
+        'nuevo': 'Nuevo Producto',
+        'categorias': 'Categorías',
+        'stock': 'Control de Stock',
+        'mas-vendidos': 'Productos Más Vendidos',
+        'stock-bajo': 'Productos con Stock Bajo'
+    };
+    
+    document.getElementById('section-title').textContent = titles[seccion] || 'Gestión de Productos';
+    document.getElementById('section-subtitle').textContent = `/ ${seccion.replace('-', ' ')}`;
+    
+    const contentArea = document.getElementById('content-area');
+    contentArea.innerHTML = '<div class="text-center py-12"><div class="loading-spinner mx-auto mb-4"></div><p class="text-gray-400">Cargando...</p></div>';
+    
+    switch(seccion) {
+        case 'lista':
+            await cargarListaProductos();
+            break;
+        case 'nuevo':
+            await cargarFormularioNuevo();
+            break;
+        case 'categorias':
+            await cargarCategorias();
+            break;
+        case 'stock':
+            await cargarControlStock();
+            break;
+        case 'mas-vendidos':
+            await cargarMasVendidos();
+            break;
+        case 'stock-bajo':
+            await cargarStockBajo();
+            break;
+    }
+};
+
+// ===========================================
+// CARGAR LISTA DE PRODUCTOS
+// ===========================================
+async function cargarListaProductos() {
+    try {
+        const productos = await db.sql(`
+            SELECT * FROM productos ORDER BY id DESC
+        `);
         
-        rows.forEach(row => {
-            const productName = row.querySelector('td:nth-child(2) .text-white').textContent.toLowerCase();
-            const sku = row.querySelector('.font-mono-custom').textContent.toLowerCase();
+        const contentArea = document.getElementById('content-area');
+        
+        contentArea.innerHTML = `
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-white text-xl font-light">Todos los Productos</h2>
+                <button onclick="mostrarSeccion('nuevo')" class="btn-primary px-4 py-2 rounded-xl text-sm text-white flex items-center gap-2">
+                    <i class="fas fa-plus"></i>
+                    Nuevo Producto
+                </button>
+            </div>
             
-            if (productName.includes(searchTerm) || sku.includes(searchTerm)) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
+            <div class="glass-panel rounded-2xl p-6">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="table-header">
+                            <tr>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">ID</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Producto</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">SKU</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Categoría</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Precio</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Stock</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Estado</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${productos.map(p => `
+                                <tr class="table-row">
+                                    <td class="py-4 px-4 text-gray-400 font-mono">${p.id}</td>
+                                    <td class="py-4 px-4 text-white">${p.nombre}</td>
+                                    <td class="py-4 px-4 text-gray-400 font-mono">${p.sku}</td>
+                                    <td class="py-4 px-4 text-gray-300">${p.categoria || '-'}</td>
+                                    <td class="py-4 px-4 text-white font-medium">$${parseFloat(p.precio).toFixed(2)}</td>
+                                    <td class="py-4 px-4">
+                                        <span class="${p.stock <= p.stock_minimo ? 'text-yellow-400' : 'text-green-400'}">${p.stock}</span>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <span class="badge-${p.estado === 'activo' ? 'success' : 'danger'} text-xs px-2 py-1 rounded-full">${p.estado}</span>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <div class="flex gap-2">
+                                            <button onclick="editarProducto(${p.id})" class="text-blue-400 hover:text-blue-300">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button onclick="duplicarProducto(${p.id})" class="text-purple-400 hover:text-purple-300">
+                                                <i class="fas fa-copy"></i>
+                                            </button>
+                                            <button onclick="eliminarProducto(${p.id})" class="text-red-400 hover:text-red-300">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        `;
+        
+    } catch (error) {
+        console.error('Error cargando productos:', error);
+        document.getElementById('content-area').innerHTML = `
+            <div class="error-message">Error cargando productos: ${error.message}</div>
+        `;
+    }
+}
+
+// ===========================================
+// CARGAR FORMULARIO NUEVO PRODUCTO
+// ===========================================
+async function cargarFormularioNuevo() {
+    try {
+        categorias = await db.sql(`SELECT * FROM categorias ORDER BY nombre`);
+        
+        const contentArea = document.getElementById('content-area');
+        
+        contentArea.innerHTML = `
+            <div class="glass-panel rounded-2xl p-6">
+                <h2 class="text-white text-xl font-light mb-6">Crear Nuevo Producto</h2>
+                
+                <form id="quickProductForm" onsubmit="guardarProductoRapido(event)" class="space-y-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="text-gray-400 text-sm block mb-2">Nombre del producto *</label>
+                                <input type="text" id="quickName" class="admin-input w-full px-4 py-3 rounded-xl" required>
+                            </div>
+                            
+                            <div>
+                                <label class="text-gray-400 text-sm block mb-2">SKU *</label>
+                                <input type="text" id="quickSku" class="admin-input w-full px-4 py-3 rounded-xl" required>
+                            </div>
+                            
+                            <div>
+                                <label class="text-gray-400 text-sm block mb-2">Categoría *</label>
+                                <select id="quickCategory" class="admin-input w-full px-4 py-3 rounded-xl" required>
+                                    <option value="" class="bg-gray-900">Seleccionar categoría</option>
+                                    ${categorias.map(c => `<option value="${c.nombre}" class="bg-gray-900">${c.nombre}</option>`).join('')}
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="text-gray-400 text-sm block mb-2">Precio *</label>
+                                    <input type="number" id="quickPrice" step="0.01" class="admin-input w-full px-4 py-3 rounded-xl" required>
+                                </div>
+                                <div>
+                                    <label class="text-gray-400 text-sm block mb-2">Stock *</label>
+                                    <input type="number" id="quickStock" class="admin-input w-full px-4 py-3 rounded-xl" required>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="text-gray-400 text-sm block mb-2">Descripción corta</label>
+                                <input type="text" id="quickDesc" class="admin-input w-full px-4 py-3 rounded-xl">
+                            </div>
+                            
+                            <div>
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="checkbox" id="quickFeatured" class="rounded border-white/20 bg-white/5 text-blue-500">
+                                    <span class="text-gray-300 text-sm">Producto destacado</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="border-t border-white/10 pt-4 flex gap-3">
+                        <button type="button" onclick="mostrarSeccion('lista')" class="btn-secondary flex-1 py-3 rounded-xl text-gray-300">
+                            Cancelar
+                        </button>
+                        <button type="button" onclick="abrirModalNuevo()" class="btn-secondary flex-1 py-3 rounded-xl text-gray-300">
+                            Configuración avanzada
+                        </button>
+                        <button type="submit" class="btn-primary flex-1 py-3 rounded-xl text-white">
+                            Guardar producto
+                        </button>
+                    </div>
+                </form>
+            </div>
+        `;
+        
+    } catch (error) {
+        console.error('Error cargando formulario:', error);
+    }
+}
+
+// ===========================================
+// CARGAR CATEGORÍAS
+// ===========================================
+async function cargarCategorias() {
+    try {
+        const categorias = await db.sql(`SELECT * FROM categorias ORDER BY id DESC`);
+        
+        const contentArea = document.getElementById('content-area');
+        
+        contentArea.innerHTML = `
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-white text-xl font-light">Categorías</h2>
+                <button onclick="abrirModalCategoria()" class="btn-primary px-4 py-2 rounded-xl text-sm text-white flex items-center gap-2">
+                    <i class="fas fa-plus"></i>
+                    Nueva Categoría
+                </button>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-4">
+                ${categorias.map(c => `
+                    <div class="glass-card rounded-xl p-4">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-white font-medium">${c.nombre}</h3>
+                                <p class="text-gray-400 text-xs mt-1">${c.descripcion || 'Sin descripción'}</p>
+                                <p class="text-gray-500 text-xs font-mono mt-2">${c.slug}</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="editarCategoria(${c.id})" class="text-blue-400 hover:text-blue-300">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button onclick="eliminarCategoria(${c.id})" class="text-red-400 hover:text-red-300">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+        
+    } catch (error) {
+        console.error('Error cargando categorías:', error);
+    }
+}
+
+// ===========================================
+// CARGAR CONTROL DE STOCK
+// ===========================================
+async function cargarControlStock() {
+    try {
+        const productos = await db.sql(`
+            SELECT id, nombre, sku, stock, stock_minimo,
+                   (SELECT SUM(cantidad) FROM pedido_detalles WHERE producto_id = productos.id) as vendidos
+            FROM productos 
+            ORDER BY stock ASC
+        `);
+        
+        const contentArea = document.getElementById('content-area');
+        
+        contentArea.innerHTML = `
+            <h2 class="text-white text-xl font-light mb-6">Control de Stock</h2>
+            
+            <div class="glass-panel rounded-2xl p-6">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="table-header">
+                            <tr>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Producto</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">SKU</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Stock Actual</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Stock Mínimo</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Vendidos</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Estado</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${productos.map(p => {
+                                const estado = p.stock <= 0 ? 'danger' : p.stock <= p.stock_minimo ? 'warning' : 'success';
+                                const estadoTexto = p.stock <= 0 ? 'Agotado' : p.stock <= p.stock_minimo ? 'Stock Bajo' : 'Normal';
+                                return `
+                                    <tr class="table-row">
+                                        <td class="py-4 px-4 text-white">${p.nombre}</td>
+                                        <td class="py-4 px-4 text-gray-400 font-mono">${p.sku}</td>
+                                        <td class="py-4 px-4 text-white font-bold">${p.stock}</td>
+                                        <td class="py-4 px-4 text-gray-400">${p.stock_minimo}</td>
+                                        <td class="py-4 px-4 text-gray-300">${p.vendidos || 0}</td>
+                                        <td class="py-4 px-4">
+                                            <span class="badge-${estado} text-xs px-2 py-1 rounded-full">${estadoTexto}</span>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <button onclick="ajustarStock(${p.id})" class="text-blue-400 hover:text-blue-300">
+                                                <i class="fas fa-sliders-h"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        `;
+        
+    } catch (error) {
+        console.error('Error cargando stock:', error);
+    }
+}
+
+// ===========================================
+// CARGAR MÁS VENDIDOS
+// ===========================================
+async function cargarMasVendidos() {
+    try {
+        const productos = await db.sql(`
+            SELECT p.id, p.nombre, p.sku, p.precio, p.stock,
+                   COUNT(pd.id) as total_pedidos,
+                   SUM(pd.cantidad) as total_vendidos
+            FROM productos p
+            LEFT JOIN pedido_detalles pd ON p.id = pd.producto_id
+            GROUP BY p.id
+            ORDER BY total_vendidos DESC
+            LIMIT 10
+        `);
+        
+        const contentArea = document.getElementById('content-area');
+        
+        contentArea.innerHTML = `
+            <h2 class="text-white text-xl font-light mb-6">Productos Más Vendidos</h2>
+            
+            <div class="glass-panel rounded-2xl p-6">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="table-header">
+                            <tr>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">#</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Producto</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">SKU</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Precio</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Vendidos</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Pedidos</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Stock</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${productos.map((p, index) => `
+                                <tr class="table-row">
+                                    <td class="py-4 px-4 text-gray-400 font-mono">${index + 1}</td>
+                                    <td class="py-4 px-4 text-white">${p.nombre}</td>
+                                    <td class="py-4 px-4 text-gray-400 font-mono">${p.sku}</td>
+                                    <td class="py-4 px-4 text-white font-medium">$${parseFloat(p.precio).toFixed(2)}</td>
+                                    <td class="py-4 px-4 text-green-400 font-bold">${p.total_vendidos || 0}</td>
+                                    <td class="py-4 px-4 text-gray-300">${p.total_pedidos || 0}</td>
+                                    <td class="py-4 px-4">
+                                        <span class="${p.stock <= 5 ? 'text-yellow-400' : 'text-green-400'}">${p.stock}</span>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        `;
+        
+    } catch (error) {
+        console.error('Error cargando más vendidos:', error);
+    }
+}
+
+// ===========================================
+// CARGAR STOCK BAJO
+// ===========================================
+async function cargarStockBajo() {
+    try {
+        const productos = await db.sql(`
+            SELECT * FROM productos 
+            WHERE stock <= stock_minimo AND stock > 0
+            ORDER BY stock ASC
+        `);
+        
+        const contentArea = document.getElementById('content-area');
+        
+        contentArea.innerHTML = `
+            <h2 class="text-white text-xl font-light mb-6">Productos con Stock Bajo</h2>
+            
+            <div class="glass-panel rounded-2xl p-6">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="table-header">
+                            <tr>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Producto</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">SKU</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Stock</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Mínimo</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Faltante</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${productos.map(p => `
+                                <tr class="table-row">
+                                    <td class="py-4 px-4 text-white">${p.nombre}</td>
+                                    <td class="py-4 px-4 text-gray-400 font-mono">${p.sku}</td>
+                                    <td class="py-4 px-4 text-yellow-400 font-bold">${p.stock}</td>
+                                    <td class="py-4 px-4 text-gray-400">${p.stock_minimo}</td>
+                                    <td class="py-4 px-4 text-red-400">${p.stock_minimo - p.stock}</td>
+                                    <td class="py-4 px-4">
+                                        <button onclick="ajustarStock(${p.id})" class="btn-primary px-3 py-1 rounded-lg text-xs">
+                                            Reponer stock
+                                        </button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        `;
+        
+    } catch (error) {
+        console.error('Error cargando stock bajo:', error);
+    }
+}
+
+// ===========================================
+// FUNCIONES DE PRODUCTOS
+// ===========================================
+window.abrirModalNuevo = function() {
+    editProductId = null;
+    document.getElementById('modalTitle').textContent = 'Nuevo Producto (Avanzado)';
+    document.getElementById('productForm').reset();
+    document.getElementById('productId').value = '';
+    especificaciones = [];
+    tags = [];
+    imagenes = [];
+    document.getElementById('specsContainer').innerHTML = '';
+    document.getElementById('tagContainer').innerHTML = '';
+    document.getElementById('imagePreview').innerHTML = '';
+    cargarCategoriasSelect();
+    document.getElementById('productModal').classList.remove('hidden');
+};
+
+window.editarProducto = async function(id) {
+    try {
+        const productos = await db.sql(`SELECT * FROM productos WHERE id = ${id}`);
+        if (productos.length === 0) return;
+        
+        const p = productos[0];
+        editProductId = id;
+        
+        document.getElementById('modalTitle').textContent = 'Editar Producto';
+        document.getElementById('productId').value = id;
+        document.getElementById('productName').value = p.nombre || '';
+        document.getElementById('productSku').value = p.sku || '';
+        document.getElementById('productPrice').value = p.precio || '';
+        document.getElementById('productComparePrice').value = p.precio_comparacion || '';
+        document.getElementById('productStock').value = p.stock || '';
+        document.getElementById('productMinStock').value = p.stock_minimo || 5;
+        document.getElementById('productShortDesc').value = p.descripcion_corta || '';
+        document.getElementById('productLongDesc').value = p.descripcion_larga || '';
+        document.getElementById('productStatus').value = p.estado || 'activo';
+        document.getElementById('productFeatured').checked = p.destacado === 1;
+        
+        // Cargar categorías y seleccionar la actual
+        await cargarCategoriasSelect(p.categoria);
+        
+        // Cargar especificaciones si existen
+        if (p.especificaciones) {
+            try {
+                especificaciones = JSON.parse(p.especificaciones);
+                renderizarEspecificaciones();
+            } catch (e) {}
+        }
+        
+        // Cargar tags si existen
+        if (p.tags) {
+            try {
+                tags = JSON.parse(p.tags);
+                renderizarTags();
+            } catch (e) {}
+        }
+        
+        document.getElementById('productModal').classList.remove('hidden');
+        
+    } catch (error) {
+        console.error('Error cargando producto:', error);
+        mostrarMensaje('error', 'Error cargando producto');
+    }
+};
+
+window.duplicarProducto = async function(id) {
+    try {
+        const productos = await db.sql(`SELECT * FROM productos WHERE id = ${id}`);
+        if (productos.length === 0) return;
+        
+        const p = productos[0];
+        editProductId = null;
+        
+        document.getElementById('modalTitle').textContent = 'Duplicar Producto';
+        document.getElementById('productId').value = '';
+        document.getElementById('productName').value = p.nombre + ' (copia)';
+        document.getElementById('productSku').value = p.sku + '-COPY';
+        document.getElementById('productPrice').value = p.precio || '';
+        document.getElementById('productComparePrice').value = p.precio_comparacion || '';
+        document.getElementById('productStock').value = p.stock || '';
+        document.getElementById('productMinStock').value = p.stock_minimo || 5;
+        document.getElementById('productShortDesc').value = p.descripcion_corta || '';
+        document.getElementById('productLongDesc').value = p.descripcion_larga || '';
+        document.getElementById('productStatus').value = p.estado || 'activo';
+        document.getElementById('productFeatured').checked = p.destacado === 1;
+        
+        await cargarCategoriasSelect(p.categoria);
+        
+        document.getElementById('productModal').classList.remove('hidden');
+        
+    } catch (error) {
+        console.error('Error duplicando producto:', error);
+        mostrarMensaje('error', 'Error duplicando producto');
+    }
+};
+
+window.eliminarProducto = async function(id) {
+    if (confirm('¿Estás seguro de eliminar este producto?')) {
+        try {
+            await db.sql(`DELETE FROM productos WHERE id = ${id}`);
+            mostrarMensaje('success', 'Producto eliminado correctamente');
+            mostrarSeccion('lista');
+        } catch (error) {
+            mostrarMensaje('error', 'Error eliminando producto');
+        }
+    }
+};
+
+window.guardarProductoRapido = async function(e) {
+    e.preventDefault();
+    
+    const nombre = document.getElementById('quickName').value;
+    const sku = document.getElementById('quickSku').value;
+    const categoria = document.getElementById('quickCategory').value;
+    const precio = document.getElementById('quickPrice').value;
+    const stock = document.getElementById('quickStock').value;
+    const desc = document.getElementById('quickDesc').value;
+    const destacado = document.getElementById('quickFeatured').checked ? 1 : 0;
+    
+    try {
+        await db.sql(`
+            INSERT INTO productos (nombre, sku, categoria, precio, stock, descripcion_corta, destacado, estado)
+            VALUES ('${nombre}', '${sku}', '${categoria}', ${precio}, ${stock}, '${desc}', ${destacado}, 'activo')
+        `);
+        
+        mostrarMensaje('success', 'Producto creado correctamente');
+        mostrarSeccion('lista');
+        
+    } catch (error) {
+        console.error('Error guardando producto:', error);
+        mostrarMensaje('error', 'Error al guardar producto');
+    }
+};
+
+// ===========================================
+// FUNCIONES DE CATEGORÍAS
+// ===========================================
+window.abrirModalCategoria = function() {
+    editCategoryId = null;
+    document.getElementById('categoryModalTitle').textContent = 'Nueva Categoría';
+    document.getElementById('categoryForm').reset();
+    document.getElementById('categoryId').value = '';
+    document.getElementById('categoryModal').classList.remove('hidden');
+};
+
+window.editarCategoria = async function(id) {
+    try {
+        const categorias = await db.sql(`SELECT * FROM categorias WHERE id = ${id}`);
+        if (categorias.length === 0) return;
+        
+        const c = categorias[0];
+        editCategoryId = id;
+        
+        document.getElementById('categoryModalTitle').textContent = 'Editar Categoría';
+        document.getElementById('categoryId').value = id;
+        document.getElementById('categoryName').value = c.nombre || '';
+        document.getElementById('categorySlug').value = c.slug || '';
+        document.getElementById('categoryDescription').value = c.descripcion || '';
+        
+        document.getElementById('categoryModal').classList.remove('hidden');
+        
+    } catch (error) {
+        console.error('Error cargando categoría:', error);
+    }
+};
+
+window.eliminarCategoria = async function(id) {
+    if (confirm('¿Estás seguro de eliminar esta categoría?')) {
+        try {
+            await db.sql(`DELETE FROM categorias WHERE id = ${id}`);
+            mostrarMensaje('success', 'Categoría eliminada correctamente');
+            mostrarSeccion('categorias');
+        } catch (error) {
+            mostrarMensaje('error', 'Error eliminando categoría');
+        }
+    }
+};
+
+// ===========================================
+// FUNCIONES DEL MODAL
+// ===========================================
+window.cerrarModal = function() {
+    document.getElementById('productModal').classList.add('hidden');
+};
+
+window.cerrarCategoryModal = function() {
+    document.getElementById('categoryModal').classList.add('hidden');
+};
+
+async function cargarCategoriasSelect(selected = null) {
+    const select = document.getElementById('productCategory');
+    select.innerHTML = '<option value="" class="bg-gray-900">Seleccionar categoría</option>';
+    
+    categorias.forEach(c => {
+        const option = document.createElement('option');
+        option.value = c.nombre;
+        option.textContent = c.nombre;
+        option.className = 'bg-gray-900';
+        if (selected && c.nombre === selected) {
+            option.selected = true;
+        }
+        select.appendChild(option);
+    });
+}
+
+// ===========================================
+// ESPECIFICACIONES DINÁMICAS
+// ===========================================
+window.agregarEspecificacion = function() {
+    const container = document.getElementById('specsContainer');
+    const index = especificaciones.length;
+    
+    const div = document.createElement('div');
+    div.className = 'spec-item';
+    div.innerHTML = `
+        <input type="text" placeholder="Nombre (ej: Procesador)" class="admin-input flex-1 px-3 py-2 rounded-lg" id="spec_name_${index}">
+        <input type="text" placeholder="Valor (ej: Quad-core 1.4GHz)" class="admin-input flex-1 px-3 py-2 rounded-lg" id="spec_value_${index}">
+        <button type="button" onclick="eliminarEspecificacion(this)" class="btn-danger px-3 py-2 rounded-lg">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+    
+    container.appendChild(div);
+    especificaciones.push({ name: '', value: '' });
+};
+
+window.eliminarEspecificacion = function(button) {
+    button.parentElement.remove();
+};
+
+// ===========================================
+// TAGS DINÁMICAS
+// ===========================================
+window.agregarTag = function() {
+    const input = document.getElementById('tagInput');
+    const tag = input.value.trim();
+    
+    if (tag && !tags.includes(tag)) {
+        tags.push(tag);
+        renderizarTags();
+        input.value = '';
+    }
+};
+
+window.eliminarTag = function(tag) {
+    tags = tags.filter(t => t !== tag);
+    renderizarTags();
+};
+
+function renderizarTags() {
+    const container = document.getElementById('tagContainer');
+    container.innerHTML = tags.map(tag => `
+        <span class="tag">
+            ${tag}
+            <span class="remove-tag" onclick="eliminarTag('${tag}')">×</span>
+        </span>
+    `).join('');
+}
+
+// ===========================================
+// IMÁGENES
+// ===========================================
+const dropArea = document.getElementById('dropArea');
+const fileInput = document.getElementById('fileInput');
+const imagePreview = document.getElementById('imagePreview');
+
+if (dropArea) {
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, preventDefaults, false);
+    });
+    
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropArea.addEventListener(eventName, () => dropArea.classList.add('dragover'), false);
+    });
+    
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, () => dropArea.classList.remove('dragover'), false);
+    });
+    
+    dropArea.addEventListener('drop', handleDrop, false);
+    fileInput?.addEventListener('change', handleFiles, false);
+}
+
+function handleDrop(e) {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    handleFiles({ target: { files } });
+}
+
+function handleFiles(e) {
+    const files = [...e.target.files];
+    files.forEach(file => {
+        if (file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                agregarImagenPreview(e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+}
+
+function agregarImagenPreview(src) {
+    const preview = document.getElementById('imagePreview');
+    const item = document.createElement('div');
+    item.className = 'image-preview-item';
+    item.innerHTML = `
+        <img src="${src}" alt="Preview">
+        <div class="remove-image" onclick="this.parentElement.remove()">
+            <i class="fas fa-times text-white text-xs"></i>
+        </div>
+    `;
+    preview.appendChild(item);
+}
+
+// ===========================================
+// GUARDAR PRODUCTO COMPLETO
+// ===========================================
+document.getElementById('productForm')?.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const id = document.getElementById('productId').value;
+    const nombre = document.getElementById('productName').value;
+    const sku = document.getElementById('productSku').value;
+    const categoria = document.getElementById('productCategory').value;
+    const precio = document.getElementById('productPrice').value;
+    const comparePrice = document.getElementById('productComparePrice').value || null;
+    const stock = document.getElementById('productStock').value;
+    const minStock = document.getElementById('productMinStock').value || 5;
+    const shortDesc = document.getElementById('productShortDesc').value || '';
+    const longDesc = document.getElementById('productLongDesc').value || '';
+    const estado = document.getElementById('productStatus').value;
+    const destacado = document.getElementById('productFeatured').checked ? 1 : 0;
+    
+    // Recolectar especificaciones
+    const specs = [];
+    for (let i = 0; i < especificaciones.length; i++) {
+        const nameInput = document.getElementById(`spec_name_${i}`);
+        const valueInput = document.getElementById(`spec_value_${i}`);
+        if (nameInput && valueInput && nameInput.value && valueInput.value) {
+            specs.push({ name: nameInput.value, value: valueInput.value });
+        }
+    }
+    
+    try {
+        if (id) {
+            // Actualizar producto existente
+            await db.sql(`
+                UPDATE productos 
+                SET nombre = '${nombre}', 
+                    sku = '${sku}', 
+                    categoria = '${categoria}', 
+                    precio = ${precio}, 
+                    precio_comparacion = ${comparePrice || 'NULL'}, 
+                    stock = ${stock}, 
+                    stock_minimo = ${minStock}, 
+                    descripcion_corta = '${shortDesc}', 
+                    descripcion_larga = '${longDesc}', 
+                    estado = '${estado}', 
+                    destacado = ${destacado},
+                    especificaciones = '${JSON.stringify(specs)}',
+                    tags = '${JSON.stringify(tags)}'
+                WHERE id = ${id}
+            `);
+            mostrarMensaje('success', 'Producto actualizado correctamente');
+        } else {
+            // Insertar nuevo producto
+            await db.sql(`
+                INSERT INTO productos 
+                (nombre, sku, categoria, precio, precio_comparacion, stock, stock_minimo, 
+                 descripcion_corta, descripcion_larga, estado, destacado, especificaciones, tags)
+                VALUES ('${nombre}', '${sku}', '${categoria}', ${precio}, ${comparePrice || 'NULL'}, 
+                        ${stock}, ${minStock}, '${shortDesc}', '${longDesc}', '${estado}', 
+                        ${destacado}, '${JSON.stringify(specs)}', '${JSON.stringify(tags)}')
+            `);
+            mostrarMensaje('success', 'Producto creado correctamente');
+        }
+        
+        cerrarModal();
+        mostrarSeccion('lista');
+        
+    } catch (error) {
+        console.error('Error guardando producto:', error);
+        mostrarMensaje('error', 'Error al guardar producto');
+    }
+});
+
+// ===========================================
+// GUARDAR CATEGORÍA
+// ===========================================
+document.getElementById('categoryForm')?.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const id = document.getElementById('categoryId').value;
+    const nombre = document.getElementById('categoryName').value;
+    const slug = document.getElementById('categorySlug').value;
+    const descripcion = document.getElementById('categoryDescription').value || '';
+    
+    try {
+        if (id) {
+            await db.sql(`
+                UPDATE categorias 
+                SET nombre = '${nombre}', slug = '${slug}', descripcion = '${descripcion}'
+                WHERE id = ${id}
+            `);
+            mostrarMensaje('success', 'Categoría actualizada correctamente');
+        } else {
+            await db.sql(`
+                INSERT INTO categorias (nombre, slug, descripcion)
+                VALUES ('${nombre}', '${slug}', '${descripcion}')
+            `);
+            mostrarMensaje('success', 'Categoría creada correctamente');
+        }
+        
+        cerrarCategoryModal();
+        mostrarSeccion('categorias');
+        
+    } catch (error) {
+        console.error('Error guardando categoría:', error);
+        mostrarMensaje('error', 'Error al guardar categoría');
+    }
+});
+
+// ===========================================
+// AJUSTAR STOCK
+// ===========================================
+window.ajustarStock = function(id) {
+    const nuevaCantidad = prompt('Ingresar nueva cantidad de stock:');
+    if (nuevaCantidad !== null && !isNaN(nuevaCantidad) && nuevaCantidad >= 0) {
+        (async () => {
+            try {
+                await db.sql(`UPDATE productos SET stock = ${nuevaCantidad} WHERE id = ${id}`);
+                mostrarMensaje('success', 'Stock actualizado correctamente');
+                mostrarSeccion(currentSection);
+            } catch (error) {
+                mostrarMensaje('error', 'Error actualizando stock');
             }
+        })();
+    }
+};
+
+// ===========================================
+// INICIALIZACIÓN
+// ===========================================
+document.addEventListener('DOMContentLoaded', async function() {
+    console.log('🚀 Inicializando panel de productos avanzado...');
+    
+    if (!verificarAuth()) return;
+    
+    await conectarDB();
+    await mostrarSeccion('lista');
+    
+    // Actualizar fecha
+    const date = new Date();
+    document.getElementById('current-date').textContent = date.toLocaleDateString('es-ES', { 
+        weekday: 'short', 
+        day: 'numeric', 
+        month: 'short' 
+    });
+    
+    // Búsqueda en lista de productos
+    document.getElementById('search-input')?.addEventListener('input', function(e) {
+        const term = e.target.value.toLowerCase();
+        const rows = document.querySelectorAll('.table-row');
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(term) ? '' : 'none';
         });
     });
-    
-    // Cerrar modal con Escape
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeProductModal();
-        }
-    });
+});
 </script>
 </body>
 </html>
