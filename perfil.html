@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfiniHon - Mi Perfil</title>
+    
+    <!-- Import Map para SQLite Cloud -->
+    <script type="importmap">
+        {
+            "imports": {
+                "@sqlitecloud/drivers": "https://esm.sh/@sqlitecloud/drivers@latest"
+            }
+        }
+    </script>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .font-mono-custom {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        body {
+            background-color: #020617;
+            background-image: radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.08) 0%, transparent 40%),
+                              radial-gradient(circle at 80% 70%, rgba(6, 182, 212, 0.08) 0%, transparent 40%);
+            min-height: 100vh;
+        }
+        
+        /* Glassmorphism */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(59, 130, 246, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            border-color: rgba(59, 130, 246, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.15);
+        }
+        
+        /* Tabs */
+        .profile-tab {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: #9ca3af;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .profile-tab:hover {
+            color: white;
+        }
+        
+        .profile-tab.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+        }
+        
+        /* Badges de estado */
+        .badge-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+        
+        .badge-info {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+        
+        /* Inputs */
+        .profile-input {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .profile-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+        
+        .profile-input:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+        }
+        
+        /* Botones */
+        .btn-primary {
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: rgba(59, 130, 246, 0.6);
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(59, 130, 246, 0.3);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(59, 130, 246, 0.5);
+        }
+        
+        .loading-spinner {
+            border: 3px solid rgba(59, 130, 246, 0.1);
+            border-radius: 50%;
+            border-top: 3px solid #3b82f6;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin: 1rem;
+        }
+
+        .success-message {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #10b981;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin: 1rem;
+        }
+
+        .address-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .address-card.selected {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .address-card:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+<!-- Header -->
+<nav class="relative z-30 border-b border-white/5 bg-[#020617]/80 backdrop-blur-xl sticky top-0">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center space-x-2">
+                <span class="text-white font-bold text-xl tracking-tight">Infini<span class="text-blue-400">Hon</span></span>
+                <span class="ml-4 text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full border border-blue-500/30">Perfil</span>
+            </div>
+            <div class="flex items-center gap-6">
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="index.html" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Inicio</a>
+                    <a href="tienda.html" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Tienda</a>
+                    <a href="perfil.html" class="text-white transition-colors text-sm font-medium border-b-2 border-blue-400 pb-1">Mi Perfil</a>
+                </div>
+                <a href="tienda.html" class="relative">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
+                    <span id="cartCount" class="absolute -top-2 -right-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">0</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Contenedor de mensajes -->
+<div id="message-container" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4"></div>
+
+<!-- Contenido principal -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Breadcrumb -->
+    <div class="flex items-center gap-2 text-sm text-gray-400 mb-6">
+        <a href="index.html" class="hover:text-blue-400 transition">Inicio</a>
+        <span>/</span>
+        <span class="text-blue-400">Mi Perfil</span>
+    </div>
+
+    <!-- Header del perfil -->
+    <div class="glass-panel rounded-2xl p-6 mb-6">
+        <div class="flex items-center gap-4">
+            <div class="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
+                <span class="text-white text-3xl font-bold" id="user-initials">U</span>
+            </div>
+            <div class="flex-1">
+                <h1 class="text-2xl font-bold text-white" id="user-fullname">Cargando...</h1>
+                <p class="text-gray-400" id="user-email">Cargando...</p>
+                <div class="flex gap-4 mt-2">
+                    <span class="text-xs bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full border border-blue-500/30" id="user-rol">Cliente</span>
+                    <span class="text-xs bg-green-500/20 text-green-400 px-3 py-1 rounded-full border border-green-500/30" id="user-verified">Verificado</span>
+                </div>
+            </div>
+            <button onclick="cerrarSesion()" class="btn-secondary px-4 py-2 rounded-xl text-sm text-gray-300 flex items-center gap-2">
+                <i class="fas fa-sign-out-alt"></i>
+                Cerrar sesión
+            </button>
+        </div>
+    </div>
+
+    <!-- Tabs de navegación del perfil -->
+    <div class="glass-panel rounded-2xl p-4 mb-6 overflow-x-auto">
+        <div class="flex gap-2 min-w-max">
+            <button class="profile-tab active" onclick="cambiarTab('resumen')" id="tab-resumen">
+                <i class="fas fa-home mr-2"></i>Resumen
+            </button>
+            <button class="profile-tab" onclick="cambiarTab('pedidos')" id="tab-pedidos">
+                <i class="fas fa-shopping-bag mr-2"></i>Mis Pedidos
+            </button>
+            <button class="profile-tab" onclick="cambiarTab('direcciones')" id="tab-direcciones">
+                <i class="fas fa-map-marker-alt mr-2"></i>Direcciones
+            </button>
+            <button class="profile-tab" onclick="cambiarTab('datos')" id="tab-datos">
+                <i class="fas fa-user mr-2"></i>Datos Personales
+            </button>
+            <button class="profile-tab" onclick="cambiarTab('password')" id="tab-password">
+                <i class="fas fa-lock mr-2"></i>Cambiar Contraseña
+            </button>
+            <button class="profile-tab" onclick="cambiarTab('favoritos')" id="tab-favoritos">
+                <i class="fas fa-heart mr-2"></i>Favoritos
+            </button>
+        </div>
+    </div>
+
+    <!-- Contenido dinámico del perfil -->
+    <div id="profile-content" class="space-y-6">
+        <!-- El contenido se carga según la pestaña -->
+        <div class="text-center py-12">
+            <div class="loading-spinner mx-auto mb-4"></div>
+            <p class="text-gray-400">Cargando perfil...</p>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="border-t border-white/5 bg-[#020617]/50 backdrop-blur-sm mt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="text-center text-gray-400 text-sm">
+            © 2024 InfiniHon Store. Todos los derechos reservados.
+        </div>
+    </div>
+</footer>
+
+<script type="module">
+// ===========================================
+// CONFIGURACIÓN DE SQLITE CLOUD
+// ===========================================
+import { Database } from '@sqlitecloud/drivers';
+
+const CONNECTION_STRING = 'sqlitecloud://cxaerd5fvk.g2.sqlite.cloud:8860/infinihon_store.db?apikey=cfHa2k4KOhBzxKL5g484dhAf4xlC4znLp5M6wzirgvc';
+
+let db = null;
+let currentUser = null;
+let direcciones = [];
+let favoritos = [];
+
+// ===========================================
+// CONEXIÓN A SQLITE CLOUD
+// ===========================================
+async function conectarDB() {
+    try {
+        console.log('🔄 Conectando a SQLite Cloud...');
+        db = new Database(CONNECTION_STRING);
+        
+        // Probar conexión
+        const result = await db.sql`SELECT 1 as test`;
+        console.log('✅ Conectado a SQLite Cloud', result);
+        
+        return true;
+    } catch (error) {
+        console.error('❌ Error de conexión:', error);
+        mostrarMensaje('error', 'Error de conexión a la base de datos');
+        return false;
+    }
+}
+
+// ===========================================
+// MOSTRAR MENSAJES
+// ===========================================
+function mostrarMensaje(tipo, texto) {
+    const container = document.getElementById('message-container');
+    if (!container) return;
+    
+    const className = tipo === 'error' ? 'error-message' : 'success-message';
+    container.innerHTML = `<div class="${className}">${texto}</div>`;
+    
+    setTimeout(() => {
+        container.innerHTML = '';
+    }, 5000);
+}
+
+// ===========================================
+// VERIFICAR AUTENTICACIÓN
+// ===========================================
+function verificarAuth() {
+    const savedUser = localStorage.getItem('user') || sessionStorage.getItem('user');
+    
+    if (!savedUser) {
+        window.location.href = 'registro_admin.html';
+        return false;
+    }
+    
+    try {
+        currentUser = JSON.parse(savedUser);
+        
+        // Actualizar header
+        document.getElementById('user-fullname').textContent = `${currentUser.nombre} ${currentUser.apellido || ''}`;
+        document.getElementById('user-email').textContent = currentUser.email;
+        
+        const initials = (currentUser.nombre?.[0] || 'U') + (currentUser.apellido?.[0] || 'S');
+        document.getElementById('user-initials').textContent = initials;
+        
+        document.getElementById('user-rol').textContent = currentUser.rol === 'admin' ? 'Administrador' : 'Cliente';
+        document.getElementById('user-verified').textContent = currentUser.verificado ? 'Verificado' : 'Pendiente';
+        
+        return true;
+        
+    } catch (e) {
+        window.location.href = 'registro_admin.html';
+        return false;
+    }
+}
+
+// ===========================================
+// CERRAR SESIÓN
+// ===========================================
+window.cerrarSesion = function() {
+    localStorage.removeItem('user');
+    sessionStorage.removeItem('user');
+    window.location.href = 'registro_admin.html';
+};
+
+// ===========================================
+// CAMBIAR TABS
+// ===========================================
+window.cambiarTab = async function(tab) {
+    // Actualizar tabs
+    document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(`tab-${tab}`).classList.add('active');
+    
+    // Cargar contenido
+    const content = document.getElementById('profile-content');
+    content.innerHTML = '<div class="text-center py-12"><div class="loading-spinner mx-auto mb-4"></div><p class="text-gray-400">Cargando...</p></div>';
+    
+    switch(tab) {
+        case 'resumen':
+            await cargarResumen();
+            break;
+        case 'pedidos':
+            await cargarPedidos();
+            break;
+        case 'direcciones':
+            cargarDirecciones();
+            break;
+        case 'datos':
+            cargarDatosPersonales();
+            break;
+        case 'password':
+            cargarCambiarPassword();
+            break;
+        case 'favoritos':
+            await cargarFavoritos();
+            break;
+    }
+};
+
+// ===========================================
+// CARGAR RESUMEN
+// ===========================================
+async function cargarResumen() {
+    try {
+        // Obtener estadísticas del usuario
+        const pedidos = await db.sql(`
+            SELECT COUNT(*) as total, SUM(total) as total_gastado 
+            FROM pedidos 
+            WHERE usuario_id = ${currentUser.id}
+        `);
+        
+        const ultimoPedido = await db.sql(`
+            SELECT numero_pedido, total, estado, created_at 
+            FROM pedidos 
+            WHERE usuario_id = ${currentUser.id}
+            ORDER BY created_at DESC 
+            LIMIT 1
+        `);
+        
+        const content = document.getElementById('profile-content');
+        
+        content.innerHTML = `
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="glass-card rounded-2xl p-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center">
+                            <i class="fas fa-shopping-bag text-blue-400 text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-400 text-sm">Total Pedidos</p>
+                            <p class="text-white text-2xl font-bold">${pedidos[0]?.total || 0}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="glass-card rounded-2xl p-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center">
+                            <i class="fas fa-dollar-sign text-green-400 text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-400 text-sm">Total Gastado</p>
+                            <p class="text-white text-2xl font-bold">$${parseFloat(pedidos[0]?.total_gastado || 0).toFixed(2)}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="glass-card rounded-2xl p-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                            <i class="fas fa-clock text-purple-400 text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-400 text-sm">Miembro desde</p>
+                            <p class="text-white text-sm font-bold">${new Date(currentUser.created_at || Date.now()).toLocaleDateString()}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            ${ultimoPedido.length > 0 ? `
+                <div class="glass-panel rounded-2xl p-6">
+                    <h3 class="text-white font-medium mb-4">Último Pedido</h3>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-white">${ultimoPedido[0].numero_pedido}</p>
+                            <p class="text-gray-400 text-sm">${new Date(ultimoPedido[0].created_at).toLocaleDateString()}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-white font-bold">$${parseFloat(ultimoPedido[0].total).toFixed(2)}</p>
+                            <span class="badge-${getEstadoColor(ultimoPedido[0].estado)} text-xs px-2 py-1 rounded-full">${ultimoPedido[0].estado}</span>
+                        </div>
+                    </div>
+                    <button onclick="cambiarTab('pedidos')" class="btn-secondary w-full mt-4 py-2 rounded-xl text-sm">
+                        Ver todos mis pedidos
+                    </button>
+                </div>
+            ` : `
+                <div class="glass-panel rounded-2xl p-6 text-center">
+                    <i class="fas fa-shopping-bag text-4xl text-gray-600 mb-3"></i>
+                    <p class="text-gray-400">Aún no has realizado ningún pedido</p>
+                    <a href="tienda.html" class="btn-primary inline-block mt-4 px-6 py-2 rounded-xl text-sm">
+                        Ir a la tienda
+                    </a>
+                </div>
+            `}
+            
+            <div class="glass-panel rounded-2xl p-6">
+                <h3 class="text-white font-medium mb-4">Acciones Rápidas</h3>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <button onclick="cambiarTab('direcciones')" class="btn-secondary p-4 rounded-xl text-left">
+                        <i class="fas fa-map-marker-alt text-blue-400 mb-2"></i>
+                        <p class="text-white text-sm">Gestionar direcciones</p>
+                    </button>
+                    <button onclick="cambiarTab('datos')" class="btn-secondary p-4 rounded-xl text-left">
+                        <i class="fas fa-user text-blue-400 mb-2"></i>
+                        <p class="text-white text-sm">Actualizar datos</p>
+                    </button>
+                    <button onclick="cambiarTab('favoritos')" class="btn-secondary p-4 rounded-xl text-left">
+                        <i class="fas fa-heart text-blue-400 mb-2"></i>
+                        <p class="text-white text-sm">Mis favoritos</p>
+                    </button>
+                </div>
+            </div>
+        `;
+        
+    } catch (error) {
+        console.error('Error cargando resumen:', error);
+    }
+}
+
+// ===========================================
+// CARGAR PEDIDOS
+// ===========================================
+async function cargarPedidos() {
+    try {
+        const pedidos = await db.sql(`
+            SELECT * FROM pedidos 
+            WHERE usuario_id = ${currentUser.id}
+            ORDER BY created_at DESC
+        `);
+        
+        const content = document.getElementById('profile-content');
+        
+        if (pedidos.length === 0) {
+            content.innerHTML = `
+                <div class="glass-panel rounded-2xl p-12 text-center">
+                    <i class="fas fa-box-open text-5xl text-gray-600 mb-4"></i>
+                    <h3 class="text-white text-xl mb-2">No hay pedidos aún</h3>
+                    <p class="text-gray-400 mb-6">Explora nuestra tienda y haz tu primera compra</p>
+                    <a href="tienda.html" class="btn-primary inline-block px-6 py-3 rounded-xl">
+                        Ir a la tienda
+                    </a>
+                </div>
+            `;
+            return;
+        }
+        
+        let html = '<div class="space-y-4">';
+        
+        for (const pedido of pedidos) {
+            // Obtener detalles del pedido
+            const detalles = await db.sql(`
+                SELECT pd.*, p.nombre, p.imagen_principal
+                FROM pedido_detalles pd
+                JOIN productos p ON pd.producto_id = p.id
+                WHERE pd.pedido_id = ${pedido.id}
+            `);
+            
+            html += `
+                <div class="glass-panel rounded-2xl p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-white font-medium">${pedido.numero_pedido}</h3>
+                            <p class="text-gray-400 text-sm">${new Date(pedido.created_at).toLocaleDateString()}</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="badge-${getEstadoColor(pedido.estado)} text-xs px-3 py-1 rounded-full">${pedido.estado}</span>
+                            <p class="text-white font-bold mt-2">$${parseFloat(pedido.total).toFixed(2)}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="border-t border-white/5 pt-4">
+                        <p class="text-gray-400 text-sm mb-2">Productos:</p>
+                        <div class="space-y-2">
+                            ${detalles.map(d => `
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-white">${d.nombre} x${d.cantidad}</span>
+                                    <span class="text-gray-400">$${parseFloat(d.precio_unitario).toFixed(2)}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="border-t border-white/5 pt-4 mt-2">
+                        <p class="text-gray-400 text-sm">Envío a: ${pedido.direccion_envio}, ${pedido.ciudad} (${pedido.codigo_postal})</p>
+                        <p class="text-gray-400 text-sm">Tel: ${pedido.telefono}</p>
+                    </div>
+                    
+                    <div class="flex gap-2 mt-4">
+                        <button onclick="verDetallePedido('${pedido.numero_pedido}')" class="btn-secondary flex-1 py-2 rounded-xl text-sm">
+                            Ver detalles
+                        </button>
+                        ${pedido.estado === 'entregado' ? `
+                            <button onclick="valorarProductos(${pedido.id})" class="btn-primary flex-1 py-2 rounded-xl text-sm">
+                                Valorar productos
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+        
+        html += '</div>';
+        content.innerHTML = html;
+        
+    } catch (error) {
+        console.error('Error cargando pedidos:', error);
+        document.getElementById('profile-content').innerHTML = `
+            <div class="error-message">Error cargando pedidos</div>
+        `;
+    }
+}
+
+// ===========================================
+// CARGAR DIRECCIONES (simulado - se puede implementar tabla direcciones)
+// ===========================================
+function cargarDirecciones() {
+    // Por ahora usamos localStorage para direcciones guardadas
+    const direccionesGuardadas = localStorage.getItem('direcciones');
+    direcciones = direccionesGuardadas ? JSON.parse(direccionesGuardadas) : [];
+    
+    const content = document.getElementById('profile-content');
+    
+    content.innerHTML = `
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-white text-xl font-light">Mis Direcciones</h2>
+            <button onclick="agregarDireccion()" class="btn-primary px-4 py-2 rounded-xl text-sm flex items-center gap-2">
+                <i class="fas fa-plus"></i>
+                Nueva dirección
+            </button>
+        </div>
+        
+        <div id="direcciones-container" class="grid md:grid-cols-2 gap-4">
+            ${direcciones.length > 0 ? direcciones.map((d, index) => `
+                <div class="glass-card rounded-xl p-4 address-card">
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <h3 class="text-white font-medium">${d.nombre}</h3>
+                            <p class="text-gray-400 text-sm">${d.direccion}</p>
+                            <p class="text-gray-400 text-sm">${d.ciudad}, ${d.codigo_postal}</p>
+                            <p class="text-gray-400 text-sm">Tel: ${d.telefono}</p>
+                            ${d.principal ? '<span class="badge-info text-xs px-2 py-1 rounded-full mt-2 inline-block">Principal</span>' : ''}
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="editarDireccion(${index})" class="text-blue-400 hover:text-blue-300">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="eliminarDireccion(${index})" class="text-red-400 hover:text-red-300">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('') : `
+                <div class="col-span-2 text-center py-12 glass-panel rounded-2xl">
+                    <i class="fas fa-map-marker-alt text-4xl text-gray-600 mb-3"></i>
+                    <p class="text-gray-400">No tienes direcciones guardadas</p>
+                </div>
+            `}
+        </div>
+    `;
+}
+
+// ===========================================
+// AGREGAR DIRECCIÓN
+// ===========================================
+window.agregarDireccion = function() {
+    const nombre = prompt('Nombre de la dirección (ej: Casa, Oficina):');
+    if (!nombre) return;
+    
+    const direccion = prompt('Dirección completa:');
+    if (!direccion) return;
+    
+    const ciudad = prompt('Ciudad:');
+    if (!ciudad) return;
+    
+    const codigo = prompt('Código postal:');
+    if (!codigo) return;
+    
+    const telefono = prompt('Teléfono de contacto:');
+    if (!telefono) return;
+    
+    const principal = direcciones.length === 0 ? true : confirm('¿Establecer como dirección principal?');
+    
+    const nuevaDireccion = {
+        nombre,
+        direccion,
+        ciudad,
+        codigo_postal: codigo,
+        telefono,
+        principal
+    };
+    
+    // Si es principal, quitar principal de las demás
+    if (principal) {
+        direcciones.forEach(d => d.principal = false);
+    }
+    
+    direcciones.push(nuevaDireccion);
+    localStorage.setItem('direcciones', JSON.stringify(direcciones));
+    
+    cargarDirecciones();
+    mostrarMensaje('success', 'Dirección guardada correctamente');
+};
+
+window.editarDireccion = function(index) {
+    const d = direcciones[index];
+    
+    const nombre = prompt('Nombre de la dirección:', d.nombre);
+    if (!nombre) return;
+    
+    const direccion = prompt('Dirección completa:', d.direccion);
+    if (!direccion) return;
+    
+    const ciudad = prompt('Ciudad:', d.ciudad);
+    if (!ciudad) return;
+    
+    const codigo = prompt('Código postal:', d.codigo_postal);
+    if (!codigo) return;
+    
+    const telefono = prompt('Teléfono de contacto:', d.telefono);
+    if (!telefono) return;
+    
+    const principal = confirm('¿Establecer como dirección principal?');
+    
+    if (principal) {
+        direcciones.forEach(d => d.principal = false);
+    }
+    
+    direcciones[index] = {
+        nombre,
+        direccion,
+        ciudad,
+        codigo_postal: codigo,
+        telefono,
+        principal
+    };
+    
+    localStorage.setItem('direcciones', JSON.stringify(direcciones));
+    cargarDirecciones();
+    mostrarMensaje('success', 'Dirección actualizada');
+};
+
+window.eliminarDireccion = function(index) {
+    if (confirm('¿Eliminar esta dirección?')) {
+        direcciones.splice(index, 1);
+        localStorage.setItem('direcciones', JSON.stringify(direcciones));
+        cargarDirecciones();
+        mostrarMensaje('success', 'Dirección eliminada');
+    }
+};
+
+// ===========================================
+// CARGAR DATOS PERSONALES
+// ===========================================
+function cargarDatosPersonales() {
+    const content = document.getElementById('profile-content');
+    
+    content.innerHTML = `
+        <div class="glass-panel rounded-2xl p-6 max-w-2xl mx-auto">
+            <h2 class="text-white text-xl font-light mb-6">Datos Personales</h2>
+            
+            <form id="datos-form" onsubmit="actualizarDatos(event)" class="space-y-4">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-gray-400 text-sm block mb-2">Nombre</label>
+                        <input type="text" id="edit-nombre" value="${currentUser.nombre || ''}" class="profile-input w-full px-4 py-2 rounded-xl" required>
+                    </div>
+                    <div>
+                        <label class="text-gray-400 text-sm block mb-2">Apellido</label>
+                        <input type="text" id="edit-apellido" value="${currentUser.apellido || ''}" class="profile-input w-full px-4 py-2 rounded-xl">
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="text-gray-400 text-sm block mb-2">Email</label>
+                    <input type="email" id="edit-email" value="${currentUser.email}" class="profile-input w-full px-4 py-2 rounded-xl" readonly disabled>
+                    <p class="text-gray-500 text-xs mt-1">El email no se puede modificar</p>
+                </div>
+                
+                <div>
+                    <label class="text-gray-400 text-sm block mb-2">Empresa</label>
+                    <input type="text" id="edit-empresa" value="${currentUser.empresa || ''}" class="profile-input w-full px-4 py-2 rounded-xl">
+                </div>
+                
+                <div class="flex gap-4 pt-4">
+                    <button type="submit" class="btn-primary flex-1 py-2 rounded-xl">
+                        Guardar cambios
+                    </button>
+                    <button type="button" onclick="cambiarTab('resumen')" class="btn-secondary flex-1 py-2 rounded-xl">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    `;
+}
+
+// ===========================================
+// ACTUALIZAR DATOS
+// ===========================================
+window.actualizarDatos = async function(e) {
+    e.preventDefault();
+    
+    const nombre = document.getElementById('edit-nombre').value;
+    const apellido = document.getElementById('edit-apellido').value;
+    const empresa = document.getElementById('edit-empresa').value;
+    
+    try {
+        await db.sql(`
+            UPDATE usuarios 
+            SET nombre = '${nombre}', apellido = '${apellido}', empresa = '${empresa}'
+            WHERE id = ${currentUser.id}
+        `);
+        
+        // Actualizar sesión
+        currentUser.nombre = nombre;
+        currentUser.apellido = apellido;
+        currentUser.empresa = empresa;
+        
+        if (localStorage.getItem('user')) {
+            localStorage.setItem('user', JSON.stringify(currentUser));
+        } else {
+            sessionStorage.setItem('user', JSON.stringify(currentUser));
+        }
+        
+        // Actualizar header
+        document.getElementById('user-fullname').textContent = `${nombre} ${apellido || ''}`;
+        document.getElementById('user-initials').textContent = (nombre[0] || 'U') + (apellido?.[0] || 'S');
+        
+        mostrarMensaje('success', 'Datos actualizados correctamente');
+        setTimeout(() => cambiarTab('resumen'), 1500);
+        
+    } catch (error) {
+        console.error('Error actualizando datos:', error);
+        mostrarMensaje('error', 'Error al actualizar datos');
+    }
+};
+
+// ===========================================
+// CAMBIAR CONTRASEÑA
+// ===========================================
+function cargarCambiarPassword() {
+    const content = document.getElementById('profile-content');
+    
+    content.innerHTML = `
+        <div class="glass-panel rounded-2xl p-6 max-w-2xl mx-auto">
+            <h2 class="text-white text-xl font-light mb-6">Cambiar Contraseña</h2>
+            
+            <form id="password-form" onsubmit="cambiarPassword(event)" class="space-y-4">
+                <div>
+                    <label class="text-gray-400 text-sm block mb-2">Contraseña actual</label>
+                    <input type="password" id="current-password" class="profile-input w-full px-4 py-2 rounded-xl" required>
+                </div>
+                
+                <div>
+                    <label class="text-gray-400 text-sm block mb-2">Nueva contraseña</label>
+                    <input type="password" id="new-password" class="profile-input w-full px-4 py-2 rounded-xl" required minlength="6">
+                </div>
+                
+                <div>
+                    <label class="text-gray-400 text-sm block mb-2">Confirmar nueva contraseña</label>
+                    <input type="password" id="confirm-password" class="profile-input w-full px-4 py-2 rounded-xl" required minlength="6">
+                </div>
+                
+                <div class="flex gap-4 pt-4">
+                    <button type="submit" class="btn-primary flex-1 py-2 rounded-xl">
+                        Cambiar contraseña
+                    </button>
+                    <button type="button" onclick="cambiarTab('resumen')" class="btn-secondary flex-1 py-2 rounded-xl">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    `;
+}
+
+// ===========================================
+// CAMBIAR CONTRASEÑA
+// ===========================================
+window.cambiarPassword = async function(e) {
+    e.preventDefault();
+    
+    const current = document.getElementById('current-password').value;
+    const newPass = document.getElementById('new-password').value;
+    const confirm = document.getElementById('confirm-password').value;
+    
+    if (newPass !== confirm) {
+        mostrarMensaje('error', 'Las contraseñas no coinciden');
+        return;
+    }
+    
+    if (newPass.length < 6) {
+        mostrarMensaje('error', 'La contraseña debe tener al menos 6 caracteres');
+        return;
+    }
+    
+    try {
+        // Verificar contraseña actual
+        const user = await db.sql(`
+            SELECT id FROM usuarios 
+            WHERE id = ${currentUser.id} AND password_hash = '${current}'
+        `);
+        
+        if (user.length === 0) {
+            mostrarMensaje('error', 'Contraseña actual incorrecta');
+            return;
+        }
+        
+        // Actualizar contraseña
+        await db.sql(`
+            UPDATE usuarios 
+            SET password_hash = '${newPass}'
+            WHERE id = ${currentUser.id}
+        `);
+        
+        mostrarMensaje('success', 'Contraseña actualizada correctamente');
+        setTimeout(() => cambiarTab('resumen'), 1500);
+        
+    } catch (error) {
+        console.error('Error cambiando contraseña:', error);
+        mostrarMensaje('error', 'Error al cambiar contraseña');
+    }
+};
+
+// ===========================================
+// CARGAR FAVORITOS (simulado - se puede implementar tabla favoritos)
+// ===========================================
+async function cargarFavoritos() {
+    // Por ahora usamos localStorage para favoritos
+    const favoritosGuardados = localStorage.getItem('favoritos');
+    favoritos = favoritosGuardados ? JSON.parse(favoritosGuardados) : [];
+    
+    const content = document.getElementById('profile-content');
+    
+    if (favoritos.length === 0) {
+        content.innerHTML = `
+            <div class="glass-panel rounded-2xl p-12 text-center">
+                <i class="fas fa-heart text-5xl text-gray-600 mb-4"></i>
+                <h3 class="text-white text-xl mb-2">No tienes favoritos</h3>
+                <p class="text-gray-400 mb-6">Guarda tus productos favoritos para encontrarlos fácilmente</p>
+                <a href="tienda.html" class="btn-primary inline-block px-6 py-3 rounded-xl">
+                    Explorar productos
+                </a>
+            </div>
+        `;
+        return;
+    }
+    
+    // Obtener datos actualizados de los productos favoritos
+    const productosFav = [];
+    for (const id of favoritos) {
+        try {
+            const prod = await db.sql(`SELECT * FROM productos WHERE id = ${id}`);
+            if (prod.length > 0) productosFav.push(prod[0]);
+        } catch (e) {}
+    }
+    
+    content.innerHTML = `
+        <h2 class="text-white text-xl font-light mb-6">Mis Favoritos</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            ${productosFav.map(p => `
+                <div class="glass-card rounded-xl overflow-hidden">
+                    <div class="h-40 bg-gradient-to-br from-blue-600/20 to-purple-600/20 p-4 flex items-center justify-center">
+                        <img src="${p.imagen_principal || 'https://i.postimg.cc/Fs3MbnrV/68747470733a2f2f696d672e73616e697368746563682e636f6d2f752f393835623461396537626538613333633236316235.png'}" 
+                             alt="${p.nombre}" class="h-full object-contain">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-white font-medium">${p.nombre}</h3>
+                        <p class="text-blue-400 font-bold mt-2">$${parseFloat(p.precio).toFixed(2)}</p>
+                        <div class="flex gap-2 mt-4">
+                            <a href="tienda.html" class="btn-secondary flex-1 py-2 rounded-xl text-xs text-center">
+                                Ver producto
+                            </a>
+                            <button onclick="eliminarFavorito(${p.id})" class="text-red-400 hover:text-red-300">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+
+// ===========================================
+// ELIMINAR FAVORITO
+// ===========================================
+window.eliminarFavorito = function(id) {
+    favoritos = favoritos.filter(f => f !== id);
+    localStorage.setItem('favoritos', JSON.stringify(favoritos));
+    cargarFavoritos();
+    mostrarMensaje('success', 'Producto eliminado de favoritos');
+};
+
+// ===========================================
+// FUNCIONES AUXILIARES
+// ===========================================
+function getEstadoColor(estado) {
+    const colores = {
+        'procesando': 'warning',
+        'enviado': 'info',
+        'entregado': 'success',
+        'cancelado': 'danger'
+    };
+    return colores[estado] || 'info';
+}
+
+window.verDetallePedido = function(numero) {
+    alert(`Ver detalles del pedido ${numero} - Implementar vista detallada`);
+};
+
+window.valorarProductos = function(pedidoId) {
+    alert('Función para valorar productos - Implementar según necesidad');
+};
+
+// ===========================================
+// INICIALIZACIÓN
+// ===========================================
+document.addEventListener('DOMContentLoaded', async function() {
+    console.log('🚀 Inicializando perfil de usuario...');
+    
+    if (!verificarAuth()) return;
+    
+    await conectarDB();
+    await cambiarTab('resumen');
+    
+    // Actualizar contador del carrito
+    const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    document.getElementById('cartCount').textContent = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+});
+</script>
+</body>
+</html>
