@@ -227,11 +227,12 @@
                     <a href="index.html" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Inicio</a>
                     <a href="tienda.html" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Tienda</a>
                     <a href="perfil.html" class="text-white transition-colors text-sm font-medium border-b-2 border-blue-400 pb-1">Mi Perfil</a>
+                    <a href="soporte.html" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Soporte</a>
                 </div>
-                <a href="tienda.html" class="relative">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
-                    <span id="cartCount" class="absolute -top-2 -right-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">0</span>
-                </a>
+                <button onclick="cerrarSesion()" class="text-gray-400 hover:text-white transition-colors text-sm font-medium flex items-center gap-1">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span class="hidden md:inline">Salir</span>
+                </button>
             </div>
         </div>
     </div>
@@ -264,10 +265,6 @@
                     <span class="text-xs bg-green-500/20 text-green-400 px-3 py-1 rounded-full border border-green-500/30" id="user-verified">Verificado</span>
                 </div>
             </div>
-            <button onclick="cerrarSesion()" class="btn-secondary px-4 py-2 rounded-xl text-sm text-gray-300 flex items-center gap-2">
-                <i class="fas fa-sign-out-alt"></i>
-                Cerrar sesión
-            </button>
         </div>
     </div>
 
@@ -369,7 +366,7 @@ function verificarAuth() {
     const savedUser = localStorage.getItem('user') || sessionStorage.getItem('user');
     
     if (!savedUser) {
-        window.location.href = 'registro_admin.html';
+        window.location.href = 'login.html';
         return false;
     }
     
@@ -377,8 +374,8 @@ function verificarAuth() {
         currentUser = JSON.parse(savedUser);
         
         // Actualizar header
-        document.getElementById('user-fullname').textContent = `${currentUser.nombre} ${currentUser.apellido || ''}`;
-        document.getElementById('user-email').textContent = currentUser.email;
+        document.getElementById('user-fullname').textContent = `${currentUser.nombre || ''} ${currentUser.apellido || ''}`.trim() || 'Usuario';
+        document.getElementById('user-email').textContent = currentUser.email || '';
         
         const initials = (currentUser.nombre?.[0] || 'U') + (currentUser.apellido?.[0] || 'S');
         document.getElementById('user-initials').textContent = initials;
@@ -389,7 +386,7 @@ function verificarAuth() {
         return true;
         
     } catch (e) {
-        window.location.href = 'registro_admin.html';
+        window.location.href = 'login.html';
         return false;
     }
 }
@@ -400,7 +397,7 @@ function verificarAuth() {
 window.cerrarSesion = function() {
     localStorage.removeItem('user');
     sessionStorage.removeItem('user');
-    window.location.href = 'registro_admin.html';
+    window.location.href = 'login.html';
 };
 
 // ===========================================
@@ -488,11 +485,11 @@ async function cargarResumen() {
                 <div class="glass-card rounded-2xl p-6">
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center">
-                            <i class="fas fa-clock text-purple-400 text-xl"></i>
+                            <i class="fas fa-calendar text-purple-400 text-xl"></i>
                         </div>
                         <div>
                             <p class="text-gray-400 text-sm">Miembro desde</p>
-                            <p class="text-white text-sm font-bold">${new Date(currentUser.created_at || Date.now()).toLocaleDateString()}</p>
+                            <p class="text-white text-sm font-bold">${new Date().toLocaleDateString()}</p>
                         </div>
                     </div>
                 </div>
@@ -546,6 +543,9 @@ async function cargarResumen() {
         
     } catch (error) {
         console.error('Error cargando resumen:', error);
+        document.getElementById('profile-content').innerHTML = `
+            <div class="error-message">Error cargando resumen: ${error.message}</div>
+        `;
     }
 }
 
@@ -643,10 +643,10 @@ async function cargarPedidos() {
 }
 
 // ===========================================
-// CARGAR DIRECCIONES (simulado - se puede implementar tabla direcciones)
+// CARGAR DIRECCIONES
 // ===========================================
 function cargarDirecciones() {
-    // Por ahora usamos localStorage para direcciones guardadas
+    // Cargar direcciones guardadas en localStorage
     const direccionesGuardadas = localStorage.getItem('direcciones');
     direcciones = direccionesGuardadas ? JSON.parse(direccionesGuardadas) : [];
     
@@ -856,7 +856,7 @@ window.actualizarDatos = async function(e) {
         }
         
         // Actualizar header
-        document.getElementById('user-fullname').textContent = `${nombre} ${apellido || ''}`;
+        document.getElementById('user-fullname').textContent = `${nombre} ${apellido || ''}`.trim();
         document.getElementById('user-initials').textContent = (nombre[0] || 'U') + (apellido?.[0] || 'S');
         
         mostrarMensaje('success', 'Datos actualizados correctamente');
@@ -956,10 +956,10 @@ window.cambiarPassword = async function(e) {
 };
 
 // ===========================================
-// CARGAR FAVORITOS (simulado - se puede implementar tabla favoritos)
+// CARGAR FAVORITOS
 // ===========================================
 async function cargarFavoritos() {
-    // Por ahora usamos localStorage para favoritos
+    // Cargar favoritos guardados en localStorage
     const favoritosGuardados = localStorage.getItem('favoritos');
     favoritos = favoritosGuardados ? JSON.parse(favoritosGuardados) : [];
     
@@ -1039,11 +1039,11 @@ function getEstadoColor(estado) {
 }
 
 window.verDetallePedido = function(numero) {
-    alert(`Ver detalles del pedido ${numero} - Implementar vista detallada`);
+    alert(`Ver detalles del pedido ${numero} - Función en desarrollo`);
 };
 
 window.valorarProductos = function(pedidoId) {
-    alert('Función para valorar productos - Implementar según necesidad');
+    alert('Función para valorar productos - Próximamente');
 };
 
 // ===========================================
@@ -1056,10 +1056,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     
     await conectarDB();
     await cambiarTab('resumen');
-    
-    // Actualizar contador del carrito
-    const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-    document.getElementById('cartCount').textContent = carrito.reduce((sum, item) => sum + item.cantidad, 0);
 });
 </script>
 </body>
