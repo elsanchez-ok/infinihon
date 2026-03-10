@@ -4,9 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>InfiniHon - Panel de Administración</title>
+    
+    <!-- Import Map para SQLite Cloud -->
+    <script type="importmap">
+        {
+            "imports": {
+                "@sqlitecloud/drivers": "https://esm.sh/@sqlitecloud/drivers@latest"
+            }
+        }
+    </script>
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
             font-family: 'Inter', sans-serif;
@@ -23,7 +34,7 @@
             min-height: 100vh;
         }
         
-        /* Glassmorphism extremo */
+        /* Glassmorphism */
         .glass-panel {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(12px);
@@ -73,7 +84,7 @@
             border-left-color: #3b82f6;
         }
         
-        /* Tablas de productos */
+        /* Tablas */
         .table-header {
             background: rgba(59, 130, 246, 0.1);
             border-bottom: 1px solid rgba(59, 130, 246, 0.2);
@@ -113,7 +124,7 @@
             border: 1px solid rgba(59, 130, 246, 0.2);
         }
         
-        /* Inputs estilo admin */
+        /* Inputs */
         .admin-input {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(59, 130, 246, 0.2);
@@ -127,11 +138,7 @@
             box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
         }
         
-        .admin-input:hover {
-            border-color: rgba(59, 130, 246, 0.4);
-        }
-        
-        /* Botones de acción */
+        /* Botones */
         .btn-primary {
             background: linear-gradient(135deg, #1e40af, #3b82f6);
             transition: all 0.3s ease;
@@ -154,7 +161,18 @@
             border-color: rgba(59, 130, 246, 0.6);
         }
         
-        /* Scrollbar personalizada */
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.6);
+        }
+        
+        /* Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
@@ -173,39 +191,60 @@
             background: rgba(59, 130, 246, 0.5);
         }
         
-        /* Modal glass */
+        /* Modal */
         .modal-glass {
             background: rgba(2, 6, 23, 0.95);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
         }
-        
-        /* Efecto de brillo en tarjetas */
-        .glow-effect {
-            position: relative;
-            overflow: hidden;
+
+        .loading-spinner {
+            border: 3px solid rgba(59, 130, 246, 0.1);
+            border-radius: 50%;
+            border-top: 3px solid #3b82f6;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 8px;
         }
-        
-        .glow-effect::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.5s ease;
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
-        
-        .glow-effect:hover::after {
-            opacity: 1;
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin: 1rem;
+        }
+
+        .success-message {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #10b981;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin: 1rem;
+        }
+
+        .stat-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .stat-card:hover {
+            transform: scale(1.02);
+            border-color: rgba(59, 130, 246, 0.4);
         }
     </style>
 </head>
 <body class="relative">
 
-<!-- Panel Admin Layout -->
 <div class="flex h-screen overflow-hidden">
     
     <!-- Sidebar -->
@@ -220,55 +259,67 @@
                 <span class="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full border border-blue-500/30 ml-2">ADMIN</span>
             </div>
             
+            <!-- Info de usuario -->
+            <div id="user-info" class="glass-card rounded-xl p-4 mb-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
+                        <span class="text-white font-medium" id="user-initials">AD</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="text-white text-sm font-medium truncate" id="user-name">Admin User</div>
+                        <div class="text-gray-400 text-xs font-mono truncate" id="user-email">admin@infinihon.com</div>
+                    </div>
+                </div>
+            </div>
+            
             <!-- Menú principal -->
             <nav class="space-y-1">
                 <div class="text-xs font-mono text-gray-500 mb-4 tracking-wider px-4">PRINCIPAL</div>
                 
-                <a href="#" class="sidebar-item active flex items-center gap-3 px-4 py-3 text-white rounded-lg">
+                <a href="#" onclick="showSection('dashboard')" class="sidebar-item active flex items-center gap-3 px-4 py-3 text-white rounded-lg" id="menu-dashboard">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                     <span class="text-sm">Dashboard</span>
                 </a>
                 
-                <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white rounded-lg">
+                <a href="#" onclick="showSection('productos')" class="sidebar-item flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white rounded-lg" id="menu-productos">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 7h-4.5A2.5 2.5 0 0 1 13 4.5V3"></path><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="9" x2="15" y2="15"></line><line x1="15" y1="9" x2="9" y2="15"></line></svg>
                     <span class="text-sm">Productos</span>
                 </a>
                 
-                <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white rounded-lg">
+                <a href="#" onclick="showSection('pedidos')" class="sidebar-item flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white rounded-lg" id="menu-pedidos">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
                     <span class="text-sm">Pedidos</span>
                 </a>
                 
-                <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white rounded-lg">
+                <a href="#" onclick="showSection('usuarios')" class="sidebar-item flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white rounded-lg" id="menu-usuarios">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                    <span class="text-sm">Clientes</span>
+                    <span class="text-sm">Usuarios</span>
                 </a>
                 
                 <div class="text-xs font-mono text-gray-500 mt-6 mb-4 tracking-wider px-4">GESTIÓN</div>
                 
-                <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white rounded-lg">
+                <a href="#" onclick="showSection('categorias')" class="sidebar-item flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white rounded-lg" id="menu-categorias">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
                     <span class="text-sm">Categorías</span>
                 </a>
                 
-                <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white rounded-lg">
+                <a href="#" onclick="showSection('publicaciones')" class="sidebar-item flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white rounded-lg" id="menu-publicaciones">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="9" x2="15" y2="15"></line><line x1="15" y1="9" x2="9" y2="15"></line></svg>
+                    <span class="text-sm">Publicaciones</span>
+                </a>
+                
+                <div class="text-xs font-mono text-gray-500 mt-6 mb-4 tracking-wider px-4">SISTEMA</div>
+                
+                <a href="#" onclick="showSection('configuracion')" class="sidebar-item flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white rounded-lg" id="menu-configuracion">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
                     <span class="text-sm">Configuración</span>
                 </a>
+                
+                <a href="#" onclick="logout()" class="sidebar-item flex items-center gap-3 px-4 py-3 text-red-400 hover:text-white hover:bg-red-500/10 rounded-lg mt-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    <span class="text-sm">Cerrar sesión</span>
+                </a>
             </nav>
-            
-            <!-- Perfil de usuario -->
-            <div class="absolute bottom-0 left-0 right-0 p-6 border-t border-white/5">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
-                        <span class="text-white font-medium">AD</span>
-                    </div>
-                    <div>
-                        <div class="text-white text-sm font-medium">Admin User</div>
-                        <div class="text-gray-400 text-xs font-mono">admin@infinihon.com</div>
-                    </div>
-                </div>
-            </div>
         </div>
     </aside>
     
@@ -278,83 +329,275 @@
         <header class="glass-panel sticky top-0 z-30 mx-4 mt-4 px-6 py-4 rounded-2xl">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <h1 class="text-white text-xl font-light">Dashboard</h1>
-                    <span class="text-gray-400 text-sm font-mono">/ panel de control</span>
+                    <h1 class="text-white text-xl font-light" id="section-title">Dashboard</h1>
+                    <span class="text-gray-400 text-sm font-mono" id="section-subtitle">/ panel de control</span>
                 </div>
                 
                 <div class="flex items-center gap-4">
                     <!-- Buscador -->
                     <div class="relative">
-                        <input type="text" placeholder="Buscar..." class="admin-input pl-10 pr-4 py-2 rounded-xl text-sm w-64">
+                        <input type="text" id="search-input" placeholder="Buscar..." class="admin-input pl-10 pr-4 py-2 rounded-xl text-sm w-64">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" class="absolute left-3 top-1/2 transform -translate-y-1/2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                     </div>
                     
                     <!-- Notificaciones -->
                     <button class="relative">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-blue-500 rounded-full text-xs flex items-center justify-center text-white">3</span>
+                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-blue-500 rounded-full text-xs flex items-center justify-center text-white" id="notification-count">0</span>
                     </button>
                     
                     <!-- Fecha -->
-                    <div class="text-gray-400 text-sm font-mono border-l border-white/5 pl-4">
-                        {new Date().toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' })}
-                    </div>
+                    <div class="text-gray-400 text-sm font-mono border-l border-white/5 pl-4" id="current-date"></div>
                 </div>
             </div>
         </header>
         
-        <!-- Contenido del dashboard -->
-        <div class="p-6 space-y-6">
+        <!-- Contenedor de mensajes -->
+        <div id="message-container" class="mx-4 mt-4"></div>
+        
+        <!-- Contenido dinámico -->
+        <div class="p-6 space-y-6" id="content-area">
+            <!-- El contenido se carga dinámicamente según la sección -->
+            <div class="text-center py-12">
+                <div class="loading-spinner mx-auto mb-4"></div>
+                <p class="text-gray-400">Cargando panel de administración...</p>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script type="module">
+// ===========================================
+// CONFIGURACIÓN DE SQLITE CLOUD
+// ===========================================
+import { Database } from '@sqlitecloud/drivers';
+
+const CONNECTION_STRING = 'sqlitecloud://cxaerd5fvk.g2.sqlite.cloud:8860/infinihon_store.db?apikey=cfHa2k4KOhBzxKL5g484dhAf4xlC4znLp5M6wzirgvc';
+
+let db = null;
+let currentUser = null;
+let currentSection = 'dashboard';
+let chart = null;
+
+// ===========================================
+// CONEXIÓN A SQLITE CLOUD
+// ===========================================
+async function conectarDB() {
+    try {
+        console.log('🔄 Conectando a SQLite Cloud...');
+        db = new Database(CONNECTION_STRING);
+        
+        // Probar conexión
+        const result = await db.sql`SELECT 1 as test`;
+        console.log('✅ Conectado a SQLite Cloud', result);
+        
+        return true;
+    } catch (error) {
+        console.error('❌ Error de conexión:', error);
+        mostrarMensaje('error', 'Error de conexión a la base de datos');
+        return false;
+    }
+}
+
+// ===========================================
+// MOSTRAR MENSAJES
+// ===========================================
+function mostrarMensaje(tipo, texto) {
+    const container = document.getElementById('message-container');
+    if (!container) return;
+    
+    const className = tipo === 'error' ? 'error-message' : 'success-message';
+    container.innerHTML = `<div class="${className}">${texto}</div>`;
+    
+    setTimeout(() => {
+        container.innerHTML = '';
+    }, 5000);
+}
+
+// ===========================================
+// VERIFICAR AUTENTICACIÓN
+// ===========================================
+function verificarAuth() {
+    const savedUser = localStorage.getItem('user') || sessionStorage.getItem('user');
+    
+    if (!savedUser) {
+        window.location.href = 'login.html';
+        return false;
+    }
+    
+    try {
+        currentUser = JSON.parse(savedUser);
+        
+        if (currentUser.rol !== 'admin') {
+            window.location.href = 'tienda.html';
+            return false;
+        }
+        
+        // Mostrar info del usuario
+        document.getElementById('user-name').textContent = `${currentUser.nombre} ${currentUser.apellido || ''}`;
+        document.getElementById('user-email').textContent = currentUser.email;
+        
+        const initials = (currentUser.nombre?.[0] || 'A') + (currentUser.apellido?.[0] || 'D');
+        document.getElementById('user-initials').textContent = initials;
+        
+        return true;
+        
+    } catch (e) {
+        window.location.href = 'login.html';
+        return false;
+    }
+}
+
+// ===========================================
+// CERRAR SESIÓN
+// ===========================================
+window.logout = function() {
+    localStorage.removeItem('user');
+    sessionStorage.removeItem('user');
+    window.location.href = 'login.html';
+};
+
+// ===========================================
+// CAMBIAR DE SECCIÓN
+// ===========================================
+window.showSection = async function(section) {
+    currentSection = section;
+    
+    // Actualizar menú
+    document.querySelectorAll('.sidebar-item').forEach(item => {
+        item.classList.remove('active');
+        item.classList.add('text-gray-400');
+    });
+    
+    document.getElementById(`menu-${section}`)?.classList.remove('text-gray-400');
+    document.getElementById(`menu-${section}`)?.classList.add('active', 'text-white');
+    
+    // Actualizar títulos
+    const titles = {
+        'dashboard': 'Dashboard',
+        'productos': 'Gestión de Productos',
+        'pedidos': 'Gestión de Pedidos',
+        'usuarios': 'Gestión de Usuarios',
+        'categorias': 'Gestión de Categorías',
+        'publicaciones': 'Gestión de Publicaciones',
+        'configuracion': 'Configuración'
+    };
+    
+    document.getElementById('section-title').textContent = titles[section] || 'Dashboard';
+    document.getElementById('section-subtitle').textContent = `/ ${section}`;
+    
+    // Cargar contenido
+    const contentArea = document.getElementById('content-area');
+    contentArea.innerHTML = '<div class="text-center py-12"><div class="loading-spinner mx-auto mb-4"></div><p class="text-gray-400">Cargando...</p></div>';
+    
+    switch(section) {
+        case 'dashboard':
+            await cargarDashboard();
+            break;
+        case 'productos':
+            await cargarProductos();
+            break;
+        case 'pedidos':
+            await cargarPedidos();
+            break;
+        case 'usuarios':
+            await cargarUsuarios();
+            break;
+        case 'categorias':
+            await cargarCategorias();
+            break;
+        case 'publicaciones':
+            await cargarPublicaciones();
+            break;
+        case 'configuracion':
+            cargarConfiguracion();
+            break;
+    }
+};
+
+// ===========================================
+// DASHBOARD
+// ===========================================
+async function cargarDashboard() {
+    try {
+        // Obtener estadísticas
+        const stats = await db.sql(`
+            SELECT 
+                (SELECT COUNT(*) FROM productos) as total_productos,
+                (SELECT COUNT(*) FROM usuarios) as total_usuarios,
+                (SELECT COUNT(*) FROM pedidos) as total_pedidos,
+                (SELECT COUNT(*) FROM pedidos WHERE estado = 'procesando') as pedidos_pendientes,
+                (SELECT SUM(total) FROM pedidos) as ventas_totales,
+                (SELECT SUM(total) FROM pedidos WHERE DATE(created_at) = DATE('now')) as ventas_hoy
+        `);
+        
+        const s = stats[0];
+        
+        // Ventas por día (últimos 7 días)
+        const ventasDiarias = await db.sql(`
+            SELECT 
+                DATE(created_at) as fecha,
+                COUNT(*) as pedidos,
+                SUM(total) as ventas
+            FROM pedidos 
+            WHERE created_at >= DATE('now', '-7 days')
+            GROUP BY DATE(created_at)
+            ORDER BY fecha
+        `);
+        
+        const contentArea = document.getElementById('content-area');
+        
+        contentArea.innerHTML = `
             <!-- Tarjetas de métricas -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="glass-card rounded-2xl p-6 glow-effect">
-                    <div class="flex items-start justify-between">
-                        <div>
-                            <p class="text-gray-400 text-sm font-mono mb-1">INGRESOS TOTALES</p>
-                            <h3 class="text-3xl font-light text-white">$45,231</h3>
-                            <p class="text-green-400 text-xs mt-2">+20.1% vs mes anterior</p>
-                        </div>
-                        <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center border border-blue-500/30">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="glass-card rounded-2xl p-6 glow-effect">
-                    <div class="flex items-start justify-between">
-                        <div>
-                            <p class="text-gray-400 text-sm font-mono mb-1">PEDIDOS</p>
-                            <h3 class="text-3xl font-light text-white">1,432</h3>
-                            <p class="text-green-400 text-xs mt-2">+12.5% vs mes anterior</p>
-                        </div>
-                        <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center border border-purple-500/30">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="1.5"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="glass-card rounded-2xl p-6 glow-effect">
+                <div class="glass-card rounded-2xl p-6 stat-card" onclick="showSection('productos')">
                     <div class="flex items-start justify-between">
                         <div>
                             <p class="text-gray-400 text-sm font-mono mb-1">PRODUCTOS</p>
-                            <h3 class="text-3xl font-light text-white">247</h3>
-                            <p class="text-blue-400 text-xs mt-2">+8 nuevos este mes</p>
+                            <h3 class="text-3xl font-light text-white">${s.total_productos || 0}</h3>
+                            <p class="text-blue-400 text-xs mt-2">En inventario</p>
                         </div>
-                        <div class="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center border border-cyan-500/30">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center border border-blue-500/30">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
                         </div>
                     </div>
                 </div>
                 
-                <div class="glass-card rounded-2xl p-6 glow-effect">
+                <div class="glass-card rounded-2xl p-6 stat-card" onclick="showSection('usuarios')">
                     <div class="flex items-start justify-between">
                         <div>
-                            <p class="text-gray-400 text-sm font-mono mb-1">CLIENTES</p>
-                            <h3 class="text-3xl font-light text-white">3,721</h3>
-                            <p class="text-green-400 text-xs mt-2">+142 nuevos</p>
+                            <p class="text-gray-400 text-sm font-mono mb-1">USUARIOS</p>
+                            <h3 class="text-3xl font-light text-white">${s.total_usuarios || 0}</h3>
+                            <p class="text-green-400 text-xs mt-2">Registrados</p>
                         </div>
-                        <div class="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center border border-orange-500/30">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        <div class="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center border border-green-500/30">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="glass-card rounded-2xl p-6 stat-card" onclick="showSection('pedidos')">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <p class="text-gray-400 text-sm font-mono mb-1">PEDIDOS</p>
+                            <h3 class="text-3xl font-light text-white">${s.total_pedidos || 0}</h3>
+                            <p class="text-yellow-400 text-xs mt-2">${s.pedidos_pendientes || 0} pendientes</p>
+                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-yellow-500/20 flex items-center justify-center border border-yellow-500/30">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="1.5"><circle cx="8" cy="21" r="1"></circle><circle cx="21" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="glass-card rounded-2xl p-6 stat-card">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <p class="text-gray-400 text-sm font-mono mb-1">VENTAS</p>
+                            <h3 class="text-3xl font-light text-white">$${parseFloat(s.ventas_totales || 0).toFixed(2)}</h3>
+                            <p class="text-purple-400 text-xs mt-2">Hoy: $${parseFloat(s.ventas_hoy || 0).toFixed(2)}</p>
+                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center border border-purple-500/30">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
                         </div>
                     </div>
                 </div>
@@ -365,11 +608,11 @@
                 <!-- Gráfico de ventas -->
                 <div class="glass-panel rounded-2xl p-6 lg:col-span-2">
                     <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-white font-medium">Rendimiento de Ventas</h3>
-                        <select class="bg-white/5 border border-white/10 rounded-lg px-3 py-1 text-sm text-gray-300">
-                            <option>Últimos 7 días</option>
-                            <option>Último mes</option>
-                            <option>Último año</option>
+                        <h3 class="text-white font-medium">Ventas últimos 7 días</h3>
+                        <select id="chart-period" onchange="actualizarGrafico()" class="bg-white/5 border border-white/10 rounded-lg px-3 py-1 text-sm text-gray-300">
+                            <option value="7">Últimos 7 días</option>
+                            <option value="30">Último mes</option>
+                            <option value="90">Último trimestre</option>
                         </select>
                     </div>
                     <canvas id="salesChart" height="200"></canvas>
@@ -378,59 +621,211 @@
                 <!-- Pedidos recientes -->
                 <div class="glass-panel rounded-2xl p-6">
                     <h3 class="text-white font-medium mb-6">Pedidos Recientes</h3>
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-white text-sm">#INV-2024-001</p>
-                                <p class="text-gray-400 text-xs">MikroTik RB4011</p>
-                            </div>
-                            <span class="badge-success text-xs px-2 py-1 rounded-full">Completado</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-white text-sm">#INV-2024-002</p>
-                                <p class="text-gray-400 text-xs">Raspberry Pi 5 x2</p>
-                            </div>
-                            <span class="badge-warning text-xs px-2 py-1 rounded-full">Procesando</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-white text-sm">#INV-2024-003</p>
-                                <p class="text-gray-400 text-xs">MikroTik hAP ax²</p>
-                            </div>
-                            <span class="badge-info text-xs px-2 py-1 rounded-full">Envío</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-white text-sm">#INV-2024-004</p>
-                                <p class="text-gray-400 text-xs">PoE+ HAT x5</p>
-                            </div>
-                            <span class="badge-success text-xs px-2 py-1 rounded-full">Completado</span>
-                        </div>
+                    <div id="pedidos-recientes" class="space-y-4">
+                        ${await obtenerPedidosRecientes()}
                     </div>
                     
-                    <button class="btn-secondary w-full mt-6 py-2 rounded-xl text-sm text-gray-300">
+                    <button onclick="showSection('pedidos')" class="btn-secondary w-full mt-6 py-2 rounded-xl text-sm text-gray-300">
                         Ver todos los pedidos
                     </button>
                 </div>
             </div>
             
-            <!-- Gestión de Productos -->
+            <!-- Productos con stock bajo -->
             <div class="glass-panel rounded-2xl p-6">
                 <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-white font-medium">Gestión de Productos</h3>
-                    <button class="btn-primary px-4 py-2 rounded-xl text-sm text-white flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                        Nuevo Producto
-                    </button>
+                    <h3 class="text-white font-medium">Productos con stock bajo</h3>
+                    <span class="text-xs bg-yellow-500/20 text-yellow-400 px-3 py-1 rounded-full">Requieren atención</span>
                 </div>
                 
-                <!-- Tabla de productos -->
                 <div class="overflow-x-auto">
                     <table class="w-full">
                         <thead class="table-header">
                             <tr>
                                 <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Producto</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">SKU</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Stock</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Mínimo</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Estado</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stock-bajo-body">
+                            ${await obtenerStockBajo()}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        `;
+        
+        // Inicializar gráfico
+        await inicializarGrafico(ventasDiarias);
+        
+    } catch (error) {
+        console.error('Error cargando dashboard:', error);
+        document.getElementById('content-area').innerHTML = `
+            <div class="error-message">
+                Error cargando dashboard: ${error.message}
+            </div>
+        `;
+    }
+}
+
+async function obtenerPedidosRecientes() {
+    try {
+        const pedidos = await db.sql(`
+            SELECT numero_pedido, total, estado, created_at 
+            FROM pedidos 
+            ORDER BY created_at DESC 
+            LIMIT 4
+        `);
+        
+        return pedidos.map(p => `
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-white text-sm">${p.numero_pedido}</p>
+                    <p class="text-gray-400 text-xs">$${parseFloat(p.total).toFixed(2)}</p>
+                </div>
+                <span class="badge-${getEstadoColor(p.estado)} text-xs px-2 py-1 rounded-full">${p.estado}</span>
+            </div>
+        `).join('');
+        
+    } catch (error) {
+        return '<p class="text-gray-400 text-sm">No hay pedidos recientes</p>';
+    }
+}
+
+async function obtenerStockBajo() {
+    try {
+        const productos = await db.sql(`
+            SELECT id, nombre, sku, stock, stock_minimo 
+            FROM productos 
+            WHERE stock <= stock_minimo AND stock > 0
+            ORDER BY stock ASC
+            LIMIT 5
+        `);
+        
+        return productos.map(p => `
+            <tr class="table-row">
+                <td class="py-4 px-4 text-white">${p.nombre}</td>
+                <td class="py-4 px-4 text-gray-400 font-mono">${p.sku}</td>
+                <td class="py-4 px-4 text-yellow-400 font-bold">${p.stock}</td>
+                <td class="py-4 px-4 text-gray-400">${p.stock_minimo}</td>
+                <td class="py-4 px-4">
+                    <span class="badge-warning text-xs px-2 py-1 rounded-full">Stock bajo</span>
+                </td>
+                <td class="py-4 px-4">
+                    <button onclick="editarProducto(${p.id})" class="text-blue-400 hover:text-blue-300 text-sm">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+        
+    } catch (error) {
+        return '<tr><td colspan="6" class="text-center py-4 text-gray-400">Error cargando productos</td></tr>';
+    }
+}
+
+function getEstadoColor(estado) {
+    const colores = {
+        'procesando': 'warning',
+        'enviado': 'info',
+        'entregado': 'success',
+        'cancelado': 'danger'
+    };
+    return colores[estado] || 'info';
+}
+
+async function inicializarGrafico(datos) {
+    const ctx = document.getElementById('salesChart')?.getContext('2d');
+    if (!ctx) return;
+    
+    if (chart) chart.destroy();
+    
+    const fechas = datos.map(d => d.fecha);
+    const ventas = datos.map(d => parseFloat(d.ventas || 0));
+    
+    chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: fechas,
+            datasets: [{
+                label: 'Ventas ($)',
+                data: ventas,
+                borderColor: '#3b82f6',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                    ticks: { color: '#9ca3af' }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: { color: '#9ca3af' }
+                }
+            }
+        }
+    });
+}
+
+window.actualizarGrafico = async function() {
+    const period = document.getElementById('chart-period').value;
+    const datos = await db.sql(`
+        SELECT 
+            DATE(created_at) as fecha,
+            SUM(total) as ventas
+        FROM pedidos 
+        WHERE created_at >= DATE('now', '-${period} days')
+        GROUP BY DATE(created_at)
+        ORDER BY fecha
+    `);
+    
+    chart.data.labels = datos.map(d => d.fecha);
+    chart.data.datasets[0].data = datos.map(d => parseFloat(d.ventas || 0));
+    chart.update();
+};
+
+// ===========================================
+// GESTIÓN DE PRODUCTOS
+// ===========================================
+async function cargarProductos() {
+    try {
+        const productos = await db.sql(`
+            SELECT * FROM productos ORDER BY id DESC
+        `);
+        
+        const contentArea = document.getElementById('content-area');
+        
+        contentArea.innerHTML = `
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-white text-xl font-light">Lista de Productos</h2>
+                <button onclick="nuevoProducto()" class="btn-primary px-4 py-2 rounded-xl text-sm text-white flex items-center gap-2">
+                    <i class="fas fa-plus"></i>
+                    Nuevo Producto
+                </button>
+            </div>
+            
+            <div class="glass-panel rounded-2xl p-6">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="table-header">
+                            <tr>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">ID</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Producto</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">SKU</th>
                                 <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Categoría</th>
                                 <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Precio</th>
                                 <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Stock</th>
@@ -439,237 +834,488 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="table-row">
-                                <td class="py-4 px-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"></rect><line x1="8" y1="2" x2="8" y2="22"></line><line x1="16" y1="2" x2="16" y2="22"></line></svg>
+                            ${productos.map(p => `
+                                <tr class="table-row">
+                                    <td class="py-4 px-4 text-gray-400 font-mono">${p.id}</td>
+                                    <td class="py-4 px-4 text-white">${p.nombre}</td>
+                                    <td class="py-4 px-4 text-gray-400 font-mono">${p.sku}</td>
+                                    <td class="py-4 px-4 text-gray-300">${p.categoria || '-'}</td>
+                                    <td class="py-4 px-4 text-white font-medium">$${parseFloat(p.precio).toFixed(2)}</td>
+                                    <td class="py-4 px-4">
+                                        <span class="${p.stock <= p.stock_minimo ? 'text-yellow-400' : 'text-green-400'}">${p.stock}</span>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <span class="badge-${p.estado === 'activo' ? 'success' : 'danger'} text-xs px-2 py-1 rounded-full">${p.estado}</span>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <div class="flex gap-2">
+                                            <button onclick="editarProducto(${p.id})" class="text-blue-400 hover:text-blue-300">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button onclick="eliminarProducto(${p.id})" class="text-red-400 hover:text-red-300">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
                                         </div>
-                                        <div>
-                                            <p class="text-white text-sm">MikroTik RB4011</p>
-                                            <p class="text-gray-400 text-xs">Router profesional</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="py-4 px-4 text-gray-300">Routers</td>
-                                <td class="py-4 px-4 text-white">$299.99</td>
-                                <td class="py-4 px-4 text-gray-300">45</td>
-                                <td class="py-4 px-4"><span class="badge-success text-xs px-2 py-1 rounded-full">Activo</span></td>
-                                <td class="py-4 px-4">
-                                    <div class="flex gap-2">
-                                        <button class="text-blue-400 hover:text-blue-300">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>
-                                        </button>
-                                        <button class="text-red-400 hover:text-red-300">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            
-                            <tr class="table-row">
-                                <td class="py-4 px-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 bg-purple-500/10 rounded-lg flex items-center justify-center">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-                                        </div>
-                                        <div>
-                                            <p class="text-white text-sm">Raspberry Pi 5</p>
-                                            <p class="text-gray-400 text-xs">4GB RAM</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="py-4 px-4 text-gray-300">Placas</td>
-                                <td class="py-4 px-4 text-white">$79.99</td>
-                                <td class="py-4 px-4 text-gray-300">12</td>
-                                <td class="py-4 px-4"><span class="badge-warning text-xs px-2 py-1 rounded-full">Stock bajo</span></td>
-                                <td class="py-4 px-4">
-                                    <div class="flex gap-2">
-                                        <button class="text-blue-400 hover:text-blue-300">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>
-                                        </button>
-                                        <button class="text-red-400 hover:text-red-300">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            
-                            <tr class="table-row">
-                                <td class="py-4 px-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 bg-cyan-500/10 rounded-lg flex items-center justify-center">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6" y2="18"></line><line x1="12" y1="6" x2="12" y2="18"></line><line x1="18" y1="6" x2="18" y2="18"></line></svg>
-                                        </div>
-                                        <div>
-                                            <p class="text-white text-sm">MikroTik CSS610</p>
-                                            <p class="text-gray-400 text-xs">Switch gestionable</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="py-4 px-4 text-gray-300">Switches</td>
-                                <td class="py-4 px-4 text-white">$189.99</td>
-                                <td class="py-4 px-4 text-gray-300">28</td>
-                                <td class="py-4 px-4"><span class="badge-success text-xs px-2 py-1 rounded-full">Activo</span></td>
-                                <td class="py-4 px-4">
-                                    <div class="flex gap-2">
-                                        <button class="text-blue-400 hover:text-blue-300">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>
-                                        </button>
-                                        <button class="text-red-400 hover:text-red-300">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
+                                    </td>
+                                </tr>
+                            `).join('')}
                         </tbody>
                     </table>
                 </div>
-                
-                <!-- Paginación -->
-                <div class="flex justify-between items-center mt-6">
-                    <p class="text-gray-400 text-sm">Mostrando 1-3 de 247 productos</p>
-                    <div class="flex gap-2">
-                        <button class="btn-secondary w-10 h-10 rounded-xl flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                        </button>
-                        <button class="btn-primary w-10 h-10 rounded-xl flex items-center justify-center text-white">1</button>
-                        <button class="btn-secondary w-10 h-10 rounded-xl flex items-center justify-center text-gray-400">2</button>
-                        <button class="btn-secondary w-10 h-10 rounded-xl flex items-center justify-center text-gray-400">3</button>
-                        <button class="btn-secondary w-10 h-10 rounded-xl flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                        </button>
+            </div>
+        `;
+        
+    } catch (error) {
+        console.error('Error cargando productos:', error);
+        document.getElementById('content-area').innerHTML = `
+            <div class="error-message">Error cargando productos: ${error.message}</div>
+        `;
+    }
+}
+
+// ===========================================
+// GESTIÓN DE PEDIDOS
+// ===========================================
+async function cargarPedidos() {
+    try {
+        const pedidos = await db.sql(`
+            SELECT p.*, u.nombre, u.email 
+            FROM pedidos p
+            LEFT JOIN usuarios u ON p.usuario_id = u.id
+            ORDER BY p.created_at DESC
+        `);
+        
+        const contentArea = document.getElementById('content-area');
+        
+        contentArea.innerHTML = `
+            <h2 class="text-white text-xl font-light mb-6">Gestión de Pedidos</h2>
+            
+            <div class="glass-panel rounded-2xl p-6">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="table-header">
+                            <tr>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Pedido</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Cliente</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Fecha</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Total</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Estado</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${pedidos.map(p => `
+                                <tr class="table-row">
+                                    <td class="py-4 px-4">
+                                        <span class="text-white font-mono">${p.numero_pedido}</span>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <div>
+                                            <p class="text-white">${p.nombre || 'Cliente'}</p>
+                                            <p class="text-gray-400 text-xs">${p.email || '-'}</p>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4 text-gray-300">${new Date(p.created_at).toLocaleDateString()}</td>
+                                    <td class="py-4 px-4 text-white font-bold">$${parseFloat(p.total).toFixed(2)}</td>
+                                    <td class="py-4 px-4">
+                                        <select onchange="actualizarEstadoPedido(${p.id}, this.value)" class="bg-white/5 border border-white/10 rounded px-2 py-1 text-xs">
+                                            <option value="procesando" ${p.estado === 'procesando' ? 'selected' : ''}>Procesando</option>
+                                            <option value="enviado" ${p.estado === 'enviado' ? 'selected' : ''}>Enviado</option>
+                                            <option value="entregado" ${p.estado === 'entregado' ? 'selected' : ''}>Entregado</option>
+                                            <option value="cancelado" ${p.estado === 'cancelado' ? 'selected' : ''}>Cancelado</option>
+                                        </select>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <button onclick="verDetallePedido(${p.id})" class="text-blue-400 hover:text-blue-300">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        `;
+        
+    } catch (error) {
+        console.error('Error cargando pedidos:', error);
+        document.getElementById('content-area').innerHTML = `
+            <div class="error-message">Error cargando pedidos: ${error.message}</div>
+        `;
+    }
+}
+
+// ===========================================
+// GESTIÓN DE USUARIOS
+// ===========================================
+async function cargarUsuarios() {
+    try {
+        const usuarios = await db.sql(`
+            SELECT * FROM usuarios ORDER BY id DESC
+        `);
+        
+        const contentArea = document.getElementById('content-area');
+        
+        contentArea.innerHTML = `
+            <h2 class="text-white text-xl font-light mb-6">Gestión de Usuarios</h2>
+            
+            <div class="glass-panel rounded-2xl p-6">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="table-header">
+                            <tr>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">ID</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Nombre</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Email</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Empresa</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Rol</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Verificado</th>
+                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${usuarios.map(u => `
+                                <tr class="table-row">
+                                    <td class="py-4 px-4 text-gray-400 font-mono">${u.id}</td>
+                                    <td class="py-4 px-4 text-white">${u.nombre} ${u.apellido || ''}</td>
+                                    <td class="py-4 px-4 text-gray-300">${u.email}</td>
+                                    <td class="py-4 px-4 text-gray-400">${u.empresa || '-'}</td>
+                                    <td class="py-4 px-4">
+                                        <span class="badge-${u.rol === 'admin' ? 'info' : 'success'} text-xs px-2 py-1 rounded-full">${u.rol}</span>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <span class="badge-${u.verificado ? 'success' : 'warning'} text-xs px-2 py-1 rounded-full">
+                                            ${u.verificado ? 'Verificado' : 'Pendiente'}
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <div class="flex gap-2">
+                                            <button onclick="editarUsuario(${u.id})" class="text-blue-400 hover:text-blue-300">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            ${u.id !== currentUser?.id ? `
+                                                <button onclick="eliminarUsuario(${u.id})" class="text-red-400 hover:text-red-300">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            ` : ''}
+                                        </div>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        `;
+        
+    } catch (error) {
+        console.error('Error cargando usuarios:', error);
+        document.getElementById('content-area').innerHTML = `
+            <div class="error-message">Error cargando usuarios: ${error.message}</div>
+        `;
+    }
+}
+
+// ===========================================
+// GESTIÓN DE CATEGORÍAS
+// ===========================================
+async function cargarCategorias() {
+    try {
+        const categorias = await db.sql(`SELECT * FROM categorias ORDER BY nombre`);
+        
+        const contentArea = document.getElementById('content-area');
+        
+        contentArea.innerHTML = `
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-white text-xl font-light">Categorías</h2>
+                <button onclick="nuevaCategoria()" class="btn-primary px-4 py-2 rounded-xl text-sm text-white flex items-center gap-2">
+                    <i class="fas fa-plus"></i>
+                    Nueva Categoría
+                </button>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-4">
+                ${categorias.map(c => `
+                    <div class="glass-card rounded-xl p-4">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-white font-medium">${c.nombre}</h3>
+                                <p class="text-gray-400 text-xs mt-1">${c.descripcion || 'Sin descripción'}</p>
+                                <p class="text-gray-500 text-xs font-mono mt-2">${c.slug}</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="editarCategoria(${c.id})" class="text-blue-400 hover:text-blue-300">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button onclick="eliminarCategoria(${c.id})" class="text-red-400 hover:text-red-300">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+        
+    } catch (error) {
+        console.error('Error cargando categorías:', error);
+        document.getElementById('content-area').innerHTML = `
+            <div class="error-message">Error cargando categorías: ${error.message}</div>
+        `;
+    }
+}
+
+// ===========================================
+// GESTIÓN DE PUBLICACIONES
+// ===========================================
+async function cargarPublicaciones() {
+    try {
+        const publicaciones = await db.sql(`
+            SELECT p.*, pr.nombre as producto_nombre 
+            FROM publicaciones p
+            LEFT JOIN productos pr ON p.producto_id = pr.id
+            ORDER BY p.created_at DESC
+        `);
+        
+        const contentArea = document.getElementById('content-area');
+        
+        contentArea.innerHTML = `
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-white text-xl font-light">Publicaciones</h2>
+                <button onclick="nuevaPublicacion()" class="btn-primary px-4 py-2 rounded-xl text-sm text-white flex items-center gap-2">
+                    <i class="fas fa-plus"></i>
+                    Nueva Publicación
+                </button>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-4">
+                ${publicaciones.map(p => `
+                    <div class="glass-card rounded-xl overflow-hidden">
+                        <div class="h-32 bg-gradient-to-br from-blue-600/20 to-purple-600/20 flex items-center justify-center">
+                            ${p.imagen ? `<img src="${p.imagen}" class="w-full h-full object-cover">` : `
+                                <span class="text-4xl text-white/30">📸</span>
+                            `}
+                        </div>
+                        <div class="p-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-white font-medium">${p.titulo || 'Sin título'}</h3>
+                                <span class="badge-${p.tipo === 'evento' ? 'info' : p.tipo === 'tutorial' ? 'success' : 'warning'} text-xs px-2 py-1 rounded-full">
+                                    ${p.tipo || 'producto'}
+                                </span>
+                            </div>
+                            <p class="text-gray-400 text-xs">${p.descripcion || 'Sin descripción'}</p>
+                            <div class="flex justify-between items-center mt-3">
+                                <span class="text-gray-500 text-xs">
+                                    <i class="far fa-heart mr-1"></i> ${p.likes || 0}
+                                </span>
+                                <div class="flex gap-2">
+                                    <button onclick="editarPublicacion(${p.id})" class="text-blue-400 hover:text-blue-300 text-sm">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button onclick="eliminarPublicacion(${p.id})" class="text-red-400 hover:text-red-300 text-sm">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+        
+    } catch (error) {
+        console.error('Error cargando publicaciones:', error);
+        document.getElementById('content-area').innerHTML = `
+            <div class="error-message">Error cargando publicaciones: ${error.message}</div>
+        `;
+    }
+}
+
+// ===========================================
+// CONFIGURACIÓN
+// ===========================================
+function cargarConfiguracion() {
+    const contentArea = document.getElementById('content-area');
+    
+    contentArea.innerHTML = `
+        <h2 class="text-white text-xl font-light mb-6">Configuración</h2>
+        
+        <div class="glass-panel rounded-2xl p-6 space-y-6">
+            <div>
+                <h3 class="text-white font-medium mb-4">Información de la tienda</h3>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-gray-400 text-sm block mb-2">Nombre de la tienda</label>
+                        <input type="text" value="InfiniHon Store" class="admin-input w-full px-4 py-2 rounded-xl">
+                    </div>
+                    <div>
+                        <label class="text-gray-400 text-sm block mb-2">Email de contacto</label>
+                        <input type="email" value="info@infinihon.com" class="admin-input w-full px-4 py-2 rounded-xl">
+                    </div>
+                    <div>
+                        <label class="text-gray-400 text-sm block mb-2">Teléfono</label>
+                        <input type="text" value="+34 900 123 456" class="admin-input w-full px-4 py-2 rounded-xl">
+                    </div>
+                    <div>
+                        <label class="text-gray-400 text-sm block mb-2">Dirección</label>
+                        <input type="text" value="Calle Tecnología 123" class="admin-input w-full px-4 py-2 rounded-xl">
                     </div>
                 </div>
             </div>
             
-            <!-- Modal de Nuevo Producto (oculto por defecto) -->
-            <div id="productModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
-                <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
-                <div class="relative modal-glass rounded-2xl p-8 max-w-md w-full border border-blue-500/20">
-                    <h3 class="text-2xl font-light text-white mb-6">Nuevo Producto</h3>
-                    
-                    <form class="space-y-4">
-                        <div>
-                            <label class="text-gray-400 text-sm block mb-2">Nombre del producto</label>
-                            <input type="text" class="admin-input w-full px-4 py-3 rounded-xl">
-                        </div>
-                        
-                        <div>
-                            <label class="text-gray-400 text-sm block mb-2">Categoría</label>
-                            <select class="admin-input w-full px-4 py-3 rounded-xl">
-                                <option class="bg-gray-900">Routers MikroTik</option>
-                                <option class="bg-gray-900">Raspberry Pi</option>
-                                <option class="bg-gray-900">Switches</option>
-                                <option class="bg-gray-900">Accesorios</option>
-                            </select>
-                        </div>
-                        
-                        <div>
-                            <label class="text-gray-400 text-sm block mb-2">Precio</label>
-                            <input type="number" class="admin-input w-full px-4 py-3 rounded-xl">
-                        </div>
-                        
-                        <div>
-                            <label class="text-gray-400 text-sm block mb-2">Stock</label>
-                            <input type="number" class="admin-input w-full px-4 py-3 rounded-xl">
-                        </div>
-                        
-                        <div>
-                            <label class="text-gray-400 text-sm block mb-2">Descripción</label>
-                            <textarea rows="3" class="admin-input w-full px-4 py-3 rounded-xl"></textarea>
-                        </div>
-                        
-                        <div class="flex gap-3 mt-6">
-                            <button type="button" onclick="closeModal()" class="btn-secondary flex-1 py-3 rounded-xl text-gray-300">
-                                Cancelar
-                            </button>
-                            <button type="submit" class="btn-primary flex-1 py-3 rounded-xl text-white">
-                                Guardar producto
-                            </button>
-                        </div>
-                    </form>
+            <div class="border-t border-white/10 pt-6">
+                <h3 class="text-white font-medium mb-4">Métodos de pago</h3>
+                <div class="space-y-2">
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" checked class="rounded border-white/20 bg-white/5 text-blue-500">
+                        <span class="text-gray-300 text-sm">Tarjeta de crédito</span>
+                    </label>
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" checked class="rounded border-white/20 bg-white/5 text-blue-500">
+                        <span class="text-gray-300 text-sm">Efectivo contra entrega</span>
+                    </label>
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" class="rounded border-white/20 bg-white/5 text-blue-500">
+                        <span class="text-gray-300 text-sm">PayPal</span>
+                    </label>
                 </div>
             </div>
+            
+            <div class="border-t border-white/10 pt-6">
+                <h3 class="text-white font-medium mb-4">Opciones de envío</h3>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-gray-400 text-sm block mb-2">Costo de envío</label>
+                        <input type="text" value="Gratis" class="admin-input w-full px-4 py-2 rounded-xl">
+                    </div>
+                    <div>
+                        <label class="text-gray-400 text-sm block mb-2">Tiempo estimado</label>
+                        <input type="text" value="3-5 días hábiles" class="admin-input w-full px-4 py-2 rounded-xl">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex justify-end">
+                <button class="btn-primary px-6 py-2 rounded-xl text-white">
+                    Guardar configuración
+                </button>
+            </div>
         </div>
-    </main>
-</div>
+    `;
+}
 
-<!-- Scripts -->
-<script>
-    // Configuración del gráfico
-    const ctx = document.getElementById('salesChart')?.getContext('2d');
-    if (ctx) {
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
-                datasets: [{
-                    label: 'Ventas',
-                    data: [12000, 19000, 15000, 25000, 22000, 30000, 28000],
-                    borderColor: '#3b82f6',
-                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                    tension: 0.4,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    y: {
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.05)'
-                        },
-                        ticks: {
-                            color: '#9ca3af'
-                        }
-                    },
-                    x: {
-                        grid: {
-                            display: false
-                        },
-                        ticks: {
-                            color: '#9ca3af'
-                        }
-                    }
-                }
-            }
-        });
-    }
-    
-    // Función para abrir modal
-    function openModal() {
-        document.getElementById('productModal').classList.remove('hidden');
-    }
-    
-    // Función para cerrar modal
-    function closeModal() {
-        document.getElementById('productModal').classList.add('hidden');
-    }
-    
-    // Event listener para botón de nuevo producto
-    document.querySelector('.btn-primary')?.addEventListener('click', openModal);
-    
-    // Cerrar modal con Escape
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeModal();
+// ===========================================
+// FUNCIONES CRUD (Placeholders)
+// ===========================================
+window.nuevoProducto = function() {
+    alert('Función para agregar nuevo producto');
+};
+
+window.editarProducto = function(id) {
+    alert(`Editar producto ${id}`);
+};
+
+window.eliminarProducto = async function(id) {
+    if (confirm('¿Estás seguro de eliminar este producto?')) {
+        try {
+            await db.sql(`DELETE FROM productos WHERE id = ${id}`);
+            mostrarMensaje('success', 'Producto eliminado correctamente');
+            cargarProductos();
+        } catch (error) {
+            mostrarMensaje('error', 'Error eliminando producto');
         }
-    });
+    }
+};
+
+window.actualizarEstadoPedido = async function(id, estado) {
+    try {
+        await db.sql(`UPDATE pedidos SET estado = '${estado}' WHERE id = ${id}`);
+        mostrarMensaje('success', 'Estado actualizado');
+    } catch (error) {
+        mostrarMensaje('error', 'Error actualizando estado');
+    }
+};
+
+window.verDetallePedido = function(id) {
+    alert(`Ver detalle del pedido ${id}`);
+};
+
+window.editarUsuario = function(id) {
+    alert(`Editar usuario ${id}`);
+};
+
+window.eliminarUsuario = async function(id) {
+    if (confirm('¿Estás seguro de eliminar este usuario?')) {
+        try {
+            await db.sql(`DELETE FROM usuarios WHERE id = ${id}`);
+            mostrarMensaje('success', 'Usuario eliminado');
+            cargarUsuarios();
+        } catch (error) {
+            mostrarMensaje('error', 'Error eliminando usuario');
+        }
+    }
+};
+
+window.nuevaCategoria = function() {
+    alert('Función para nueva categoría');
+};
+
+window.editarCategoria = function(id) {
+    alert(`Editar categoría ${id}`);
+};
+
+window.eliminarCategoria = async function(id) {
+    if (confirm('¿Estás seguro de eliminar esta categoría?')) {
+        try {
+            await db.sql(`DELETE FROM categorias WHERE id = ${id}`);
+            mostrarMensaje('success', 'Categoría eliminada');
+            cargarCategorias();
+        } catch (error) {
+            mostrarMensaje('error', 'Error eliminando categoría');
+        }
+    }
+};
+
+window.nuevaPublicacion = function() {
+    alert('Función para nueva publicación');
+};
+
+window.editarPublicacion = function(id) {
+    alert(`Editar publicación ${id}`);
+};
+
+window.eliminarPublicacion = async function(id) {
+    if (confirm('¿Estás seguro de eliminar esta publicación?')) {
+        try {
+            await db.sql(`DELETE FROM publicaciones WHERE id = ${id}`);
+            mostrarMensaje('success', 'Publicación eliminada');
+            cargarPublicaciones();
+        } catch (error) {
+            mostrarMensaje('error', 'Error eliminando publicación');
+        }
+    }
+};
+
+// ===========================================
+// INICIALIZACIÓN
+// ===========================================
+document.addEventListener('DOMContentLoaded', async function() {
+    console.log('🚀 Inicializando panel admin...');
+    
+    if (!verificarAuth()) return;
+    
+    await conectarDB();
+    await showSection('dashboard');
     
     // Actualizar fecha
-    const dateElement = document.querySelector('.font-mono.border-l');
-    if (dateElement) {
-        const date = new Date();
-        const options = { weekday: 'short', day: 'numeric', month: 'short' };
-        dateElement.textContent = date.toLocaleDateString('es-ES', options);
-    }
+    const date = new Date();
+    document.getElementById('current-date').textContent = date.toLocaleDateString('es-ES', { 
+        weekday: 'short', 
+        day: 'numeric', 
+        month: 'short' 
+    });
+});
 </script>
 </body>
 </html>
