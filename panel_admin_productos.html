@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InfiniHon - Panel de Productos</title>
+    <title>InfiniHon - Panel de Gestión de Productos</title>
     
     <!-- Import Map para SQLite Cloud -->
     <script type="importmap">
@@ -18,365 +18,910 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Mismos estilos que antes - mantener igual */
+        /* ===== VARIABLES ===== */
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #1e40af;
+            --secondary: #06b6d4;
+            --accent: #8b5cf6;
+            --bg-dark: #020617;
+            --bg-card: #0a0f1f;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --border-color: rgba(59, 130, 246, 0.2);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+        }
+
+        /* ===== RESET Y BASE ===== */
         * {
-            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        
+
         body {
-            background-color: #020617;
-            background-image: radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.08) 0%, transparent 40%),
-                              radial-gradient(circle at 80% 70%, rgba(6, 182, 212, 0.08) 0%, transparent 40%);
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(6, 182, 212, 0.08) 0%, transparent 40%);
             min-height: 100vh;
+            color: var(--text-primary);
+            overflow: hidden;
         }
-        
+
+        /* ===== SCROLLBAR PERSONALIZADA ===== */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(59, 130, 246, 0.3);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(59, 130, 246, 0.5);
+        }
+
+        /* ===== GLASSMORPHISM ===== */
         .glass-panel {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(10, 15, 31, 0.7);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(59, 130, 246, 0.15);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
         }
-        
+
+        .glass-panel:hover {
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 12px 40px rgba(59, 130, 246, 0.15);
+        }
+
         .glass-card {
             background: rgba(255, 255, 255, 0.02);
             backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border: 1px solid rgba(59, 130, 246, 0.1);
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
+
         .glass-card:hover {
             border-color: rgba(59, 130, 246, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(59, 130, 246, 0.2);
         }
-        
+
+        /* ===== SIDEBAR ===== */
         .sidebar {
-            background: rgba(2, 6, 23, 0.8);
+            background: rgba(2, 6, 23, 0.9);
             backdrop-filter: blur(16px);
-            border-right: 1px solid rgba(59, 130, 246, 0.15);
-        }
-        
-        .sidebar-item {
+            -webkit-backdrop-filter: blur(16px);
+            border-right: 1px solid var(--border-color);
+            width: 280px;
             transition: all 0.3s ease;
-            border-left: 2px solid transparent;
         }
-        
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            margin: 4px 12px;
+            border-radius: 12px;
+            color: var(--text-secondary);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-left: 3px solid transparent;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .sidebar-item i {
+            width: 20px;
+            font-size: 1.1rem;
+        }
+
         .sidebar-item:hover {
             background: rgba(59, 130, 246, 0.1);
-            border-left-color: #3b82f6;
+            color: white;
+            border-left-color: var(--primary);
+            transform: translateX(4px);
         }
-        
+
         .sidebar-item.active {
             background: rgba(59, 130, 246, 0.15);
-            border-left-color: #3b82f6;
+            color: white;
+            border-left-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
         }
-        
+
+        /* ===== BOTONES ===== */
         .btn-primary {
-            background: linear-gradient(135deg, #1e40af, #3b82f6);
-            transition: all 0.3s ease;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
-        
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-primary:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
         .btn-primary:hover {
-            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
         }
-        
+
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(59, 130, 246, 0.3);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
-        
+
         .btn-secondary:hover {
             background: rgba(59, 130, 246, 0.1);
-        }
-        
-        .admin-input {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-color: var(--primary);
             color: white;
+            transform: translateY(-1px);
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+            color: #ff6b6b;
+        }
+
+        /* ===== INPUTS ===== */
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-label {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            font-weight: 400;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: white;
+            font-size: 0.95rem;
             transition: all 0.3s ease;
         }
-        
-        .admin-input:focus {
+
+        .input-field:focus {
             outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+            background: rgba(255, 255, 255, 0.05);
         }
-        
-        .loading-spinner {
-            border: 3px solid rgba(59, 130, 246, 0.1);
+
+        .input-field:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+        }
+
+        .input-field::placeholder {
+            color: rgba(148, 163, 184, 0.3);
+        }
+
+        /* ===== TABLAS ===== */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 16px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+        }
+
+        .table th {
+            padding: 16px 20px;
+            text-align: left;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            background: rgba(59, 130, 246, 0.1);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .table td {
+            padding: 16px 20px;
+            color: white;
+            background: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            transition: all 0.3s ease;
+        }
+
+        .table tr:hover td {
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        /* ===== BADGES ===== */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .badge-info {
+            background: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        /* ===== MODALES ===== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: #0a0f1f;
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.95) translateY(20px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        /* ===== UPLOAD ÁREA ===== */
+        .upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--primary);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        /* ===== ESPECIFICACIONES ===== */
+        .spec-item {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* ===== TAGS ===== */
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            min-height: 60px;
+        }
+
+        .tag {
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            animation: tagAppear 0.3s ease;
+        }
+
+        @keyframes tagAppear {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .tag .remove-tag {
+            cursor: pointer;
+            opacity: 0.5;
+            transition: all 0.2s ease;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             border-radius: 50%;
-            border-top: 3px solid #3b82f6;
+        }
+
+        .tag .remove-tag:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* ===== PREVISUALIZACIÓN DE IMÁGENES ===== */
+        .image-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .image-preview-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .image-preview-item:hover {
+            border-color: var(--primary);
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .image-preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-preview-item .remove-image {
+            position: absolute;
+            top: 4px;
+            right: 4px;
             width: 24px;
             height: 24px;
+            background: rgba(239, 68, 68, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .image-preview-item:hover .remove-image {
+            opacity: 1;
+        }
+
+        /* ===== LOADING SPINNER ===== */
+        .loading-spinner {
+            border: 3px solid rgba(59, 130, 246, 0.1);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
             animation: spin 1s linear infinite;
         }
-        
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
-        .error-message {
+
+        /* ===== ESTADOS DE MENSAJES ===== */
+        .message {
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: messageSlide 0.3s ease;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.error {
             background: rgba(239, 68, 68, 0.1);
             border: 1px solid rgba(239, 68, 68, 0.3);
             color: #ef4444;
-            padding: 1rem;
-            border-radius: 0.75rem;
         }
-        
-        .success-message {
+
+        .message.success {
             background: rgba(16, 185, 129, 0.1);
             border: 1px solid rgba(16, 185, 129, 0.3);
             color: #10b981;
-            padding: 1rem;
-            border-radius: 0.75rem;
         }
-        
-        .table-header {
-            background: rgba(59, 130, 246, 0.1);
-            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+
+        /* ===== UTILIDADES ===== */
+        .text-gradient {
+            background: linear-gradient(135deg, #60a5fa, #22d3ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        
-        .table-row {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease;
+
+        .shadow-glow {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
         }
-        
-        .table-row:hover {
-            background: rgba(59, 130, 246, 0.05);
+
+        .hover-lift {
+            transition: transform 0.3s ease;
         }
-        
-        .badge-success {
-            background: rgba(16, 185, 129, 0.1);
-            color: #10b981;
-            border: 1px solid rgba(16, 185, 129, 0.2);
-        }
-        
-        .badge-warning {
-            background: rgba(245, 158, 11, 0.1);
-            color: #f59e0b;
-            border: 1px solid rgba(245, 158, 11, 0.2);
-        }
-        
-        .badge-danger {
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
-            border: 1px solid rgba(239, 68, 68, 0.2);
-        }
-        
-        .badge-info {
-            background: rgba(59, 130, 246, 0.1);
-            color: #3b82f6;
-            border: 1px solid rgba(59, 130, 246, 0.2);
+
+        .hover-lift:hover {
+            transform: translateY(-4px);
         }
     </style>
 </head>
 <body>
 
+<!-- Layout principal -->
 <div class="flex h-screen overflow-hidden">
     
-    <!-- Sidebar -->
-    <aside class="sidebar w-64 flex-shrink-0 hidden lg:block overflow-y-auto">
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar w-[280px] flex-shrink-0 hidden lg:block overflow-y-auto">
         <div class="p-6">
             <!-- Logo -->
-            <div class="flex items-center space-x-2 mb-8">
-                <div class="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
-                    <span class="text-black font-bold text-xl">I</span>
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-xl flex items-center justify-center shadow-glow">
+                    <span class="text-black font-bold text-2xl">I</span>
                 </div>
-                <span class="text-white font-light text-xl tracking-tight">INFINI<span class="font-medium text-blue-400">HON</span></span>
-                <span class="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full border border-blue-500/30 ml-2">PRODUCTOS</span>
+                <div>
+                    <span class="text-white font-light text-xl tracking-tight">INFINI<span class="font-bold text-blue-400">HON</span></span>
+                    <span class="block text-xs text-blue-400/60 font-mono mt-1">Gestión de Productos</span>
+                </div>
             </div>
             
-            <!-- Info de usuario -->
-            <div id="user-info" class="glass-card rounded-xl p-4 mb-6">
+            <!-- Perfil de usuario -->
+            <div class="glass-card rounded-xl p-4 mb-6" id="user-info">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
-                        <span class="text-white font-medium" id="user-initials">AD</span>
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center shadow-lg">
+                        <span class="text-white font-bold text-lg" id="user-initials">AD</span>
                     </div>
                     <div class="flex-1 min-w-0">
-                        <div class="text-white text-sm font-medium truncate" id="user-name">Admin</div>
+                        <div class="text-white font-medium truncate" id="user-name">Administrador</div>
                         <div class="text-gray-400 text-xs font-mono truncate" id="user-email">admin@infinihon.com</div>
+                        <span class="badge badge-info text-xs mt-1">Administrador</span>
                     </div>
                 </div>
             </div>
             
-            <!-- Menú -->
+            <!-- Menú de navegación -->
             <nav class="space-y-1">
-                <a href="#" onclick="mostrarSeccion('lista')" class="sidebar-item active flex items-center gap-3 px-4 py-3 text-white rounded-lg" id="menu-lista">
-                    <i class="fas fa-list"></i>
-                    <span class="text-sm">Lista de Productos</span>
-                </a>
+                <div class="text-xs font-mono text-gray-500 mb-3 px-4">PRINCIPAL</div>
                 
-                <a href="#" onclick="mostrarSeccion('nuevo')" class="sidebar-item flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white rounded-lg" id="menu-nuevo">
-                    <i class="fas fa-plus"></i>
-                    <span class="text-sm">Nuevo Producto</span>
-                </a>
+                <div class="sidebar-item active" onclick="cambiarSeccion('lista')" id="menu-lista">
+                    <i class="fas fa-list-ul"></i>
+                    <span>Lista de Productos</span>
+                </div>
                 
-                <a href="#" onclick="mostrarSeccion('categorias')" class="sidebar-item flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white rounded-lg" id="menu-categorias">
+                <div class="sidebar-item" onclick="cambiarSeccion('nuevo')" id="menu-nuevo">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Nuevo Producto</span>
+                </div>
+                
+                <div class="sidebar-item" onclick="cambiarSeccion('categorias')" id="menu-categorias">
                     <i class="fas fa-tags"></i>
-                    <span class="text-sm">Categorías</span>
-                </a>
+                    <span>Categorías</span>
+                </div>
                 
-                <a href="#" onclick="mostrarSeccion('stock')" class="sidebar-item flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white rounded-lg" id="menu-stock">
+                <div class="text-xs font-mono text-gray-500 mt-6 mb-3 px-4">INVENTARIO</div>
+                
+                <div class="sidebar-item" onclick="cambiarSeccion('stock')" id="menu-stock">
                     <i class="fas fa-boxes"></i>
-                    <span class="text-sm">Control de Stock</span>
-                </a>
+                    <span>Control de Stock</span>
+                </div>
                 
-                <hr class="border-white/5 my-4">
+                <div class="sidebar-item" onclick="cambiarSeccion('bajo-stock')" id="menu-bajo-stock">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>Stock Bajo</span>
+                    <span class="ml-auto bg-yellow-500/20 text-yellow-400 text-xs px-2 py-1 rounded-full" id="stock-bajo-count">0</span>
+                </div>
                 
-                <a href="#" onclick="cerrarSesion()" class="sidebar-item flex items-center gap-3 px-4 py-3 text-red-400 hover:text-white hover:bg-red-500/10 rounded-lg">
+                <div class="sidebar-item" onclick="cambiarSeccion('mas-vendidos')" id="menu-mas-vendidos">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Más Vendidos</span>
+                </div>
+                
+                <div class="text-xs font-mono text-gray-500 mt-6 mb-3 px-4">SISTEMA</div>
+                
+                <div class="sidebar-item" onclick="irAConfiguracion()" id="menu-config">
+                    <i class="fas fa-cog"></i>
+                    <span>Configuración</span>
+                </div>
+                
+                <div class="sidebar-item text-red-400 hover:text-red-300 hover:bg-red-500/10" onclick="cerrarSesion()">
                     <i class="fas fa-sign-out-alt"></i>
-                    <span class="text-sm">Cerrar sesión</span>
-                </a>
+                    <span>Cerrar sesión</span>
+                </div>
             </nav>
         </div>
     </aside>
     
-    <!-- Contenido principal -->
+    <!-- ===== CONTENIDO PRINCIPAL ===== -->
     <main class="flex-1 overflow-y-auto">
-        <!-- Header -->
+        <!-- Header superior -->
         <header class="glass-panel sticky top-0 z-30 mx-4 mt-4 px-6 py-4 rounded-2xl">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <h1 class="text-white text-xl font-light" id="section-title">Gestión de Productos</h1>
-                    <span class="text-gray-400 text-sm font-mono" id="section-subtitle">/ lista de productos</span>
+                    <h1 class="text-white text-2xl font-light" id="titulo-seccion">Productos</h1>
+                    <span class="text-gray-400 text-sm font-mono" id="subtitulo-seccion">/ lista de productos</span>
                 </div>
                 
                 <div class="flex items-center gap-4">
+                    <!-- Buscador -->
                     <div class="relative">
-                        <input type="text" id="search-input" placeholder="Buscar productos..." class="admin-input pl-10 pr-4 py-2 rounded-xl text-sm w-64">
                         <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" id="buscador" placeholder="Buscar productos..." 
+                               class="bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2 text-white text-sm w-72 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30">
                     </div>
                     
-                    <div class="text-gray-400 text-sm font-mono border-l border-white/5 pl-4" id="current-date"></div>
+                    <!-- Notificaciones -->
+                    <button class="relative text-gray-400 hover:text-white transition-colors">
+                        <i class="fas fa-bell text-xl"></i>
+                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-blue-500 rounded-full text-xs flex items-center justify-center text-white">3</span>
+                    </button>
+                    
+                    <!-- Fecha -->
+                    <div class="text-gray-400 text-sm font-mono border-l border-white/10 pl-4" id="fecha-actual"></div>
                 </div>
             </div>
         </header>
         
         <!-- Contenedor de mensajes -->
-        <div id="message-container" class="mx-4 mt-4"></div>
+        <div id="mensajes-container" class="mx-4 mt-4"></div>
         
         <!-- Contenido dinámico -->
-        <div class="p-6 space-y-6" id="content-area">
-            <div class="text-center py-12">
-                <div class="loading-spinner mx-auto mb-4"></div>
-                <p class="text-gray-400">Cargando panel de productos...</p>
+        <div class="p-6" id="contenido-principal">
+            <div class="flex items-center justify-center min-h-[400px]">
+                <div class="text-center">
+                    <div class="loading-spinner mx-auto mb-4"></div>
+                    <p class="text-gray-400">Cargando panel de gestión...</p>
+                </div>
             </div>
         </div>
     </main>
 </div>
 
-<!-- Modal de Producto -->
-<div id="productModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
-    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="cerrarModal()"></div>
-    <div class="relative bg-[#0a0f1f] rounded-2xl p-8 max-w-4xl w-full mx-4 border border-blue-500/20 max-h-[90vh] overflow-y-auto">
-        <div class="flex justify-between items-center mb-6">
-            <h3 id="modalTitle" class="text-2xl font-light text-white">Nuevo Producto</h3>
-            <button onclick="cerrarModal()" class="text-gray-400 hover:text-white">
-                <i class="fas fa-times text-xl"></i>
-            </button>
+<!-- ===== MODAL DE PRODUCTO ===== -->
+<div id="modal-producto" class="modal-overlay">
+    <div class="modal-content">
+        <div class="p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 id="modal-titulo" class="text-2xl font-light text-white">Nuevo Producto</h2>
+                <button onclick="cerrarModal()" class="text-gray-400 hover:text-white transition-colors">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <form id="form-producto" class="space-y-6">
+                <input type="hidden" id="producto-id">
+                
+                <!-- Información básica -->
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="input-group">
+                        <label class="input-label">Nombre del producto <span class="text-red-400">*</span></label>
+                        <input type="text" id="producto-nombre" class="input-field" placeholder="Ej: MikroTik RB4011" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">SKU <span class="text-red-400">*</span></label>
+                        <input type="text" id="producto-sku" class="input-field" placeholder="Ej: MT-RB4011" required>
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="input-group">
+                        <label class="input-label">Categoría <span class="text-red-400">*</span></label>
+                        <select id="producto-categoria" class="input-field" required>
+                            <option value="" class="bg-gray-900">Seleccionar categoría</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">Subcategoría</label>
+                        <input type="text" id="producto-subcategoria" class="input-field" placeholder="Ej: Router empresarial">
+                    </div>
+                </div>
+                
+                <!-- Precios y stock -->
+                <div class="grid md:grid-cols-4 gap-6">
+                    <div class="input-group">
+                        <label class="input-label">Precio <span class="text-red-400">*</span></label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">$</span>
+                            <input type="number" id="producto-precio" step="0.01" class="input-field pl-8" placeholder="0.00" required>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">Precio comparación</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">$</span>
+                            <input type="number" id="producto-precio-comp" step="0.01" class="input-field pl-8" placeholder="0.00">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">Stock <span class="text-red-400">*</span></label>
+                        <input type="number" id="producto-stock" class="input-field" placeholder="0" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">Stock mínimo</label>
+                        <input type="number" id="producto-stock-min" class="input-field" placeholder="5" value="5">
+                    </div>
+                </div>
+                
+                <!-- Descripciones -->
+                <div class="input-group">
+                    <label class="input-label">Descripción corta</label>
+                    <input type="text" id="producto-desc-corta" class="input-field" placeholder="Breve descripción del producto">
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Descripción detallada</label>
+                    <textarea id="producto-desc-larga" rows="4" class="input-field" placeholder="Descripción completa del producto..."></textarea>
+                </div>
+                
+                <!-- Estado y destacado -->
+                <div class="flex items-center gap-6">
+                    <div class="input-group flex-1">
+                        <label class="input-label">Estado</label>
+                        <select id="producto-estado" class="input-field">
+                            <option value="activo" class="bg-gray-900">Activo</option>
+                            <option value="inactivo" class="bg-gray-900">Inactivo</option>
+                        </select>
+                    </div>
+                    
+                    <div class="flex items-center gap-2 mt-6">
+                        <input type="checkbox" id="producto-destacado" class="w-4 h-4 rounded border-white/20 bg-white/5 text-blue-500">
+                        <label for="producto-destacado" class="text-gray-300 text-sm">Producto destacado</label>
+                    </div>
+                </div>
+                
+                <!-- Botones -->
+                <div class="flex gap-3 pt-6 border-t border-white/10">
+                    <button type="button" onclick="cerrarModal()" class="btn-secondary flex-1">
+                        <i class="fas fa-times mr-2"></i>
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn-primary flex-1">
+                        <i class="fas fa-save mr-2"></i>
+                        Guardar producto
+                    </button>
+                </div>
+            </form>
         </div>
-        
-        <form id="productForm" class="space-y-4">
-            <input type="hidden" id="productId">
-            
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="text-gray-400 text-sm block mb-2">Nombre del producto *</label>
-                    <input type="text" id="productName" class="admin-input w-full px-4 py-3 rounded-xl" required>
-                </div>
-                
-                <div>
-                    <label class="text-gray-400 text-sm block mb-2">SKU *</label>
-                    <input type="text" id="productSku" class="admin-input w-full px-4 py-3 rounded-xl" required>
-                </div>
-                
-                <div>
-                    <label class="text-gray-400 text-sm block mb-2">Categoría *</label>
-                    <select id="productCategory" class="admin-input w-full px-4 py-3 rounded-xl" required>
-                        <option value="" class="bg-gray-900">Seleccionar categoría</option>
-                    </select>
-                </div>
-                
-                <div>
-                    <label class="text-gray-400 text-sm block mb-2">Precio *</label>
-                    <input type="number" id="productPrice" step="0.01" class="admin-input w-full px-4 py-3 rounded-xl" required>
-                </div>
-                
-                <div>
-                    <label class="text-gray-400 text-sm block mb-2">Stock *</label>
-                    <input type="number" id="productStock" class="admin-input w-full px-4 py-3 rounded-xl" required>
-                </div>
-                
-                <div>
-                    <label class="text-gray-400 text-sm block mb-2">Estado</label>
-                    <select id="productStatus" class="admin-input w-full px-4 py-3 rounded-xl">
-                        <option value="activo" class="bg-gray-900">Activo</option>
-                        <option value="inactivo" class="bg-gray-900">Inactivo</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div>
-                <label class="text-gray-400 text-sm block mb-2">Descripción corta</label>
-                <input type="text" id="productShortDesc" class="admin-input w-full px-4 py-3 rounded-xl">
-            </div>
-            
-            <div>
-                <label class="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" id="productFeatured" class="rounded border-white/20 bg-white/5 text-blue-500">
-                    <span class="text-gray-300 text-sm">Producto destacado</span>
-                </label>
-            </div>
-            
-            <div class="flex gap-3 pt-4">
-                <button type="button" onclick="cerrarModal()" class="btn-secondary flex-1 py-3 rounded-xl text-gray-300">
-                    Cancelar
-                </button>
-                <button type="submit" class="btn-primary flex-1 py-3 rounded-xl text-white">
-                    Guardar producto
-                </button>
-            </div>
-        </form>
     </div>
 </div>
 
-<!-- Modal de Categoría -->
-<div id="categoryModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
-    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="cerrarCategoryModal()"></div>
-    <div class="relative bg-[#0a0f1f] rounded-2xl p-8 max-w-md w-full mx-4 border border-blue-500/20">
-        <div class="flex justify-between items-center mb-6">
-            <h3 id="categoryModalTitle" class="text-2xl font-light text-white">Nueva Categoría</h3>
-            <button onclick="cerrarCategoryModal()" class="text-gray-400 hover:text-white">
-                <i class="fas fa-times text-xl"></i>
-            </button>
+<!-- ===== MODAL DE CATEGORÍA ===== -->
+<div id="modal-categoria" class="modal-overlay">
+    <div class="modal-content max-w-md">
+        <div class="p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 id="modal-categoria-titulo" class="text-2xl font-light text-white">Nueva Categoría</h2>
+                <button onclick="cerrarModalCategoria()" class="text-gray-400 hover:text-white transition-colors">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <form id="form-categoria" class="space-y-6">
+                <input type="hidden" id="categoria-id">
+                
+                <div class="input-group">
+                    <label class="input-label">Nombre de la categoría <span class="text-red-400">*</span></label>
+                    <input type="text" id="categoria-nombre" class="input-field" placeholder="Ej: Routers MikroTik" required>
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Slug <span class="text-red-400">*</span></label>
+                    <input type="text" id="categoria-slug" class="input-field" placeholder="Ej: routers-mikrotik" required>
+                    <p class="text-gray-500 text-xs mt-1">URL amigable: /categoria/routers-mikrotik</p>
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Descripción</label>
+                    <textarea id="categoria-descripcion" rows="3" class="input-field" placeholder="Descripción de la categoría..."></textarea>
+                </div>
+                
+                <div class="flex gap-3 pt-6 border-t border-white/10">
+                    <button type="button" onclick="cerrarModalCategoria()" class="btn-secondary flex-1">
+                        <i class="fas fa-times mr-2"></i>
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn-primary flex-1">
+                        <i class="fas fa-save mr-2"></i>
+                        Guardar
+                    </button>
+                </div>
+            </form>
         </div>
-        
-        <form id="categoryForm" class="space-y-4">
-            <input type="hidden" id="categoryId">
-            
-            <div>
-                <label class="text-gray-400 text-sm block mb-2">Nombre de la categoría *</label>
-                <input type="text" id="categoryName" class="admin-input w-full px-4 py-3 rounded-xl" required>
-            </div>
-            
-            <div>
-                <label class="text-gray-400 text-sm block mb-2">Slug *</label>
-                <input type="text" id="categorySlug" class="admin-input w-full px-4 py-3 rounded-xl" required>
-            </div>
-            
-            <div>
-                <label class="text-gray-400 text-sm block mb-2">Descripción</label>
-                <textarea id="categoryDescription" rows="3" class="admin-input w-full px-4 py-3 rounded-xl"></textarea>
-            </div>
-            
-            <div class="flex gap-3 pt-4">
-                <button type="button" onclick="cerrarCategoryModal()" class="btn-secondary flex-1 py-3 rounded-xl text-gray-300">
-                    Cancelar
-                </button>
-                <button type="submit" class="btn-primary flex-1 py-3 rounded-xl text-white">
-                    Guardar categoría
+    </div>
+</div>
+
+<!-- ===== MODAL DE AJUSTE DE STOCK ===== -->
+<div id="modal-stock" class="modal-overlay">
+    <div class="modal-content max-w-md">
+        <div class="p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-light text-white">Ajustar Stock</h2>
+                <button onclick="cerrarModalStock()" class="text-gray-400 hover:text-white transition-colors">
+                    <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
-        </form>
+            
+            <form id="form-stock" class="space-y-6">
+                <input type="hidden" id="stock-producto-id">
+                
+                <div class="input-group">
+                    <label class="input-label">Producto</label>
+                    <p id="stock-producto-nombre" class="text-white text-lg font-medium"></p>
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Stock actual</label>
+                    <p id="stock-actual" class="text-white text-lg"></p>
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Nueva cantidad <span class="text-red-400">*</span></label>
+                    <input type="number" id="stock-nuevo" class="input-field" placeholder="Ingresar nueva cantidad" required min="0">
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Motivo del ajuste</label>
+                    <select id="stock-motivo" class="input-field">
+                        <option value="compra" class="bg-gray-900">Compra a proveedor</option>
+                        <option value="devolucion" class="bg-gray-900">Devolución de cliente</option>
+                        <option value="ajuste" class="bg-gray-900">Ajuste de inventario</option>
+                        <option value="perdida" class="bg-gray-900">Pérdida/daño</option>
+                    </select>
+                </div>
+                
+                <div class="flex gap-3 pt-6 border-t border-white/10">
+                    <button type="button" onclick="cerrarModalStock()" class="btn-secondary flex-1">
+                        <i class="fas fa-times mr-2"></i>
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn-primary flex-1">
+                        <i class="fas fa-check mr-2"></i>
+                        Actualizar
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -390,7 +935,32 @@ const CONNECTION_STRING = 'sqlitecloud://cxaerd5fvk.g2.sqlite.cloud:8860/infinih
 
 let db = null;
 let currentUser = null;
-let currentSection = 'lista';
+let seccionActual = 'lista';
+let categoriasGlobal = [];
+let editProductId = null;
+let editCategoryId = null;
+let stockProductId = null;
+
+// ===========================================
+// INICIALIZACIÓN
+// ===========================================
+document.addEventListener('DOMContentLoaded', async function() {
+    console.log('🚀 Inicializando panel de gestión de productos...');
+    
+    await conectarDB();
+    verificarAuth();
+    await cargarCategoriasGlobal();
+    await actualizarContadorStockBajo();
+    await cambiarSeccion('lista');
+    
+    // Actualizar fecha
+    actualizarFecha();
+    
+    // Configurar buscador
+    document.getElementById('buscador')?.addEventListener('input', function(e) {
+        buscarEnTabla(e.target.value);
+    });
+});
 
 // ===========================================
 // CONEXIÓN A SQLITE CLOUD
@@ -400,6 +970,7 @@ async function conectarDB() {
         console.log('🔄 Conectando a SQLite Cloud...');
         db = new Database(CONNECTION_STRING);
         
+        // Probar conexión
         const result = await db.sql`SELECT 1 as test`;
         console.log('✅ Conectado a SQLite Cloud', result);
         
@@ -412,34 +983,19 @@ async function conectarDB() {
 }
 
 // ===========================================
-// MOSTRAR MENSAJES
-// ===========================================
-function mostrarMensaje(tipo, texto) {
-    const container = document.getElementById('message-container');
-    if (!container) return;
-    
-    const className = tipo === 'error' ? 'error-message' : 'success-message';
-    container.innerHTML = `<div class="${className}">${texto}</div>`;
-    
-    setTimeout(() => {
-        container.innerHTML = '';
-    }, 5000);
-}
-
-// ===========================================
-// VERIFICAR AUTENTICACIÓN - VERSIÓN CORREGIDA
+// VERIFICAR AUTENTICACIÓN
 // ===========================================
 function verificarAuth() {
     const savedUser = localStorage.getItem('user') || sessionStorage.getItem('user');
     
     // Si no hay usuario guardado, crear uno de prueba
     if (!savedUser) {
-        console.log('ℹ️ No hay usuario, creando usuario de prueba...');
+        console.log('ℹ️ Creando usuario de prueba...');
         const testUser = {
             id: 1,
             nombre: 'Admin',
-            apellido: 'Test',
-            email: 'admin@test.com',
+            apellido: 'Principal',
+            email: 'admin@infinihon.com',
             rol: 'admin',
             verificado: 1
         };
@@ -449,18 +1005,16 @@ function verificarAuth() {
     } else {
         try {
             currentUser = JSON.parse(savedUser);
-            console.log('✅ Usuario cargado:', currentUser.email);
-            
-            // FORZAR ROL ADMIN PARA PRUEBAS
+            // Forzar rol admin para pruebas
             currentUser.rol = 'admin';
-            
+            console.log('✅ Usuario cargado:', currentUser.email);
         } catch (e) {
-            console.error('Error parseando usuario, creando uno nuevo:', e);
+            console.error('Error parseando usuario, creando nuevo:', e);
             const testUser = {
                 id: 1,
                 nombre: 'Admin',
-                apellido: 'Test',
-                email: 'admin@test.com',
+                apellido: 'Principal',
+                email: 'admin@infinihon.com',
                 rol: 'admin',
                 verificado: 1
             };
@@ -470,48 +1024,117 @@ function verificarAuth() {
     }
     
     // Actualizar UI
-    document.getElementById('user-name').textContent = `${currentUser.nombre} ${currentUser.apellido || ''}`;
-    document.getElementById('user-email').textContent = currentUser.email;
-    
-    const initials = (currentUser.nombre?.[0] || 'A') + (currentUser.apellido?.[0] || 'D');
-    document.getElementById('user-initials').textContent = initials;
-    
-    return true;
+    actualizarUIUsuario();
 }
 
 // ===========================================
-// CERRAR SESIÓN
+// ACTUALIZAR UI DE USUARIO
 // ===========================================
-window.cerrarSesion = function() {
-    localStorage.removeItem('user');
-    sessionStorage.removeItem('user');
-    window.location.href = 'login.html';
-};
+function actualizarUIUsuario() {
+    if (currentUser) {
+        const nombreCompleto = `${currentUser.nombre || ''} ${currentUser.apellido || ''}`.trim() || 'Administrador';
+        document.getElementById('user-name').textContent = nombreCompleto;
+        document.getElementById('user-email').textContent = currentUser.email || 'admin@infinihon.com';
+        
+        const initials = (currentUser.nombre?.[0] || 'A') + (currentUser.apellido?.[0] || 'D');
+        document.getElementById('user-initials').textContent = initials;
+    }
+}
+
+// ===========================================
+// CARGAR CATEGORÍAS GLOBALES
+// ===========================================
+async function cargarCategoriasGlobal() {
+    try {
+        categoriasGlobal = await db.sql(`SELECT * FROM categorias ORDER BY nombre`);
+    } catch (error) {
+        console.error('Error cargando categorías:', error);
+        categoriasGlobal = [];
+    }
+}
+
+// ===========================================
+// ACTUALIZAR CONTADOR DE STOCK BAJO
+// ===========================================
+async function actualizarContadorStockBajo() {
+    try {
+        const result = await db.sql(`
+            SELECT COUNT(*) as count FROM productos 
+            WHERE stock <= stock_minimo AND stock > 0
+        `);
+        document.getElementById('stock-bajo-count').textContent = result[0].count || 0;
+    } catch (error) {
+        console.error('Error actualizando contador:', error);
+    }
+}
+
+// ===========================================
+// ACTUALIZAR FECHA
+// ===========================================
+function actualizarFecha() {
+    const date = new Date();
+    const opciones = { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' };
+    document.getElementById('fecha-actual').textContent = date.toLocaleDateString('es-ES', opciones);
+}
+
+// ===========================================
+// MOSTRAR MENSAJE
+// ===========================================
+function mostrarMensaje(tipo, texto) {
+    const container = document.getElementById('mensajes-container');
+    if (!container) return;
+    
+    const mensaje = document.createElement('div');
+    mensaje.className = `message ${tipo}`;
+    mensaje.innerHTML = `
+        <i class="fas ${tipo === 'error' ? 'fa-exclamation-circle' : 'fa-check-circle'} text-xl"></i>
+        <span>${texto}</span>
+    `;
+    
+    container.appendChild(mensaje);
+    
+    setTimeout(() => {
+        mensaje.style.opacity = '0';
+        mensaje.style.transform = 'translateY(-20px)';
+        setTimeout(() => mensaje.remove(), 300);
+    }, 5000);
+}
 
 // ===========================================
 // CAMBIAR SECCIÓN
 // ===========================================
-window.mostrarSeccion = async function(seccion) {
-    currentSection = seccion;
+window.cambiarSeccion = async function(seccion) {
+    seccionActual = seccion;
     
+    // Actualizar menú activo
     document.querySelectorAll('.sidebar-item').forEach(item => {
         item.classList.remove('active');
     });
-    
     document.getElementById(`menu-${seccion}`)?.classList.add('active');
     
-    const titles = {
-        'lista': 'Lista de Productos',
+    // Actualizar títulos
+    const titulos = {
+        'lista': 'Productos',
         'nuevo': 'Nuevo Producto',
         'categorias': 'Categorías',
-        'stock': 'Control de Stock'
+        'stock': 'Control de Stock',
+        'bajo-stock': 'Stock Bajo',
+        'mas-vendidos': 'Productos Más Vendidos'
     };
     
-    document.getElementById('section-title').textContent = titles[seccion] || 'Gestión de Productos';
-    document.getElementById('section-subtitle').textContent = `/ ${seccion}`;
+    document.getElementById('titulo-seccion').textContent = titulos[seccion] || 'Productos';
+    document.getElementById('subtitulo-seccion').textContent = `/ ${seccion.replace('-', ' ')}`;
     
-    const contentArea = document.getElementById('content-area');
-    contentArea.innerHTML = '<div class="text-center py-12"><div class="loading-spinner mx-auto mb-4"></div><p class="text-gray-400">Cargando...</p></div>';
+    // Cargar contenido
+    const contenido = document.getElementById('contenido-principal');
+    contenido.innerHTML = `
+        <div class="flex items-center justify-center min-h-[400px]">
+            <div class="text-center">
+                <div class="loading-spinner mx-auto mb-4"></div>
+                <p class="text-gray-400">Cargando...</p>
+            </div>
+        </div>
+    `;
     
     switch(seccion) {
         case 'lista':
@@ -521,10 +1144,16 @@ window.mostrarSeccion = async function(seccion) {
             await cargarFormularioNuevo();
             break;
         case 'categorias':
-            await cargarCategorias();
+            await cargarListaCategorias();
             break;
         case 'stock':
             await cargarControlStock();
+            break;
+        case 'bajo-stock':
+            await cargarStockBajo();
+            break;
+        case 'mas-vendidos':
+            await cargarMasVendidos();
             break;
     }
 };
@@ -534,31 +1163,38 @@ window.mostrarSeccion = async function(seccion) {
 // ===========================================
 async function cargarListaProductos() {
     try {
-        const productos = await db.sql(`SELECT * FROM productos ORDER BY id DESC`);
+        const productos = await db.sql(`
+            SELECT p.*, 
+                   (SELECT COUNT(*) FROM pedido_detalles WHERE producto_id = p.id) as ventas
+            FROM productos p 
+            ORDER BY p.id DESC
+        `);
         
-        const contentArea = document.getElementById('content-area');
+        const contenido = document.getElementById('contenido-principal');
         
         let html = `
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-white text-xl font-light">Todos los Productos</h2>
-                <button onclick="mostrarSeccion('nuevo')" class="btn-primary px-4 py-2 rounded-xl text-sm text-white flex items-center gap-2">
+                <button onclick="abrirModalNuevo()" class="btn-primary">
                     <i class="fas fa-plus"></i>
                     Nuevo Producto
                 </button>
             </div>
             
             <div class="glass-panel rounded-2xl p-6">
-                <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead class="table-header">
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
                             <tr>
-                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">ID</th>
-                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Producto</th>
-                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">SKU</th>
-                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Categoría</th>
-                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Precio</th>
-                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Stock</th>
-                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Acciones</th>
+                                <th>ID</th>
+                                <th>Producto</th>
+                                <th>SKU</th>
+                                <th>Categoría</th>
+                                <th>Precio</th>
+                                <th>Stock</th>
+                                <th>Ventas</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -567,29 +1203,39 @@ async function cargarListaProductos() {
         if (productos.length === 0) {
             html += `
                 <tr>
-                    <td colspan="7" class="text-center py-8 text-gray-400">
-                        No hay productos disponibles
+                    <td colspan="9" class="text-center py-12 text-gray-400">
+                        <i class="fas fa-box-open text-4xl mb-3"></i>
+                        <p>No hay productos disponibles</p>
                     </td>
                 </tr>
             `;
         } else {
             productos.forEach(p => {
+                const stockClass = p.stock <= p.stock_minimo ? 'text-yellow-400' : 'text-green-400';
+                const estadoClass = p.estado === 'activo' ? 'badge-success' : 'badge-danger';
+                
                 html += `
-                    <tr class="table-row">
-                        <td class="py-4 px-4 text-gray-400 font-mono">${p.id}</td>
-                        <td class="py-4 px-4 text-white">${p.nombre}</td>
-                        <td class="py-4 px-4 text-gray-400 font-mono">${p.sku}</td>
-                        <td class="py-4 px-4 text-gray-300">${p.categoria || '-'}</td>
-                        <td class="py-4 px-4 text-white font-medium">$${parseFloat(p.precio).toFixed(2)}</td>
-                        <td class="py-4 px-4">
-                            <span class="${p.stock <= 5 ? 'text-yellow-400' : 'text-green-400'}">${p.stock}</span>
+                    <tr>
+                        <td class="font-mono">#${p.id}</td>
+                        <td>
+                            <div class="font-medium">${p.nombre}</div>
+                            <div class="text-xs text-gray-400">${p.descripcion_corta?.substring(0, 30) || ''}...</div>
                         </td>
-                        <td class="py-4 px-4">
+                        <td class="font-mono text-gray-400">${p.sku}</td>
+                        <td>${p.categoria || '-'}</td>
+                        <td class="font-medium">$${parseFloat(p.precio).toFixed(2)}</td>
+                        <td class="${stockClass} font-medium">${p.stock}</td>
+                        <td class="text-gray-300">${p.ventas || 0}</td>
+                        <td><span class="badge ${estadoClass}">${p.estado}</span></td>
+                        <td>
                             <div class="flex gap-2">
-                                <button onclick="editarProducto(${p.id})" class="text-blue-400 hover:text-blue-300">
+                                <button onclick="editarProducto(${p.id})" class="text-blue-400 hover:text-blue-300 transition-colors" title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button onclick="eliminarProducto(${p.id})" class="text-red-400 hover:text-red-300">
+                                <button onclick="duplicarProducto(${p.id})" class="text-purple-400 hover:text-purple-300 transition-colors" title="Duplicar">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                                <button onclick="eliminarProducto(${p.id})" class="text-red-400 hover:text-red-300 transition-colors" title="Eliminar">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
@@ -606,12 +1252,15 @@ async function cargarListaProductos() {
             </div>
         `;
         
-        contentArea.innerHTML = html;
+        contenido.innerHTML = html;
         
     } catch (error) {
         console.error('Error cargando productos:', error);
-        document.getElementById('content-area').innerHTML = `
-            <div class="error-message">Error cargando productos: ${error.message}</div>
+        document.getElementById('contenido-principal').innerHTML = `
+            <div class="error-message">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                Error cargando productos: ${error.message}
+            </div>
         `;
     }
 }
@@ -620,113 +1269,132 @@ async function cargarListaProductos() {
 // CARGAR FORMULARIO NUEVO PRODUCTO
 // ===========================================
 async function cargarFormularioNuevo() {
-    try {
-        const categorias = await db.sql(`SELECT * FROM categorias ORDER BY nombre`);
-        
-        const contentArea = document.getElementById('content-area');
-        
-        contentArea.innerHTML = `
-            <div class="glass-panel rounded-2xl p-6 max-w-2xl mx-auto">
-                <h2 class="text-white text-xl font-light mb-6">Crear Nuevo Producto</h2>
+    const contenido = document.getElementById('contenido-principal');
+    
+    let categoriasOptions = '<option value="" class="bg-gray-900">Seleccionar categoría</option>';
+    categoriasGlobal.forEach(c => {
+        categoriasOptions += `<option value="${c.nombre}" class="bg-gray-900">${c.nombre}</option>`;
+    });
+    
+    contenido.innerHTML = `
+        <div class="glass-panel rounded-2xl p-8 max-w-3xl mx-auto">
+            <h2 class="text-white text-2xl font-light mb-6">Crear Nuevo Producto</h2>
+            
+            <form id="form-producto-rapido" onsubmit="guardarProductoRapido(event)" class="space-y-6">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="input-group">
+                        <label class="input-label">Nombre del producto <span class="text-red-400">*</span></label>
+                        <input type="text" id="rapido-nombre" class="input-field" placeholder="Ej: MikroTik RB4011" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">SKU <span class="text-red-400">*</span></label>
+                        <input type="text" id="rapido-sku" class="input-field" placeholder="Ej: MT-RB4011" required>
+                    </div>
+                </div>
                 
-                <form id="quickProductForm" onsubmit="guardarProductoRapido(event)" class="space-y-4">
-                    <div>
-                        <label class="text-gray-400 text-sm block mb-2">Nombre del producto *</label>
-                        <input type="text" id="quickName" class="admin-input w-full px-4 py-3 rounded-xl" required>
-                    </div>
-                    
-                    <div>
-                        <label class="text-gray-400 text-sm block mb-2">SKU *</label>
-                        <input type="text" id="quickSku" class="admin-input w-full px-4 py-3 rounded-xl" required>
-                    </div>
-                    
-                    <div>
-                        <label class="text-gray-400 text-sm block mb-2">Categoría *</label>
-                        <select id="quickCategory" class="admin-input w-full px-4 py-3 rounded-xl" required>
-                            <option value="" class="bg-gray-900">Seleccionar categoría</option>
-                            ${categorias.map(c => `<option value="${c.nombre}" class="bg-gray-900">${c.nombre}</option>`).join('')}
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="input-group">
+                        <label class="input-label">Categoría <span class="text-red-400">*</span></label>
+                        <select id="rapido-categoria" class="input-field" required>
+                            ${categoriasOptions}
                         </select>
                     </div>
                     
                     <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="text-gray-400 text-sm block mb-2">Precio *</label>
-                            <input type="number" id="quickPrice" step="0.01" class="admin-input w-full px-4 py-3 rounded-xl" required>
+                        <div class="input-group">
+                            <label class="input-label">Precio <span class="text-red-400">*</span></label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">$</span>
+                                <input type="number" id="rapido-precio" step="0.01" class="input-field pl-8" placeholder="0.00" required>
+                            </div>
                         </div>
-                        <div>
-                            <label class="text-gray-400 text-sm block mb-2">Stock *</label>
-                            <input type="number" id="quickStock" class="admin-input w-full px-4 py-3 rounded-xl" required>
+                        
+                        <div class="input-group">
+                            <label class="input-label">Stock <span class="text-red-400">*</span></label>
+                            <input type="number" id="rapido-stock" class="input-field" placeholder="0" required>
                         </div>
                     </div>
-                    
-                    <div>
-                        <label class="text-gray-400 text-sm block mb-2">Descripción corta</label>
-                        <input type="text" id="quickDesc" class="admin-input w-full px-4 py-3 rounded-xl">
-                    </div>
-                    
-                    <div class="flex gap-3 pt-4">
-                        <button type="button" onclick="mostrarSeccion('lista')" class="btn-secondary flex-1 py-3 rounded-xl text-gray-300">
-                            Cancelar
-                        </button>
-                        <button type="submit" class="btn-primary flex-1 py-3 rounded-xl text-white">
-                            Guardar producto
-                        </button>
-                    </div>
-                </form>
-            </div>
-        `;
-        
-    } catch (error) {
-        console.error('Error cargando formulario:', error);
-    }
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Descripción corta</label>
+                    <input type="text" id="rapido-desc" class="input-field" placeholder="Breve descripción del producto">
+                </div>
+                
+                <div class="flex items-center gap-2">
+                    <input type="checkbox" id="rapido-destacado" class="w-4 h-4 rounded border-white/20 bg-white/5 text-blue-500">
+                    <label for="rapido-destacado" class="text-gray-300 text-sm">Producto destacado</label>
+                </div>
+                
+                <div class="flex gap-3 pt-6 border-t border-white/10">
+                    <button type="button" onclick="cambiarSeccion('lista')" class="btn-secondary flex-1">
+                        <i class="fas fa-times mr-2"></i>
+                        Cancelar
+                    </button>
+                    <button type="button" onclick="abrirModalNuevo()" class="btn-secondary flex-1">
+                        <i class="fas fa-cog mr-2"></i>
+                        Configuración avanzada
+                    </button>
+                    <button type="submit" class="btn-primary flex-1">
+                        <i class="fas fa-save mr-2"></i>
+                        Guardar producto
+                    </button>
+                </div>
+            </form>
+        </div>
+    `;
 }
 
 // ===========================================
-// CARGAR CATEGORÍAS
+// CARGAR LISTA DE CATEGORÍAS
 // ===========================================
-async function cargarCategorias() {
+async function cargarListaCategorias() {
     try {
         const categorias = await db.sql(`SELECT * FROM categorias ORDER BY id DESC`);
         
-        const contentArea = document.getElementById('content-area');
+        const contenido = document.getElementById('contenido-principal');
         
         let html = `
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-white text-xl font-light">Categorías</h2>
-                <button onclick="abrirModalCategoria()" class="btn-primary px-4 py-2 rounded-xl text-sm text-white flex items-center gap-2">
+                <button onclick="abrirModalCategoria()" class="btn-primary">
                     <i class="fas fa-plus"></i>
                     Nueva Categoría
                 </button>
             </div>
             
-            <div class="grid md:grid-cols-3 gap-4">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         `;
         
         if (categorias.length === 0) {
             html += `
                 <div class="col-span-3 text-center py-12 glass-panel rounded-2xl">
-                    <i class="fas fa-tags text-4xl text-gray-600 mb-3"></i>
+                    <i class="fas fa-tags text-5xl text-gray-600 mb-4"></i>
                     <p class="text-gray-400">No hay categorías creadas</p>
                 </div>
             `;
         } else {
             categorias.forEach(c => {
                 html += `
-                    <div class="glass-card rounded-xl p-4">
-                        <div class="flex justify-between items-start">
+                    <div class="glass-card rounded-xl p-6 hover-lift">
+                        <div class="flex justify-between items-start mb-4">
                             <div>
-                                <h3 class="text-white font-medium">${c.nombre}</h3>
-                                <p class="text-gray-400 text-xs mt-1">${c.descripcion || 'Sin descripción'}</p>
-                                <p class="text-gray-500 text-xs font-mono mt-2">${c.slug}</p>
+                                <h3 class="text-white text-lg font-medium">${c.nombre}</h3>
+                                <p class="text-gray-400 text-sm mt-1">${c.descripcion || 'Sin descripción'}</p>
+                                <p class="text-gray-500 text-xs font-mono mt-3">/${c.slug}</p>
                             </div>
                             <div class="flex gap-2">
-                                <button onclick="editarCategoria(${c.id})" class="text-blue-400 hover:text-blue-300">
+                                <button onclick="editarCategoria(${c.id})" class="text-blue-400 hover:text-blue-300 transition-colors" title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button onclick="eliminarCategoria(${c.id})" class="text-red-400 hover:text-red-300">
+                                <button onclick="eliminarCategoria(${c.id})" class="text-red-400 hover:text-red-300 transition-colors" title="Eliminar">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
+                        </div>
+                        <div class="text-xs text-gray-500">
+                            <span class="badge badge-info">ID: ${c.id}</span>
                         </div>
                     </div>
                 `;
@@ -734,10 +1402,11 @@ async function cargarCategorias() {
         }
         
         html += '</div>';
-        contentArea.innerHTML = html;
+        contenido.innerHTML = html;
         
     } catch (error) {
         console.error('Error cargando categorías:', error);
+        mostrarMensaje('error', 'Error cargando categorías');
     }
 }
 
@@ -746,24 +1415,30 @@ async function cargarCategorias() {
 // ===========================================
 async function cargarControlStock() {
     try {
-        const productos = await db.sql(`SELECT id, nombre, sku, stock, stock_minimo FROM productos ORDER BY stock ASC`);
+        const productos = await db.sql(`
+            SELECT id, nombre, sku, stock, stock_minimo,
+                   (SELECT SUM(cantidad) FROM pedido_detalles WHERE producto_id = id) as vendidos
+            FROM productos 
+            ORDER BY stock ASC
+        `);
         
-        const contentArea = document.getElementById('content-area');
+        const contenido = document.getElementById('contenido-principal');
         
         let html = `
-            <h2 class="text-white text-xl font-light mb-6">Control de Stock</h2>
+            <h2 class="text-white text-xl font-light mb-6">Control de Inventario</h2>
             
             <div class="glass-panel rounded-2xl p-6">
-                <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead class="table-header">
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
                             <tr>
-                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Producto</th>
-                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">SKU</th>
-                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Stock Actual</th>
-                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Stock Mínimo</th>
-                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Estado</th>
-                                <th class="text-left py-3 px-4 text-gray-300 text-sm font-medium">Acción</th>
+                                <th>Producto</th>
+                                <th>SKU</th>
+                                <th>Stock Actual</th>
+                                <th>Stock Mínimo</th>
+                                <th>Vendidos</th>
+                                <th>Estado</th>
+                                <th>Acción</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -772,27 +1447,35 @@ async function cargarControlStock() {
         if (productos.length === 0) {
             html += `
                 <tr>
-                    <td colspan="6" class="text-center py-8 text-gray-400">
-                        No hay productos para mostrar
+                    <td colspan="7" class="text-center py-12 text-gray-400">
+                        <i class="fas fa-boxes text-4xl mb-3"></i>
+                        <p>No hay productos para mostrar</p>
                     </td>
                 </tr>
             `;
         } else {
             productos.forEach(p => {
-                const estado = p.stock <= 0 ? 'danger' : p.stock <= p.stock_minimo ? 'warning' : 'success';
-                const estadoTexto = p.stock <= 0 ? 'Agotado' : p.stock <= p.stock_minimo ? 'Stock Bajo' : 'Normal';
+                let estadoClass = 'badge-success';
+                let estadoTexto = 'Normal';
+                
+                if (p.stock <= 0) {
+                    estadoClass = 'badge-danger';
+                    estadoTexto = 'Agotado';
+                } else if (p.stock <= p.stock_minimo) {
+                    estadoClass = 'badge-warning';
+                    estadoTexto = 'Stock Bajo';
+                }
                 
                 html += `
-                    <tr class="table-row">
-                        <td class="py-4 px-4 text-white">${p.nombre}</td>
-                        <td class="py-4 px-4 text-gray-400 font-mono">${p.sku}</td>
-                        <td class="py-4 px-4 text-white font-bold">${p.stock}</td>
-                        <td class="py-4 px-4 text-gray-400">${p.stock_minimo}</td>
-                        <td class="py-4 px-4">
-                            <span class="badge-${estado} text-xs px-2 py-1 rounded-full">${estadoTexto}</span>
-                        </td>
-                        <td class="py-4 px-4">
-                            <button onclick="ajustarStock(${p.id})" class="text-blue-400 hover:text-blue-300">
+                    <tr>
+                        <td class="font-medium">${p.nombre}</td>
+                        <td class="font-mono text-gray-400">${p.sku}</td>
+                        <td class="font-bold ${p.stock <= p.stock_minimo ? 'text-yellow-400' : 'text-green-400'}">${p.stock}</td>
+                        <td class="text-gray-400">${p.stock_minimo}</td>
+                        <td class="text-gray-300">${p.vendidos || 0}</td>
+                        <td><span class="badge ${estadoClass}">${estadoTexto}</span></td>
+                        <td>
+                            <button onclick="abrirModalStock(${p.id}, '${p.nombre}', ${p.stock})" class="text-blue-400 hover:text-blue-300 transition-colors" title="Ajustar stock">
                                 <i class="fas fa-sliders-h"></i>
                             </button>
                         </td>
@@ -808,10 +1491,170 @@ async function cargarControlStock() {
             </div>
         `;
         
-        contentArea.innerHTML = html;
+        contenido.innerHTML = html;
         
     } catch (error) {
         console.error('Error cargando stock:', error);
+        mostrarMensaje('error', 'Error cargando control de stock');
+    }
+}
+
+// ===========================================
+// CARGAR STOCK BAJO
+// ===========================================
+async function cargarStockBajo() {
+    try {
+        const productos = await db.sql(`
+            SELECT * FROM productos 
+            WHERE stock <= stock_minimo AND stock > 0
+            ORDER BY stock ASC
+        `);
+        
+        const contenido = document.getElementById('contenido-principal');
+        
+        let html = `
+            <h2 class="text-white text-xl font-light mb-6">Productos con Stock Bajo</h2>
+            
+            <div class="glass-panel rounded-2xl p-6">
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>SKU</th>
+                                <th>Stock</th>
+                                <th>Mínimo</th>
+                                <th>Faltante</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+        `;
+        
+        if (productos.length === 0) {
+            html += `
+                <tr>
+                    <td colspan="6" class="text-center py-12 text-gray-400">
+                        <i class="fas fa-check-circle text-4xl text-green-400 mb-3"></i>
+                        <p>No hay productos con stock bajo</p>
+                    </td>
+                </tr>
+            `;
+        } else {
+            productos.forEach(p => {
+                const faltante = p.stock_minimo - p.stock;
+                html += `
+                    <tr>
+                        <td class="font-medium">${p.nombre}</td>
+                        <td class="font-mono text-gray-400">${p.sku}</td>
+                        <td class="text-yellow-400 font-bold">${p.stock}</td>
+                        <td class="text-gray-400">${p.stock_minimo}</td>
+                        <td class="text-red-400 font-medium">${faltante}</td>
+                        <td>
+                            <button onclick="abrirModalStock(${p.id}, '${p.nombre}', ${p.stock})" class="btn-primary px-3 py-1 rounded-lg text-xs">
+                                <i class="fas fa-plus mr-1"></i>
+                                Reponer stock
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+        
+        html += `
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        `;
+        
+        contenido.innerHTML = html;
+        
+    } catch (error) {
+        console.error('Error cargando stock bajo:', error);
+        mostrarMensaje('error', 'Error cargando productos con stock bajo');
+    }
+}
+
+// ===========================================
+// CARGAR MÁS VENDIDOS
+// ===========================================
+async function cargarMasVendidos() {
+    try {
+        const productos = await db.sql(`
+            SELECT p.id, p.nombre, p.sku, p.precio, p.stock,
+                   COUNT(pd.id) as total_pedidos,
+                   SUM(pd.cantidad) as total_vendidos,
+                   SUM(pd.cantidad * pd.precio_unitario) as ingresos
+            FROM productos p
+            LEFT JOIN pedido_detalles pd ON p.id = pd.producto_id
+            GROUP BY p.id
+            HAVING total_vendidos > 0
+            ORDER BY total_vendidos DESC
+            LIMIT 10
+        `);
+        
+        const contenido = document.getElementById('contenido-principal');
+        
+        let html = `
+            <h2 class="text-white text-xl font-light mb-6">Productos Más Vendidos</h2>
+            
+            <div class="glass-panel rounded-2xl p-6">
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Producto</th>
+                                <th>SKU</th>
+                                <th>Precio</th>
+                                <th>Vendidos</th>
+                                <th>Pedidos</th>
+                                <th>Ingresos</th>
+                                <th>Stock</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+        `;
+        
+        if (productos.length === 0) {
+            html += `
+                <tr>
+                    <td colspan="8" class="text-center py-12 text-gray-400">
+                        <i class="fas fa-chart-line text-4xl mb-3"></i>
+                        <p>No hay ventas registradas</p>
+                    </td>
+                </tr>
+            `;
+        } else {
+            productos.forEach((p, index) => {
+                html += `
+                    <tr>
+                        <td class="font-mono text-gray-400">${index + 1}</td>
+                        <td class="font-medium">${p.nombre}</td>
+                        <td class="font-mono text-gray-400">${p.sku}</td>
+                        <td class="text-blue-400 font-medium">$${parseFloat(p.precio).toFixed(2)}</td>
+                        <td class="text-green-400 font-bold">${p.total_vendidos || 0}</td>
+                        <td class="text-gray-300">${p.total_pedidos || 0}</td>
+                        <td class="text-white font-medium">$${parseFloat(p.ingresos || 0).toFixed(2)}</td>
+                        <td class="${p.stock <= 5 ? 'text-yellow-400' : 'text-green-400'}">${p.stock}</td>
+                    </tr>
+                `;
+            });
+        }
+        
+        html += `
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        `;
+        
+        contenido.innerHTML = html;
+        
+    } catch (error) {
+        console.error('Error cargando más vendidos:', error);
+        mostrarMensaje('error', 'Error cargando productos más vendidos');
     }
 }
 
@@ -819,11 +1662,23 @@ async function cargarControlStock() {
 // FUNCIONES DE PRODUCTOS
 // ===========================================
 window.abrirModalNuevo = function() {
-    document.getElementById('modalTitle').textContent = 'Nuevo Producto';
-    document.getElementById('productForm').reset();
-    document.getElementById('productId').value = '';
-    cargarCategoriasSelect();
-    document.getElementById('productModal').classList.remove('hidden');
+    editProductId = null;
+    document.getElementById('modal-titulo').textContent = 'Nuevo Producto';
+    document.getElementById('form-producto').reset();
+    document.getElementById('producto-id').value = '';
+    
+    // Cargar categorías en el select
+    const select = document.getElementById('producto-categoria');
+    select.innerHTML = '<option value="" class="bg-gray-900">Seleccionar categoría</option>';
+    categoriasGlobal.forEach(c => {
+        const option = document.createElement('option');
+        option.value = c.nombre;
+        option.textContent = c.nombre;
+        option.className = 'bg-gray-900';
+        select.appendChild(option);
+    });
+    
+    document.getElementById('modal-producto').classList.add('active');
 };
 
 window.editarProducto = async function(id) {
@@ -832,20 +1687,37 @@ window.editarProducto = async function(id) {
         if (productos.length === 0) return;
         
         const p = productos[0];
+        editProductId = id;
         
-        document.getElementById('modalTitle').textContent = 'Editar Producto';
-        document.getElementById('productId').value = id;
-        document.getElementById('productName').value = p.nombre || '';
-        document.getElementById('productSku').value = p.sku || '';
-        document.getElementById('productPrice').value = p.precio || '';
-        document.getElementById('productStock').value = p.stock || '';
-        document.getElementById('productShortDesc').value = p.descripcion_corta || '';
-        document.getElementById('productStatus').value = p.estado || 'activo';
-        document.getElementById('productFeatured').checked = p.destacado === 1;
+        document.getElementById('modal-titulo').textContent = 'Editar Producto';
+        document.getElementById('producto-id').value = id;
+        document.getElementById('producto-nombre').value = p.nombre || '';
+        document.getElementById('producto-sku').value = p.sku || '';
+        document.getElementById('producto-subcategoria').value = '';
+        document.getElementById('producto-precio').value = p.precio || '';
+        document.getElementById('producto-precio-comp').value = p.precio_comparacion || '';
+        document.getElementById('producto-stock').value = p.stock || '';
+        document.getElementById('producto-stock-min').value = p.stock_minimo || 5;
+        document.getElementById('producto-desc-corta').value = p.descripcion_corta || '';
+        document.getElementById('producto-desc-larga').value = p.descripcion_larga || '';
+        document.getElementById('producto-estado').value = p.estado || 'activo';
+        document.getElementById('producto-destacado').checked = p.destacado === 1;
         
-        await cargarCategoriasSelect(p.categoria);
+        // Cargar categorías y seleccionar la actual
+        const select = document.getElementById('producto-categoria');
+        select.innerHTML = '<option value="" class="bg-gray-900">Seleccionar categoría</option>';
+        categoriasGlobal.forEach(c => {
+            const option = document.createElement('option');
+            option.value = c.nombre;
+            option.textContent = c.nombre;
+            option.className = 'bg-gray-900';
+            if (c.nombre === p.categoria) {
+                option.selected = true;
+            }
+            select.appendChild(option);
+        });
         
-        document.getElementById('productModal').classList.remove('hidden');
+        document.getElementById('modal-producto').classList.add('active');
         
     } catch (error) {
         console.error('Error cargando producto:', error);
@@ -853,13 +1725,59 @@ window.editarProducto = async function(id) {
     }
 };
 
+window.duplicarProducto = async function(id) {
+    try {
+        const productos = await db.sql(`SELECT * FROM productos WHERE id = ${id}`);
+        if (productos.length === 0) return;
+        
+        const p = productos[0];
+        editProductId = null;
+        
+        document.getElementById('modal-titulo').textContent = 'Duplicar Producto';
+        document.getElementById('producto-id').value = '';
+        document.getElementById('producto-nombre').value = p.nombre + ' (copia)';
+        document.getElementById('producto-sku').value = p.sku + '-COPY';
+        document.getElementById('producto-subcategoria').value = '';
+        document.getElementById('producto-precio').value = p.precio || '';
+        document.getElementById('producto-precio-comp').value = p.precio_comparacion || '';
+        document.getElementById('producto-stock').value = p.stock || '';
+        document.getElementById('producto-stock-min').value = p.stock_minimo || 5;
+        document.getElementById('producto-desc-corta').value = p.descripcion_corta || '';
+        document.getElementById('producto-desc-larga').value = p.descripcion_larga || '';
+        document.getElementById('producto-estado').value = p.estado || 'activo';
+        document.getElementById('producto-destacado').checked = p.destacado === 1;
+        
+        // Cargar categorías
+        const select = document.getElementById('producto-categoria');
+        select.innerHTML = '<option value="" class="bg-gray-900">Seleccionar categoría</option>';
+        categoriasGlobal.forEach(c => {
+            const option = document.createElement('option');
+            option.value = c.nombre;
+            option.textContent = c.nombre;
+            option.className = 'bg-gray-900';
+            if (c.nombre === p.categoria) {
+                option.selected = true;
+            }
+            select.appendChild(option);
+        });
+        
+        document.getElementById('modal-producto').classList.add('active');
+        
+    } catch (error) {
+        console.error('Error duplicando producto:', error);
+        mostrarMensaje('error', 'Error duplicando producto');
+    }
+};
+
 window.eliminarProducto = async function(id) {
-    if (confirm('¿Estás seguro de eliminar este producto?')) {
+    if (confirm('¿Estás seguro de eliminar este producto?\nEsta acción no se puede deshacer.')) {
         try {
             await db.sql(`DELETE FROM productos WHERE id = ${id}`);
             mostrarMensaje('success', 'Producto eliminado correctamente');
-            mostrarSeccion('lista');
+            await actualizarContadorStockBajo();
+            await cambiarSeccion(seccionActual);
         } catch (error) {
+            console.error('Error eliminando producto:', error);
             mostrarMensaje('error', 'Error eliminando producto');
         }
     }
@@ -868,25 +1786,32 @@ window.eliminarProducto = async function(id) {
 window.guardarProductoRapido = async function(e) {
     e.preventDefault();
     
-    const nombre = document.getElementById('quickName').value;
-    const sku = document.getElementById('quickSku').value;
-    const categoria = document.getElementById('quickCategory').value;
-    const precio = document.getElementById('quickPrice').value;
-    const stock = document.getElementById('quickStock').value;
-    const desc = document.getElementById('quickDesc').value;
+    const nombre = document.getElementById('rapido-nombre').value;
+    const sku = document.getElementById('rapido-sku').value;
+    const categoria = document.getElementById('rapido-categoria').value;
+    const precio = document.getElementById('rapido-precio').value;
+    const stock = document.getElementById('rapido-stock').value;
+    const desc = document.getElementById('rapido-desc').value || '';
+    const destacado = document.getElementById('rapido-destacado').checked ? 1 : 0;
+    
+    if (!nombre || !sku || !categoria || !precio || !stock) {
+        mostrarMensaje('error', 'Por favor completa todos los campos obligatorios');
+        return;
+    }
     
     try {
         await db.sql(`
-            INSERT INTO productos (nombre, sku, categoria, precio, stock, descripcion_corta, estado)
-            VALUES ('${nombre}', '${sku}', '${categoria}', ${precio}, ${stock}, '${desc}', 'activo')
+            INSERT INTO productos (nombre, sku, categoria, precio, stock, descripcion_corta, destacado, estado)
+            VALUES ('${nombre}', '${sku}', '${categoria}', ${precio}, ${stock}, '${desc}', ${destacado}, 'activo')
         `);
         
         mostrarMensaje('success', 'Producto creado correctamente');
-        mostrarSeccion('lista');
+        await actualizarContadorStockBajo();
+        await cambiarSeccion('lista');
         
     } catch (error) {
         console.error('Error guardando producto:', error);
-        mostrarMensaje('error', 'Error al guardar producto');
+        mostrarMensaje('error', 'Error al guardar producto: ' + error.message);
     }
 };
 
@@ -894,10 +1819,11 @@ window.guardarProductoRapido = async function(e) {
 // FUNCIONES DE CATEGORÍAS
 // ===========================================
 window.abrirModalCategoria = function() {
-    document.getElementById('categoryModalTitle').textContent = 'Nueva Categoría';
-    document.getElementById('categoryForm').reset();
-    document.getElementById('categoryId').value = '';
-    document.getElementById('categoryModal').classList.remove('hidden');
+    editCategoryId = null;
+    document.getElementById('modal-categoria-titulo').textContent = 'Nueva Categoría';
+    document.getElementById('form-categoria').reset();
+    document.getElementById('categoria-id').value = '';
+    document.getElementById('modal-categoria').classList.add('active');
 };
 
 window.editarCategoria = async function(id) {
@@ -906,133 +1832,148 @@ window.editarCategoria = async function(id) {
         if (categorias.length === 0) return;
         
         const c = categorias[0];
+        editCategoryId = id;
         
-        document.getElementById('categoryModalTitle').textContent = 'Editar Categoría';
-        document.getElementById('categoryId').value = id;
-        document.getElementById('categoryName').value = c.nombre || '';
-        document.getElementById('categorySlug').value = c.slug || '';
-        document.getElementById('categoryDescription').value = c.descripcion || '';
+        document.getElementById('modal-categoria-titulo').textContent = 'Editar Categoría';
+        document.getElementById('categoria-id').value = id;
+        document.getElementById('categoria-nombre').value = c.nombre || '';
+        document.getElementById('categoria-slug').value = c.slug || '';
+        document.getElementById('categoria-descripcion').value = c.descripcion || '';
         
-        document.getElementById('categoryModal').classList.remove('hidden');
+        document.getElementById('modal-categoria').classList.add('active');
         
     } catch (error) {
         console.error('Error cargando categoría:', error);
+        mostrarMensaje('error', 'Error cargando categoría');
     }
 };
 
 window.eliminarCategoria = async function(id) {
-    if (confirm('¿Estás seguro de eliminar esta categoría?')) {
+    if (confirm('¿Estás seguro de eliminar esta categoría?\nLos productos asociados quedarán sin categoría.')) {
         try {
             await db.sql(`DELETE FROM categorias WHERE id = ${id}`);
             mostrarMensaje('success', 'Categoría eliminada correctamente');
-            mostrarSeccion('categorias');
+            await cargarCategoriasGlobal();
+            await cambiarSeccion('categorias');
         } catch (error) {
+            console.error('Error eliminando categoría:', error);
             mostrarMensaje('error', 'Error eliminando categoría');
         }
     }
 };
 
 // ===========================================
-// FUNCIONES AUXILIARES
+// FUNCIONES DE STOCK
+// ===========================================
+window.abrirModalStock = function(id, nombre, stockActual) {
+    stockProductId = id;
+    document.getElementById('stock-producto-id').value = id;
+    document.getElementById('stock-producto-nombre').textContent = nombre;
+    document.getElementById('stock-actual').textContent = stockActual;
+    document.getElementById('stock-nuevo').value = stockActual;
+    document.getElementById('modal-stock').classList.add('active');
+};
+
+window.cerrarModalStock = function() {
+    document.getElementById('modal-stock').classList.remove('active');
+};
+
+// ===========================================
+// CERRAR MODALES
 // ===========================================
 window.cerrarModal = function() {
-    document.getElementById('productModal').classList.add('hidden');
+    document.getElementById('modal-producto').classList.remove('active');
 };
 
-window.cerrarCategoryModal = function() {
-    document.getElementById('categoryModal').classList.add('hidden');
+window.cerrarModalCategoria = function() {
+    document.getElementById('modal-categoria').classList.remove('active');
 };
 
-window.ajustarStock = function(id) {
-    const nuevaCantidad = prompt('Ingresar nueva cantidad de stock:');
-    if (nuevaCantidad !== null && !isNaN(nuevaCantidad) && nuevaCantidad >= 0) {
-        (async () => {
-            try {
-                await db.sql(`UPDATE productos SET stock = ${nuevaCantidad} WHERE id = ${id}`);
-                mostrarMensaje('success', 'Stock actualizado correctamente');
-                mostrarSeccion(currentSection);
-            } catch (error) {
-                mostrarMensaje('error', 'Error actualizando stock');
-            }
-        })();
-    }
-};
-
-async function cargarCategoriasSelect(selected = null) {
-    const categorias = await db.sql(`SELECT * FROM categorias ORDER BY nombre`);
-    const select = document.getElementById('productCategory');
-    select.innerHTML = '<option value="" class="bg-gray-900">Seleccionar categoría</option>';
+// ===========================================
+// BUSCAR EN TABLA
+// ===========================================
+function buscarEnTabla(termino) {
+    const rows = document.querySelectorAll('.table tbody tr');
+    const term = termino.toLowerCase();
     
-    categorias.forEach(c => {
-        const option = document.createElement('option');
-        option.value = c.nombre;
-        option.textContent = c.nombre;
-        option.className = 'bg-gray-900';
-        if (selected && c.nombre === selected) {
-            option.selected = true;
-        }
-        select.appendChild(option);
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(term) ? '' : 'none';
     });
 }
 
 // ===========================================
 // GUARDAR PRODUCTO DEL MODAL
 // ===========================================
-document.getElementById('productForm')?.addEventListener('submit', async function(e) {
+document.getElementById('form-producto')?.addEventListener('submit', async function(e) {
     e.preventDefault();
     
-    const id = document.getElementById('productId').value;
-    const nombre = document.getElementById('productName').value;
-    const sku = document.getElementById('productSku').value;
-    const categoria = document.getElementById('productCategory').value;
-    const precio = document.getElementById('productPrice').value;
-    const stock = document.getElementById('productStock').value;
-    const shortDesc = document.getElementById('productShortDesc').value || '';
-    const estado = document.getElementById('productStatus').value;
-    const destacado = document.getElementById('productFeatured').checked ? 1 : 0;
+    const id = document.getElementById('producto-id').value;
+    const nombre = document.getElementById('producto-nombre').value;
+    const sku = document.getElementById('producto-sku').value;
+    const categoria = document.getElementById('producto-categoria').value;
+    const subcategoria = document.getElementById('producto-subcategoria').value;
+    const precio = document.getElementById('producto-precio').value;
+    const precioComp = document.getElementById('producto-precio-comp').value;
+    const stock = document.getElementById('producto-stock').value;
+    const stockMin = document.getElementById('producto-stock-min').value || 5;
+    const descCorta = document.getElementById('producto-desc-corta').value || '';
+    const descLarga = document.getElementById('producto-desc-larga').value || '';
+    const estado = document.getElementById('producto-estado').value;
+    const destacado = document.getElementById('producto-destacado').checked ? 1 : 0;
     
     try {
         if (id) {
+            // Actualizar producto existente
             await db.sql(`
                 UPDATE productos 
                 SET nombre = '${nombre}', 
                     sku = '${sku}', 
                     categoria = '${categoria}', 
                     precio = ${precio}, 
+                    precio_comparacion = ${precioComp || 'NULL'}, 
                     stock = ${stock}, 
-                    descripcion_corta = '${shortDesc}', 
+                    stock_minimo = ${stockMin}, 
+                    descripcion_corta = '${descCorta}', 
+                    descripcion_larga = '${descLarga}', 
                     estado = '${estado}', 
                     destacado = ${destacado}
                 WHERE id = ${id}
             `);
             mostrarMensaje('success', 'Producto actualizado correctamente');
         } else {
+            // Insertar nuevo producto
             await db.sql(`
-                INSERT INTO productos (nombre, sku, categoria, precio, stock, descripcion_corta, estado, destacado)
-                VALUES ('${nombre}', '${sku}', '${categoria}', ${precio}, ${stock}, '${shortDesc}', '${estado}', ${destacado})
+                INSERT INTO productos 
+                (nombre, sku, categoria, precio, precio_comparacion, stock, stock_minimo, 
+                 descripcion_corta, descripcion_larga, estado, destacado)
+                VALUES ('${nombre}', '${sku}', '${categoria}', ${precio}, ${precioComp || 'NULL'}, 
+                        ${stock}, ${stockMin}, '${descCorta}', '${descLarga}', '${estado}', ${destacado})
             `);
             mostrarMensaje('success', 'Producto creado correctamente');
         }
         
         cerrarModal();
-        mostrarSeccion('lista');
+        await actualizarContadorStockBajo();
+        await cargarCategoriasGlobal();
+        await cambiarSeccion('lista');
         
     } catch (error) {
         console.error('Error guardando producto:', error);
-        mostrarMensaje('error', 'Error al guardar producto');
+        mostrarMensaje('error', 'Error al guardar producto: ' + error.message);
     }
 });
 
 // ===========================================
 // GUARDAR CATEGORÍA
 // ===========================================
-document.getElementById('categoryForm')?.addEventListener('submit', async function(e) {
+document.getElementById('form-categoria')?.addEventListener('submit', async function(e) {
     e.preventDefault();
     
-    const id = document.getElementById('categoryId').value;
-    const nombre = document.getElementById('categoryName').value;
-    const slug = document.getElementById('categorySlug').value;
-    const descripcion = document.getElementById('categoryDescription').value || '';
+    const id = document.getElementById('categoria-id').value;
+    const nombre = document.getElementById('categoria-nombre').value;
+    const slug = document.getElementById('categoria-slug').value;
+    const descripcion = document.getElementById('categoria-descripcion').value || '';
     
     try {
         if (id) {
@@ -1050,43 +1991,49 @@ document.getElementById('categoryForm')?.addEventListener('submit', async functi
             mostrarMensaje('success', 'Categoría creada correctamente');
         }
         
-        cerrarCategoryModal();
-        mostrarSeccion('categorias');
+        cerrarModalCategoria();
+        await cargarCategoriasGlobal();
+        await cambiarSeccion('categorias');
         
     } catch (error) {
         console.error('Error guardando categoría:', error);
-        mostrarMensaje('error', 'Error al guardar categoría');
+        mostrarMensaje('error', 'Error al guardar categoría: ' + error.message);
     }
 });
 
 // ===========================================
-// INICIALIZACIÓN
+// GUARDAR AJUSTE DE STOCK
 // ===========================================
-document.addEventListener('DOMContentLoaded', async function() {
-    console.log('🚀 Inicializando panel de productos...');
+document.getElementById('form-stock')?.addEventListener('submit', async function(e) {
+    e.preventDefault();
     
-    verificarAuth();
-    await conectarDB();
-    await mostrarSeccion('lista');
+    const id = document.getElementById('stock-producto-id').value;
+    const nuevoStock = document.getElementById('stock-nuevo').value;
     
-    // Actualizar fecha
-    const date = new Date();
-    document.getElementById('current-date').textContent = date.toLocaleDateString('es-ES', { 
-        weekday: 'short', 
-        day: 'numeric', 
-        month: 'short' 
-    });
-    
-    // Búsqueda en lista de productos
-    document.getElementById('search-input')?.addEventListener('input', function(e) {
-        const term = e.target.value.toLowerCase();
-        const rows = document.querySelectorAll('.table-row');
-        rows.forEach(row => {
-            const text = row.textContent.toLowerCase();
-            row.style.display = text.includes(term) ? '' : 'none';
-        });
-    });
+    try {
+        await db.sql(`UPDATE productos SET stock = ${nuevoStock} WHERE id = ${id}`);
+        mostrarMensaje('success', 'Stock actualizado correctamente');
+        cerrarModalStock();
+        await actualizarContadorStockBajo();
+        await cambiarSeccion(seccionActual);
+    } catch (error) {
+        console.error('Error actualizando stock:', error);
+        mostrarMensaje('error', 'Error actualizando stock');
+    }
 });
+
+// ===========================================
+// FUNCIONES DE NAVEGACIÓN
+// ===========================================
+window.irAConfiguracion = function() {
+    window.location.href = 'admin.html';
+};
+
+window.cerrarSesion = function() {
+    localStorage.removeItem('user');
+    sessionStorage.removeItem('user');
+    window.location.href = 'login.html';
+};
 </script>
 </body>
 </html>
