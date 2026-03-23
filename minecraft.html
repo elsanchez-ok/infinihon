@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfiniHon - Servicios Minecraft Premium</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Minecraft&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .font-minecraft {
+            font-family: 'Minecraft', 'JetBrains Mono', monospace;
+        }
+        
+        body {
+            background-color: #0a0c10;
+            background-image: radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.15) 0%, transparent 50%),
+                              radial-gradient(circle at 80% 70%, rgba(6, 182, 212, 0.15) 0%, transparent 50%),
+                              url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32"><rect width="16" height="16" fill="rgba(59,130,246,0.03)"/><rect x="16" y="16" width="16" height="16" fill="rgba(6,182,212,0.03)"/></svg>');
+            background-repeat: repeat;
+            min-height: 100vh;
+        }
+        
+        /* Glassmorphism */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(59, 130, 246, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            border-color: rgba(59, 130, 246, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(59, 130, 246, 0.2);
+        }
+        
+        /* Efecto bloque Minecraft */
+        .minecraft-block {
+            position: relative;
+            background: linear-gradient(135deg, #2d2d2d, #3a3a3a);
+            border: 2px solid #4a4a4a;
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.1), 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .minecraft-block::before {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            right: 4px;
+            bottom: 4px;
+            background: linear-gradient(135deg, #3a3a3a, #2a2a2a);
+            pointer-events: none;
+        }
+        
+        /* Botones */
+        .btn-primary {
+            background: linear-gradient(135deg, #1e40af, #3b82f6, #22d3ee);
+            background-size: 200% 200%;
+            transition: all 0.3s ease;
+            animation: gradientShift 3s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.6);
+            transform: translateY(-2px);
+        }
+        
+        /* Planes */
+        .plan-card {
+            transition: all 0.3s ease;
+        }
+        
+        .plan-card:hover {
+            transform: translateY(-8px);
+        }
+        
+        .plan-popular {
+            border: 2px solid #3b82f6;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .plan-popular::before {
+            content: 'MÁS POPULAR';
+            position: absolute;
+            top: 12px;
+            right: -30px;
+            background: linear-gradient(90deg, #1e40af, #3b82f6);
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.2rem 2rem;
+            transform: rotate(45deg);
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        
+        /* Iconos de Minecraft */
+        .minecraft-icon {
+            filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.5));
+        }
+        
+        /* Animaciones */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .float-animation {
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(59, 130, 246, 0.3);
+            border-radius: 4px;
+        }
+        
+        /* Cursor personalizado */
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background: #3b82f6;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s;
+        }
+        
+        .cursor-ring {
+            width: 30px;
+            height: 30px;
+            border: 2px solid rgba(59, 130, 246, 0.5);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transition: all 0.2s ease;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<nav class="sticky top-0 z-50 border-b border-white/5 bg-[#020617]/80 backdrop-blur-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
+                    <span class="text-black font-bold text-xl">I</span>
+                </div>
+                <div>
+                    <span class="text-white font-light text-xl tracking-tight">INFINI<span class="font-bold text-blue-400">HON</span></span>
+                    <span class="ml-2 text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full border border-blue-500/30">MINECRAFT</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-6">
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Inicio</a>
+                    <a href="servicios.html" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Servicios</a>
+                    <a href="tienda.html" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Tienda</a>
+                    <a href="soporte.html" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Soporte</a>
+                </div>
+                <a href="contacto.html" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all">
+                    Contratar
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-blue-900/20 to-transparent"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div class="text-center">
+            <div class="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-4 py-2 mb-6">
+                <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                <span class="text-green-400 text-sm font-mono">SERVIDORES ACTIVOS: 1,247</span>
+            </div>
+            <h1 class="text-5xl lg:text-7xl font-bold text-white mb-6">
+                Servidores Minecraft
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 block mt-2">
+                    Potencia Industrial
+                </span>
+            </h1>
+            <p class="text-gray-400 text-lg max-w-2xl mx-auto mb-8">
+                Infraestructura de grado industrial para servidores Minecraft de alto rendimiento. 
+                Latencia ultra baja, protección DDoS avanzada y uptime garantizado.
+            </p>
+            <div class="flex flex-wrap gap-4 justify-center">
+                <a href="#planes" class="btn-primary px-8 py-4 rounded-xl text-white font-medium text-lg flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 7 22 17 12 22 2 17 2 7 12 2"></polygon><line x1="12" y1="22" x2="12" y2="12"></line><line x1="22" y1="7" x2="12" y2="12"></line><line x1="2" y1="7" x2="12" y2="12"></line></svg>
+                    Ver Planes
+                </a>
+                <a href="#demo" class="btn-secondary px-8 py-4 rounded-xl text-white font-medium text-lg flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    Demo Gratis
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Métricas de rendimiento -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div class="glass-card rounded-2xl p-6 text-center">
+            <div class="text-3xl text-blue-400 mb-2">⚡</div>
+            <div class="text-2xl font-bold text-white">99.99%</div>
+            <div class="text-gray-400 text-sm">Uptime Garantizado</div>
+        </div>
+        <div class="glass-card rounded-2xl p-6 text-center">
+            <div class="text-3xl text-blue-400 mb-2">🎮</div>
+            <div class="text-2xl font-bold text-white">0ms</div>
+            <div class="text-gray-400 text-sm">Latencia Óptima</div>
+        </div>
+        <div class="glass-card rounded-2xl p-6 text-center">
+            <div class="text-3xl text-blue-400 mb-2">🛡️</div>
+            <div class="text-2xl font-bold text-white">1.2 Tbps</div>
+            <div class="text-gray-400 text-sm">Protección DDoS</div>
+        </div>
+        <div class="glass-card rounded-2xl p-6 text-center">
+            <div class="text-3xl text-blue-400 mb-2">💾</div>
+            <div class="text-2xl font-bold text-white">NVMe</div>
+            <div class="text-gray-400 text-sm">Almacenamiento Ultra Rápido</div>
+        </div>
+    </div>
+</section>
+
+<!-- Planes de Servicio -->
+<section id="planes" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-light text-white mb-4">Planes para tu Servidor</h2>
+        <p class="text-gray-400 max-w-2xl mx-auto">Elige el plan perfecto para tu comunidad. Todos incluyen soporte 24/7 y panel de control.</p>
+    </div>
+    
+    <div class="grid lg:grid-cols-4 gap-6">
+        <!-- Plan Básico -->
+        <div class="plan-card glass-card rounded-2xl p-6 text-center">
+            <div class="text-4xl mb-4">🌿</div>
+            <h3 class="text-xl font-bold text-white mb-2">Básico</h3>
+            <p class="text-gray-400 text-sm mb-4">Para servidores pequeños</p>
+            <div class="text-3xl font-bold text-white mb-4">$9.99<span class="text-sm text-gray-400">/mes</span></div>
+            <ul class="space-y-3 text-sm text-gray-300 mb-6">
+                <li>✅ 2GB RAM Dedicada</li>
+                <li>✅ 20 jugadores simultáneos</li>
+                <li>✅ 50GB SSD NVMe</li>
+                <li>✅ Protección DDoS básica</li>
+                <li>✅ Panel Pterodactyl</li>
+            </ul>
+            <a href="#contratar" class="btn-secondary block py-3 rounded-xl text-white text-sm font-medium">Contratar</a>
+        </div>
+        
+        <!-- Plan Profesional -->
+        <div class="plan-card glass-card rounded-2xl p-6 text-center plan-popular">
+            <div class="text-4xl mb-4">⚡</div>
+            <h3 class="text-xl font-bold text-white mb-2">Profesional</h3>
+            <p class="text-gray-400 text-sm mb-4">Ideal para comunidades medianas</p>
+            <div class="text-3xl font-bold text-white mb-4">$24.99<span class="text-sm text-gray-400">/mes</span></div>
+            <ul class="space-y-3 text-sm text-gray-300 mb-6">
+                <li>✅ 6GB RAM Dedicada</li>
+                <li>✅ 60 jugadores simultáneos</li>
+                <li>✅ 150GB SSD NVMe</li>
+                <li>✅ Protección DDoS avanzada</li>
+                <li>✅ Panel + FTP acceso</li>
+                <li>✅ Copias de seguridad diarias</li>
+            </ul>
+            <a href="#contratar" class="btn-primary block py-3 rounded-xl text-white text-sm font-medium">Contratar</a>
+        </div>
+        
+        <!-- Plan Empresarial -->
+        <div class="plan-card glass-card rounded-2xl p-6 text-center">
+            <div class="text-4xl mb-4">🏆</div>
+            <h3 class="text-xl font-bold text-white mb-2">Empresarial</h3>
+            <p class="text-gray-400 text-sm mb-4">Para grandes comunidades</p>
+            <div class="text-3xl font-bold text-white mb-4">$49.99<span class="text-sm text-gray-400">/mes</span></div>
+            <ul class="space-y-3 text-sm text-gray-300 mb-6">
+                <li>✅ 12GB RAM Dedicada</li>
+                <li>✅ 120 jugadores simultáneos</li>
+                <li>✅ 300GB SSD NVMe</li>
+                <li>✅ Protección DDoS empresarial</li>
+                <li>✅ CPU dedicado (2 núcleos)</li>
+                <li>✅ Soporte prioritario 24/7</li>
+            </ul>
+            <a href="#contratar" class="btn-secondary block py-3 rounded-xl text-white text-sm font-medium">Contratar</a>
+        </div>
+        
+        <!-- Plan Ultra -->
+        <div class="plan-card glass-card rounded-2xl p-6 text-center">
+            <div class="text-4xl mb-4">👑</div>
+            <h3 class="text-xl font-bold text-white mb-2">Ultra</h3>
+            <p class="text-gray-400 text-sm mb-4">Máximo rendimiento</p>
+            <div class="text-3xl font-bold text-white mb-4">$99.99<span class="text-sm text-gray-400">/mes</span></div>
+            <ul class="space-y-3 text-sm text-gray-300 mb-6">
+                <li>✅ 24GB RAM Dedicada</li>
+                <li>✅ 250+ jugadores simultáneos</li>
+                <li>✅ 500GB SSD NVMe</li>
+                <li>✅ Protección DDoS ilimitada</li>
+                <li>✅ CPU dedicado (4 núcleos)</li>
+                <li>✅ Soporte VIP + asesor técnico</li>
+                <li>✅ Servidor dedicado</li>
+            </ul>
+            <a href="#contratar" class="btn-secondary block py-3 rounded-xl text-white text-sm font-medium">Contratar</a>
+        </div>
+    </div>
+</section>
+
+<!-- Características Destacadas -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="glass-panel rounded-3xl p-12">
+        <div class="grid md:grid-cols-2 gap-12">
+            <div>
+                <h2 class="text-3xl font-light text-white mb-6">¿Por qué elegir InfiniHon para tu servidor?</h2>
+                <div class="space-y-4">
+                    <div class="flex gap-3">
+                        <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">⚡</div>
+                        <div>
+                            <h3 class="text-white font-medium">Hardware de última generación</h3>
+                            <p class="text-gray-400 text-sm">Procesadores AMD EPYC / Intel Xeon, RAM DDR5 ECC, almacenamiento NVMe</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">🌎</div>
+                        <div>
+                            <h3 class="text-white font-medium">Ubicación global</h3>
+                            <p class="text-gray-400 text-sm">Data centers en Norteamérica, Europa, Asia y Latinoamérica</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">🎮</div>
+                        <div>
+                            <h3 class="text-white font-medium">Optimización Minecraft</h3>
+                            <p class="text-gray-400 text-sm">Configuración especializada para Paper, Purpur, Forge y Fabric</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">🛡️</div>
+                        <div>
+                            <h3 class="text-white font-medium">Seguridad enterprise</h3>
+                            <p class="text-gray-400 text-sm">Protección DDoS avanzada, backups automáticos, firewall personalizable</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-card rounded-2xl p-8">
+                <h3 class="text-white text-xl font-light mb-4">Testimonio de cliente</h3>
+                <div class="flex gap-4 mb-4">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center">
+                        <span class="text-white text-xl">🎮</span>
+                    </div>
+                    <div>
+                        <p class="text-white font-medium">CraftLand Network</p>
+                        <p class="text-gray-400 text-sm">+500 jugadores diarios</p>
+                    </div>
+                </div>
+                <p class="text-gray-300 text-sm leading-relaxed italic">
+                    "Desde que migramos a InfiniHon, la experiencia de nuestros jugadores mejoró drásticamente. Latencia mínima, servidores estables y un soporte técnico excepcional. ¡100% recomendados!"
+                </p>
+                <div class="mt-4 flex gap-1">
+                    <span class="text-yellow-400">★★★★★</span>
+                    <span class="text-gray-400 text-sm">(5.0)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Demo Gratis -->
+<section id="demo" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="glass-panel rounded-3xl p-12 text-center">
+        <div class="inline-flex items-center gap-2 bg-green-500/10 border border-green-500/20 rounded-full px-4 py-2 mb-6">
+            <span class="text-green-400 text-sm">🎮 OFERTA LIMITADA</span>
+        </div>
+        <h2 class="text-4xl font-light text-white mb-4">Prueba 7 días gratis</h2>
+        <p class="text-gray-400 max-w-2xl mx-auto mb-8">
+            Sin compromiso, sin tarjeta de crédito. Prueba nuestro servicio y experimenta la potencia industrial.
+        </p>
+        <form class="flex flex-wrap gap-4 justify-center max-w-2xl mx-auto">
+            <input type="email" placeholder="Tu email corporativo" class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500">
+            <input type="text" placeholder="Nombre de tu servidor" class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500">
+            <button class="btn-primary px-8 py-3 rounded-xl text-white font-medium">
+                Solicitar Demo
+            </button>
+        </form>
+        <p class="text-xs text-gray-500 mt-4">* Incluye servidor de prueba con 4GB RAM por 7 días</p>
+    </div>
+</section>
+
+<!-- Datacenters -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="text-center mb-12">
+        <h2 class="text-3xl font-light text-white mb-4">Ubicaciones Globales</h2>
+        <p class="text-gray-400">Elige la región más cercana a tus jugadores</p>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="glass-card rounded-xl p-4 text-center">
+            <span class="text-2xl mb-2 block">🇺🇸</span>
+            <span class="text-white text-sm">Norteamérica</span>
+            <span class="text-gray-500 text-xs block">Virginia, California</span>
+        </div>
+        <div class="glass-card rounded-xl p-4 text-center">
+            <span class="text-2xl mb-2 block">🇪🇺</span>
+            <span class="text-white text-sm">Europa</span>
+            <span class="text-gray-500 text-xs block">Francfort, Londres</span>
+        </div>
+        <div class="glass-card rounded-xl p-4 text-center">
+            <span class="text-2xl mb-2 block">🇸🇬</span>
+            <span class="text-white text-sm">Asia-Pacífico</span>
+            <span class="text-gray-500 text-xs block">Singapur, Tokio</span>
+        </div>
+        <div class="glass-card rounded-xl p-4 text-center">
+            <span class="text-2xl mb-2 block">🇧🇷</span>
+            <span class="text-white text-sm">Latinoamérica</span>
+            <span class="text-gray-500 text-xs block">São Paulo, Santiago</span>
+        </div>
+    </div>
+</section>
+
+<!-- Preguntas Frecuentes -->
+<section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="text-center mb-12">
+        <h2 class="text-3xl font-light text-white mb-4">Preguntas Frecuentes</h2>
+    </div>
+    <div class="space-y-4">
+        <div class="glass-card rounded-xl p-6">
+            <button onclick="toggleFaq(this)" class="flex justify-between items-center w-full">
+                <span class="text-white font-medium">¿Puedo migrar mi servidor actual?</span>
+                <svg class="w-5 h-5 text-blue-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="faq-answer mt-3 text-gray-400 text-sm hidden">
+                Sí, ofrecemos migración gratuita y asistida. Nuestros técnicos te ayudarán a transferir todos tus archivos y configuraciones sin tiempo de inactividad.
+            </div>
+        </div>
+        <div class="glass-card rounded-xl p-6">
+            <button onclick="toggleFaq(this)" class="flex justify-between items-center w-full">
+                <span class="text-white font-medium">¿Qué versiones de Minecraft soportan?</span>
+                <svg class="w-5 h-5 text-blue-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="faq-answer mt-3 text-gray-400 text-sm hidden">
+                Soportamos todas las versiones de 1.8 a 1.20.4, incluyendo modpacks populares como RLCraft, Better Minecraft, y servidores personalizados con Paper, Purpur, Forge y Fabric.
+            </div>
+        </div>
+        <div class="glass-card rounded-xl p-6">
+            <button onclick="toggleFaq(this)" class="flex justify-between items-center w-full">
+                <span class="text-white font-medium">¿Qué tipo de soporte ofrecen?</span>
+                <svg class="w-5 h-5 text-blue-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="faq-answer mt-3 text-gray-400 text-sm hidden">
+                Soporte 24/7 vía chat, ticket y WhatsApp. Respuesta garantizada en menos de 15 minutos para clientes empresariales y 30 minutos para planes profesionales.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="border-t border-white/5 bg-[#020617]/50 backdrop-blur-sm mt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid md:grid-cols-4 gap-8">
+            <div>
+                <div class="flex items-center space-x-2 mb-4">
+                    <div class="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
+                        <span class="text-black font-bold text-xl">I</span>
+                    </div>
+                    <span class="text-white font-bold text-xl">InfiniHon</span>
+                </div>
+                <p class="text-gray-400 text-sm">Servidores Minecraft de grado industrial para comunidades exigentes.</p>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-4">Enlaces</h4>
+                <ul class="space-y-2">
+                    <li><a href="#planes" class="text-gray-400 hover:text-white text-sm transition-colors">Planes</a></li>
+                    <li><a href="#demo" class="text-gray-400 hover:text-white text-sm transition-colors">Demo Gratis</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Documentación</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Estado del servicio</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-4">Contacto</h4>
+                <ul class="space-y-2">
+                    <li class="text-gray-400 text-sm">mc@infinihon.com</li>
+                    <li class="text-gray-400 text-sm">+34 93 123 45 67</li>
+                    <li class="text-gray-400 text-sm">Discord: /infinihon</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-4">Comunidad</h4>
+                <div class="flex gap-4">
+                    <a href="#" class="text-gray-400 hover:text-white"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-3 10h-5v2h5v-2m0-4h-5v2h5V9Z"/></svg></a>
+                    <a href="#" class="text-gray-400 hover:text-white"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.5-4.5-10-10-10S2 6.5 2 12c0 4.8 3.4 8.8 8 9.8v-7h-2v-2h2V9c0-2.2 1.8-4 4-4h2v2h-2c-1.1 0-2 .9-2 2v2h4v2h-4v7c4.6-1 8-5 8-9.8z"/></svg></a>
+                    <a href="#" class="text-gray-400 hover:text-white"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></a>
+                </div>
+            </div>
+        </div>
+        <div class="mt-8 pt-8 border-t border-white/10 text-center text-gray-400 text-sm">
+            © 2024 InfiniHon Minecraft Hosting. Todos los derechos reservados.
+        </div>
+    </div>
+</footer>
+
+<script>
+    function toggleFaq(button) {
+        const answer = button.nextElementSibling;
+        const icon = button.querySelector('svg');
+        answer.classList.toggle('hidden');
+        icon.classList.toggle('rotate-180');
+    }
+</script>
+</body>
+</html>
