@@ -3,6 +3,30 @@
 <head>
 
 
+
+<button id="btn-compartir">Retar a un amigo ⚔️</button>
+
+<script>
+document.getElementById('btn-compartir').addEventListener('click', async () => {
+    if (navigator.share) {
+        try {
+            await navigator.share({
+                title: 'InfiniHon Lab',
+                text: '¡Acabo de sacar 150ms en el test de reflejos de InfiniHon! A que no me ganas.',
+                url: 'https://infinihon.vercel.app/tester.html'
+            });
+            console.log('¡Contenido compartido con éxito!');
+        } catch (error) {
+            console.log('Error al compartir', error);
+        }
+    } else {
+        alert("Tu navegador no soporta esta función. ¡Copia el link y mándalo por WhatsApp!");
+    }
+});
+</script>
+
+
+    
 <meta name="view-transition" content="same-origin">    
 
 
