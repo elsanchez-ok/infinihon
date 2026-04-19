@@ -274,6 +274,35 @@
             border-color: rgba(255, 255, 255, 0.2);
             transform: translateY(-3px);
         }
+
+
+
+
+/* Modificar la barra de desplazamiento */
+::-webkit-scrollbar {
+    width: 10px; /* Ancho de la barra */
+}
+
+/* El fondo de la barra */
+::-webkit-scrollbar-track {
+    background: #020617; /* El mismo azul ultra-oscuro de tu fondo */
+}
+
+/* El "pulgar" (la parte que se mueve) */
+::-webkit-scrollbar-thumb {
+    background: #1e293b; 
+    border-radius: 5px;
+    border: 2px solid #020617; /* Crea un efecto de espacio alrededor */
+}
+
+/* Cuando pasas el mouse por encima de la barra */
+::-webkit-scrollbar-thumb:hover {
+    background: #3b82f6; /* Tu color azul acento */
+    box-shadow: 0 0 10px #3b82f6;
+}
+
+
+        
     </style>
 </head>
 <body class="selection:bg-blue-500/30 relative">
