@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil Profesional | InfiniHon Team</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        :root { 
+            --bg-deep: #020617; 
+            --accent: #3b82f6;
+            --accent-secondary: #06b6d4;
+        }
+        
+        * {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            cursor: none !important;
+        }
+
+        .font-mono, .font-mono-custom {
+            font-family: 'JetBrains Mono', monospace !important;
+        }
+        
+        body {
+            background-color: var(--bg-deep);
+            color: #f8fafc;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Cursor Personalizado Avanzado */
+        #custom-cursor {
+            width: 28px; 
+            height: 28px; 
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            position: fixed; 
+            pointer-events: none; 
+            z-index: 9999;
+            transition: transform 0.25s cubic-bezier(0.23, 1, 0.32, 1), border-color 0.3s ease, width 0.2s, height 0.2s;
+            mix-blend-mode: difference;
+            transform: translate(-50%, -50%);
+            will-change: left, top;
+        }
+        
+        #cursor-dot {
+            position: absolute;
+            top: 50%; 
+            left: 50%;
+            width: 6px; 
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: background-color 0.3s ease;
+        }
+
+        #cursor-aura {
+            width: 500px; 
+            height: 500px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 70%);
+            position: fixed; 
+            pointer-events: none; 
+            z-index: 9998;
+            border-radius: 50%;
+            transform: translate(-50%, -50%); 
+            transition: opacity 0.5s ease, background 0.3s ease;
+            will-change: left, top;
+        }
+
+        /* Efecto Ping */
+        .ping-effect {
+            position: fixed; 
+            width: 24px; 
+            height: 24px;
+            border: 2px solid rgba(59, 130, 246, 0.8);
+            border-radius: 50%; 
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            animation: ping-anim 0.6s ease-out forwards;
+            z-index: 10000;
+        }
+        
+        @keyframes ping-anim {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(4.5); opacity: 0; }
+        }
+
+        /* Fondo mesh animado */
+        .mesh-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.1), transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(6, 182, 212, 0.1), transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.05), transparent 50%);
+            animation: meshMove 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes meshMove {
+            0% { transform: scale(1) translate(0, 0); }
+            50% { transform: scale(1.1) translate(-1%, 2%); }
+            100% { transform: scale(1.05) translate(1%, -1%); }
+        }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        }
+        
+        .glass-card {
+            background: rgba(10, 15, 31, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        
+        .glass-card:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 12px 40px rgba(59, 130, 246, 0.2);
+        }
+
+        /* Bento Cards 3D */
+        .bento-card { 
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1); 
+            transform-style: preserve-3d;
+        }
+        
+        .bento-card:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: scale(1.02) translateY(-6px);
+        }
+
+        /* Avatar con glow */
+        .avatar-glow {
+            box-shadow: 0 0 60px rgba(59, 130, 246, 0.3);
+            border: 3px solid rgba(59, 130, 246, 0.5);
+            transition: all 0.4s ease;
+        }
+        
+        .avatar-glow:hover {
+            box-shadow: 0 0 80px rgba(59, 130, 246, 0.5);
+            border-color: rgba(59, 130, 246, 0.8);
+        }
+
+        /* Badge TOP */
+        .top-badge {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #020617;
+            font-weight: 800;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            border: 1px solid rgba(251, 191, 36, 0.5);
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+        }
+
+        /* Skill bar */
+        .skill-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+        
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #06b6d4);
+            border-radius: 9999px;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+            transition: width 1s ease;
+        }
+
+        /* Social icon */
+        .social-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Timeline */
+        .timeline-item {
+            position: relative;
+            padding-left: 32px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 12px;
+            height: 12px;
+            background: #3b82f6;
+            border-radius: 50%;
+            box-shadow: 0 0 15px #3b82f6;
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 20px;
+            width: 2px;
+            height: calc(100% + 16px);
+            background: linear-gradient(to bottom, #3b82f6, transparent);
+        }
+        
+        .timeline-item:last-child::after {
+            display: none;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.03); }
+        ::-webkit-scrollbar-thumb { background: rgba(59, 130, 246, 0.3); border-radius: 10px; }
+
+        /* Animación de entrada */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-in {
+            animation: fadeInUp 0.7s ease-out forwards;
+        }
+        
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+    </style>
+</head>
+<body class="selection:bg-blue-500/30 relative">
+
+<!-- Cursor personalizado -->
+<div id="custom-cursor"><span id="cursor-dot"></span></div>
+<div id="cursor-aura"></div>
+
+<!-- Fondo mesh -->
+<div class="mesh-bg"></div>
+
+<!-- Navegación -->
+<nav class="sticky top-0 z-40 glass border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex justify-between items-center">
+        <a href="index.html" class="flex items-center space-x-3 interactive tilt-card">
+            <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+                <i data-lucide="cpu" class="text-black w-6 h-6"></i>
+            </div>
+            <span class="text-white font-bold text-xl tracking-tight">
+                Infini<span class="text-blue-400">Hon</span>
+            </span>
+        </a>
+        
+        <div class="hidden md:flex items-center space-x-8 text-sm font-semibold">
+            <a href="index.html" class="interactive text-gray-300 hover:text-white transition-colors">Inicio</a>
+            <a href="servicios.html" class="interactive text-gray-300 hover:text-white transition-colors">Servicios</a>
+            <a href="tienda.html" class="interactive text-gray-300 hover:text-white transition-colors">Tienda</a>
+            <a href="alianzas.html" class="interactive text-gray-300 hover:text-white transition-colors">Alianzas</a>
+            <a href="#" class="interactive text-white transition-colors border-b-2 border-blue-400 pb-1">Perfil</a>
+        </div>
+        
+        <a href="contacto.html" class="interactive bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 px-4 py-2 rounded-lg text-sm font-medium border border-blue-500/30 transition-all">
+            Contactar
+        </a>
+    </div>
+</nav>
+
+<!-- Contenido principal -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    
+    <!-- Header del perfil con TOP badge -->
+    <div class="glass-card rounded-[3rem] p-8 lg:p-12 mb-8 animate-in">
+        <div class="flex flex-col lg:flex-row gap-8 items-center lg:items-start">
+            <!-- Avatar -->
+            <div class="relative">
+                <div class="w-40 h-40 lg:w-48 lg:h-48 rounded-full avatar-glow overflow-hidden bg-gradient-to-br from-blue-500/30 to-cyan-500/30 p-1">
+                    <div class="w-full h-full rounded-full bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center text-6xl font-bold text-white">
+                        JS
+                    </div>
+                </div>
+                <div class="absolute -bottom-3 -right-3">
+                    <span class="top-badge flex items-center gap-1">
+                        <i data-lucide="crown" class="w-4 h-4"></i>
+                        TOP PERFORMER
+                    </span>
+                </div>
+            </div>
+            
+            <!-- Info principal -->
+            <div class="flex-1 text-center lg:text-left">
+                <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 mb-3">
+                    <h1 class="text-4xl lg:text-5xl font-extrabold text-white tracking-tight">Joseph Sánchez</h1>
+                    <span class="px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full text-xs font-mono-custom border border-blue-500/30">#IN-77429</span>
+                </div>
+                
+                <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-4">
+                    <span class="text-xl text-gray-300 font-light">Arquitecto de Infraestructura Senior</span>
+                    <span class="flex items-center gap-1 text-yellow-400 text-sm">
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <span class="text-gray-400 ml-1">(124 proyectos)</span>
+                    </span>
+                </div>
+                
+                <p class="text-gray-400 text-lg leading-relaxed max-w-2xl">
+                    Especialista en infraestructura de alto rendimiento con más de 8 años diseñando soluciones 
+                    escalables para empresas Fortune 500. Líder técnico del equipo de edge computing en InfiniHon.
+                </p>
+                
+                <!-- Métricas rápidas -->
+                <div class="grid grid-cols-3 gap-4 mt-6 max-w-md">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-white">8+</div>
+                        <div class="text-gray-500 text-xs font-mono-custom">AÑOS EXP.</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-white">45+</div>
+                        <div class="text-gray-500 text-xs font-mono-custom">PROYECTOS</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-white">12</div>
+                        <div class="text-gray-500 text-xs font-mono-custom">CERTIFIC.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Botón de contacto rápido -->
+            <div class="lg:self-start">
+                <button class="interactive bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-8 py-4 rounded-xl font-bold flex items-center gap-2 hover:scale-105 transition-transform shadow-lg shadow-blue-500/25">
+                    <i data-lucide="mail" class="w-5 h-5"></i>
+                    Contactar
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Grid de contenido -->
+    <div class="grid lg:grid-cols-3 gap-8">
+        
+        <!-- Columna izquierda: Bio, Skills, Intereses -->
+        <div class="lg:col-span-1 space-y-8">
+            
+            <!-- Bio -->
+            <div class="glass-card rounded-[2rem] p-6 animate-in delay-1">
+                <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                    <i data-lucide="user" class="w-5 h-5 text-blue-400"></i>
+                    Sobre Mí
+                </h2>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    Apasionado por la tecnología desde los 12 años cuando armé mi primera computadora. 
+                    Creo firmemente en la democratización del acceso a infraestructura de calidad. 
+                    Fuera del trabajo, soy entusiasta del hardware open-source y contribuyo a proyectos 
+                    de computación distribuida.
+                </p>
+                
+                <div class="mt-4 pt-4 border-t border-white/10">
+                    <div class="flex items-center gap-3 text-sm">
+                        <i data-lucide="map-pin" class="w-4 h-4 text-gray-500"></i>
+                        <span class="text-gray-300">Tegucigalpa, Honduras</span>
+                    </div>
+                    <div class="flex items-center gap-3 text-sm mt-2">
+                        <i data-lucide="calendar" class="w-4 h-4 text-gray-500"></i>
+                        <span class="text-gray-300">En InfiniHon desde 2024</span>
+                    </div>
+                    <div class="flex items-center gap-3 text-sm mt-2">
+                        <i data-lucide="globe" class="w-4 h-4 text-gray-500"></i>
+                        <span class="text-gray-300">Español (Nativo) · Inglés (C2) · Portugués (B1)</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Skills técnicas -->
+            <div class="glass-card rounded-[2rem] p-6 animate-in delay-2">
+                <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                    <i data-lucide="cpu" class="w-5 h-5 text-purple-400"></i>
+                    Stack Tecnológico
+                </h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-300">MikroTik RouterOS</span>
+                            <span class="text-blue-400 font-mono-custom">98%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 98%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-300">Kubernetes / K3s</span>
+                            <span class="text-blue-400 font-mono-custom">92%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 92%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-300">Docker / Containers</span>
+                            <span class="text-blue-400 font-mono-custom">95%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 95%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-300">Ansible / Terraform</span>
+                            <span class="text-blue-400 font-mono-custom">88%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 88%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-300">Python / Bash</span>
+                            <span class="text-blue-400 font-mono-custom">90%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 90%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-300">AWS / Azure</span>
+                            <span class="text-blue-400 font-mono-custom">85%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 85%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Intereses y hobbies -->
+            <div class="glass-card rounded-[2rem] p-6 animate-in delay-3">
+                <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                    <i data-lucide="heart" class="w-5 h-5 text-red-400"></i>
+                    Intereses
+                </h2>
+                
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-2 bg-white/5 rounded-xl text-sm text-gray-300 border border-white/10 flex items-center gap-2">
+                        <i data-lucide="cpu" class="w-4 h-4 text-blue-400"></i>
+                        Edge Computing
+                    </span>
+                    <span class="px-3 py-2 bg-white/5 rounded-xl text-sm text-gray-300 border border-white/10 flex items-center gap-2">
+                        <i data-lucide="shield" class="w-4 h-4 text-green-400"></i>
+                        Ciberseguridad
+                    </span>
+                    <span class="px-3 py-2 bg-white/5 rounded-xl text-sm text-gray-300 border border-white/10 flex items-center gap-2">
+                        <i data-lucide="database" class="w-4 h-4 text-purple-400"></i>
+                        Bases de Datos
+                    </span>
+                    <span class="px-3 py-2 bg-white/5 rounded-xl text-sm text-gray-300 border border-white/10 flex items-center gap-2">
+                        <i data-lucide="gamepad-2" class="w-4 h-4 text-cyan-400"></i>
+                        Gaming
+                    </span>
+                    <span class="px-3 py-2 bg-white/5 rounded-xl text-sm text-gray-300 border border-white/10 flex items-center gap-2">
+                        <i data-lucide="music" class="w-4 h-4 text-yellow-400"></i>
+                        Música Electrónica
+                    </span>
+                    <span class="px-3 py-2 bg-white/5 rounded-xl text-sm text-gray-300 border border-white/10 flex items-center gap-2">
+                        <i data-lucide="bike" class="w-4 h-4 text-orange-400"></i>
+                        Ciclismo
+                    </span>
+                    <span class="px-3 py-2 bg-white/5 rounded-xl text-sm text-gray-300 border border-white/10 flex items-center gap-2">
+                        <i data-lucide="coffee" class="w-4 h-4 text-amber-400"></i>
+                        Café de Especialidad
+                    </span>
+                    <span class="px-3 py-2 bg-white/5 rounded-xl text-sm text-gray-300 border border-white/10 flex items-center gap-2">
+                        <i data-lucide="book-open" class="w-4 h-4 text-indigo-400"></i>
+                        Sci-Fi
+                    </span>
+                </div>
+            </div>
+            
+            <!-- Redes sociales -->
+            <div class="glass-card rounded-[2rem] p-6 animate-in delay-4">
+                <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                    <i data-lucide="share-2" class="w-5 h-5 text-blue-400"></i>
+                    Conecta Conmigo
+                </h2>
+                
+                <div class="grid grid-cols-4 gap-3">
+                    <a href="#" class="social-icon interactive group">
+                        <i class="fab fa-github text-2xl text-gray-400 group-hover:text-white transition-colors"></i>
+                    </a>
+                    <a href="#" class="social-icon interactive group">
+                        <i class="fab fa-linkedin-in text-2xl text-gray-400 group-hover:text-blue-400 transition-colors"></i>
+                    </a>
+                    <a href="#" class="social-icon interactive group">
+                        <i class="fab fa-x-twitter text-2xl text-gray-400 group-hover:text-white transition-colors"></i>
+                    </a>
+                    <a href="#" class="social-icon interactive group">
+                        <i class="fab fa-instagram text-2xl text-gray-400 group-hover:text-pink-400 transition-colors"></i>
+                    </a>
+                    <a href="#" class="social-icon interactive group">
+                        <i class="fab fa-dev text-2xl text-gray-400 group-hover:text-white transition-colors"></i>
+                    </a>
+                    <a href="#" class="social-icon interactive group">
+                        <i class="fab fa-stack-overflow text-2xl text-gray-400 group-hover:text-orange-400 transition-colors"></i>
+                    </a>
+                    <a href="#" class="social-icon interactive group">
+                        <i class="fab fa-discord text-2xl text-gray-400 group-hover:text-indigo-400 transition-colors"></i>
+                    </a>
+                    <a href="#" class="social-icon interactive group">
+                        <i class="fab fa-youtube text-2xl text-gray-400 group-hover:text-red-400 transition-colors"></i>
+                    </a>
+                </div>
+                
+                <!-- Email público -->
+                <div class="mt-4 p-4 bg-white/5 rounded-xl border border-white/10">
+                    <p class="text-gray-400 text-xs mb-1">Email profesional</p>
+                    <p class="text-white font-mono-custom text-sm">j.sanchez@infinihon.com</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Columna derecha: Experiencia, Logros, Proyectos -->
+        <div class="lg:col-span-2 space-y-8">
+            
+            <!-- Experiencia laboral -->
+            <div class="glass-card rounded-[2rem] p-8 animate-in delay-1">
+                <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+                    <i data-lucide="briefcase" class="w-6 h-6 text-blue-400"></i>
+                    Trayectoria Profesional
+                </h2>
+                
+                <div class="space-y-6">
+                    <div class="timeline-item">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-lg font-bold text-white">Arquitecto de Infraestructura Senior</h3>
+                            <span class="text-xs font-mono-custom text-blue-400 bg-blue-500/10 px-3 py-1 rounded-full">2024 - Presente</span>
+                        </div>
+                        <p class="text-blue-400 text-sm mb-2">InfiniHon · Tegucigalpa</p>
+                        <p class="text-gray-400 text-sm">
+                            Lidero el diseño e implementación de clusters de edge computing basados en Raspberry Pi 
+                            para clientes enterprise. Responsable de la arquitectura de red con MikroTik y la 
+                            automatización de despliegues con Ansible.
+                        </p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-lg font-bold text-white">DevOps Engineer Lead</h3>
+                            <span class="text-xs font-mono-custom text-gray-400 bg-white/5 px-3 py-1 rounded-full">2021 - 2024</span>
+                        </div>
+                        <p class="text-gray-500 text-sm mb-2">CloudNation · Remoto</p>
+                        <p class="text-gray-400 text-sm">
+                            Migración de infraestructura on-premise a AWS para más de 30 clientes. 
+                            Implementación de pipelines CI/CD con GitLab y monitoreo con Prometheus/Grafana.
+                        </p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-lg font-bold text-white">Administrador de Sistemas</h3>
+                            <span class="text-xs font-mono-custom text-gray-400 bg-white/5 px-3 py-1 rounded-full">2018 - 2021</span>
+                        </div>
+                        <p class="text-gray-500 text-sm mb-2">DataCenter HN · San Pedro Sula</p>
+                        <p class="text-gray-400 text-sm">
+                            Gestión de más de 200 servidores físicos y virtuales. Administración de redes 
+                            con equipos MikroTik y Cisco. Implementación de políticas de seguridad y backups.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Logros destacados -->
+            <div class="glass-card rounded-[2rem] p-8 animate-in delay-2">
+                <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+                    <i data-lucide="trophy" class="w-6 h-6 text-yellow-400"></i>
+                    Logros Destacados
+                </h2>
+                
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="bg-white/5 rounded-xl p-5 border border-white/10 hover:border-blue-500/30 transition-all">
+                        <div class="flex items-start gap-3">
+                            <div class="w-10 h-10 bg-yellow-500/20 rounded-xl flex items-center justify-center">
+                                <i data-lucide="award" class="w-5 h-5 text-yellow-400"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-bold mb-1">MikroTik Certified Trainer</h4>
+                                <p class="text-gray-400 text-xs">Certificación MTCNA, MTCRE, MTCINE</p>
+                                <p class="text-gray-500 text-xs mt-2">2023</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white/5 rounded-xl p-5 border border-white/10 hover:border-blue-500/30 transition-all">
+                        <div class="flex items-start gap-3">
+                            <div class="w-10 h-10 bg-blue-500/20 rounded-xl flex items-center justify-center">
+                                <i data-lucide="cloud" class="w-5 h-5 text-blue-400"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-bold mb-1">AWS Solutions Architect</h4>
+                                <p class="text-gray-400 text-xs">Professional · 2022</p>
+                                <p class="text-gray-500 text-xs mt-2">Validación: AWS-ASA-77429</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white/5 rounded-xl p-5 border border-white/10 hover:border-blue-500/30 transition-all">
+                        <div class="flex items-start gap-3">
+                            <div class="w-10 h-10 bg-purple-500/20 rounded-xl flex items-center justify-center">
+                                <i data-lucide="container" class="w-5 h-5 text-purple-400"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-bold mb-1">CKA: Kubernetes Admin</h4>
+                                <p class="text-gray-400 text-xs">Certified Kubernetes Administrator</p>
+                                <p class="text-gray-500 text-xs mt-2">Linux Foundation · 2023</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white/5 rounded-xl p-5 border border-white/10 hover:border-blue-500/30 transition-all">
+                        <div class="flex items-start gap-3">
+                            <div class="w-10 h-10 bg-green-500/20 rounded-xl flex items-center justify-center">
+                                <i data-lucide="shield-check" class="w-5 h-5 text-green-400"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-bold mb-1">Speaker Internacional</h4>
+                                <p class="text-gray-400 text-xs">MikroTik User Meeting 2024</p>
+                                <p class="text-gray-500 text-xs mt-2">"Edge Computing con ARM"</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Proyectos destacados -->
+            <div class="glass-card rounded-[2rem] p-8 animate-in delay-3">
+                <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+                    <i data-lucide="folder-git" class="w-6 h-6 text-cyan-400"></i>
+                    Proyectos Destacados
+                </h2>
+                
+                <div class="space-y-4">
+                    <div class="flex items-start gap-4 p-4 bg-white/5 rounded-xl border border-white/10">
+                        <div class="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center">
+                            <i data-lucide="server" class="w-6 h-6 text-blue-400"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start">
+                                <h4 class="text-white font-bold">InfiniCluster Pro</h4>
+                                <span class="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded-full">En producción</span>
+                            </div>
+                            <p class="text-gray-400 text-sm mt-1">
+                                Cluster de 32 nodos Raspberry Pi para edge computing con Kubernetes. 
+                                Reduce latencia en 60% y consumo energético en 45%.
+                            </p>
+                            <div class="flex gap-2 mt-3">
+                                <span class="text-xs text-gray-500">K3s</span>
+                                <span class="text-xs text-gray-500">•</span>
+                                <span class="text-xs text-gray-500">Ansible</span>
+                                <span class="text-xs text-gray-500">•</span>
+                                <span class="text-xs text-gray-500">Prometheus</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-4 p-4 bg-white/5 rounded-xl border border-white/10">
+                        <div class="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center">
+                            <i data-lucide="router" class="w-6 h-6 text-purple-400"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start">
+                                <h4 class="text-white font-bold">MikroTik SD-WAN Automatizado</h4>
+                                <span class="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full">Open Source</span>
+                            </div>
+                            <p class="text-gray-400 text-sm mt-1">
+                                Framework para automatizar despliegues SD-WAN con MikroTik RouterOS. 
+                                Incluye templates para BGP, OSPF y failover automático.
+                            </p>
+                            <div class="flex gap-2 mt-3">
+                                <span class="text-xs text-gray-500">RouterOS</span>
+                                <span class="text-xs text-gray-500">•</span>
+                                <span class="text-xs text-gray-500">Python</span>
+                                <span class="text-xs text-gray-500">•</span>
+                                <span class="text-xs text-gray-500">REST API</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-4 p-4 bg-white/5 rounded-xl border border-white/10">
+                        <div class="w-12 h-12 bg-cyan-500/20 rounded-xl flex items-center justify-center">
+                            <i data-lucide="database" class="w-6 h-6 text-cyan-400"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start">
+                                <h4 class="text-white font-bold">Monitorización Zero-Trust</h4>
+                                <span class="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded-full">En desarrollo</span>
+                            </div>
+                            <p class="text-gray-400 text-sm mt-1">
+                                Sistema de monitoreo distribuido con autenticación por hardware 
+                                para entornos de alta seguridad. Basado en Raspberry Pi y TPM 2.0.
+                            </p>
+                            <div class="flex gap-2 mt-3">
+                                <span class="text-xs text-gray-500">Grafana</span>
+                                <span class="text-xs text-gray-500">•</span>
+                                <span class="text-xs text-gray-500">Loki</span>
+                                <span class="text-xs text-gray-500">•</span>
+                                <span class="text-xs text-gray-500">TPM</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ver más en GitHub -->
+                <div class="mt-6 text-center">
+                    <a href="#" class="interactive inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm">
+                        Ver más proyectos en GitHub
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Testimonios / Endorsements -->
+            <div class="glass-card rounded-[2rem] p-8 animate-in delay-4">
+                <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+                    <i data-lucide="message-circle" class="w-6 h-6 text-green-400"></i>
+                    Recomendaciones
+                </h2>
+                
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="bg-white/5 rounded-xl p-5 border border-white/10">
+                        <i data-lucide="quote" class="w-8 h-8 text-blue-400/30 mb-3"></i>
+                        <p class="text-gray-300 text-sm italic mb-4">
+                            "Joseph es un profesional excepcional. Su conocimiento en MikroTik y edge computing 
+                            nos ayudó a reducir costos en un 40% mientras mejorábamos la latencia."
+                        </p>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-white font-bold text-sm">
+                                MC
+                            </div>
+                            <div>
+                                <p class="text-white font-medium text-sm">María Castillo</p>
+                                <p class="text-gray-500 text-xs">CTO · TechSolutions</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white/5 rounded-xl p-5 border border-white/10">
+                        <i data-lucide="quote" class="w-8 h-8 text-blue-400/30 mb-3"></i>
+                        <p class="text-gray-300 text-sm italic mb-4">
+                            "Trabajar con Joseph en el proyecto InfiniCluster fue una experiencia increíble. 
+                            Su visión técnica y capacidad de ejecución son de primer nivel."
+                        </p>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm">
+                                RL
+                            </div>
+                            <div>
+                                <p class="text-white font-medium text-sm">Roberto López</p>
+                                <p class="text-gray-500 text-xs">Lead Engineer · InfiniHon</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- CTA Final -->
+    <div class="mt-12 glass-card rounded-[3rem] p-10 text-center bg-gradient-to-r from-blue-600/10 to-cyan-600/10 animate-in">
+        <h2 class="text-3xl font-bold text-white mb-3">¿Trabajamos juntos?</h2>
+        <p class="text-gray-400 max-w-xl mx-auto mb-6">
+            Estoy disponible para consultoría, charlas técnicas y colaboraciones en proyectos de infraestructura.
+        </p>
+        <div class="flex flex-wrap gap-4 justify-center">
+            <a href="#" class="interactive bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-8 py-4 rounded-xl font-bold flex items-center gap-2 hover:scale-105 transition-transform">
+                <i data-lucide="calendar" class="w-5 h-5"></i>
+                Agendar una reunión
+            </a>
+            <a href="#" class="interactive glass px-8 py-4 rounded-xl font-bold border-white/20 hover:bg-white/5 transition-all flex items-center gap-2">
+                <i data-lucide="download" class="w-5 h-5"></i>
+                Descargar CV
+            </a>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="relative z-10 border-t border-white/5 glass mt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+            <p class="text-gray-500 text-xs font-mono-custom">
+                © 2025 InfiniHon · Perfil Profesional · Joseph Sánchez
+            </p>
+            <div class="flex gap-6">
+                <a href="#" class="text-gray-500 hover:text-gray-400 text-xs font-mono-custom interactive">PRIVACIDAD</a>
+                <a href="#" class="text-gray-500 hover:text-gray-400 text-xs font-mono-custom interactive">TÉRMINOS</a>
+                <a href="#" class="text-gray-500 hover:text-gray-400 text-xs font-mono-custom interactive">CONTACTO</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Inicializar iconos
+    lucide.createIcons();
+    
+    // Cursor personalizado
+    const cursor = document.getElementById('custom-cursor');
+    const cursorDot = document.getElementById('cursor-dot');
+    const aura = document.getElementById('cursor-aura');
+    
+    const isTouch = !window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (isTouch) {
+        if(cursor) cursor.style.display = 'none';
+        if(aura) aura.style.display = 'none';
+        document.body.style.cursor = 'auto';
+    } else {
+        document.addEventListener('mousemove', (e) => {
+            if(!cursor || !aura) return;
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            aura.style.left = e.clientX + 'px';
+            aura.style.top = e.clientY + 'px';
+        });
+
+        document.addEventListener('mousedown', (e) => {
+            const ping = document.createElement('div');
+            ping.className = 'ping-effect';
+            ping.style.left = e.clientX + 'px';
+            ping.style.top = e.clientY + 'px';
+            document.body.appendChild(ping);
+            setTimeout(() => ping.remove(), 600);
+        });
+
+        document.addEventListener('mouseover', (e) => {
+            const el = e.target.closest('button, a, .interactive, .bento-card, .social-icon');
+            if (el) {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                cursor.style.width = '34px';
+                cursor.style.height = '34px';
+                
+                let theme = '#60a5fa';
+                cursor.style.borderColor = theme;
+                cursorDot.style.backgroundColor = theme;
+                aura.style.background = `radial-gradient(circle, ${theme}33 0%, transparent 70%)`;
+                cursor.style.mixBlendMode = 'normal';
+            }
+        });
+        
+        document.addEventListener('mouseout', (e) => {
+            const el = e.target.closest('button, a, .interactive, .bento-card, .social-icon');
+            if (el) {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                cursor.style.width = '28px';
+                cursor.style.height = '28px';
+                cursor.style.borderColor = 'rgba(255, 255, 255, 0.9)';
+                cursorDot.style.backgroundColor = 'white';
+                cursor.style.mixBlendMode = 'difference';
+                aura.style.background = 'radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 70%)';
+            }
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            const card = e.target.closest('.tilt-card, .bento-card');
+            if(card) {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * -4;
+                const rotateY = ((x - centerX) / centerX) * 4;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            }
+        });
+        
+        document.addEventListener('mouseout', (e) => {
+            const card = e.target.closest('.tilt-card, .bento-card');
+            if(card) card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+        });
+    }
+</script>
+</body>
+</html>
