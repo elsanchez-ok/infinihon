@@ -190,6 +190,27 @@
 }
 
 
+
+
+
+/* Configuración básica de la transición suave */
+::view-transition-old(root) {
+    animation: fade-out 0.3s ease-out both;
+}
+::view-transition-new(root) {
+    animation: fade-in 0.3s ease-in both;
+}
+
+@keyframes fade-out {
+    to { opacity: 0; transform: scale(0.98); }
+}
+@keyframes fade-in {
+    from { opacity: 0; transform: scale(1.02); }
+}
+
+
+
+        
         
     </style>
 </head>
