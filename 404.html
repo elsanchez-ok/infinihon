@@ -517,5 +517,40 @@
     console.log('%c404 • Recurso no encontrado', 'font-size: 12px; color: #ef4444;');
     console.log('%c¿Eres desarrollador? Únete a nuestro equipo: careers@infinihon.com', 'font-size: 11px; color: #6b7280;');
 </script>
+
+<script>
+    // ==========================================
+    // ESCUDO BÁSICO ANTI-COPIAS
+    // ==========================================
+    
+    // 1. Desactivar el clic derecho
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    });
+
+    // 2. Bloquear combinaciones de teclas comunes (Ctrl+S, Ctrl+U, F12)
+    document.addEventListener('keydown', function(e) {
+        // Bloquear Ctrl+S (Guardar)
+        if (e.ctrlKey && e.key === 's') {
+            e.preventDefault();
+            alert('El guardado de esta página está deshabilitado por seguridad.');
+        }
+        // Bloquear Ctrl+U (Ver código fuente)
+        if (e.ctrlKey && e.key === 'u') {
+            e.preventDefault();
+        }
+    });
+
+    // ==========================================
+    // TRUCO 4: MENSAJE SECRETO EN LA CONSOLA
+    // ==========================================
+    // Si a pesar de lo anterior logran abrir la consola con F12, verán esto:
+    console.log(
+        "%c🛡️ SISTEMA INFINIHON 🛡️\n\n%cVeo que sabes inspeccionar código. \nEsta arquitectura está protegida. Si te apasiona el hardware y el desarrollo, estás en el lugar correcto.", 
+        "color: #3b82f6; font-size: 20px; font-weight: bold; text-shadow: 0 0 10px rgba(59,130,246,0.5);",
+        "color: #a1a1aa; font-size: 14px;"
+    );
+</script>
+    
 </body>
 </html>
