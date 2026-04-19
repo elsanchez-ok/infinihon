@@ -1,0 +1,5 @@
+Contact: mailto:joseph.sanchez@iteesa.edu.hn
+Expires: 2027-01-01T00:00:00.000Z
+Acknowledgments: https://infinihon.vercel.app/hall-of-fame
+Preferred-Languages: es, en
+Canonical: https://infinihon.vercel.app/.well-known/security.txt
