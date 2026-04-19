@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 • Página no encontrada | InfiniHon</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        :root { 
+            --bg-deep: #020617; 
+            --accent: #3b82f6;
+            --accent-secondary: #06b6d4;
+        }
+        
+        * {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            cursor: none !important;
+        }
+
+        .font-mono, .font-mono-custom {
+            font-family: 'JetBrains Mono', monospace !important;
+        }
+        
+        body {
+            background-color: var(--bg-deep);
+            color: #f8fafc;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Cursor Personalizado Avanzado */
+        #custom-cursor {
+            width: 28px; 
+            height: 28px; 
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            position: fixed; 
+            pointer-events: none; 
+            z-index: 9999;
+            transition: transform 0.25s cubic-bezier(0.23, 1, 0.32, 1), border-color 0.3s ease, width 0.2s, height 0.2s;
+            mix-blend-mode: difference;
+            transform: translate(-50%, -50%);
+            will-change: left, top;
+        }
+        
+        #cursor-dot {
+            position: absolute;
+            top: 50%; 
+            left: 50%;
+            width: 6px; 
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: background-color 0.3s ease;
+        }
+
+        #cursor-aura {
+            width: 500px; 
+            height: 500px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            position: fixed; 
+            pointer-events: none; 
+            z-index: 9998;
+            border-radius: 50%;
+            transform: translate(-50%, -50%); 
+            transition: opacity 0.5s ease, background 0.3s ease;
+            will-change: left, top;
+        }
+
+        /* Efecto Ping al hacer clic */
+        .ping-effect {
+            position: fixed; 
+            width: 24px; 
+            height: 24px;
+            border: 2px solid rgba(59, 130, 246, 0.8);
+            border-radius: 50%; 
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            animation: ping-anim 0.6s ease-out forwards;
+            z-index: 10000;
+        }
+        
+        @keyframes ping-anim {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(4.5); opacity: 0; }
+        }
+
+        /* Fondo mesh animado */
+        .mesh-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            background:
+                radial-gradient(circle at 20% 40%, rgba(37, 99, 235, 0.12), transparent 45%),
+                radial-gradient(circle at 80% 30%, rgba(6, 182, 212, 0.12), transparent 45%),
+                radial-gradient(circle at 40% 70%, rgba(59, 130, 246, 0.08), transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(168, 85, 247, 0.06), transparent 55%);
+            animation: meshMove 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes meshMove {
+            0% { transform: scale(1) translate(0, 0); }
+            33% { transform: scale(1.1) translate(-1%, 2%); }
+            66% { transform: scale(1.15) translate(2%, -1%); }
+            100% { transform: scale(1.05) translate(1%, 1%); }
+        }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        }
+        
+        .glass-card {
+            background: rgba(10, 15, 31, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        
+        .glass-card:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 12px 40px rgba(59, 130, 246, 0.2);
+        }
+
+        /* Animación Glitch para el 404 */
+        .glitch {
+            font-size: 12rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            position: relative;
+            text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75),
+                        -0.025em -0.05em 0 rgba(0, 255, 0, 0.75),
+                        0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+            animation: glitch 500ms infinite;
+        }
+
+        .glitch span {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .glitch span:first-child {
+            animation: glitch 650ms infinite;
+            clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+            transform: translate(-0.025em, -0.0125em);
+            opacity: 0.8;
+        }
+
+        .glitch span:last-child {
+            animation: glitch 375ms infinite;
+            clip-path: polygon(0 80%, 100% 20%, 100% 100%, 0 100%);
+            transform: translate(0.0125em, 0.025em);
+            opacity: 0.8;
+        }
+
+        @keyframes glitch {
+            0% { text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75), -0.05em -0.025em 0 rgba(0, 255, 0, 0.75), -0.025em 0.05em 0 rgba(0, 0, 255, 0.75); }
+            14% { text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75), -0.05em -0.025em 0 rgba(0, 255, 0, 0.75), -0.025em 0.05em 0 rgba(0, 0, 255, 0.75); }
+            15% { text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75), 0.025em 0.025em 0 rgba(0, 255, 0, 0.75), -0.05em -0.05em 0 rgba(0, 0, 255, 0.75); }
+            49% { text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75), 0.025em 0.025em 0 rgba(0, 255, 0, 0.75), -0.05em -0.05em 0 rgba(0, 0, 255, 0.75); }
+            50% { text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75), 0.05em 0 0 rgba(0, 255, 0, 0.75), 0 -0.05em 0 rgba(0, 0, 255, 0.75); }
+            99% { text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75), 0.05em 0 0 rgba(0, 255, 0, 0.75), 0 -0.05em 0 rgba(0, 0, 255, 0.75); }
+            100% { text-shadow: -0.025em 0 0 rgba(255, 0, 0, 0.75), -0.025em -0.025em 0 rgba(0, 255, 0, 0.75), -0.025em -0.05em 0 rgba(0, 0, 255, 0.75); }
+        }
+
+        /* Animación de entrada */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-in {
+            animation: fadeInUp 0.7s ease-out forwards;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.3s; }
+        .delay-3 { animation-delay: 0.5s; }
+
+        /* Efecto scanline */
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.02) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 9997;
+            opacity: 0.3;
+            animation: scanlines 8s linear infinite;
+        }
+
+        @keyframes scanlines {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100%; }
+        }
+
+        /* Terminal prompt animado */
+        .terminal-cursor {
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background: #3b82f6;
+            animation: blink 1s step-end infinite;
+            vertical-align: middle;
+            margin-left: 4px;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Botones interactivos */
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px -10px rgba(59, 130, 246, 0.4);
+            border-color: rgba(59, 130, 246, 0.6);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body class="selection:bg-blue-500/30 relative">
+
+<!-- Cursor personalizado -->
+<div id="custom-cursor"><span id="cursor-dot"></span></div>
+<div id="cursor-aura"></div>
+
+<!-- Scanline effect -->
+<div class="scanline"></div>
+
+<!-- Fondo mesh -->
+<div class="mesh-bg"></div>
+
+<!-- Navegación minimalista -->
+<nav class="sticky top-0 z-40 glass border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex justify-between items-center">
+        <a href="index.html" class="flex items-center space-x-3 interactive tilt-card">
+            <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+                <i data-lucide="cpu" class="text-black w-6 h-6"></i>
+            </div>
+            <span class="text-white font-bold text-xl tracking-tight">
+                Infini<span class="text-blue-400">Hon</span>
+            </span>
+        </a>
+        
+        <div class="hidden md:flex items-center space-x-8 text-sm font-semibold">
+            <a href="index.html" class="interactive text-gray-300 hover:text-white transition-colors">Inicio</a>
+            <a href="servicios.html" class="interactive text-gray-300 hover:text-white transition-colors">Servicios</a>
+            <a href="tienda.html" class="interactive text-gray-300 hover:text-white transition-colors">Tienda</a>
+            <a href="alianzas.html" class="interactive text-gray-300 hover:text-white transition-colors">Alianzas</a>
+        </div>
+        
+        <a href="contacto.html" class="interactive bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 px-4 py-2 rounded-lg text-sm font-medium border border-blue-500/30 transition-all">
+            Soporte
+        </a>
+    </div>
+</nav>
+
+<!-- Contenido principal 404 -->
+<main class="relative z-10 min-h-[calc(100vh-200px)] flex items-center justify-center px-4 py-16">
+    <div class="max-w-4xl mx-auto text-center">
+        
+        <!-- Código de error con glitch -->
+        <div class="relative mb-8 animate-in">
+            <div class="glitch text-white font-mono-custom">
+                404
+                <span aria-hidden="true" class="font-mono-custom">404</span>
+                <span aria-hidden="true" class="font-mono-custom">404</span>
+            </div>
+            <div class="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent"></div>
+        </div>
+        
+        <!-- Terminal style message -->
+        <div class="glass-card rounded-3xl p-8 mb-10 max-w-2xl mx-auto animate-in delay-1">
+            <div class="flex items-center gap-2 mb-4 text-gray-400 border-b border-white/10 pb-3">
+                <i data-lucide="terminal" class="w-5 h-5 text-blue-400"></i>
+                <span class="font-mono-custom text-sm">infiniHon@enterprise:~$</span>
+                <span class="text-red-400 font-mono-custom text-sm ml-auto">ERROR</span>
+            </div>
+            
+            <p class="font-mono-custom text-gray-300 text-left mb-4">
+                <span class="text-blue-400">></span> Accediendo a ruta: <span class="text-yellow-400" id="current-path">/pagina-no-encontrada</span>
+            </p>
+            <p class="font-mono-custom text-gray-300 text-left mb-4">
+                <span class="text-red-400">✗</span> <span class="text-red-300">Error 404:</span> El recurso solicitado no existe en este servidor.
+            </p>
+            <p class="font-mono-custom text-gray-300 text-left">
+                <span class="text-blue-400">></span> Código de estado: <span class="text-orange-400">HTTP/1.1 404 Not Found</span>
+            </p>
+            
+            <div class="flex items-center gap-2 mt-4 text-gray-500">
+                <span class="font-mono-custom">infiniHon@enterprise:~$</span>
+                <span class="font-mono-custom">_</span>
+                <span class="terminal-cursor"></span>
+            </div>
+        </div>
+        
+        <!-- Mensaje principal -->
+        <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-4 animate-in delay-1 tracking-tight">
+            Parece que esta <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">página</span> se ha desconectado
+        </h1>
+        
+        <p class="text-gray-400 text-lg max-w-xl mx-auto mb-10 animate-in delay-2 leading-relaxed">
+            La ruta que estás buscando no existe o ha sido movida a otra ubicación. 
+            Nuestros ingenieros han sido notificados del fallo en la matriz.
+        </p>
+        
+        <!-- Botones de acción -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-in delay-3">
+            <a href="index.html" class="btn-primary interactive px-8 py-4 rounded-xl text-white font-bold flex items-center gap-3 text-lg">
+                <i data-lucide="home" class="w-5 h-5"></i>
+                Volver al Inicio
+            </a>
+            <a href="tienda.html" class="btn-secondary interactive px-8 py-4 rounded-xl text-white font-bold flex items-center gap-3 text-lg">
+                <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                Explorar Tienda
+            </a>
+            <button onclick="window.history.back()" class="btn-secondary interactive px-8 py-4 rounded-xl text-white font-bold flex items-center gap-3 text-lg">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                Página Anterior
+            </button>
+        </div>
+        
+        <!-- Enlaces rápidos -->
+        <div class="mt-16 pt-8 border-t border-white/10 animate-in delay-3">
+            <p class="text-gray-500 text-sm font-mono-custom mb-6 tracking-wider">// ENLACES RÁPIDOS</p>
+            <div class="flex flex-wrap justify-center gap-6 md:gap-10">
+                <a href="servicios.html" class="interactive text-gray-400 hover:text-blue-400 transition-colors text-sm flex items-center gap-2">
+                    <i data-lucide="network" class="w-4 h-4"></i>
+                    Servicios IT
+                </a>
+                <a href="tienda.html" class="interactive text-gray-400 hover:text-blue-400 transition-colors text-sm flex items-center gap-2">
+                    <i data-lucide="cpu" class="w-4 h-4"></i>
+                    Hardware
+                </a>
+                <a href="alianzas.html" class="interactive text-gray-400 hover:text-blue-400 transition-colors text-sm flex items-center gap-2">
+                    <i data-lucide="handshake" class="w-4 h-4"></i>
+                    Alianzas
+                </a>
+                <a href="soporte.html" class="interactive text-gray-400 hover:text-blue-400 transition-colors text-sm flex items-center gap-2">
+                    <i data-lucide="headset" class="w-4 h-4"></i>
+                    Soporte Técnico
+                </a>
+                <a href="contacto.html" class="interactive text-gray-400 hover:text-blue-400 transition-colors text-sm flex items-center gap-2">
+                    <i data-lucide="mail" class="w-4 h-4"></i>
+                    Contacto
+                </a>
+            </div>
+        </div>
+        
+        <!-- Easter egg: coordenadas -->
+        <div class="mt-12 text-gray-600 text-xs font-mono-custom opacity-40">
+            <span>NODO: 0x7F.0x00.0x00.0x01 | LAT: 14.0723° N | LONG: 87.1921° W</span>
+        </div>
+    </div>
+</main>
+
+<!-- Footer minimalista -->
+<footer class="relative z-10 border-t border-white/5 glass py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+            <p class="text-gray-500 text-xs font-mono-custom">
+                © 2025 InfiniHon • Código de error: 0x194
+            </p>
+            <div class="flex gap-6">
+                <a href="#" class="text-gray-500 hover:text-gray-400 text-xs font-mono-custom interactive">PRIVACIDAD</a>
+                <a href="#" class="text-gray-500 hover:text-gray-400 text-xs font-mono-custom interactive">TÉRMINOS</a>
+                <a href="#" class="text-gray-500 hover:text-gray-400 text-xs font-mono-custom interactive">STATUS</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // ===========================================
+    // INICIALIZACIÓN DE LUCIDE
+    // ===========================================
+    lucide.createIcons();
+    
+    // ===========================================
+    // MOSTRAR RUTA ACTUAL
+    // ===========================================
+    const pathElement = document.getElementById('current-path');
+    if (pathElement) {
+        const currentPath = window.location.pathname || '/pagina-no-encontrada';
+        pathElement.textContent = currentPath;
+    }
+
+    // ===========================================
+    // CURSOR Y EFECTOS 3D
+    // ===========================================
+    const cursor = document.getElementById('custom-cursor');
+    const cursorDot = document.getElementById('cursor-dot');
+    const aura = document.getElementById('cursor-aura');
+    
+    const isTouch = !window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (isTouch) {
+        if(cursor) cursor.style.display = 'none';
+        if(aura) aura.style.display = 'none';
+        document.body.style.cursor = 'auto';
+    } else {
+        document.addEventListener('mousemove', (e) => {
+            if(!cursor || !aura) return;
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            aura.style.left = e.clientX + 'px';
+            aura.style.top = e.clientY + 'px';
+        });
+
+        document.addEventListener('mousedown', (e) => {
+            const ping = document.createElement('div');
+            ping.className = 'ping-effect';
+            ping.style.left = e.clientX + 'px';
+            ping.style.top = e.clientY + 'px';
+            document.body.appendChild(ping);
+            setTimeout(() => ping.remove(), 600);
+        });
+
+        document.addEventListener('mouseover', (e) => {
+            const el = e.target.closest('button, a, .interactive');
+            if (el) {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                cursor.style.width = '34px';
+                cursor.style.height = '34px';
+                
+                let theme = '#60a5fa';
+                cursor.style.borderColor = theme;
+                cursorDot.style.backgroundColor = theme;
+                aura.style.background = `radial-gradient(circle, ${theme}33 0%, transparent 70%)`;
+                cursor.style.mixBlendMode = 'normal';
+            }
+        });
+        
+        document.addEventListener('mouseout', (e) => {
+            const el = e.target.closest('button, a, .interactive');
+            if (el) {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                cursor.style.width = '28px';
+                cursor.style.height = '28px';
+                cursor.style.borderColor = 'rgba(255, 255, 255, 0.9)';
+                cursorDot.style.backgroundColor = 'white';
+                cursor.style.mixBlendMode = 'difference';
+                aura.style.background = 'radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%)';
+            }
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            const card = e.target.closest('.tilt-card');
+            if(card) {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * -6;
+                const rotateY = ((x - centerX) / centerX) * 6;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            }
+        });
+        
+        document.addEventListener('mouseout', (e) => {
+            const card = e.target.closest('.tilt-card');
+            if(card) card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+        });
+    }
+    
+    // ===========================================
+    // CONSOLA OCULTA (Easter egg)
+    // ===========================================
+    console.log('%c🚀 INFINIHON ENTERPRISE', 'font-size: 16px; font-weight: bold; color: #3b82f6;');
+    console.log('%c404 • Recurso no encontrado', 'font-size: 12px; color: #ef4444;');
+    console.log('%c¿Eres desarrollador? Únete a nuestro equipo: careers@infinihon.com', 'font-size: 11px; color: #6b7280;');
+</script>
+</body>
+</html>
