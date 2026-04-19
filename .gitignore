@@ -1,0 +1,10 @@
+# Ignorar archivos de contraseñas
+.env
+.env.local
+
+# Ignorar carpetas pesadas de sistema (si usas Node.js)
+node_modules/
+
+# Ignorar archivos basura de Windows o Mac
+.DS_Store
+Thumbs.db
