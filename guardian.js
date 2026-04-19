@@ -1,26 +1,24 @@
 // ==========================================
-// MODO MANTENIMIENTO INFINIHON
+// MODO MANTENIMIENTO INFINIHON 🛡️
 // ==========================================
 
-// Cambia esto a 'false' cuando quieras que la tienda vuelva a la normalidad
+// Cambia a 'false' para abrir la tienda al público
 const MANTENIMIENTO_ACTIVO = true; 
 
-// Lista de páginas que SÍ pueden visitarse durante el mantenimiento
-const paginasPermitidas = [
-    '/fix.html',
-    '/login.html',
-    '/404.html',
-    '/elsanchezok.html',
-];
+// Obtenemos la ruta en la que está el usuario
+const rutaActual = window.location.pathname;
 
-// Obtener la página que el usuario está intentando ver
-const paginaActual = window.location.pathname;
-
-// Lógica de redirección
 if (MANTENIMIENTO_ACTIVO) {
-    // Si la página en la que están NO está en la lista de permitidas...
-    if (!paginasPermitidas.includes(paginaActual)) {
-        // ...los enviamos directamente a la pantalla de trabajo
-        window.location.replace('/fix.html');
+    // Verificamos si la ruta "contiene" alguna de estas palabras clave.
+    // Así no importa si Vercel le pone o le quita el ".html" o la "/" al final.
+    const esPaginaPermitida = rutaActual.includes('/fix') || 
+                              rutaActual.includes('/login') || 
+                              rutaActual.includes('/elsanchezok') ||
+                              rutaActual.includes('/404');
+
+    // Si NO es una página permitida, lo pateamos a mantenimiento
+    if (!esPaginaPermitida) {
+        // Redirigimos a /fix (sin el .html, dejamos que Vercel haga su magia)
+        window.location.replace('/fix');
     }
 }
