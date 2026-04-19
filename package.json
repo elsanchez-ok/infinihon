@@ -1,0 +1,14 @@
+{
+  "name": "infinihon-store",
+  "version": "1.0.0",
+  "description": "Tienda de hardware y servidores",
+  "author": "InfiniHon Admin",
+  "scripts": {
+    "start": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "particles.js": "^2.0.0",
+    "vanilla-tilt": "^1.8.1"
+  }
+}
