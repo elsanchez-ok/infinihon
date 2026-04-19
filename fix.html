@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfiniHon | Panel de Mantenimiento</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        :root { --bg-deep: #020617; --accent: #3b82f6; }
+        * { font-family: 'Plus Jakarta Sans', sans-serif; cursor: none !important; }
+        .font-mono-custom { font-family: 'JetBrains Mono', monospace !important; }
+        body { background-color: var(--bg-deep); color: #f8fafc; min-height: 100vh; overflow-x: hidden; }
+
+        /* ================= Cursor Personalizado ================= */
+        #custom-cursor {
+            width: 24px; height: 24px; border: 2px solid white; border-radius: 50%;
+            position: fixed; pointer-events: none; z-index: 9999;
+            transition: transform 0.25s cubic-bezier(0.23, 1, 0.32, 1), border-color 0.3s ease, width 0.2s, height 0.2s;
+            mix-blend-mode: difference; transform: translate(-50%, -50%); will-change: left, top;
+        }
+        #cursor-dot {
+            position: absolute; top: 50%; left: 50%; width: 5px; height: 5px;
+            background: white; border-radius: 50%; transform: translate(-50%, -50%);
+            transition: background-color 0.3s ease;
+        }
+        #cursor-aura {
+            width: 450px; height: 450px; background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            position: fixed; pointer-events: none; z-index: 9998; border-radius: 50%;
+            transform: translate(-50%, -50%); transition: opacity 0.5s ease, background 0.3s ease; will-change: left, top;
+        }
+
+        /* ================= Fondo Animado de Malla ================= */
+        .mesh-bg {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;
+            background: radial-gradient(circle at 15% 50%, rgba(37, 99, 235, 0.12), transparent 50%),
+                        radial-gradient(circle at 85% 30%, rgba(6, 182, 212, 0.12), transparent 50%),
+                        radial-gradient(circle at 50% 80%, rgba(59, 130, 246, 0.08), transparent 50%);
+            animation: meshMove 20s ease-in-out infinite alternate;
+        }
+        @keyframes meshMove { 0% { transform: scale(1) translate(0, 0); } 50% { transform: scale(1.1) translate(-2%, 2%); } 100% { transform: scale(1.05) translate(2%, -2%); } }
+
+        /* ================= Glassmorphism & Utils ================= */
+        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); }
+        .glass-panel { background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(12px); border: 1px solid rgba(59, 130, 246, 0.1); }
+        .tilt-card { transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1); transform-style: preserve-3d; }
+        .spin-slow { animation: spin 8s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* ================= PANTALLA DE CARGA ================= */
+        #loader-screen {
+            position: fixed; inset: 0; z-index: 50; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background-color: var(--bg-deep); transition: opacity 0.8s ease;
+        }
+        .cyber-ring { position: absolute; border-radius: 50%; border: 2px solid transparent; }
+        .cyber-ring-1 { width: 140px; height: 140px; border-top-color: #3b82f6; border-bottom-color: #22d3ee; animation: spin 1.5s linear infinite; }
+        .cyber-ring-2 { width: 100px; height: 100px; border-right-color: #a855f7; border-left-color: #3b82f6; border-style: dashed; animation: spin 2.5s linear infinite reverse; }
+        .cyber-core { width: 50px; height: 50px; border-radius: 50%; background: radial-gradient(circle, rgba(59,130,246,0.8) 0%, transparent 70%); animation: corePulse 1s ease-in-out infinite alternate; box-shadow: 0 0 30px rgba(59,130,246,0.5); }
+        @keyframes corePulse { 0% { transform: scale(0.8); opacity: 0.5; } 100% { transform: scale(1.2); opacity: 1; } }
+        .glitch-text { text-shadow: 0 0 10px rgba(34, 211, 238, 0.8); }
+
+        #main-content { opacity: 0; transition: opacity 1s ease; display: none; }
+        
+        /* Animación de barras de progreso */
+        @keyframes loadBar { 0% { width: 0%; } 100% { width: var(--target-width); } }
+        .progress-fill { animation: loadBar 2s ease-out forwards; animation-delay: 3.5s; width: 0; }
+    </style>
+</head>
+<body class="selection:bg-blue-500/30">
+
+<div id="custom-cursor"><span id="cursor-dot"></span></div>
+<div id="cursor-aura"></div>
+<div class="mesh-bg"></div>
+
+<div id="loader-screen">
+    <div class="relative flex items-center justify-center mb-12 w-40 h-40">
+        <div class="cyber-ring cyber-ring-1"></div>
+        <div class="cyber-ring cyber-ring-2"></div>
+        <div class="cyber-core"></div>
+    </div>
+    <div class="w-72 h-1.5 bg-white/10 rounded-full overflow-hidden mb-4 relative border border-white/5">
+        <div id="loader-bar" class="h-full bg-gradient-to-r from-blue-600 via-cyan-400 to-blue-400 w-0 transition-all duration-100 ease-out shadow-[0_0_10px_rgba(34,211,238,0.8)]"></div>
+    </div>
+    <div class="flex justify-between w-72 text-[10px] font-mono-custom text-gray-500 mb-3">
+        <span>SYS_BOOT_SEQ</span>
+        <span id="loader-percent" class="text-blue-400 font-bold">0%</span>
+    </div>
+    <div id="loader-status" class="text-xs font-mono-custom text-cyan-400 glitch-text tracking-widest uppercase">ESTABLECIENDO CONEXIÓN...</div>
+</div>
+
+<main id="main-content" class="relative z-10 max-w-7xl mx-auto px-4 py-12 md:py-20 w-full min-h-screen flex flex-col justify-center">
+    
+    <header class="w-full flex justify-between items-center mb-8 border-b border-white/10 pb-6 px-4">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-blue-600/20 rounded-lg border border-blue-500/30 flex items-center justify-center">
+                <i data-lucide="cpu" class="w-5 h-5 text-blue-400"></i>
+            </div>
+            <div>
+                <h2 class="text-xl font-bold text-white tracking-tight">InfiniHon</h2>
+                <p class="text-[10px] text-blue-400 font-mono-custom uppercase tracking-widest">Hardware & Infraestructura</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="relative flex h-3 w-3">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-3 w-3 bg-yellow-500"></span>
+            </span>
+            <span class="text-xs font-mono-custom text-gray-400">MODO_MANTENIMIENTO</span>
+        </div>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <div class="lg:col-span-2 glass tilt-card interactive rounded-[2rem] p-8 md:p-12 relative overflow-hidden flex flex-col justify-center">
+            <div class="absolute -top-32 -right-32 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl"></div>
+            
+            <span class="text-cyan-400 text-sm font-mono-custom tracking-[0.2em] mb-4 block" style="transform: translateZ(20px);">// ACTUALIZACIÓN DE PROTOCOLOS</span>
+            
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-6 tracking-tighter leading-tight" style="transform: translateZ(40px);">
+                Evolucionando nuestra <br />
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500">Arquitectura Digital</span>
+            </h1>
+            
+            <p class="text-gray-400 text-lg max-w-xl leading-relaxed mb-10" style="transform: translateZ(20px);">
+                En InfiniHon no nos conformamos. Estamos desplegando nuevos servidores de alto rendimiento para garantizarte una experiencia de navegación y compra de hardware sin interrupciones.
+            </p>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-2xl mb-8" style="transform: translateZ(30px);">
+                <div class="glass-panel rounded-2xl p-5 flex flex-col items-center justify-center interactive">
+                    <span id="days" class="text-4xl font-mono-custom font-bold text-white mb-1">00</span>
+                    <span class="text-[10px] text-blue-400 font-bold uppercase tracking-widest">Días</span>
+                </div>
+                <div class="glass-panel rounded-2xl p-5 flex flex-col items-center justify-center interactive">
+                    <span id="hours" class="text-4xl font-mono-custom font-bold text-white mb-1">00</span>
+                    <span class="text-[10px] text-blue-400 font-bold uppercase tracking-widest">Horas</span>
+                </div>
+                <div class="glass-panel rounded-2xl p-5 flex flex-col items-center justify-center interactive">
+                    <span id="minutes" class="text-4xl font-mono-custom font-bold text-white mb-1">00</span>
+                    <span class="text-[10px] text-blue-400 font-bold uppercase tracking-widest">Minutos</span>
+                </div>
+                <div class="glass-panel rounded-2xl p-5 flex flex-col items-center justify-center interactive border-blue-500/30">
+                    <span id="seconds" class="text-4xl font-mono-custom font-bold text-cyan-400 mb-1">00</span>
+                    <span class="text-[10px] text-cyan-400 font-bold uppercase tracking-widest">Segundos</span>
+                </div>
+            </div>
+
+            <div style="transform: translateZ(20px);">
+                <button class="interactive bg-blue-600 hover:bg-blue-500 text-white px-8 py-3 rounded-xl font-semibold transition-all shadow-[0_0_20px_rgba(37,99,235,0.3)] flex items-center gap-2 w-fit">
+                    <i data-lucide="mail" class="w-5 h-5"></i> Avísame cuando esté listo
+                </button>
+            </div>
+        </div>
+
+        <div class="space-y-6 flex flex-col">
+            
+            <div class="glass tilt-card interactive rounded-[2rem] p-6 flex-1">
+                <div class="flex items-center gap-3 mb-4">
+                    <i data-lucide="list-checks" class="text-blue-400 w-5 h-5"></i>
+                    <h3 class="text-white font-semibold">Registro de Tareas</h3>
+                </div>
+                <ul class="space-y-4">
+                    <li class="flex items-start gap-3">
+                        <i data-lucide="check-circle-2" class="w-5 h-5 text-green-400 shrink-0 mt-0.5"></i>
+                        <div>
+                            <p class="text-sm text-gray-200">Respaldo de Base de Datos</p>
+                            <p class="text-[10px] text-gray-500 font-mono-custom">COMPLETADO</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i data-lucide="loader-2" class="w-5 h-5 text-blue-400 shrink-0 mt-0.5 animate-spin"></i>
+                        <div>
+                            <p class="text-sm text-gray-200">Migración a Nodos NVMe</p>
+                            <p class="text-[10px] text-blue-400 font-mono-custom">EN PROGRESO</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-3 opacity-50">
+                        <i data-lucide="shield" class="w-5 h-5 text-gray-400 shrink-0 mt-0.5"></i>
+                        <div>
+                            <p class="text-sm text-gray-200">Implementación Zero-Trust</p>
+                            <p class="text-[10px] text-gray-500 font-mono-custom">PENDIENTE</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="glass tilt-card interactive rounded-[2rem] p-6 flex-1">
+                <div class="flex items-center gap-3 mb-5">
+                    <i data-lucide="activity" class="text-cyan-400 w-5 h-5"></i>
+                    <h3 class="text-white font-semibold">Métricas de Migración</h3>
+                </div>
+                
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-gray-400 font-mono-custom">Integridad de Datos</span>
+                            <span class="text-cyan-400">100%</span>
+                        </div>
+                        <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                            <div class="h-full bg-cyan-400 progress-fill" style="--target-width: 100%;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-gray-400 font-mono-custom">Propagación DNS</span>
+                            <span class="text-blue-500">65%</span>
+                        </div>
+                        <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                            <div class="h-full bg-blue-500 progress-fill" style="--target-width: 65%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel tilt-card interactive rounded-[2rem] p-6 border-l-4 border-l-blue-500 flex-1 flex flex-col justify-center">
+                <h3 class="text-white font-bold mb-2">El Estándar InfiniHon</h3>
+                <p class="text-xs text-gray-400 leading-relaxed">
+                    Nuestra tienda de hardware especializado merece una plataforma a la altura. Esta actualización reducirá la latencia en un 40% y mejorará el rendimiento del catálogo 3D en tiempo real.
+                </p>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<script>
+    lucide.createIcons();
+
+    // ==========================================
+    // LÓGICA SECUENCIA DE ARRANQUE (BOOT)
+    // ==========================================
+    window.addEventListener('load', () => {
+        let loadProgress = 0;
+        const loaderBar = document.getElementById('loader-bar');
+        const loaderPercent = document.getElementById('loader-percent');
+        const loaderStatus = document.getElementById('loader-status');
+        
+        const bootMessages = [
+            "INICIALIZANDO KERNEL...",
+            "VERIFICANDO FIRMAS DE SEGURIDAD...",
+            "CARGANDO MÓDULOS DE RED (IPv6)...",
+            "ENCRIPTANDO CONEXIÓN END-TO-END...",
+            "SINCRONIZANDO BASES DE DATOS...",
+            "SISTEMA LISTO. ABRIENDO COMPUERTAS."
+        ];
+
+        const bootInterval = setInterval(() => {
+            loadProgress += Math.floor(Math.random() * 5) + 2; 
+            
+            if (loadProgress >= 100) {
+                loadProgress = 100;
+                clearInterval(bootInterval);
+                
+                setTimeout(() => {
+                    const loader = document.getElementById('loader-screen');
+                    const mainContent = document.getElementById('main-content');
+                    loader.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                        mainContent.style.display = 'flex'; // Cambiado a flex para centrar el dashboard
+                        setTimeout(() => mainContent.style.opacity = '1', 50);
+                    }, 800);
+                }, 600);
+            }
+            
+            loaderBar.style.width = `${loadProgress}%`;
+            loaderPercent.textContent = `${loadProgress}%`;
+            
+            const msgIndex = Math.floor((loadProgress / 100) * (bootMessages.length - 1));
+            loaderStatus.textContent = bootMessages[msgIndex];
+            
+        }, 60);
+    });
+
+    // ==========================================
+    // LÓGICA DEL CONTADOR REGRESIVO
+    // ==========================================
+    // Termina el 15 de Noviembre de 2026
+    const targetDate = new Date("Nov 15, 2026 12:00:00").getTime(); 
+
+    const countdown = setInterval(function() {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById("days").innerText = days.toString().padStart(2, '0');
+        document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
+        document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
+        document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
+
+        if (distance < 0) {
+            clearInterval(countdown);
+            document.querySelector(".grid").innerHTML = "<div class='col-span-full text-2xl font-bold text-green-400 font-mono-custom glitch-text'>[ SERVIDORES EN LÍNEA ]</div>";
+        }
+    }, 1000);
+
+    // ==========================================
+    // LÓGICA DEL CURSOR Y TILT 3D
+    // ==========================================
+    const cursor = document.getElementById('custom-cursor');
+    const cursorDot = document.getElementById('cursor-dot');
+    const aura = document.getElementById('cursor-aura');
+    const isTouch = !window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+    if (!isTouch) {
+        document.addEventListener('mousemove', (e) => {
+            if(!cursor || !aura) return;
+            cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
+            aura.style.left = e.clientX + 'px'; aura.style.top = e.clientY + 'px';
+        });
+
+        document.addEventListener('mouseover', (e) => {
+            const el = e.target.closest('.interactive');
+            if (el) {
+                if(!cursor) return;
+                cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                cursor.style.borderColor = '#60a5fa'; cursorDot.style.backgroundColor = '#60a5fa';
+                aura.style.background = `radial-gradient(circle, #60a5fa33 0%, transparent 70%)`;
+            }
+        });
+        
+        document.addEventListener('mouseout', (e) => {
+            const el = e.target.closest('.interactive');
+            if (el) {
+                if(!cursor) return;
+                cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                cursor.style.borderColor = 'white'; cursorDot.style.backgroundColor = 'white';
+                aura.style.background = 'radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%)';
+            }
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            const card = e.target.closest('.tilt-card');
+            if(card) {
+                const rect = card.getBoundingClientRect();
+                // Reducimos un poco el efecto tilt para que no sea tan brusco en paneles pequeños
+                const rotateX = (((e.clientY - rect.top) - (rect.height/2)) / (rect.height/2)) * -3;
+                const rotateY = (((e.clientX - rect.left) - (rect.width/2)) / (rect.width/2)) * 3;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.01, 1.01, 1.01)`;
+            }
+        });
+        
+        document.addEventListener('mouseout', (e) => {
+            const card = e.target.closest('.tilt-card');
+            if(card) card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+        });
+    } else {
+        document.body.style.cursor = 'auto';
+        if(cursor) cursor.style.display = 'none';
+        if(aura) aura.style.display = 'none';
+    }
+</script>
+</body>
+</html>
