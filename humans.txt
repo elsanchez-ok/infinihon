@@ -1,0 +1,13 @@
+/* TEAM */
+  Developer: Joseph Sanchez / @elsanchezok
+  Role: Lead System Architect & Founder
+  Contact: joseph.sanchez@iteesa.edu.hn
+  From: Honduras
+
+/* SITE */
+  Last update: Abril 2026
+  Language: Spanish
+  Doctype: HTML5
+  IDE: Visual Studio Code
+  Hosting: Vercel Edge Network
+  Note: Construido con pasión para los verdaderos entusiastas del hardware.
