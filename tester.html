@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfiniHon Lab | Hardware Tester</title>
+    <style>
+        body {
+            background-color: #020617;
+            color: #ffffff;
+            font-family: 'Courier New', Courier, monospace; /* Fuente estilo consola */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #0f172a;
+            padding: 2rem;
+            border-radius: 10px;
+            border: 1px solid #3b82f6;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+            text-align: center;
+            max-width: 500px;
+        }
+        h1 { color: #3b82f6; text-transform: uppercase; }
+        button {
+            background: transparent;
+            color: #3b82f6;
+            border: 2px solid #3b82f6;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 10px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #3b82f6;
+            color: #020617;
+            box-shadow: 0 0 15px #3b82f6;
+        }
+        #area-prueba {
+            margin-top: 20px;
+            padding: 40px;
+            background: #1e293b;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        .alerta { color: #ef4444; font-size: 0.9rem; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>InfiniHon Lab 🔬</h1>
+        <p>Analiza tu hardware actual.</p>
+
+        <button id="btn-escanear">Escanear Setup (USB)</button>
+        <p id="resultado-usb" class="alerta"></p>
+
+        <hr style="border-color: #1e293b; margin: 20px 0;">
+
+        <h3>Prueba de Velocidad de Reacción</h3>
+        <p>Haz clic en el cuadro cuando cambie a verde.</p>
+        <div id="area-prueba">Esperando para iniciar...</div>
+        <button id="btn-iniciar-prueba">Iniciar Prueba</button>
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. LÓGICA DE WEBUSB
+        // ==========================================
+        document.getElementById('btn-escanear').addEventListener('click', async () => {
+            try {
+                // Esto abre la ventana nativa del navegador pidiendo permiso
+                const device = await navigator.usb.requestDevice({ filters: [] });
+                document.getElementById('resultado-usb').innerText = 
+                    `¡Dispositivo detectado! ${device.productName || 'Hardware Desconocido'} conectado.`;
+                document.getElementById('resultado-usb').style.color = '#10b981'; // Verde
+            } catch (error) {
+                // Si el usuario cancela o el navegador no es compatible
+                document.getElementById('resultado-usb').innerText = 
+                    "Escaneo cancelado o no soportado en este navegador.";
+            }
+        });
+
+        // ==========================================
+        // 2. LÓGICA DEL TESTER DE REACCIÓN
+        // ==========================================
+        let tiempoInicio;
+        let timeoutPrueba;
+        const areaPrueba = document.getElementById('area-prueba');
+        const btnIniciar = document.getElementById('btn-iniciar-prueba');
+
+        btnIniciar.addEventListener('click', () => {
+            areaPrueba.style.background = '#ef4444'; // Rojo
+            areaPrueba.innerText = "¡Espera al verde!";
+            btnIniciar.disabled = true;
+
+            // Tiempo aleatorio entre 2 y 5 segundos
+            const tiempoEspera = Math.floor(Math.random() * 3000) + 2000;
+            
+            timeoutPrueba = setTimeout(() => {
+                areaPrueba.style.background = '#10b981'; // Verde
+                areaPrueba.innerText = "¡CLIC AHORA!";
+                tiempoInicio = Date.now();
+            }, tiempoEspera);
+        });
+
+        areaPrueba.addEventListener('click', () => {
+            if (areaPrueba.style.background === 'rgb(16, 185, 129)') { // Si está verde
+                const tiempoReaccion = Date.now() - tiempoInicio;
+                areaPrueba.style.background = '#1e293b';
+                
+                let mensaje = `Tu tiempo: ${tiempoReaccion}ms. `;
+                if (tiempoReaccion > 250) {
+                    mensaje += "\n⚠️ Lento. Te recomendamos un Teclado Mecánico InfiniHon.";
+                } else {
+                    mensaje += "\n⚡ ¡Reflejos de eSports!";
+                }
+                
+                areaPrueba.innerText = mensaje;
+                btnIniciar.disabled = false;
+            } else if (areaPrueba.style.background === 'rgb(239, 68, 68)') { // Si está rojo
+                clearTimeout(timeoutPrueba);
+                areaPrueba.style.background = '#1e293b';
+                areaPrueba.innerText = "¡Hiciste clic muy pronto! Tramposo.";
+                btnIniciar.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
