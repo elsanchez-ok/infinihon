@@ -1,0 +1,16 @@
+User-agent: *
+Disallow: /api/
+Disallow: /login.html
+Disallow: /fix.html
+
+# ==========================================
+#  _____        __ _       _ _   _             
+# |_   _|      / _(_)     (_) | | |            
+#   | |  _ __ | |_ _ _ __  _| |_| | ___  _ __  
+#   | | | '_ \|  _| | '_ \| |  _  |/ _ \| '_ \ 
+#  _| |_| | | | | | | | | | | | | | (_) | | | |
+# |_____|_| |_|_| |_|_| |_|_|_| |_|\___/|_| |_|
+#
+# ¿Buscando vulnerabilidades? Mejor busca nuestras
+# ofertas de empleo enviando un correo a joseph.sanchez@iteesa.edu.hn
+# ==========================================
