@@ -3,7 +3,7 @@
 // true = Guardián ACTIVADO (Página en mantenimiento)
 // false = Guardián DESACTIVADO (Público general puede entrar)
 // ==========================================
-const modoMantenimiento = false; 
+const modoMantenimiento = true; 
 
 if (modoMantenimiento) {
     // --- INICIO DE LA LÓGICA DEL GUARDIÁN ---
