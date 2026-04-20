@@ -9,79 +9,58 @@ const paginasIntocables = ["fix", "404", "elsanchezok"];
 // LÓGICA DEL GUARDIÁN
 // ==========================================
 const rutaActual = window.location.pathname;
-let guardiaDebeActuar = false;
+const parametrosURL = new URLSearchParams(window.location.search);
 
+// 1. GESTIÓN DE CREDENCIALES (Entrar/Salir)
+if (parametrosURL.get('admin') === 'infinihonVIP') {
+    localStorage.setItem('paseAdministrador', 'activado');
+    window.history.replaceState({}, document.title, window.location.pathname);
+}
+if (parametrosURL.get('admin') === 'salir') {
+    localStorage.removeItem('paseAdministrador');
+    window.location.href = "fix.html";
+}
+
+const esAdmin = localStorage.getItem('paseAdministrador') === 'activado';
+
+// 2. VERIFICACIÓN DE ACCESO
 const esIntocable = paginasIntocables.some(pagina => rutaActual.includes(pagina));
 
-if (!esIntocable) {
+if (!esIntocable && !esAdmin) {
+    let guardiaDebeBloquear = false;
+
     if (cerrarTodoElSitio === true) {
-        guardiaDebeActuar = true; 
+        guardiaDebeBloquear = true; 
     } else if (paginasEnObras.some(pagina => rutaActual.includes(pagina))) {
-        guardiaDebeActuar = true; 
+        guardiaDebeBloquear = true; 
     }
 
-    if (guardiaDebeActuar) {
-        const parametrosURL = new URLSearchParams(window.location.search);
+    if (guardiaDebeBloquear) {
+        window.location.href = "fix.html"; 
+    }
+}
 
-        if (parametrosURL.get('admin') === 'salir') {
+// 3. INYECCIÓN DEL BOTÓN (Solo si eres Admin y NO estás en la página de fix)
+if (esAdmin && !rutaActual.includes("fix")) {
+    console.log("🟢 [Modo Admin] Acceso total concedido.");
+    
+    window.addEventListener('load', () => {
+        const botonSalir = document.createElement('button');
+        botonSalir.innerHTML = '🔒 Salir del Modo Admin';
+        
+        Object.assign(botonSalir.style, {
+            position: 'fixed', bottom: '20px', right: '20px',
+            backgroundColor: '#dc2626', color: '#ffffff',
+            border: '2px solid #991b1b', padding: '12px 20px',
+            borderRadius: '8px', fontFamily: 'system-ui, sans-serif',
+            fontWeight: 'bold', cursor: 'pointer',
+            boxShadow: '0 4px 10px rgba(0,0,0,0.5)', zIndex: '9999'
+        });
+
+        botonSalir.onclick = () => {
             localStorage.removeItem('paseAdministrador');
             window.location.href = "fix.html";
-        }
-
-        if (parametrosURL.get('admin') === 'joseph') {
-            localStorage.setItem('paseAdministrador', 'activado');
-            window.history.replaceState({}, document.title, window.location.pathname);
-        }
-
-        const esAdmin = localStorage.getItem('paseAdministrador');
-
-        if (esAdmin !== 'activado') {
-            window.location.href = "fix.html"; 
-        } else {
-            console.log("🟢 [Modo Admin] Pase VIP detectado.");
-            
-            // ==========================================
-            // INYECCIÓN DEL BOTÓN SECRETO FLOTANTE
-            // ==========================================
-            // Esperamos a que la página cargue para dibujar el botón
-            window.addEventListener('DOMContentLoaded', () => {
-                const botonSalir = document.createElement('button');
-                botonSalir.innerHTML = '🔒 Salir del Modo Admin';
-                
-                // Le damos estilo para que se vea profesional y moderno
-                Object.assign(botonSalir.style, {
-                    position: 'fixed',
-                    bottom: '20px',
-                    right: '20px',
-                    backgroundColor: '#dc2626', // Rojo de alerta
-                    color: '#ffffff',
-                    border: '2px solid #991b1b',
-                    padding: '12px 20px',
-                    borderRadius: '8px',
-                    fontFamily: 'system-ui, sans-serif',
-                    fontWeight: 'bold',
-                    cursor: 'pointer',
-                    boxShadow: '0 4px 10px rgba(0,0,0,0.5)',
-                    zIndex: '9999', // Se asegura de estar encima de cualquier otra cosa
-                    transition: 'all 0.3s ease'
-                });
-
-                // Efecto al pasar el mouse por encima
-                botonSalir.onmouseover = () => botonSalir.style.backgroundColor = '#b91c1c';
-                botonSalir.onmouseout = () => botonSalir.style.backgroundColor = '#dc2626';
-
-                // Lo que pasa al hacer clic: destruye la llave y te saca
-                botonSalir.onclick = function() {
-                    localStorage.removeItem('paseAdministrador');
-                    window.location.href = "fix.html";
-                };
-
-                // Insertamos el botón en el cuerpo de tu página
-                document.body.appendChild(botonSalir);
-            });
-            // ==========================================
-        }
-    } else {
-        console.log("🟢 [Público] Esta página está abierta para todos.");
-    }
+        };
+        document.body.appendChild(botonSalir);
+    });
 }
