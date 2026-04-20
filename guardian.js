@@ -8,7 +8,10 @@ const modoMantenimiento = true;
 if (modoMantenimiento) {
     // --- INICIO DE LA LÓGICA DEL GUARDIÁN ---
     const rutaActual = window.location.pathname;
-    const paginasLibres = ["fix.html", "404.html", "tienda.html", "registro_admin.html", "elsanchezok.html"];
+    
+    // CORRECCIÓN AQUÍ: Quitamos el ".html" para que Vercel no confunda al Guardián
+    const paginasLibres = ["fix", "404", "tienda", "registro_admin", "elsanchezok"];
+    
     const esPaginaLibre = paginasLibres.some(pagina => rutaActual.includes(pagina));
 
     if (!esPaginaLibre) {
