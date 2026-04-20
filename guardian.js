@@ -1,24 +1,46 @@
-// ==========================================
-// MODO MANTENIMIENTO INFINIHON 🛡️
-// ==========================================
-
-// Cambia a 'false' para abrir la tienda al público
-const MANTENIMIENTO_ACTIVO = true; 
-
-// Obtenemos la ruta en la que está el usuario
+// Obtenemos la ruta en la que está el usuario actualmente
 const rutaActual = window.location.pathname;
 
-if (MANTENIMIENTO_ACTIVO) {
-    // Verificamos si la ruta "contiene" alguna de estas palabras clave.
-    // Así no importa si Vercel le pone o le quita el ".html" o la "/" al final.
-    const esPaginaPermitida = rutaActual.includes('/fix') || 
-                              rutaActual.includes('/login') || 
-                              rutaActual.includes('/elsanchezok') ||
-                              rutaActual.includes('/404');
+// 1. LA LISTA BLANCA: ¿Qué páginas están abiertas al público?
+// IMPORTANTE: Asegúrate de incluir fix.html y 404.html aquí
+const paginasLibres = [
+    "panel_admin.html",
+    "fix.html",
+    "404.html",
+    "elsanchezok.html" // Ejemplo: si esta sección ya está terminada
+];
 
-    // Si NO es una página permitida, lo pateamos a mantenimiento
-    if (!esPaginaPermitida) {
-        // Redirigimos a /fix (sin el .html, dejamos que Vercel haga su magia)
-        window.location.replace('/fix');
+// Comprobamos si la página en la que estamos está en la lista blanca
+const esPaginaLibre = paginasLibres.some(pagina => rutaActual.includes(pagina));
+
+if (esPaginaLibre) {
+    // Si la página está en la lista, el Guardián se echa a dormir. Todos pasan.
+    console.log("🟢 Página pública detectada. Guardián en reposo.");
+} else {
+    // 2. SI NO ES PÁGINA LIBRE (Ej. index.html), ACTIVAMOS PROTOCOLO VIP
+    const parametrosURL = new URLSearchParams(window.location.search);
+
+    // Salir del modo admin
+    if (parametrosURL.get('admin') === 'salir') {
+        localStorage.removeItem('paseAdministrador');
+        window.location.href = "fix.html";
+    }
+
+    // Entrar al modo admin
+    if (parametrosURL.get('admin') === 'infinihonVIP') {
+        localStorage.setItem('paseAdministrador', 'activado');
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
+    // Verificar el pase
+    const esAdmin = localStorage.getItem('paseAdministrador');
+
+    if (esAdmin === 'activado') {
+        // ERES TÚ: Te dejamos trabajar en las obras
+        console.log("🟢 Modo Administrador: Puedes ver las páginas en construcción.");
+    } else {
+        // SON LOS DEMÁS: Los mandamos a la sala de espera
+        console.log("🔴 Zona en obras. Redirigiendo a fix.html...");
+        window.location.href = "fix.html"; 
     }
 }
