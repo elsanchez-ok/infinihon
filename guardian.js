@@ -1,46 +1,36 @@
-// Obtenemos la ruta en la que está el usuario actualmente
-const rutaActual = window.location.pathname;
+// ==========================================
+// INTERRUPTOR MAESTRO DEL GUARDIÁN
+// true = Guardián ACTIVADO (Página en mantenimiento)
+// false = Guardián DESACTIVADO (Público general puede entrar)
+// ==========================================
+const modoMantenimiento = false; 
 
-// 1. LA LISTA BLANCA: ¿Qué páginas están abiertas al público?
-// IMPORTANTE: Asegúrate de incluir fix.html y 404.html aquí
-const paginasLibres = [
-    "panel_admin.html",
-    "fix.html",
-    "404.html",
-    "elsanchezok.html" // Ejemplo: si esta sección ya está terminada
-];
+if (modoMantenimiento) {
+    // --- INICIO DE LA LÓGICA DEL GUARDIÁN ---
+    const rutaActual = window.location.pathname;
+    const paginasLibres = ["fix.html", "404.html", "tienda.html", "registro_admin.html", "elsanchezok.html"];
+    const esPaginaLibre = paginasLibres.some(pagina => rutaActual.includes(pagina));
 
-// Comprobamos si la página en la que estamos está en la lista blanca
-const esPaginaLibre = paginasLibres.some(pagina => rutaActual.includes(pagina));
+    if (!esPaginaLibre) {
+        const parametrosURL = new URLSearchParams(window.location.search);
 
-if (esPaginaLibre) {
-    // Si la página está en la lista, el Guardián se echa a dormir. Todos pasan.
-    console.log("🟢 Página pública detectada. Guardián en reposo.");
+        if (parametrosURL.get('admin') === 'salir') {
+            localStorage.removeItem('paseAdministrador');
+            window.location.href = "fix.html";
+        }
+
+        if (parametrosURL.get('admin') === 'infinihonVIP') {
+            localStorage.setItem('paseAdministrador', 'activado');
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+
+        const esAdmin = localStorage.getItem('paseAdministrador');
+
+        if (esAdmin !== 'activado') {
+            window.location.href = "fix.html"; 
+        }
+    }
+    // --- FIN DE LA LÓGICA DEL GUARDIÁN ---
 } else {
-    // 2. SI NO ES PÁGINA LIBRE (Ej. index.html), ACTIVAMOS PROTOCOLO VIP
-    const parametrosURL = new URLSearchParams(window.location.search);
-
-    // Salir del modo admin
-    if (parametrosURL.get('admin') === 'salir') {
-        localStorage.removeItem('paseAdministrador');
-        window.location.href = "fix.html";
-    }
-
-    // Entrar al modo admin
-    if (parametrosURL.get('admin') === 'infinihonVIP') {
-        localStorage.setItem('paseAdministrador', 'activado');
-        window.history.replaceState({}, document.title, window.location.pathname);
-    }
-
-    // Verificar el pase
-    const esAdmin = localStorage.getItem('paseAdministrador');
-
-    if (esAdmin === 'activado') {
-        // ERES TÚ: Te dejamos trabajar en las obras
-        console.log("🟢 Modo Administrador: Puedes ver las páginas en construcción.");
-    } else {
-        // SON LOS DEMÁS: Los mandamos a la sala de espera
-        console.log("🔴 Zona en obras. Redirigiendo a fix.html...");
-        window.location.href = "fix.html"; 
-    }
+    console.log("🟢 El Guardián está apagado. Acceso libre para todo el mundo.");
 }
