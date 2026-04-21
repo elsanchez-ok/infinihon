@@ -1,37 +1,17 @@
 <!DOCTYPE html>
 <html lang="es" class="scroll-smooth">
 <head>
-
-
-
-<meta property="og:title" content="InfiniHon | Infraestructura IT de Grado Industrial">
-<meta property="og:description" content="Pon a prueba tu equipo y descubre componentes de grado industrial. ¿Estás listo para el upgrade?">
-<meta property="og:image" content="https://infinihon.vercel.app/tu-imagen-cool-para-redes.jpg">
-<meta property="og:url" content="https://infinihon.vercel.app">
-<meta name="twitter:card" content="summary_large_image">
-
-
-
-
-
+    <meta property="og:title" content="InfiniHon | Infraestructura IT de Grado Industrial">
+    <meta property="og:description" content="Pon a prueba tu equipo y descubre componentes de grado industrial. ¿Estás listo para el upgrade?">
+    <meta property="og:image" content="https://infinihon.vercel.app/tu-imagen-cool-para-redes.jpg">
+    <meta property="og:url" content="https://infinihon.vercel.app">
+    <meta name="twitter:card" content="summary_large_image">
     
-<script src="/guardian.js"></script>
-
-
-
-
+    <script src="/guardian.js"></script>
     
-
-<meta name="view-transition" content="same-origin">
-    
-
-
-
-    
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#020617">
-
-
+    <meta name="view-transition" content="same-origin">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#020617">
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -131,6 +111,15 @@
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
         
+        /* Dropdown con fondo SÓLIDO (NO transparente) */
+        .dropdown-solid {
+            background: #0a0f1f;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.8);
+        }
+        
         /* Bento Grids Animados */
         .bento-card { 
             transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1); 
@@ -186,54 +175,54 @@
             animation-delay: 2s;
         }
 
+        /* Modificar la barra de desplazamiento */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
 
+        ::-webkit-scrollbar-track {
+            background: #020617;
+        }
 
-/* Modificar la barra de desplazamiento */
-::-webkit-scrollbar {
-    width: 10px; /* Ancho de la barra */
-}
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b; 
+            border-radius: 5px;
+            border: 2px solid #020617;
+        }
 
-/* El fondo de la barra */
-::-webkit-scrollbar-track {
-    background: #020617; /* El mismo azul ultra-oscuro de tu fondo */
-}
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3b82f6;
+            box-shadow: 0 0 10px #3b82f6;
+        }
 
-/* El "pulgar" (la parte que se mueve) */
-::-webkit-scrollbar-thumb {
-    background: #1e293b; 
-    border-radius: 5px;
-    border: 2px solid #020617; /* Crea un efecto de espacio alrededor */
-}
+        /* Configuración básica de la transición suave */
+        ::view-transition-old(root) {
+            animation: fade-out 0.3s ease-out both;
+        }
+        ::view-transition-new(root) {
+            animation: fade-in 0.3s ease-in both;
+        }
 
-/* Cuando pasas el mouse por encima de la barra */
-::-webkit-scrollbar-thumb:hover {
-    background: #3b82f6; /* Tu color azul acento */
-    box-shadow: 0 0 10px #3b82f6;
-}
+        @keyframes fade-out {
+            to { opacity: 0; transform: scale(0.98); }
+        }
+        @keyframes fade-in {
+            from { opacity: 0; transform: scale(1.02); }
+        }
 
-
-
-
-
-/* Configuración básica de la transición suave */
-::view-transition-old(root) {
-    animation: fade-out 0.3s ease-out both;
-}
-::view-transition-new(root) {
-    animation: fade-in 0.3s ease-in both;
-}
-
-@keyframes fade-out {
-    to { opacity: 0; transform: scale(0.98); }
-}
-@keyframes fade-in {
-    from { opacity: 0; transform: scale(1.02); }
-}
-
-
-
+        /* Menú móvil */
+        #mobileMenu {
+            max-height: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: max-height 0.4s ease, opacity 0.3s ease, visibility 0.3s ease;
+        }
         
-        
+        #mobileMenu.open {
+            max-height: 500px;
+            opacity: 1;
+            visibility: visible;
+        }
     </style>
 </head>
 <body class="selection:bg-blue-500/30 min-h-screen relative">
@@ -256,16 +245,16 @@
 <nav class="sticky top-0 z-50 glass border-b border-white/5">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex justify-between items-center">
         <!-- Logo -->
-        <div class="flex items-center space-x-3">
+        <a href="index.html" class="flex items-center space-x-3">
             <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
                 <i data-lucide="cpu" class="text-black w-6 h-6"></i>
             </div>
             <span class="text-white font-bold text-xl tracking-tight">
                 𝓘𝓷𝓯𝓲𝓷𝓲<span class="text-blue-400">𝓗𝓸𝓷</span>
             </span>
-        </div>
+        </a>
         
-        <!-- Navegación principal con Dropdown -->
+        <!-- Navegación principal con Dropdown (Desktop) -->
         <div class="hidden md:flex items-center space-x-8 text-sm font-semibold">
             <a href="index.html" class="text-gray-300 hover:text-white transition-colors cursor-none">Inicio</a>
             <a href="servicios.html" class="text-gray-300 hover:text-white transition-colors cursor-none">Servicios</a>
@@ -279,8 +268,9 @@
                     <i data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-300 group-hover:rotate-180"></i>
                 </a>
                 
+                <!-- Dropdown con fondo SÓLIDO -->
                 <div class="absolute left-0 mt-2 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top group-hover:translate-y-0 translate-y-2">
-                    <div class="relative glass rounded-xl shadow-2xl overflow-hidden border border-blue-500/20">
+                    <div class="relative dropdown-solid rounded-xl shadow-2xl overflow-hidden">
                         <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-cyan-400"></div>
                         
                         <div class="p-2">
@@ -323,6 +313,16 @@
                                     <p class="text-gray-400 text-xs">Advanced Partner</p>
                                 </div>
                             </a>
+                            
+                            <a href="perfil.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-green-500/10 transition-all group/item cursor-none">
+                                <div class="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center border border-green-500/30">
+                                    <i data-lucide="user-circle" class="text-green-400 w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <p class="text-white text-sm font-medium">Mi Perfil</p>
+                                    <p class="text-gray-400 text-xs">Área Personal</p>
+                                </div>
+                            </a>
                         </div>
                         
                         <div class="border-t border-white/5 my-1"></div>
@@ -336,9 +336,29 @@
             </div>
         </div>
         
-        <a href="contacto.html" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition-all cursor-none">
-            Contactar
-        </a>
+        <!-- Botón de menú móvil (REEMPLAZA al botón Contactar) -->
+        <button id="mobileMenuBtn" class="md:hidden text-white p-2 hover:bg-white/10 rounded-lg transition-all">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+        
+        <!-- Espacio vacío en desktop (ya no hay botón Contactar) -->
+        <div class="hidden md:block w-20"></div>
+    </div>
+    
+    <!-- Menú desplegable para MÓVILES -->
+    <div id="mobileMenu" class="md:hidden glass border-t border-white/5 overflow-hidden">
+        <div class="px-4 py-4 space-y-2">
+            <a href="index.html" class="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all">Inicio</a>
+            <a href="servicios.html" class="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all">Servicios</a>
+            <a href="tienda.html" class="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all">Tienda</a>
+            <a href="blog.html" class="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all">Blog</a>
+            <a href="alianzas.html" class="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all">Alianzas</a>
+            <a href="minecraft.html" class="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all">MineCraft</a>
+            <a href="soporte.html" class="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all">Soporte</a>
+            <a href="sobre_nosotros.html" class="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all">Sobre Nosotros</a>
+            <a href="perfil.html" class="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all">Mi Perfil</a>
+            <a href="contacto.html" class="block px-4 py-3 text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-all text-center font-medium">Contactar</a>
+        </div>
     </div>
 </nav>
 
@@ -678,6 +698,23 @@
     (function(){
         // Inicializar iconos de Lucide
         lucide.createIcons();
+
+        // Menú móvil
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('open');
+                const icon = mobileMenuBtn.querySelector('i');
+                if (mobileMenu.classList.contains('open')) {
+                    icon.setAttribute('data-lucide', 'x');
+                } else {
+                    icon.setAttribute('data-lucide', 'menu');
+                }
+                lucide.createIcons();
+            });
+        }
 
         // Lógica del Cursor Personalizado Avanzado
         const cursor = document.getElementById('custom-cursor');
