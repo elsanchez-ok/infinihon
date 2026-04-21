@@ -1,522 +1,574 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InfiniHon - Contacto</title>
+    <title>InfiniHon - Contacto & Soporte</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
     <style>
+        :root { 
+            --bg-deep: #020617; 
+            --accent: #38bdf8; 
+        }
+
         * {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            cursor: none !important; /* Ocultar el cursor nativo */
         }
         
-        body {
-            background-color: #020617;
-            background-image: radial-gradient(circle at 30% 70%, rgba(37, 99, 235, 0.03) 0%, transparent 50%),
-                              radial-gradient(circle at 80% 20%, rgba(56, 189, 248, 0.03) 0%, transparent 50%);
-        }
-        
-        /* Estilo para validación en tiempo real */
-        .input-error {
-            border-color: #ef4444;
-            box-shadow: 0 0 0 1px #ef4444;
-        }
-        
-        .input-success {
-            border-color: #10b981;
-            box-shadow: 0 0 0 1px #10b981;
-        }
-        
-        .error-message {
-            color: #ef4444;
-            font-size: 0.75rem;
-            margin-top: 0.25rem;
+        .font-mono-custom {
             font-family: 'JetBrains Mono', monospace;
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: all 0.3s ease;
         }
-        
-        .error-message.visible {
-            opacity: 1;
-            transform: translateY(0);
+
+        body {
+            background-color: var(--bg-deep);
+            background-image: radial-gradient(circle at 30% 70%, rgba(37, 99, 235, 0.05) 0%, transparent 50%),
+                              radial-gradient(circle at 80% 20%, rgba(56, 189, 248, 0.05) 0%, transparent 50%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #f8fafc;
         }
-        
-        /* Botón flotante Glass */
-        .whatsapp-float {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-            z-index: 50;
+
+        /* ==========================================
+           MAGIA DEL CURSOR Y SCROLLBAR
+           ========================================== */
+        #custom-cursor {
+            width: 24px; height: 24px; border: 2px solid white; border-radius: 50%;
+            position: fixed; pointer-events: none; z-index: 999999;
+            transition: transform 0.25s cubic-bezier(0.23, 1, 0.32, 1), border-color 0.3s ease, width 0.2s, height 0.2s;
+            mix-blend-mode: difference; transform: translate(-50%, -50%); will-change: left, top;
         }
-        
-        .whatsapp-float:hover {
-            background: rgba(59, 130, 246, 0.2);
-            border-color: rgba(59, 130, 246, 0.6);
-            transform: scale(1.05);
-            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+        #cursor-dot {
+            position: absolute; top: 50%; left: 50%; width: 5px; height: 5px; background: white; border-radius: 50%;
+            transform: translate(-50%, -50%); transition: background-color 0.3s ease;
         }
-        
-        /* Acordeón FAQ */
-        .faq-item {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        #cursor-aura {
+            width: 450px; height: 450px; background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%);
+            position: fixed; pointer-events: none; z-index: 999998; border-radius: 50%;
+            transform: translate(-50%, -50%); transition: opacity 0.5s ease, background 0.3s ease; will-change: left, top;
         }
-        
-        .faq-question {
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .ping-effect {
+            position: fixed; width: 20px; height: 20px; border: 2px solid rgba(56, 189, 248, 0.8);
+            border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%);
+            animation: ping-anim 0.6s ease-out forwards; z-index: 1000000;
         }
-        
-        .faq-question:hover {
-            color: #60a5fa;
+        @keyframes ping-anim { 0% { transform: translate(-50%, -50%) scale(1); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(4); opacity: 0; } }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #38bdf8; }
+
+        /* ==========================================
+           ANIMACIONES ON-SCROLL
+           ========================================== */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* ==========================================
+           ESTILOS ESPECÍFICOS DE CONTACTO
+           ========================================== */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(56, 189, 248, 0.15);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
         }
-        
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-        }
-        
-        .faq-answer.open {
-            max-height: 200px;
-        }
-        
-        .faq-icon {
-            transition: transform 0.3s ease;
-        }
-        
-        .faq-icon.rotate {
-            transform: rotate(45deg);
-        }
-        
-        /* Mapa estilo nocturno */
-        .map-container {
-            filter: grayscale(0.5) brightness(0.7) contrast(1.2);
-        }
-        
-        .map-container iframe {
-            border-radius: 1rem;
-        }
-        
-        /* Inputs minimalistas */
+
+        /* Inputs y Validación */
         .form-input {
-            background: transparent;
-            border: none;
-            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
-            padding: 0.75rem 0;
+            background: rgba(2, 6, 23, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.75rem;
+            padding: 1rem 1rem 1rem 3rem;
             color: white;
             transition: all 0.3s ease;
         }
-        
         .form-input:focus {
             outline: none;
-            border-bottom-color: #3b82f6;
+            border-color: #38bdf8;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.2), inset 0 0 10px rgba(56, 189, 248, 0.1);
+            background: rgba(15, 23, 42, 0.8);
         }
-        
-        .form-input::placeholder {
-            color: rgba(148, 163, 184, 0.5);
-            font-weight: 300;
+        .form-input::placeholder { color: transparent; } /* Ocultar para el efecto flotante */
+
+        .input-icon {
+            position: absolute; left: 1rem; top: 1rem; color: rgba(148, 163, 184, 0.5); transition: all 0.3s ease; pointer-events: none;
         }
-        
+        .form-group:focus-within .input-icon { color: #38bdf8; filter: drop-shadow(0 0 5px rgba(56,189,248,0.5)); }
+
         .form-label {
-            position: absolute;
-            left: 0;
-            top: 0.75rem;
-            color: rgba(148, 163, 184, 0.5);
-            transition: all 0.3s ease;
-            pointer-events: none;
+            position: absolute; left: 3rem; top: 1rem; color: rgba(148, 163, 184, 0.5); transition: all 0.3s ease; pointer-events: none;
         }
-        
         .form-input:focus ~ .form-label,
         .form-input:not(:placeholder-shown) ~ .form-label {
-            top: -1.2rem;
-            font-size: 0.75rem;
-            color: #3b82f6;
+            top: -0.6rem; left: 1rem; font-size: 0.75rem; color: #38bdf8; background: #020617; padding: 0 0.5rem; border-radius: 0.25rem;
         }
+
+        /* Estados de validación */
+        .input-error { border-color: #ef4444 !important; box-shadow: 0 0 15px rgba(239, 68, 68, 0.2) !important; }
+        .input-error ~ .input-icon { color: #ef4444 !important; }
+        .input-error ~ .form-label { color: #ef4444 !important; }
         
-        /* Grid de contacto */
-        .contact-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
+        .input-success { border-color: #10b981 !important; box-shadow: 0 0 15px rgba(16, 185, 129, 0.2) !important; }
+        .input-success ~ .input-icon { color: #10b981 !important; }
+        .input-success ~ .form-label { color: #10b981 !important; }
+
+        .error-message {
+            color: #ef4444; font-size: 0.7rem; font-family: 'JetBrains Mono', monospace;
+            opacity: 0; transform: translateY(-5px); transition: all 0.3s ease; position: absolute; bottom: -1.2rem; right: 0.5rem;
         }
-        
-        @media (max-width: 768px) {
-            .contact-grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
+        .error-message.visible { opacity: 1; transform: translateY(0); }
+
+        /* Botón Enviar */
+        .btn-submit {
+            background: linear-gradient(135deg, #1e40af, #06b6d4); position: relative; overflow: hidden;
+            transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.1);
         }
+        .btn-submit::after {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg) translateY(-100%); transition: transform 0.6s ease;
+        }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 25px -5px rgba(56, 189, 248, 0.6); }
+        .btn-submit:hover::after { transform: rotate(45deg) translateY(100%); }
+
+        /* Botón WhatsApp HUD */
+        .whatsapp-float {
+            position: fixed; bottom: 2rem; right: 2rem; background: rgba(16, 185, 129, 0.1);
+            backdrop-filter: blur(12px); border: 1px solid rgba(16, 185, 129, 0.3);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.2); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 50;
+        }
+        .whatsapp-float:hover { background: rgba(16, 185, 129, 0.2); border-color: rgba(16, 185, 129, 0.6); transform: scale(1.1) translateY(-5px); box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4); }
+
+        /* Mapa Cyber */
+        .map-container { position: relative; border-radius: 1.5rem; overflow: hidden; border: 1px solid rgba(56, 189, 248, 0.2); }
+        .map-container::after {
+            content: ''; position: absolute; inset: 0; border-radius: 1.5rem; pointer-events: none;
+            box-shadow: inset 0 0 30px rgba(2, 6, 23, 0.8);
+        }
+        .map-container iframe { filter: grayscale(1) invert(0.8) hue-rotate(180deg) contrast(1.2); transition: filter 0.5s ease; }
+        .map-container:hover iframe { filter: grayscale(0.8) invert(0.8) hue-rotate(180deg) contrast(1.1) sepia(0.3); }
+
+        /* FAQ */
+        .faq-item {
+            background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 1rem; margin-bottom: 1rem; transition: all 0.3s ease; overflow: hidden;
+        }
+        .faq-item:hover { border-color: rgba(56, 189, 248, 0.3); background: rgba(15, 23, 42, 0.6); }
+        .faq-question { padding: 1.25rem; cursor: pointer; transition: color 0.3s ease; display: flex; justify-content: space-between; align-items: center; }
+        .faq-question:hover { color: #38bdf8; }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 0 1.25rem; opacity: 0; }
+        .faq-answer.open { max-height: 300px; padding-bottom: 1.25rem; opacity: 1; }
+        .faq-icon { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .faq-icon.rotate { transform: rotate(180deg); color: #38bdf8; }
+
     </style>
 </head>
-<body class="min-h-screen relative">
+<body class="selection:bg-blue-500/30">
 
-<!-- Header minimalista -->
-<nav class="relative z-40 border-b border-white/5 bg-[#020617]/80 backdrop-blur-sm">
+<div id="custom-cursor"><span id="cursor-dot"></span></div>
+<div id="cursor-aura"></div>
+
+<nav class="sticky top-0 z-50 border-b border-white/5 bg-[#020617]/80 backdrop-blur-xl">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-20">
-            <div class="flex items-center space-x-2">
-                <div class="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
+            <div class="flex items-center gap-3 cursor-pointer group" data-cursor-interact onclick="window.location.href='index.html'">
+                <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(56,189,248,0.3)] group-hover:shadow-[0_0_25px_rgba(56,189,248,0.5)] transition-all">
                     <span class="text-black font-bold text-xl">I</span>
                 </div>
-                <span class="text-white font-light text-xl tracking-tight">INFINI<span class="font-medium text-blue-400">HON</span></span>
+                <span class="text-white font-bold text-xl tracking-tight hidden sm:block">INFINI<span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">HON</span></span>
             </div>
-            <div class="hidden md:flex items-center space-x-12">
-                <a href="#" class="text-gray-400 hover:text-white transition-colors text-sm font-light tracking-wide">INICIO</a>
-                <a href="#" class="text-gray-400 hover:text-white transition-colors text-sm font-light tracking-wide">SERVICIOS</a>
-                <a href="#" class="text-gray-400 hover:text-white transition-colors text-sm font-light tracking-wide">SOBRE NOSOTROS</a>
-                <a href="#" class="text-white transition-colors text-sm font-medium tracking-wide border-b border-blue-400 pb-1">CONTACTO</a>
+            
+            <div class="hidden md:flex items-center space-x-10">
+                <a href="index.html" class="text-gray-400 hover:text-white transition-all text-sm font-semibold tracking-wide" data-cursor-interact>INICIO</a>
+                <a href="servicios.html" class="text-gray-400 hover:text-white transition-all text-sm font-semibold tracking-wide" data-cursor-interact>SERVICIOS</a>
+                <a href="sobre_nosotros.html" class="text-gray-400 hover:text-white transition-all text-sm font-semibold tracking-wide" data-cursor-interact>SOBRE NOSOTROS</a>
+                <a href="contacto.html" class="text-white transition-all text-sm font-semibold tracking-wide border-b-2 border-blue-400 pb-1" data-cursor-interact>CONTACTO</a>
+            </div>
+
+            <div class="md:hidden flex items-center">
+                <button class="text-gray-400 hover:text-white" data-cursor-interact>
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
             </div>
         </div>
     </div>
 </nav>
 
-<!-- Hero Contacto -->
-<section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+<section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 reveal">
     <div class="max-w-2xl">
-        <span class="text-blue-400 text-sm font-mono tracking-[0.2em] mb-4 block">// CONTACTO</span>
-        <h1 class="text-4xl lg:text-5xl font-light text-white mb-6 leading-tight">
+        <span class="text-blue-400 text-xs font-mono-custom tracking-[0.2em] mb-4 block inline-block border border-blue-500/30 bg-blue-500/10 px-3 py-1 rounded-full">// INICIAR_PROTOCOLO_COMUNICACIÓN</span>
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight tracking-tight">
             Hablemos sobre tu<br>
-            <span class="font-medium bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">próximo proyecto</span>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 font-extrabold italic">próximo proyecto</span>
         </h1>
-        <p class="text-gray-400 font-light leading-relaxed">
-            Estamos aquí para resolver tus dudas y ayudarte a construir la infraestructura IT que tu empresa necesita.
+        <p class="text-gray-400 text-lg leading-relaxed font-light">
+            Nuestros ingenieros están listos para resolver tus dudas y ayudarte a diseñar la infraestructura IT que catapultará tu empresa hacia el futuro.
         </p>
     </div>
 </section>
 
-<!-- Grid Principal Contacto -->
-<section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div class="contact-grid">
+<section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 reveal">
+    <div class="grid lg:grid-cols-12 gap-12 lg:gap-16">
         
-        <!-- Formulario de Contacto -->
-        <div>
-            <h2 class="text-2xl font-light text-white mb-8">Envíanos un mensaje</h2>
+        <div class="lg:col-span-7 glass-panel p-8 lg:p-10 rounded-[2rem]">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-1 h-8 bg-blue-400 rounded-full"></div>
+                <h2 class="text-2xl font-bold text-white">Centro de Mensajería</h2>
+            </div>
             
-            <form id="contactForm" class="space-y-8">
-                <!-- Nombre -->
-                <div class="relative">
-                    <input type="text" id="name" class="form-input w-full peer" placeholder=" " required>
+            <form id="contactForm" class="space-y-6">
+                <div class="form-group relative pb-2">
+                    <i data-lucide="user" class="input-icon w-5 h-5"></i>
+                    <input type="text" id="name" class="form-input w-full peer" placeholder=" " required data-cursor-interact>
                     <label for="name" class="form-label">Nombre completo</label>
                     <div id="nameError" class="error-message"></div>
                 </div>
                 
-                <!-- Email -->
-                <div class="relative">
-                    <input type="email" id="email" class="form-input w-full peer" placeholder=" " required>
-                    <label for="email" class="form-label">Email corporativo o personal</label>
-                    <div id="emailError" class="error-message"></div>
+                <div class="grid md:grid-cols-2 gap-6 pb-2">
+                    <div class="form-group relative">
+                        <i data-lucide="mail" class="input-icon w-5 h-5"></i>
+                        <input type="email" id="email" class="form-input w-full peer" placeholder=" " required data-cursor-interact>
+                        <label for="email" class="form-label">Email corporativo</label>
+                        <div id="emailError" class="error-message"></div>
+                    </div>
+                    
+                    <div class="form-group relative">
+                        <i data-lucide="building" class="input-icon w-5 h-5"></i>
+                        <input type="text" id="company" class="form-input w-full peer" placeholder=" " required data-cursor-interact>
+                        <label for="company" class="form-label">Empresa</label>
+                        <div id="companyError" class="error-message"></div>
+                    </div>
                 </div>
                 
-                <!-- Empresa -->
-                <div class="relative">
-                    <input type="text" id="company" class="form-input w-full peer" placeholder=" " required>
-                    <label for="company" class="form-label">Empresa</label>
-                    <div id="companyError" class="error-message"></div>
+                <div class="form-group relative pb-2">
+                    <i data-lucide="phone" class="input-icon w-5 h-5"></i>
+                    <input type="tel" id="phone" class="form-input w-full peer" placeholder=" " data-cursor-interact>
+                    <label for="phone" class="form-label">Teléfono de contacto (Opcional)</label>
                 </div>
                 
-                <!-- Teléfono -->
-                <div class="relative">
-                    <input type="tel" id="phone" class="form-input w-full peer" placeholder=" ">
-                    <label for="phone" class="form-label">Teléfono (opcional)</label>
-                </div>
-                
-                <!-- Mensaje -->
-                <div class="relative">
-                    <textarea id="message" rows="4" class="form-input w-full peer resize-none" placeholder=" " required></textarea>
-                    <label for="message" class="form-label">¿En qué podemos ayudarte?</label>
+                <div class="form-group relative pb-2">
+                    <i data-lucide="message-square" class="input-icon w-5 h-5" style="top: 1.5rem"></i>
+                    <textarea id="message" rows="4" class="form-input w-full peer resize-none" style="padding-top: 1.25rem;" placeholder=" " required data-cursor-interact></textarea>
+                    <label for="message" class="form-label" style="top: 1.25rem;">Especificaciones del requerimiento</label>
                     <div id="messageError" class="error-message"></div>
                 </div>
                 
-                <!-- Botón enviar -->
-                <button type="submit" class="group relative overflow-hidden bg-transparent border border-blue-500/30 hover:border-blue-400 text-blue-400 hover:text-white px-8 py-4 rounded-xl text-sm font-medium transition-all w-full">
-                    <span class="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-                    <span class="relative flex items-center justify-center gap-2">
-                        Enviar mensaje
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                    </span>
+                <button type="submit" class="btn-submit w-full py-4 rounded-xl text-white font-bold tracking-wide flex justify-center items-center gap-2 mt-4" data-cursor-interact>
+                    TRANSMITIR MENSAJE 
+                    <i data-lucide="send" class="w-4 h-4"></i>
                 </button>
             </form>
+        </div>
+        
+        <div class="lg:col-span-5 space-y-8 flex flex-col justify-between">
             
-            <!-- Información de contacto minimalista -->
-            <div class="mt-12 grid grid-cols-2 gap-6">
-                <div>
-                    <div class="text-gray-400 text-xs font-mono mb-2 tracking-wider">EMAIL</div>
-                    <div class="text-white text-sm">contacto@infinihon.com</div>
-                    <div class="text-white text-sm">soporte@infinihon.com</div>
+            <div class="grid sm:grid-cols-2 gap-4">
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-colors group" data-cursor-interact data-theme="#3b82f6" onclick="window.location.href='mailto:soporte@infinihon.com'">
+                    <div class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i data-lucide="mail" class="text-blue-400 w-5 h-5"></i>
+                    </div>
+                    <div class="text-gray-400 text-xs font-mono-custom mb-1 tracking-wider">CANAL PRINCIPAL</div>
+                    <div class="text-white text-sm break-words font-medium">contacto@infinihon.com</div>
+                    <div class="text-gray-500 text-xs mt-2">Soporte técnico y ventas</div>
                 </div>
-                <div>
-                    <div class="text-gray-400 text-xs font-mono mb-2 tracking-wider">TELÉFONO</div>
-                    <div class="text-white text-sm">+34 93 123 45 67</div>
-                    <div class="text-white text-sm">+34 93 765 43 21</div>
+                
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-colors group" data-cursor-interact data-theme="#10b981" onclick="window.location.href='tel:+34931234567'">
+                    <div class="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i data-lucide="phone-call" class="text-green-400 w-5 h-5"></i>
+                    </div>
+                    <div class="text-gray-400 text-xs font-mono-custom mb-1 tracking-wider">LÍNEA DIRECTA</div>
+                    <div class="text-white text-sm font-medium">+34 93 123 45 67</div>
+                    <div class="text-green-400/80 text-xs mt-2 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span> Operativo 24/7</div>
                 </div>
+            </div>
+            
+            <div class="glass-panel p-6 rounded-3xl h-full flex flex-col">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-white font-medium flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-blue-400"></i> Coordenadas HQ</h3>
+                    <span class="text-[10px] font-mono-custom text-blue-400 bg-blue-500/10 px-2 py-1 rounded">EUROPA SUR</span>
+                </div>
+                
+                <div class="map-container flex-1 min-h-[200px] mb-4" data-cursor-interact>
+                    <iframe 
+                        src="https://www.openstreetmap.org/export/embed.html?bbox=2.1734%2C41.3851%2C2.1834%2C41.3951&amp;layer=mapnik&amp;marker=41.3901%2C2.1784" 
+                        width="100%" 
+                        height="100%" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy">
+                    </iframe>
+                </div>
+                
+                <div class="flex items-start gap-4">
+                    <div>
+                        <div class="text-white text-sm font-bold">Barcelona Tech Hub</div>
+                        <div class="text-gray-400 text-xs font-mono-custom mt-1">Carrer de la Tecnologia, 123<br>08018 Barcelona, España</div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+<section class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-24 reveal">
+    <div class="text-center mb-12">
+        <span class="text-blue-400 text-sm font-mono-custom tracking-[0.2em] mb-4 block">// BASE_DE_CONOCIMIENTO</span>
+        <h2 class="text-4xl font-bold text-white">Preguntas Frecuentes</h2>
+    </div>
+    
+    <div class="space-y-2">
+        <div class="faq-item" data-cursor-interact>
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <h3 class="text-white font-medium">¿Qué tipo de soporte técnico ofrecen para empresas?</h3>
+                <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-gray-500"></i>
+            </div>
+            <div class="faq-answer">
+                <p class="text-gray-400 text-sm font-light leading-relaxed">
+                    Ofrecemos soporte técnico integral 24/7 para clientes con planes Enterprise. Esto incluye monitoreo proactivo del NOC, resolución inmediata de incidentes, consultoría arquitectónica y un SLA estricto que garantiza tiempos de respuesta inferiores a 15 minutos ante caídas.
+                </p>
             </div>
         </div>
         
-        <!-- Mapa y ubicación -->
-        <div>
-            <h2 class="text-2xl font-light text-white mb-8">Nuestra ubicación</h2>
-            
-            <div class="map-container mb-8">
-                <iframe 
-                    src="https://www.openstreetmap.org/export/embed.html?bbox=2.1734%2C41.3851%2C2.1834%2C41.3951&amp;layer=mapnik&amp;marker=41.3901%2C2.1784" 
-                    width="100%" 
-                    height="300" 
-                    style="border:0; filter: hue-rotate(180deg) brightness(0.8);" 
-                    allowfullscreen="" 
-                    loading="lazy">
-                </iframe>
+        <div class="faq-item" data-cursor-interact>
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <h3 class="text-white font-medium">¿Realizan auditorías o visitas in-situ a los centros de datos?</h3>
+                <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-gray-500"></i>
             </div>
-            
-            <div class="space-y-4">
-                <div class="flex items-start gap-4">
-                    <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                    </div>
-                    <div>
-                        <div class="text-white text-sm font-medium">Barcelona</div>
-                        <div class="text-gray-400 text-xs font-mono mt-1">Carrer de la Tecnologia, 123</div>
-                        <div class="text-gray-400 text-xs font-mono">08018 Barcelona</div>
-                    </div>
-                </div>
-                
-                <div class="flex items-start gap-4">
-                    <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                    </div>
-                    <div>
-                        <div class="text-white text-sm font-medium">Madrid</div>
-                        <div class="text-gray-400 text-xs font-mono mt-1">Paseo de la Castellana, 45</div>
-                        <div class="text-gray-400 text-xs font-mono">28046 Madrid</div>
-                    </div>
-                </div>
-                
-                <div class="pt-4">
-                    <div class="text-gray-400 text-xs font-mono mb-2">HORARIO</div>
-                    <div class="text-white text-sm">Lunes a Viernes: 9:00 - 18:00</div>
-                    <div class="text-gray-400 text-xs mt-1">Soporte 24/7 para clientes enterprise</div>
-                </div>
+            <div class="faq-answer">
+                <p class="text-gray-400 text-sm font-light leading-relaxed">
+                    Sí, contamos con un equipo de ingenieros de campo listos para desplazarse. Para implementaciones de hardware físico, configuraciones de MikroTik complejas en rack o auditorías de seguridad, realizamos visitas técnicas en sus instalaciones previo agendamiento.
+                </p>
+            </div>
+        </div>
+        
+        <div class="faq-item" data-cursor-interact>
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <h3 class="text-white font-medium">¿Cuánto tiempo toma implementar un Cluster Nation II?</h3>
+                <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-gray-500"></i>
+            </div>
+            <div class="faq-answer">
+                <p class="text-gray-400 text-sm font-light leading-relaxed">
+                    Los tiempos varían. Una configuración virtualizada estándar se despliega automáticamente en minutos. Sin embargo, para infraestructuras bare-metal complejas con alta disponibilidad (HA) y reglas de firewall personalizadas, el tiempo promedio de entrega es de 1 a 3 semanas.
+                </p>
+            </div>
+        </div>
+        
+        <div class="faq-item" data-cursor-interact>
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <h3 class="text-white font-medium">¿Puedo solicitar una Prueba de Concepto (PoC)?</h3>
+                <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-gray-500"></i>
+            </div>
+            <div class="faq-answer">
+                <p class="text-gray-400 text-sm font-light leading-relaxed">
+                    Definitivamente. Para proyectos empresariales a gran escala, habilitamos entornos de "Sandbox" o pruebas de concepto durante 30 días, permitiéndole a su equipo evaluar el rendimiento NVMe, la latencia de la red y nuestra protección DDoS antes de adquirir un compromiso a largo plazo.
+                </p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- FAQ Section -->
-<section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-    <div class="max-w-3xl mx-auto">
-        <div class="text-center mb-16">
-            <span class="text-blue-400 text-sm font-mono tracking-[0.2em] mb-4 block">// FAQ</span>
-            <h2 class="text-3xl font-light text-white">Preguntas frecuentes</h2>
-        </div>
-        
-        <div class="space-y-2">
-            <!-- FAQ Item 1 -->
-            <div class="faq-item py-4">
-                <div class="faq-question flex justify-between items-center" onclick="toggleFaq(this)">
-                    <h3 class="text-white font-light">¿Qué tipo de soporte ofrecen?</h3>
-                    <svg class="faq-icon w-5 h-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                </div>
-                <div class="faq-answer text-gray-400 text-sm font-light leading-relaxed">
-                    Ofrecemos soporte técnico 24/7 para clientes enterprise, incluyendo monitoreo proactivo, 
-                    resolución de incidentes y consultoría técnica. Nuestro SLA garantiza tiempos de respuesta 
-                    inferiores a 15 minutos.
-                </div>
-            </div>
-            
-            <!-- FAQ Item 2 -->
-            <div class="faq-item py-4">
-                <div class="faq-question flex justify-between items-center" onclick="toggleFaq(this)">
-                    <h3 class="text-white font-light">¿Realizan visitas in-situ?</h3>
-                    <svg class="faq-icon w-5 h-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                </div>
-                <div class="faq-answer text-gray-400 text-sm font-light leading-relaxed">
-                    Sí, disponemos de ingenieros de campo en las principales ciudades. Para implementaciones 
-                    complejas o auditorías de infraestructura, realizamos visitas técnicas en tus instalaciones.
-                </div>
-            </div>
-            
-            <!-- FAQ Item 3 -->
-            <div class="faq-item py-4">
-                <div class="faq-question flex justify-between items-center" onclick="toggleFaq(this)">
-                    <h3 class="text-white font-light">¿Cuánto tiempo toma una implementación?</h3>
-                    <svg class="faq-icon w-5 h-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                </div>
-                <div class="faq-answer text-gray-400 text-sm font-light leading-relaxed">
-                    Los tiempos varían según la complejidad del proyecto. Desde 2 semanas para configuraciones 
-                    estándar hasta 3 meses para infraestructuras enterprise completas con alta disponibilidad.
-                </div>
-            </div>
-            
-            <!-- FAQ Item 4 -->
-            <div class="faq-item py-4">
-                <div class="faq-question flex justify-between items-center" onclick="toggleFaq(this)">
-                    <h3 class="text-white font-light">¿Ofrecen pruebas de concepto?</h3>
-                    <svg class="faq-icon w-5 h-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                </div>
-                <div class="faq-answer text-gray-400 text-sm font-light leading-relaxed">
-                    Sí, para proyectos empresariales podemos realizar pruebas de concepto con una duración de 
-                    30 días, evaluando el rendimiento y la integración con tu infraestructura existente.
-                </div>
-            </div>
-            
-            <!-- FAQ Item 5 -->
-            <div class="faq-item py-4">
-                <div class="faq-question flex justify-between items-center" onclick="toggleFaq(this)">
-                    <h3 class="text-white font-light">¿Qué certificaciones tienen?</h3>
-                    <svg class="faq-icon w-5 h-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                </div>
-                <div class="faq-answer text-gray-400 text-sm font-light leading-relaxed">
-                    Estamos certificados en ISO 27001, SOC 2 Type II, y nuestros ingenieros cuentan con 
-                    certificaciones oficiales de MikroTik, Raspberry Pi y principales proveedores cloud.
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Botón flotante WhatsApp Glass -->
-<a href="https://wa.me/34931234567?text=Hola%20InfiniHon,%20me%20gustaría%20recibir%20información" 
+<a href="https://wa.me/34931234567?text=Hola%20InfiniHon,%20solicito%20asistencia%20inmediata" 
    target="_blank" 
-   class="whatsapp-float w-16 h-16 rounded-full flex items-center justify-center">
-    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+   class="whatsapp-float w-14 h-14 rounded-2xl flex items-center justify-center"
+   data-cursor-interact data-theme="#10b981">
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
 </a>
 
-<!-- Footer minimalista -->
-<footer class="relative z-10 border-t border-white/5 bg-[#020617]/50 backdrop-blur-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="flex justify-between items-center">
-            <div class="text-gray-500 text-xs font-mono">
-                © 2024 INFINIHON · TODOS LOS DERECHOS RESERVADOS
+<footer class="border-t border-white/5 bg-[#020617]/90 backdrop-blur-xl relative z-10 reveal">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="text-gray-500 text-xs font-mono-custom">
+                © 2026 INFINIHON HOSTING · TRANSMISIÓN SEGURA
             </div>
-            <div class="flex gap-8">
-                <a href="#" class="text-gray-400 hover:text-white text-xs font-mono transition-colors">PRIVACIDAD</a>
-                <a href="#" class="text-gray-400 hover:text-white text-xs font-mono transition-colors">TÉRMINOS</a>
-                <a href="#" class="text-gray-400 hover:text-white text-xs font-mono transition-colors">COOKIES</a>
+            <div class="flex gap-6">
+                <a href="#" class="text-gray-500 hover:text-white text-xs font-mono-custom transition-colors" data-cursor-interact>PRIVACIDAD</a>
+                <a href="#" class="text-gray-500 hover:text-white text-xs font-mono-custom transition-colors" data-cursor-interact>SLA</a>
+                <a href="#" class="text-gray-500 hover:text-white text-xs font-mono-custom transition-colors" data-cursor-interact>TÉRMINOS</a>
             </div>
         </div>
     </div>
 </footer>
 
-<!-- Script para validación en tiempo real -->
 <script>
-    // Validación en tiempo real
-    const form = document.getElementById('contactForm');
-    const nameInput = document.getElementById('name');
-    const emailInput = document.getElementById('email');
-    const companyInput = document.getElementById('company');
-    const messageInput = document.getElementById('message');
-    
-    const nameError = document.getElementById('nameError');
-    const emailError = document.getElementById('emailError');
-    const companyError = document.getElementById('companyError');
-    const messageError = document.getElementById('messageError');
-    
-    // Validar nombre
-    nameInput.addEventListener('input', function() {
-        if (this.value.length < 3) {
-            this.classList.add('input-error');
-            this.classList.remove('input-success');
-            nameError.textContent = 'Mínimo 3 caracteres';
-            nameError.classList.add('visible');
-        } else {
-            this.classList.remove('input-error');
-            this.classList.add('input-success');
-            nameError.classList.remove('visible');
-        }
-    });
-    
-    // Validar email
-    emailInput.addEventListener('input', function() {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(this.value)) {
-            this.classList.add('input-error');
-            this.classList.remove('input-success');
-            emailError.textContent = 'Email corporativo o personal válido requerido';
-            emailError.classList.add('visible');
-        } else {
-            this.classList.remove('input-error');
-            this.classList.add('input-success');
-            emailError.classList.remove('visible');
-        }
-    });
-    
-    // Validar empresa
-    companyInput.addEventListener('input', function() {
-        if (this.value.length < 2) {
-            this.classList.add('input-error');
-            this.classList.remove('input-success');
-            companyError.textContent = 'Nombre de empresa requerido';
-            companyError.classList.add('visible');
-        } else {
-            this.classList.remove('input-error');
-            this.classList.add('input-success');
-            companyError.classList.remove('visible');
-        }
-    });
-    
-    // Validar mensaje
-    messageInput.addEventListener('input', function() {
-        if (this.value.length < 10) {
-            this.classList.add('input-error');
-            this.classList.remove('input-success');
-            messageError.textContent = 'Mínimo 10 caracteres';
-            messageError.classList.add('visible');
-        } else {
-            this.classList.remove('input-error');
-            this.classList.add('input-success');
-            messageError.classList.remove('visible');
-        }
-    });
-    
-    // Prevenir envío del formulario
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
+    document.addEventListener('DOMContentLoaded', () => {
+        // Inicializar iconos de Lucide
+        lucide.createIcons();
+
+        // 1. Validación en tiempo real (Estilo Cyber)
+        const form = document.getElementById('contactForm');
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const companyInput = document.getElementById('company');
+        const messageInput = document.getElementById('message');
         
-        // Validar todos los campos
-        let isValid = true;
+        const nameError = document.getElementById('nameError');
+        const emailError = document.getElementById('emailError');
+        const companyError = document.getElementById('companyError');
+        const messageError = document.getElementById('messageError');
         
-        if (nameInput.value.length < 3) isValid = false;
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value)) isValid = false;
-        if (companyInput.value.length < 2) isValid = false;
-        if (messageInput.value.length < 10) isValid = false;
-        
-        if (isValid) {
-            alert('Formulario válido. Enviando...');
-            // Aquí iría la lógica de envío real
-        } else {
-            alert('Por favor, completa todos los campos correctamente');
+        function validateField(input, errorElement, condition, errorMsg) {
+            if (condition) {
+                input.classList.add('input-error');
+                input.classList.remove('input-success');
+                errorElement.innerHTML = `<i data-lucide="alert-triangle" class="inline w-3 h-3 mr-1"></i> ${errorMsg}`;
+                errorElement.classList.add('visible');
+            } else {
+                input.classList.remove('input-error');
+                input.classList.add('input-success');
+                errorElement.classList.remove('visible');
+            }
+            lucide.createIcons();
         }
-    });
-    
-    // Función para FAQ
-    function toggleFaq(element) {
-        const answer = element.nextElementSibling;
-        const icon = element.querySelector('.faq-icon');
+
+        nameInput.addEventListener('input', function() { validateField(this, nameError, this.value.length < 3, 'IDENTIFICACIÓN INVÁLIDA (MIN 3 CARACT.)'); });
+        emailInput.addEventListener('input', function() { const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; validateField(this, emailError, !emailRegex.test(this.value), 'FORMATO DE CORREO NO RECONOCIDO'); });
+        companyInput.addEventListener('input', function() { validateField(this, companyError, this.value.length < 2, 'ENTIDAD REQUERIDA'); });
+        messageInput.addEventListener('input', function() { validateField(this, messageError, this.value.length < 10, 'PAQUETE DE DATOS INSUFICIENTE (MIN 10 CARACT.)'); });
         
-        // Cerrar otros FAQs abiertos
-        document.querySelectorAll('.faq-answer').forEach(item => {
-            if (item !== answer && item.classList.contains('open')) {
-                item.classList.remove('open');
-                const prevIcon = item.previousElementSibling.querySelector('.faq-icon');
-                if (prevIcon) prevIcon.classList.remove('rotate');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            let isValid = true;
+            if (nameInput.value.length < 3) isValid = false;
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value)) isValid = false;
+            if (companyInput.value.length < 2) isValid = false;
+            if (messageInput.value.length < 10) isValid = false;
+            
+            const btn = form.querySelector('button[type="submit"]');
+            if (isValid) {
+                btn.innerHTML = '<i data-lucide="loader" class="w-5 h-5 animate-spin"></i> TRANSMITIENDO...';
+                lucide.createIcons();
+                setTimeout(() => {
+                    btn.innerHTML = '<i data-lucide="check-circle" class="w-5 h-5 text-green-400"></i> PAQUETE RECIBIDO';
+                    btn.style.background = 'rgba(16, 185, 129, 0.2)';
+                    btn.style.borderColor = '#10b981';
+                    lucide.createIcons();
+                    form.reset();
+                    // Limpiar clases de exito
+                    [nameInput, emailInput, companyInput, messageInput].forEach(inp => input.classList.remove('input-success'));
+                }, 2000);
+            } else {
+                // Forzar validación visual
+                nameInput.dispatchEvent(new Event('input'));
+                emailInput.dispatchEvent(new Event('input'));
+                companyInput.dispatchEvent(new Event('input'));
+                messageInput.dispatchEvent(new Event('input'));
             }
         });
+
+        // 2. Función para FAQ
+        window.toggleFaq = function(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('.faq-icon');
+            
+            // Comportamiento de Acordeón (cierra los demás)
+            document.querySelectorAll('.faq-answer').forEach(item => {
+                if (item !== answer && item.classList.contains('open')) {
+                    item.classList.remove('open');
+                    const prevIcon = item.previousElementSibling.querySelector('.faq-icon');
+                    if (prevIcon) prevIcon.classList.remove('rotate');
+                }
+            });
+            
+            answer.classList.toggle('open');
+            icon.classList.toggle('rotate');
+        };
+
+        // 3. Scroll Reveal
+        const reveals = document.querySelectorAll('.reveal');
+        const revealOptions = { threshold: 0.15, rootMargin: "0px 0px -50px 0px" };
+        const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('active');
+                observer.unobserve(entry.target);
+            });
+        }, revealOptions);
+        reveals.forEach(reveal => revealOnScroll.observe(reveal));
+
+        // 4. Cursor Premium 2026
+        const cursor = document.getElementById('custom-cursor');
+        const cursorDot = document.getElementById('cursor-dot');
+        const aura = document.getElementById('cursor-aura');
         
-        // Abrir/cerrar el actual
-        answer.classList.toggle('open');
-        icon.classList.toggle('rotate');
-    }
-    
-    // FAQ iconos
-    document.querySelectorAll('.faq-question').forEach(question => {
-        question.addEventListener('click', () => toggleFaq(question));
+        const isTouch = !window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+        if (isTouch) {
+            if(cursor) cursor.style.display = 'none';
+            if(aura) aura.style.display = 'none';
+            document.body.style.cursor = 'auto';
+        } else {
+            document.addEventListener('mousemove', (e) => {
+                if(!cursor || !aura) return;
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+                aura.style.left = e.clientX + 'px';
+                aura.style.top = e.clientY + 'px';
+            });
+
+            document.addEventListener('mousedown', (e) => {
+                const ping = document.createElement('div');
+                ping.className = 'ping-effect';
+                const currentColor = cursor.style.borderColor || 'rgba(56, 189, 248, 0.8)';
+                if(currentColor !== 'white' && currentColor !== 'rgba(255, 255, 255, 0.9)') {
+                    ping.style.borderColor = currentColor;
+                }
+                ping.style.left = e.clientX + 'px';
+                ping.style.top = e.clientY + 'px';
+                document.body.appendChild(ping);
+                setTimeout(() => ping.remove(), 600);
+            });
+
+            const interactiveElements = document.querySelectorAll('button, a, input, textarea, .faq-item, .whatsapp-float, .map-container, [data-cursor-interact]');
+            
+            interactiveElements.forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    if(!cursor) return;
+                    cursor.style.transform = 'translate(-50%, -50%) scale(1.6)';
+                    cursor.style.width = '32px';
+                    cursor.style.height = '32px';
+                    
+                    let themeColor = el.dataset.theme || (el.closest('[data-theme]') && el.closest('[data-theme]').dataset.theme);
+                    
+                    if (themeColor) {
+                        cursor.style.borderColor = themeColor;
+                        cursorDot.style.backgroundColor = themeColor;
+                        aura.style.background = `radial-gradient(circle, ${themeColor}33 0%, transparent 70%)`;
+                        cursor.style.mixBlendMode = 'normal';
+                    } else {
+                        cursor.style.borderColor = '#38bdf8';
+                        cursorDot.style.backgroundColor = '#38bdf8';
+                        aura.style.background = 'radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, transparent 70%)';
+                        cursor.style.mixBlendMode = 'normal';
+                    }
+                });
+                
+                el.addEventListener('mouseleave', () => {
+                    if(!cursor) return;
+                    cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                    cursor.style.width = '24px';
+                    cursor.style.height = '24px';
+                    cursor.style.borderColor = 'white';
+                    cursorDot.style.backgroundColor = 'white';
+                    cursor.style.mixBlendMode = 'difference';
+                    aura.style.background = 'radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%)';
+                });
+            });
+
+            document.addEventListener('mouseleave', () => {
+                if(cursor) cursor.style.opacity = '0';
+                if(aura) aura.style.opacity = '0';
+            });
+            document.addEventListener('mouseenter', () => {
+                if(cursor) cursor.style.opacity = '1';
+                if(aura) aura.style.opacity = '1';
+            });
+        }
     });
 </script>
 </body>
