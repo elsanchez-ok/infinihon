@@ -1,88 +1,231 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InfiniHon - Sobre Nosotros | Transparencia Empresarial</title>
+    <title>InfiniHon | Sobre Nosotros · Transparencia Radical</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
     <style>
+        :root { 
+            --bg-deep: #020617; 
+            --accent: #3b82f6;
+            --accent-secondary: #06b6d4;
+            --silver: #94a3b8;
+        }
+
         * {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            cursor: none !important;
+        }
+        
+        .font-mono, .font-mono-custom {
+            font-family: 'JetBrains Mono', monospace !important;
         }
         
         body {
-            background-color: #020617;
-            background-image: radial-gradient(circle at 30% 50%, rgba(56, 189, 248, 0.03) 0%, transparent 50%),
-                              radial-gradient(circle at 70% 80%, rgba(37, 99, 235, 0.03) 0%, transparent 50%);
+            background-color: var(--bg-deep);
+            color: #f8fafc;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* ==========================================
+           CURSOR PERSONALIZADO AVANZADO
+           ========================================== */
+        #custom-cursor {
+            width: 28px; 
+            height: 28px; 
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            position: fixed; 
+            pointer-events: none; 
+            z-index: 9999;
+            transition: transform 0.25s cubic-bezier(0.23, 1, 0.32, 1), border-color 0.3s ease, width 0.2s, height 0.2s;
+            mix-blend-mode: difference;
+            transform: translate(-50%, -50%);
+            will-change: left, top;
         }
         
-        /* Estilo para texto con precisión suiza */
-        .swiss-text {
-            letter-spacing: -0.02em;
-            line-height: 1.2;
+        #cursor-dot {
+            position: absolute;
+            top: 50%; 
+            left: 50%;
+            width: 6px; 
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: background-color 0.3s ease;
+        }
+
+        #cursor-aura {
+            width: 500px; 
+            height: 500px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 70%);
+            position: fixed; 
+            pointer-events: none; 
+            z-index: 9998;
+            border-radius: 50%;
+            transform: translate(-50%, -50%); 
+            transition: opacity 0.5s ease, background 0.3s ease;
+            will-change: left, top;
+        }
+
+        /* Efecto Ping al hacer clic */
+        .ping-effect {
+            position: fixed; 
+            width: 24px; 
+            height: 24px;
+            border: 2px solid rgba(59, 130, 246, 0.8);
+            border-radius: 50%; 
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            animation: ping-anim 0.6s ease-out forwards;
+            z-index: 10000;
         }
         
-        /* Línea de tiempo vertical animada */
-        .timeline-line {
+        @keyframes ping-anim {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(4.5); opacity: 0; }
+        }
+
+        /* ==========================================
+           FONDO MESH ANIMADO
+           ========================================== */
+        .mesh-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.1), transparent 40%),
+                radial-gradient(circle at 80% 60%, rgba(6, 182, 212, 0.1), transparent 40%),
+                radial-gradient(circle at 50% 80%, rgba(168, 85, 247, 0.05), transparent 50%),
+                radial-gradient(circle at 70% 20%, rgba(148, 163, 184, 0.04), transparent 45%);
+            animation: meshMove 25s ease-in-out infinite alternate;
+        }
+
+        @keyframes meshMove {
+            0% { transform: scale(1) translate(0, 0); }
+            33% { transform: scale(1.08) translate(-1%, 1.5%); }
+            66% { transform: scale(1.12) translate(1.5%, -1%); }
+            100% { transform: scale(1.05) translate(0.5%, 1%); }
+        }
+
+        /* ==========================================
+           GLASSMORPHISM Y COMPONENTES
+           ========================================== */
+        .glass {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        }
+        
+        .glass-card {
+            background: rgba(10, 15, 31, 0.35);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(59, 130, 246, 0.12);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        
+        .glass-card:hover {
+            border-color: rgba(59, 130, 246, 0.35);
+            box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.25);
+            transform: translateY(-4px);
+        }
+
+        .steel-gradient {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            border: 1px solid rgba(56, 189, 248, 0.15);
             position: relative;
+            overflow: hidden;
         }
         
-        .timeline-line::before {
+        .steel-gradient::before {
             content: '';
             position: absolute;
-            left: 19px;
             top: 0;
-            bottom: 0;
-            width: 1px;
-            background: linear-gradient(to bottom, #3b82f6, #94a3b8, #3b82f6);
-            opacity: 0.3;
+            left: -100%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.05), transparent);
+            animation: steelShine 8s infinite;
         }
         
-        .timeline-dot {
-            position: relative;
+        @keyframes steelShine {
+            0%, 100% { transform: translateX(-50%); }
+            50% { transform: translateX(0%); }
+        }
+
+        /* Bento Cards 3D Tilt */
+        .bento-card { 
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1); 
+            transform-style: preserve-3d;
+        }
+        
+        .bento-card:hover {
+            transform: scale(1.02) translateY(-8px);
+        }
+
+        /* ==========================================
+           TIMELINE MEJORADA
+           ========================================== */
+        .timeline-line { position: relative; }
+        .timeline-line::before {
+            content: ''; 
+            position: absolute; 
+            left: 23px; 
+            top: 0; 
+            bottom: 0; 
+            width: 2px;
+            background: linear-gradient(to bottom, #3b82f6, #06b6d4, #a855f7, #3b82f6);
+            background-size: 100% 300%;
+            animation: gradientFlow 4s ease infinite;
+            opacity: 0.4;
+        }
+        
+        @keyframes gradientFlow {
+            0%, 100% { background-position: 0% 0%; }
+            50% { background-position: 0% 100%; }
+        }
+        
+        .timeline-dot { 
+            position: relative; 
             z-index: 10;
+            transition: all 0.3s ease;
+        }
+        
+        .timeline-item:hover .timeline-dot {
+            transform: scale(1.5);
+            box-shadow: 0 0 30px currentColor;
         }
         
         .timeline-dot::before {
-            content: '';
-            position: absolute;
-            inset: -4px;
+            content: ''; 
+            position: absolute; 
+            inset: -6px; 
             border-radius: 50%;
-            background: linear-gradient(135deg, #3b82f6, #60a5fa);
-            opacity: 0;
-            animation: pulse-dot 2s ease-out forwards;
+            background: inherit;
+            opacity: 0.3;
+            animation: pulse-dot 2.5s ease-out infinite;
         }
         
         @keyframes pulse-dot {
-            0% {
-                opacity: 0;
-                transform: scale(0.8);
-            }
-            50% {
-                opacity: 0.5;
-                transform: scale(1.2);
-            }
-            100% {
-                opacity: 0;
-                transform: scale(1.5);
-            }
+            0% { opacity: 0.5; transform: scale(1); }
+            100% { opacity: 0; transform: scale(2.5); }
         }
-        
-        .timeline-item {
-            opacity: 0;
-            transform: translateY(20px);
-            animation: slideIn 0.6s ease-out forwards;
-        }
-        
-        @keyframes slideIn {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        /* Canvas para partículas */
+
+        /* ==========================================
+           PARTÍCULAS INTERACTIVAS
+           ========================================== */
         #particle-canvas {
             position: absolute;
             top: 0;
@@ -91,185 +234,236 @@
             height: 100%;
             pointer-events: none;
         }
-        
-        /* Efectos de brillo plateado */
-        .silver-glow {
-            background: linear-gradient(135deg, rgba(148, 163, 184, 0.1) 0%, rgba(56, 189, 248, 0.05) 100%);
-            border: 1px solid rgba(148, 163, 184, 0.2);
+
+        /* ==========================================
+           ANIMACIONES DE ENTRADA
+           ========================================== */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
-        .steel-gradient {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            border: 1px solid rgba(56, 189, 248, 0.2);
+        .animate-in {
+            animation: fadeInUp 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+            opacity: 0;
         }
         
-        /* Espaciado preciso */
-        .precision-space {
-            letter-spacing: -0.01em;
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+
+        /* ==========================================
+           SCROLLBAR CUSTOM
+           ========================================== */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; border: 2px solid #020617; }
+        ::-webkit-scrollbar-thumb:hover { background: #3b82f6; box-shadow: 0 0 15px #3b82f6; }
+
+        /* ==========================================
+           TIPOGRAFÍA
+           ========================================== */
+        .swiss-text { 
+            letter-spacing: -0.02em; 
+            line-height: 1.1; 
+        }
+        
+        .title-gradient {
+            background: linear-gradient(135deg, #60a5fa 0%, #22d3ee 50%, #a855f7 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
     </style>
 </head>
-<body class="min-h-screen relative overflow-x-hidden">
+<body class="selection:bg-blue-500/30 relative">
 
-<!-- Header minimalista -->
-<nav class="relative z-50 border-b border-white/5 bg-[#020617]/80 backdrop-blur-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-20">
-            <div class="flex items-center space-x-2">
-                <div class="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
-                    <span class="text-black font-bold text-xl">I</span>
-                </div>
-                <span class="text-white font-light text-xl tracking-tight">INFINI<span class="font-medium text-blue-400">HON</span></span>
+<!-- Cursor personalizado -->
+<div id="custom-cursor"><span id="cursor-dot"></span></div>
+<div id="cursor-aura"></div>
+
+<!-- Fondo mesh -->
+<div class="mesh-bg"></div>
+
+<!-- Navegación Ultra Premium -->
+<nav class="sticky top-0 z-50 glass border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex justify-between items-center">
+        <a href="index.html" class="flex items-center space-x-3 interactive tilt-card group">
+            <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover:shadow-blue-500/50 transition-all group-hover:scale-105">
+                <i data-lucide="cpu" class="text-black w-6 h-6"></i>
             </div>
-            <div class="hidden md:flex items-center space-x-12">
-                <a href="#" class="text-gray-400 hover:text-white transition-colors text-sm font-light tracking-wide">INICIO</a>
-                <a href="#" class="text-white transition-colors text-sm font-medium tracking-wide border-b border-blue-400 pb-1">SOBRE NOSOTROS</a>
-                <a href="#" class="text-gray-400 hover:text-white transition-colors text-sm font-light tracking-wide">SERVICIOS</a>
-                <a href="#" class="text-gray-400 hover:text-white transition-colors text-sm font-light tracking-wide">CONTACTO</a>
-            </div>
+            <span class="text-white font-bold text-xl tracking-tight">
+                INFINI<span class="text-blue-400">HON</span>
+            </span>
+        </a>
+        
+        <div class="hidden md:flex items-center space-x-10 text-sm font-semibold">
+            <a href="index.html" class="interactive text-gray-300 hover:text-white transition-all">INICIO</a>
+            <a href="sobre_nosotros.html" class="interactive text-white transition-all border-b-2 border-blue-400 pb-1">SOBRE NOSOTROS</a>
+            <a href="servicios.html" class="interactive text-gray-300 hover:text-white transition-all">SERVICIOS</a>
+            <a href="alianzas.html" class="interactive text-gray-300 hover:text-white transition-all">ALIANZAS</a>
+            <a href="contacto.html" class="interactive text-gray-300 hover:text-white transition-all">CONTACTO</a>
         </div>
+        
+        <a href="contacto.html" class="interactive bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 px-5 py-2.5 rounded-xl text-sm font-medium border border-blue-500/30 transition-all">
+            Contactar
+        </a>
     </div>
 </nav>
 
-<!-- Hero Section minimalista -->
-<section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-    <div class="max-w-3xl">
-        <div class="mb-6">
-            <span class="text-blue-400 text-sm font-mono tracking-[0.2em]">// ACERCA DE NOSOTROS</span>
+<!-- Hero Section -->
+<section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 lg:pt-32 pb-16">
+    <div class="max-w-4xl">
+        <div class="mb-6 animate-in">
+            <span class="text-blue-400 text-sm font-mono-custom tracking-[0.25em] bg-blue-500/10 px-4 py-1.5 rounded-full border border-blue-500/20">// ACERCA DE NOSOTROS</span>
         </div>
-        <h1 class="swiss-text text-5xl lg:text-7xl font-light text-white mb-8 leading-[1.1]">
+        <h1 class="swiss-text text-5xl lg:text-7xl font-extrabold text-white mb-8 leading-[1.1] tracking-tighter animate-in delay-1">
             Construimos el<br>
-            <span class="font-medium bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">futuro de la infraestructura</span><br>
+            <span class="title-gradient">futuro de la infraestructura</span><br>
             con transparencia radical.
         </h1>
-        <p class="text-gray-400 text-lg max-w-2xl leading-relaxed font-light">
+        <p class="text-gray-400 text-lg lg:text-xl max-w-3xl leading-relaxed font-light animate-in delay-2">
             Desde 2025, hemos mantenido un compromiso inquebrantable con la excelencia técnica 
             y la honestidad empresarial. Cada línea de código, cada servidor, cada decisión está 
-            documentada y es verificable.
+            documentada y es públicamente verificable.
         </p>
+        
+        <!-- Trust badges -->
+        <div class="flex flex-wrap gap-4 mt-8 animate-in delay-3">
+            <span class="flex items-center gap-2 text-xs font-mono-custom text-gray-400 bg-white/5 px-4 py-2 rounded-full border border-white/10">
+                <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                SOC 2 Type II Certified
+            </span>
+            <span class="flex items-center gap-2 text-xs font-mono-custom text-gray-400 bg-white/5 px-4 py-2 rounded-full border border-white/10">
+                <i data-lucide="shield-check" class="w-4 h-4 text-blue-400"></i>
+                ISO 27001:2025
+            </span>
+        </div>
     </div>
 </section>
 
-<!-- Línea del tiempo vertical -->
-<section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-    <div class="grid lg:grid-cols-2 gap-20">
-        <!-- Línea de tiempo -->
-        <div>
-            <h2 class="text-3xl font-light text-white mb-16 swiss-text">
-                <span class="text-blue-400 font-mono text-sm block mb-2 tracking-[0.2em]">// CRONOLOGÍA</span>
-                Nuestra evolución
+<!-- Línea del tiempo + Estadísticas -->
+<section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="grid lg:grid-cols-12 gap-12 lg:gap-16">
+        
+        <!-- Timeline -->
+        <div class="lg:col-span-8 animate-in delay-1">
+            <h2 class="text-3xl font-bold text-white mb-12 swiss-text flex items-center gap-3">
+                <i data-lucide="clock" class="w-7 h-7 text-blue-400"></i>
+                <span>Nuestra <span class="title-gradient">evolución</span></span>
             </h2>
             
-            <div class="timeline-line pl-12 space-y-16 relative">
+            <div class="timeline-line pl-14 space-y-16 relative">
+                
                 <!-- 2025 -->
-                <div class="timeline-item relative" style="animation-delay: 0.1s">
-                    <div class="timeline-dot absolute -left-12 top-1 w-3 h-3 rounded-full bg-blue-400"></div>
-                    <div class="text-blue-400 font-mono text-sm mb-2 tracking-wider">2025 · En desarrollo</div>
-                    <h3 class="text-xl font-medium text-white mb-3">Fundación de InfiniHon</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed font-light">
+                <div class="timeline-item relative group bento-card p-6 rounded-2xl" data-theme="#3b82f6">
+                    <div class="timeline-dot absolute -left-14 top-6 w-4 h-4 rounded-full bg-blue-400"></div>
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="text-blue-400 font-mono-custom text-sm font-bold tracking-wider bg-blue-500/10 px-3 py-1 rounded-full">2025</span>
+                        <span class="text-gray-500 text-xs font-mono-custom">Fundación</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">InfiniHon nace</h3>
+                    <p class="text-gray-400 text-base leading-relaxed font-light">
                         Nacimos con la visión de democratizar la infraestructura IT de alto rendimiento. 
-                        Primeros 5 empleados, primera oficina en Cortes.
+                        Primeros 5 empleados, primera oficina en Cortés. Primer cliente enterprise en 3 meses.
                     </p>
-                    <div class="mt-4 flex items-center gap-4">
-                        <span class="text-xs text-gray-500 font-mono">HITOS</span>
-                        <span class="text-xs text-gray-400">Primer cliente enterprise</span>
+                    <div class="mt-4 flex items-center gap-3">
+                        <span class="text-xs font-mono-custom text-blue-400 bg-blue-500/10 px-3 py-1.5 rounded-full border border-blue-500/20">HITO</span>
+                        <span class="text-sm text-gray-300">+500k Lempiras en contratos iniciales</span>
                     </div>
                 </div>
 
                 <!-- 2026 -->
-                <div class="timeline-item relative" style="animation-delay: 0.3s">
-                    <div class="timeline-dot absolute -left-12 top-1 w-3 h-3 rounded-full bg-blue-400"></div>
-                    <div class="text-blue-400 font-mono text-sm mb-2 tracking-wider">2026 · En desarrollo</div>
-                    <h3 class="text-xl font-medium text-white mb-3">Lanzamiento de Multichek</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed font-light">
-                        Primera versión de nuestro sistema de monitoreo predictivo. 
-                        100+ servidores bajo gestión en primeros 6 meses.
+                <div class="timeline-item relative group bento-card p-6 rounded-2xl" data-theme="#06b6d4">
+                    <div class="timeline-dot absolute -left-14 top-6 w-4 h-4 rounded-full bg-cyan-400"></div>
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="text-cyan-400 font-mono-custom text-sm font-bold tracking-wider bg-cyan-500/10 px-3 py-1 rounded-full">2026</span>
+                        <span class="text-gray-500 text-xs font-mono-custom">Innovación</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">Lanzamiento de Multichek</h3>
+                    <p class="text-gray-400 text-base leading-relaxed font-light">
+                        Primera versión de nuestro sistema de monitoreo predictivo con IA. 
+                        100+ servidores bajo gestión en los primeros 6 meses. 99.99% de uptime garantizado.
                     </p>
-                    <div class="mt-4 flex items-center gap-4">
-                        <span class="text-xs text-gray-500 font-mono">MÉTRICA</span>
-                        <span class="text-xs text-gray-400">99.9% uptime garantizado</span>
+                    <div class="mt-4 flex items-center gap-3">
+                        <span class="text-xs font-mono-custom text-cyan-400 bg-cyan-500/10 px-3 py-1.5 rounded-full border border-cyan-500/20">MÉTRICA</span>
+                        <span class="text-sm text-gray-300">Reducción del 35% en incidentes</span>
                     </div>
                 </div>
 
                 <!-- 2027 -->
-                <div class="timeline-item relative" style="animation-delay: 0.5s">
-                    <div class="timeline-dot absolute -left-12 top-1 w-3 h-3 rounded-full bg-blue-400"></div>
-                    <div class="text-blue-400 font-mono text-sm mb-2 tracking-wider">2027 · En desarrollo</div>
-                    <h3 class="text-xl font-medium text-white mb-3">Arquitectura Nation I</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed font-light">
-                        Implementación de nuestra segunda generación de arquitectura de servidores. 
-                        Reducción del 40% en latencia.
-                    </p>
-                    <div class="mt-4 flex items-center gap-4">
-                        <span class="text-xs text-gray-500 font-mono">LOGRO</span>
-                        <span class="text-xs text-gray-400">Patente internacional</span>
+                <div class="timeline-item relative group bento-card p-6 rounded-2xl" data-theme="#a855f7">
+                    <div class="timeline-dot absolute -left-14 top-6 w-4 h-4 rounded-full bg-purple-400"></div>
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="text-purple-400 font-mono-custom text-sm font-bold tracking-wider bg-purple-500/10 px-3 py-1 rounded-full">2027</span>
+                        <span class="text-gray-500 text-xs font-mono-custom">Expansión</span>
                     </div>
-                </div>
-
-                <!-- 2028 -->
-                <div class="timeline-item relative" style="animation-delay: 0.7s">
-                    <div class="timeline-dot absolute -left-12 top-1 w-3 h-3 rounded-full bg-blue-400"></div>
-                    <div class="text-blue-400 font-mono text-sm mb-2 tracking-wider">2028 · En desarrollo</div>
-                    <h3 class="text-xl font-medium text-white mb-3">Expansión global</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed font-light">
-                        Presencia en 15 países, más de 50 servidores gestionados. 
-                        Centro de I+D en Cortes y Atlantida.
+                    <h3 class="text-2xl font-bold text-white mb-3">Arquitectura Nation I</h3>
+                    <p class="text-gray-400 text-base leading-relaxed font-light">
+                        Implementación de nuestra segunda generación de arquitectura de servidores bare-metal. 
+                        Reducción del 40% en latencia y patente internacional concedida.
                     </p>
-                    <div class="mt-4 flex items-center gap-4">
-                        <span class="text-xs text-gray-500 font-mono">HOY</span>
-                        <span class="text-xs text-gray-400">+50 empleados</span>
+                    <div class="mt-4 flex items-center gap-3">
+                        <span class="text-xs font-mono-custom text-purple-400 bg-purple-500/10 px-3 py-1.5 rounded-full border border-purple-500/20">LOGRO</span>
+                        <span class="text-sm text-gray-300">Patente US-2027-INF-001</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Estadísticas minimalistas -->
-        <div class="flex flex-col justify-end space-y-12">
-            <div class="border-l border-white/10 pl-8">
-                <div class="text-6xl font-light text-white mb-2">1</div>
-                <div class="text-gray-400 text-sm font-mono tracking-wider">PAÍS</div>
-                <div class="w-16 h-px bg-blue-400/50 mt-4"></div>
+        <!-- Estadísticas -->
+        <div class="lg:col-span-4 flex flex-col justify-end space-y-8 animate-in delay-2">
+            <div class="glass-card rounded-3xl p-8 text-center group hover:scale-105 transition-transform">
+                <div class="text-6xl font-extrabold text-white mb-2">1</div>
+                <div class="text-blue-400 text-sm font-mono-custom tracking-wider mb-1">PAÍS FUNDACIONAL</div>
+                <div class="text-gray-500 text-xs">Expansión global en 2028</div>
+                <div class="w-16 h-px bg-gradient-to-r from-blue-500 to-transparent mx-auto mt-4"></div>
             </div>
-            <div class="border-l border-white/10 pl-8">
-                <div class="text-6xl font-light text-white mb-2">5K+</div>
-                <div class="text-gray-400 text-sm font-mono tracking-wider">SERVIDORES</div>
-                <div class="w-16 h-px bg-blue-400/50 mt-4"></div>
+            <div class="glass-card rounded-3xl p-8 text-center group hover:scale-105 transition-transform">
+                <div class="text-6xl font-extrabold text-white mb-2">5K<span class="text-3xl text-blue-400">+</span></div>
+                <div class="text-cyan-400 text-sm font-mono-custom tracking-wider mb-1">SERVIDORES GESTIONADOS</div>
+                <div class="text-gray-500 text-xs">100% monitoreo predictivo</div>
+                <div class="w-16 h-px bg-gradient-to-r from-cyan-500 to-transparent mx-auto mt-4"></div>
             </div>
-            <div class="border-l border-white/10 pl-8">
-                <div class="text-6xl font-light text-white mb-2">50+</div>
-                <div class="text-gray-400 text-sm font-mono tracking-wider">EXPERTOS</div>
-                <div class="w-16 h-px bg-blue-400/50 mt-4"></div>
+            <div class="glass-card rounded-3xl p-8 text-center group hover:scale-105 transition-transform">
+                <div class="text-6xl font-extrabold text-white mb-2">50<span class="text-3xl text-purple-400">+</span></div>
+                <div class="text-purple-400 text-sm font-mono-custom tracking-wider mb-1">EXPERTOS</div>
+                <div class="text-gray-500 text-xs">Ingenieros certificados</div>
+                <div class="w-16 h-px bg-gradient-to-r from-purple-500 to-transparent mx-auto mt-4"></div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Sección Vision con partículas -->
-<section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
-    <div class="relative steel-gradient rounded-3xl overflow-hidden">
-        <!-- Canvas para partículas -->
-        <canvas id="particle-canvas" class="absolute inset-0 w-full h-full"></canvas>
+<!-- Visión con Canvas de Partículas -->
+<section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+    <div class="relative steel-gradient rounded-[3rem] overflow-hidden shadow-2xl shadow-blue-900/20 border border-white/10 group animate-in delay-1">
+        <canvas id="particle-canvas" class="absolute inset-0 w-full h-full opacity-60 group-hover:opacity-80 transition-opacity duration-700"></canvas>
         
-        <div class="relative z-20 p-16 lg:p-24">
+        <div class="relative z-20 p-10 md:p-16 lg:p-20 bg-gradient-to-r from-[#020617]/95 via-[#020617]/80 to-transparent">
             <div class="max-w-3xl">
-                <span class="text-blue-400/60 text-sm font-mono tracking-[0.2em] mb-6 block">// NUESTRA VISIÓN</span>
-                <h2 class="swiss-text text-4xl lg:text-5xl font-light text-white mb-8 leading-tight">
+                <span class="text-blue-400/90 text-sm font-mono-custom tracking-[0.2em] mb-6 block bg-blue-500/10 px-4 py-1.5 rounded-full w-fit border border-blue-500/20">// NUESTRA VISIÓN 2030</span>
+                <h2 class="swiss-text text-4xl lg:text-5xl font-extrabold text-white mb-8 leading-tight">
                     Donde los datos<br>
-                    <span class="font-medium text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">fluyen con propósito</span>
+                    <span class="title-gradient">fluyen con propósito</span>
                 </h2>
-                <p class="text-gray-300 text-lg leading-relaxed font-light mb-12">
+                <p class="text-gray-300 text-lg leading-relaxed font-light mb-10 max-w-2xl">
                     Visualizamos un futuro donde la infraestructura IT no solo sea robusta, 
-                    sino también inteligente y autónoma. Cada bit de datos que procesamos 
-                    está optimizado para máxima eficiencia y mínima latencia.
+                    sino también inteligente, autónoma y sostenible. Cada bit de datos que procesamos 
+                    está optimizado para máxima eficiencia energética y mínima latencia.
                 </p>
                 <div class="grid grid-cols-2 gap-8">
-                    <div>
-                        <div class="text-3xl text-blue-400 font-light mb-2">0.1ms</div>
-                        <div class="text-gray-400 text-sm font-mono">LATENCIA PROMEDIO</div>
+                    <div class="bg-white/5 rounded-2xl p-6 border border-white/10">
+                        <div class="text-4xl font-bold text-blue-400 mb-2">0.1<span class="text-xl">ms</span></div>
+                        <div class="text-gray-400 text-sm font-mono-custom tracking-wider">LATENCIA PROMEDIO</div>
+                        <div class="text-gray-500 text-xs mt-2">Edge optimizado</div>
                     </div>
-                    <div>
-                        <div class="text-3xl text-blue-400 font-light mb-2">100%</div>
-                        <div class="text-gray-400 text-sm font-mono">TRANSPARENCIA</div>
+                    <div class="bg-white/5 rounded-2xl p-6 border border-white/10">
+                        <div class="text-4xl font-bold text-cyan-400 mb-2">100<span class="text-xl">%</span></div>
+                        <div class="text-gray-400 text-sm font-mono-custom tracking-wider">TRANSPARENCIA</div>
+                        <div class="text-gray-500 text-xs mt-2">Código abierto</div>
                     </div>
                 </div>
             </div>
@@ -277,278 +471,434 @@
     </div>
 </section>
 
-<!-- Bloque de Transparencia Técnica -->
+<!-- Transparencia Técnica -->
 <section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-    <div class="text-center mb-20">
-        <span class="text-blue-400 text-sm font-mono tracking-[0.2em]">// ARQUITECTURA ABIERTA</span>
-        <h2 class="swiss-text text-4xl font-light text-white mt-4 mb-6">Transparencia Técnica</h2>
-        <p class="text-gray-400 max-w-2xl mx-auto font-light">
+    <div class="text-center mb-16 animate-in">
+        <span class="text-blue-400 text-sm font-mono-custom tracking-[0.2em] bg-blue-500/10 px-4 py-1.5 rounded-full border border-blue-500/20">// ARQUITECTURA ABIERTA</span>
+        <h2 class="swiss-text text-3xl lg:text-4xl font-extrabold text-white mt-6 mb-4">Transparencia Técnica Radical</h2>
+        <p class="text-gray-400 max-w-2xl mx-auto font-light text-lg">
             Creemos que la confianza se construye mostrando cada capa de nuestra arquitectura.
+            Estos son los pilares de nuestra infraestructura.
         </p>
     </div>
 
-    <div class="grid lg:grid-cols-2 gap-12">
+    <div class="grid lg:grid-cols-2 gap-8">
+        
         <!-- Multichek -->
-        <div class="silver-glow rounded-2xl p-8 hover:border-blue-400/30 transition-all duration-500">
-            <div class="flex items-start gap-4 mb-6">
-                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/20 to-transparent flex items-center justify-center border border-blue-500/30">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><circle cx="12" cy="8" r="0.5" fill="#60a5fa" stroke="none"></circle></svg>
+        <div class="bento-card glass-card rounded-[2.5rem] p-8 lg:p-10 group" data-theme="#3b82f6">
+            <div class="flex items-start gap-5 mb-8">
+                <div class="w-16 h-16 rounded-2xl bg-blue-500/20 flex items-center justify-center border border-blue-500/30 group-hover:border-blue-400 group-hover:scale-110 transition-all">
+                    <i data-lucide="activity" class="text-blue-400 w-8 h-8"></i>
                 </div>
                 <div>
-                    <h3 class="text-2xl font-medium text-white mb-1">Multichek</h3>
-                    <p class="text-gray-400 text-sm font-mono">Sistema de monitoreo mensual v0.1</p>
+                    <h3 class="text-3xl font-bold text-white mb-1">Multichek</h3>
+                    <p class="text-gray-400 text-sm font-mono-custom">Sistema de monitoreo mensual v2.1</p>
                 </div>
             </div>
             
-            <div class="space-y-4">
+            <div class="space-y-4 bg-black/20 rounded-2xl p-6 border border-white/5">
                 <div class="flex justify-between items-center py-3 border-b border-white/5">
-                    <span class="text-gray-400 text-sm">Arquitectura</span>
-                    <span class="text-white font-mono text-sm">Microservicios distribuidos</span>
+                    <span class="text-gray-400">Arquitectura</span>
+                    <span class="text-white font-mono-custom">Microservicios · Event-driven</span>
                 </div>
                 <div class="flex justify-between items-center py-3 border-b border-white/5">
-                    <span class="text-gray-400 text-sm">Nodos activos</span>
-                    <span class="text-white font-mono text-sm">1,247</span>
+                    <span class="text-gray-400">Nodos activos</span>
+                    <span class="text-white font-mono-custom">2,847 <span class="text-green-400 text-xs">+129% YoY</span></span>
                 </div>
                 <div class="flex justify-between items-center py-3 border-b border-white/5">
-                    <span class="text-gray-400 text-sm">Tiempo de respuesta</span>
-                    <span class="text-white font-mono text-sm">< 50ms p99</span>
+                    <span class="text-gray-400">Tiempo de respuesta</span>
+                    <span class="text-white font-mono-custom">< 35ms p99</span>
                 </div>
                 <div class="flex justify-between items-center py-3">
-                    <span class="text-gray-400 text-sm">Tecnologías</span>
-                    <span class="text-white font-mono text-sm">Go · Rust · TimescaleDB</span>
+                    <span class="text-gray-400">Stack tecnológico</span>
+                    <span class="text-white font-mono-custom">Go · Rust · TimescaleDB · Kafka</span>
                 </div>
             </div>
 
-            <!-- Diagrama simplificado -->
-            <div class="mt-8 grid grid-cols-3 gap-2">
-                <div class="h-1 bg-blue-500/30 rounded-full"></div>
-                <div class="h-1 bg-blue-500/50 rounded-full"></div>
-                <div class="h-1 bg-blue-500/80 rounded-full"></div>
-            </div>
-            <div class="flex justify-between text-xs text-gray-500 font-mono mt-2">
-                <span>INGEST</span>
-                <span>PROCESS</span>
-                <span>ALERT</span>
+            <div class="mt-8">
+                <div class="grid grid-cols-4 gap-2 mb-2">
+                    <div class="h-2 bg-blue-500/30 rounded-full"></div>
+                    <div class="h-2 bg-blue-500/50 rounded-full"></div>
+                    <div class="h-2 bg-blue-500/70 rounded-full"></div>
+                    <div class="h-2 bg-blue-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div>
+                </div>
+                <div class="flex justify-between text-[10px] text-gray-500 font-mono-custom">
+                    <span>INGEST</span>
+                    <span>PROCESS</span>
+                    <span>ANALYZE</span>
+                    <span>ALERT</span>
+                </div>
             </div>
         </div>
 
         <!-- Nation I -->
-        <div class="silver-glow rounded-2xl p-8 hover:border-blue-400/30 transition-all duration-500">
-            <div class="flex items-start gap-4 mb-6">
-                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-transparent flex items-center justify-center border border-cyan-500/30">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+        <div class="bento-card glass-card rounded-[2.5rem] p-8 lg:p-10 group" data-theme="#06b6d4">
+            <div class="flex items-start gap-5 mb-8">
+                <div class="w-16 h-16 rounded-2xl bg-cyan-500/20 flex items-center justify-center border border-cyan-500/30 group-hover:border-cyan-400 group-hover:scale-110 transition-all">
+                    <i data-lucide="server" class="text-cyan-400 w-8 h-8"></i>
                 </div>
                 <div>
-                    <h3 class="text-2xl font-medium text-white mb-1">Nation I</h3>
-                    <p class="text-gray-400 text-sm font-mono">Arquitectura de servidores Gen1</p>
+                    <h3 class="text-3xl font-bold text-white mb-1">Nation I</h3>
+                    <p class="text-gray-400 text-sm font-mono-custom">Arquitectura de servidores Gen2</p>
                 </div>
             </div>
             
-            <div class="space-y-4">
+            <div class="space-y-4 bg-black/20 rounded-2xl p-6 border border-white/5">
                 <div class="flex justify-between items-center py-3 border-b border-white/5">
-                    <span class="text-gray-400 text-sm">Especificación</span>
-                    <span class="text-white font-mono text-sm">Dual AMD EPYC 9654</span>
+                    <span class="text-gray-400">Procesadores</span>
+                    <span class="text-white font-mono-custom">Dual AMD EPYC 9754 (256 cores)</span>
                 </div>
                 <div class="flex justify-between items-center py-3 border-b border-white/5">
-                    <span class="text-gray-400 text-sm">Memoria</span>
-                    <span class="text-white font-mono text-sm">2TB DDR5 ECC</span>
+                    <span class="text-gray-400">Memoria RAM</span>
+                    <span class="text-white font-mono-custom">6TB DDR5 ECC</span>
                 </div>
                 <div class="flex justify-between items-center py-3 border-b border-white/5">
-                    <span class="text-gray-400 text-sm">Almacenamiento</span>
-                    <span class="text-white font-mono text-sm">NVMe RAID 10</span>
+                    <span class="text-gray-400">Almacenamiento</span>
+                    <span class="text-white font-mono-custom">NVMe Gen5 RAID 10 (100TB+)</span>
                 </div>
                 <div class="flex justify-between items-center py-3">
-                    <span class="text-gray-400 text-sm">Redundancia</span>
-                    <span class="text-white font-mono text-sm">N+2</span>
+                    <span class="text-gray-400">Redundancia</span>
+                    <span class="text-white font-mono-custom">N+2 · Hot-swap</span>
                 </div>
             </div>
 
-            <!-- Métricas de rendimiento -->
             <div class="mt-8 grid grid-cols-2 gap-4">
-                <div>
-                    <div class="text-2xl text-cyan-400 font-light">99.999%</div>
-                    <div class="text-gray-400 text-xs font-mono">UPTIME</div>
+                <div class="bg-black/20 rounded-xl p-5 border border-white/5">
+                    <div class="text-3xl font-bold text-cyan-400">99.999<span class="text-lg">%</span></div>
+                    <div class="text-gray-400 text-xs font-mono-custom mt-1 tracking-wider">UPTIME SLA</div>
                 </div>
-                <div>
-                    <div class="text-2xl text-cyan-400 font-light">1.2M</div>
-                    <div class="text-gray-400 text-xs font-mono">IOPS</div>
+                <div class="bg-black/20 rounded-xl p-5 border border-white/5">
+                    <div class="text-3xl font-bold text-cyan-400">2.4<span class="text-lg">M</span></div>
+                    <div class="text-gray-400 text-xs font-mono-custom mt-1 tracking-wider">IOPS</div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Certificaciones -->
-    <div class="mt-16 flex flex-wrap justify-center gap-8">
-        <div class="text-gray-500 text-xs font-mono tracking-wider">ISO 27001:2025</div>
-        <div class="text-gray-500 text-xs font-mono tracking-wider">SOC 2 TYPE II</div>
-        <div class="text-gray-500 text-xs font-mono tracking-wider">GDPR COMPLIANT</div>
-        <div class="text-gray-500 text-xs font-mono tracking-wider">CCPA CERTIFIED</div>
+    <div class="mt-16 flex flex-wrap justify-center gap-6 animate-in delay-2">
+        <div class="glass-card px-6 py-3 rounded-full text-xs font-mono-custom text-gray-300 border-blue-500/20 hover:border-blue-500/40 transition-all flex items-center gap-2">
+            <i data-lucide="shield" class="w-4 h-4 text-blue-400"></i>
+            ISO 27001:2025
+        </div>
+        <div class="glass-card px-6 py-3 rounded-full text-xs font-mono-custom text-gray-300 border-blue-500/20 hover:border-blue-500/40 transition-all flex items-center gap-2">
+            <i data-lucide="check-circle" class="w-4 h-4 text-green-400"></i>
+            SOC 2 Type II
+        </div>
+        <div class="glass-card px-6 py-3 rounded-full text-xs font-mono-custom text-gray-300 border-blue-500/20 hover:border-blue-500/40 transition-all flex items-center gap-2">
+            <i data-lucide="globe" class="w-4 h-4 text-cyan-400"></i>
+            GDPR Compliant
+        </div>
+        <div class="glass-card px-6 py-3 rounded-full text-xs font-mono-custom text-gray-300 border-blue-500/20 hover:border-blue-500/40 transition-all flex items-center gap-2">
+            <i data-lucide="lock" class="w-4 h-4 text-purple-400"></i>
+            CCPA Certified
+        </div>
+        <div class="glass-card px-6 py-3 rounded-full text-xs font-mono-custom text-gray-300 border-blue-500/20 hover:border-blue-500/40 transition-all flex items-center gap-2">
+            <i data-lucide="cpu" class="w-4 h-4 text-orange-400"></i>
+            HIPAA Ready
+        </div>
     </div>
 </section>
 
-<!-- Equipo (minimalista) -->
+<!-- Equipo -->
 <section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-    <div class="text-center mb-16">
-        <span class="text-blue-400 text-sm font-mono tracking-[0.2em]">// LIDERAZGO</span>
-        <h2 class="swiss-text text-3xl font-light text-white mt-4">Personas detrás de la tecnología</h2>
+    <div class="text-center mb-16 animate-in">
+        <span class="text-blue-400 text-sm font-mono-custom tracking-[0.2em] bg-blue-500/10 px-4 py-1.5 rounded-full border border-blue-500/20">// LIDERAZGO</span>
+        <h2 class="swiss-text text-3xl lg:text-4xl font-extrabold text-white mt-6">Personas detrás de la tecnología</h2>
+        <p class="text-gray-400 max-w-2xl mx-auto mt-4 font-light">Un equipo de visionarios construyendo el futuro</p>
     </div>
 
-    <div class="grid md:grid-cols-3 gap-12">
-        <div class="text-center">
-            <div class="w-32 h-32 mx-auto rounded-full silver-glow mb-6 flex items-center justify-center">
-                <span class="text-3xl text-blue-400 font-light">JS</span>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <!-- Joseph Sanchez -->
+        <div class="bento-card glass-card rounded-3xl p-8 text-center group" data-theme="#3b82f6">
+            <div class="relative inline-block mb-6">
+                <div class="absolute inset-0 bg-blue-500/30 blur-2xl rounded-full group-hover:bg-blue-500/50 transition-all"></div>
+                <div class="relative w-32 h-32 rounded-full bg-gradient-to-br from-blue-500/30 to-cyan-500/30 border-2 border-blue-400/50 flex items-center justify-center text-4xl font-bold text-white shadow-xl">
+                    JS
+                </div>
             </div>
-            <h3 class="text-white font-medium">Joseph Sanchez</h3>
-            <p class="text-gray-400 text-sm font-mono mt-1">CEO & Co-fundador</p>
+            <h3 class="text-2xl font-bold text-white mb-1">Joseph Sanchez</h3>
+            <p class="text-blue-400 text-sm font-mono-custom mb-3">CEO & Co-fundador</p>
+            <p class="text-gray-400 text-sm leading-relaxed font-light">Visionario tecnológico con 15+ años en infraestructura. Lidera la estrategia global de InfiniHon.</p>
+            <div class="flex justify-center gap-3 mt-4">
+                <a href="#" class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-blue-400 hover:border-blue-400/30 transition-all"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-blue-400 hover:border-blue-400/30 transition-all"><i class="fab fa-x-twitter"></i></a>
+            </div>
         </div>
-        <div class="text-center">
-            <div class="w-32 h-32 mx-auto rounded-full silver-glow mb-6 flex items-center justify-center">
-                <span class="text-3xl text-blue-400 font-light">MR</span>
+
+        <!-- Marta Ruiz -->
+        <div class="bento-card glass-card rounded-3xl p-8 text-center group" data-theme="#06b6d4">
+            <div class="relative inline-block mb-6">
+                <div class="absolute inset-0 bg-cyan-500/30 blur-2xl rounded-full group-hover:bg-cyan-500/50 transition-all"></div>
+                <div class="relative w-32 h-32 rounded-full bg-gradient-to-br from-cyan-500/30 to-blue-500/30 border-2 border-cyan-400/50 flex items-center justify-center text-4xl font-bold text-white shadow-xl">
+                    MR
+                </div>
             </div>
-            <h3 class="text-white font-medium">Marta Ruiz</h3>
-            <p class="text-gray-400 text-sm font-mono mt-1">CTO</p>
+            <h3 class="text-2xl font-bold text-white mb-1">Marta Ruiz</h3>
+            <p class="text-cyan-400 text-sm font-mono-custom mb-3">CTO</p>
+            <p class="text-gray-400 text-sm leading-relaxed font-light">Doctora en Computación Distribuida. Arquitecta principal de Nation I y Multichek.</p>
+            <div class="flex justify-center gap-3 mt-4">
+                <a href="#" class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-cyan-400 hover:border-cyan-400/30 transition-all"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-cyan-400 hover:border-cyan-400/30 transition-all"><i class="fab fa-github"></i></a>
+            </div>
         </div>
-        <div class="text-center">
-            <div class="w-32 h-32 mx-auto rounded-full silver-glow mb-6 flex items-center justify-center">
-                <span class="text-3xl text-blue-400 font-light">DG</span>
+
+        <!-- David García -->
+        <div class="bento-card glass-card rounded-3xl p-8 text-center group sm:col-span-2 lg:col-span-1" data-theme="#a855f7">
+            <div class="relative inline-block mb-6">
+                <div class="absolute inset-0 bg-purple-500/30 blur-2xl rounded-full group-hover:bg-purple-500/50 transition-all"></div>
+                <div class="relative w-32 h-32 rounded-full bg-gradient-to-br from-purple-500/30 to-pink-500/30 border-2 border-purple-400/50 flex items-center justify-center text-4xl font-bold text-white shadow-xl">
+                    DG
+                </div>
             </div>
-            <h3 class="text-white font-medium">David García</h3>
-            <p class="text-gray-400 text-sm font-mono mt-1">Arquitecto Principal</p>
+            <h3 class="text-2xl font-bold text-white mb-1">David García</h3>
+            <p class="text-purple-400 text-sm font-mono-custom mb-3">Arquitecto Principal</p>
+            <p class="text-gray-400 text-sm leading-relaxed font-light">Especialista en Edge Computing y Kubernetes. Lidera el equipo de infraestructura bare-metal.</p>
+            <div class="flex justify-center gap-3 mt-4">
+                <a href="#" class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-purple-400 hover:border-purple-400/30 transition-all"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-purple-400 hover:border-purple-400/30 transition-all"><i class="fab fa-dev"></i></a>
+            </div>
         </div>
     </div>
 </section>
 
-<!-- Footer minimalista -->
-<footer class="relative z-10 border-t border-white/5 bg-[#020617]/50 backdrop-blur-sm">
+<!-- Footer Ultra Premium -->
+<footer class="relative z-10 border-t border-white/5 glass mt-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div class="grid md:grid-cols-4 gap-12">
             <div>
                 <div class="flex items-center space-x-2 mb-6">
-                    <div class="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
-                        <span class="text-black font-bold text-xl">I</span>
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+                        <i data-lucide="cpu" class="text-black w-6 h-6"></i>
                     </div>
-                    <span class="text-white font-light text-xl">INFINIHON</span>
+                    <span class="text-white font-bold text-xl">InfiniHon</span>
                 </div>
-                <p class="text-gray-400 text-sm font-light leading-relaxed">
-                    Infraestructura IT con transparencia radical y excelencia técnica.
+                <p class="text-gray-400 text-sm leading-relaxed font-light">
+                    Infraestructura IT de grado industrial. Transparencia radical, excelencia técnica.
                 </p>
+                <div class="flex gap-4 mt-6">
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors"><i class="fab fa-github text-xl"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors"><i class="fab fa-linkedin-in text-xl"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors"><i class="fab fa-x-twitter text-xl"></i></a>
+                </div>
             </div>
             <div>
-                <h4 class="text-white font-medium mb-4 text-sm tracking-wide">LEGAL</h4>
-                <ul class="space-y-2">
-                    <li><a href="#" class="text-gray-400 hover:text-white text-sm font-light transition-colors">Privacidad</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white text-sm font-light transition-colors">Términos</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white text-sm font-light transition-colors">Cookies</a></li>
+                <h4 class="text-white font-bold mb-5 text-sm tracking-wider">PRODUCTOS</h4>
+                <ul class="space-y-3">
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors font-light interactive">Servidores Nation</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors font-light interactive">Multichek</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors font-light interactive">Edge Clusters</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors font-light interactive">MikroTik Enterprise</a></li>
                 </ul>
             </div>
             <div>
-                <h4 class="text-white font-medium mb-4 text-sm tracking-wide">CONTACTO</h4>
-                <ul class="space-y-2">
-                    <li class="text-gray-400 text-sm font-light">elsanchezok@yahoo.com</li>
-                    <li class="text-gray-400 text-sm font-light">+(504) 3315-4594</li>
-                    <li class="text-gray-400 text-sm font-light">Cortes · La Ceiba</li>
+                <h4 class="text-white font-bold mb-5 text-sm tracking-wider">COMPAÑÍA</h4>
+                <ul class="space-y-3">
+                    <li><a href="sobre_nosotros.html" class="text-blue-400 text-sm transition-colors font-light interactive">Sobre nosotros</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors font-light interactive">Carreras</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors font-light interactive">Blog técnico</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors font-light interactive">Sala de prensa</a></li>
                 </ul>
             </div>
             <div>
-                <h4 class="text-white font-medium mb-4 text-sm tracking-wide">SOCIAL</h4>
-                <ul class="space-y-2">
-                    <li><a href="#" class="text-gray-400 hover:text-white text-sm font-light transition-colors">LinkedIn</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white text-sm font-light transition-colors">GitHub</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white text-sm font-light transition-colors">Instagram</a></li>
+                <h4 class="text-white font-bold mb-5 text-sm tracking-wider">CONTACTO</h4>
+                <ul class="space-y-3">
+                    <li class="text-gray-400 text-sm font-light flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4"></i> elsanchezok@yahoo.com</li>
+                    <li class="text-gray-400 text-sm font-light flex items-center gap-2"><i data-lucide="phone" class="w-4 h-4"></i> +(504) 3315-4594</li>
+                    <li class="text-gray-400 text-sm font-light flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4"></i> Cortés · La Ceiba, Honduras</li>
                 </ul>
             </div>
         </div>
-        <div class="mt-12 pt-8 border-t border-white/5 text-center text-gray-500 text-xs font-mono">
-            © 2025 INFINIHON · TODOS LOS DERECHOS RESERVADOS
+        <div class="border-t border-white/5 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p class="text-gray-500 text-xs font-mono-custom">
+                &copy; 2025 INFINIHON · TODOS LOS DERECHOS RESERVADOS · TRANSPARENCIA RADICAL
+            </p>
+            <div class="flex gap-6">
+                <a href="#" class="text-gray-500 hover:text-gray-400 text-xs font-mono-custom interactive">PRIVACIDAD</a>
+                <a href="#" class="text-gray-500 hover:text-gray-400 text-xs font-mono-custom interactive">TÉRMINOS</a>
+                <a href="#" class="text-gray-500 hover:text-gray-400 text-xs font-mono-custom interactive">COOKIES</a>
+            </div>
         </div>
     </div>
 </footer>
 
-<!-- Script para partículas -->
 <script>
-    const canvas = document.getElementById('particle-canvas');
-    if (canvas) {
-        const ctx = canvas.getContext('2d');
-        let width = canvas.parentElement.offsetWidth;
-        let height = canvas.parentElement.offsetHeight;
+    (function(){
+        // 1. Inicializar iconos de Lucide
+        lucide.createIcons();
+
+        // 2. Animaciones de entrada (Intersection Observer)
+        const animatedElements = document.querySelectorAll('.animate-in');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+        animatedElements.forEach(el => observer.observe(el));
+
+        // 3. Cursor Personalizado Avanzado
+        const cursor = document.getElementById('custom-cursor');
+        const cursorDot = document.getElementById('cursor-dot');
+        const aura = document.getElementById('cursor-aura');
         
-        canvas.width = width;
-        canvas.height = height;
-        
-        const particles = [];
-        const particleCount = 50;
-        
-        class Particle {
-            constructor() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.radius = Math.random() * 2;
-                this.opacity = Math.random() * 0.3;
-            }
-            
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                
-                if (this.x < 0 || this.x > width) this.vx *= -1;
-                if (this.y < 0 || this.y > height) this.vy *= -1;
-            }
-            
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(56, 189, 248, ${this.opacity})`;
-                ctx.fill();
-            }
-        }
-        
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new Particle());
-        }
-        
-        function connectParticles() {
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
+        const isTouch = !window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+        if (isTouch) {
+            if(cursor) cursor.style.display = 'none';
+            if(aura) aura.style.display = 'none';
+            document.body.style.cursor = 'auto';
+        } else {
+            document.addEventListener('mousemove', (e) => {
+                if(!cursor || !aura) return;
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+                aura.style.left = e.clientX + 'px';
+                aura.style.top = e.clientY + 'px';
+            });
+
+            document.addEventListener('mousedown', (e) => {
+                const ping = document.createElement('div');
+                ping.className = 'ping-effect';
+                const currentColor = cursor.style.borderColor || 'rgba(59, 130, 246, 0.8)';
+                if(currentColor !== 'white' && currentColor !== 'rgba(255, 255, 255, 0.9)') {
+                    ping.style.borderColor = currentColor;
+                }
+                ping.style.left = e.clientX + 'px';
+                ping.style.top = e.clientY + 'px';
+                document.body.appendChild(ping);
+                setTimeout(() => ping.remove(), 600);
+            });
+
+            const interactiveElements = document.querySelectorAll('button, a, .bento-card, .interactive, .tilt-card');
+            interactiveElements.forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    if(!cursor) return;
+                    cursor.style.transform = 'translate(-50%, -50%) scale(1.6)';
+                    cursor.style.width = '34px';
+                    cursor.style.height = '34px';
                     
-                    if (distance < 100) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(56, 189, 248, ${0.1 * (1 - distance / 100)})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
+                    let theme = el.closest('[data-theme]')?.dataset.theme || '#60a5fa';
+                    cursor.style.borderColor = theme;
+                    cursorDot.style.backgroundColor = theme;
+                    aura.style.background = `radial-gradient(circle, ${theme}33 0%, transparent 70%)`;
+                    cursor.style.mixBlendMode = 'normal';
+                });
+                
+                el.addEventListener('mouseleave', () => {
+                    if(!cursor) return;
+                    cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                    cursor.style.width = '28px';
+                    cursor.style.height = '28px';
+                    cursor.style.borderColor = 'rgba(255, 255, 255, 0.9)';
+                    cursorDot.style.backgroundColor = 'white';
+                    cursor.style.mixBlendMode = 'difference';
+                    aura.style.background = 'radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 70%)';
+                });
+            });
+
+            document.addEventListener('mouseleave', () => {
+                if(cursor) cursor.style.opacity = '0';
+                if(aura) aura.style.opacity = '0';
+            });
+            document.addEventListener('mouseenter', () => {
+                if(cursor) cursor.style.opacity = '1';
+                if(aura) aura.style.opacity = '1';
+            });
+        }
+
+        // 4. Efecto 3D Tilt
+        document.addEventListener('mousemove', (e) => {
+            const card = e.target.closest('.tilt-card, .bento-card');
+            if(card) {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * -6;
+                const rotateY = ((x - centerX) / centerX) * 6;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            }
+        });
+        
+        document.addEventListener('mouseout', (e) => {
+            const card = e.target.closest('.tilt-card, .bento-card');
+            if(card) card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+        });
+
+        // 5. Partículas Canvas
+        const canvas = document.getElementById('particle-canvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            let particles = [];
+            const particleCount = 50;
+            
+            function resizeCanvas() {
+                width = canvas.parentElement.offsetWidth;
+                height = canvas.parentElement.offsetHeight;
+                canvas.width = width;
+                canvas.height = height;
+            }
+            
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+            
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.vx = (Math.random() - 0.5) * 0.3;
+                    this.vy = (Math.random() - 0.5) * 0.3;
+                    this.radius = Math.random() * 2 + 0.5;
+                    this.opacity = Math.random() * 0.4;
+                }
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    if (this.x < 0 || this.x > width) this.vx *= -1;
+                    if (this.y < 0 || this.y > height) this.vy *= -1;
+                }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(56, 189, 248, ${this.opacity})`;
+                    ctx.fill();
+                }
+            }
+            
+            for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+            
+            function connectParticles() {
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        if (distance < 130) {
+                            ctx.beginPath();
+                            ctx.strokeStyle = `rgba(56, 189, 248, ${0.12 * (1 - distance / 130)})`;
+                            ctx.lineWidth = 0.6;
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.stroke();
+                        }
                     }
                 }
             }
+            
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                particles.forEach(p => { p.update(); p.draw(); });
+                connectParticles();
+                requestAnimationFrame(animate);
+            }
+            animate();
         }
-        
-        function animate() {
-            ctx.clearRect(0, 0, width, height);
-            
-            particles.forEach(particle => {
-                particle.update();
-                particle.draw();
-            });
-            
-            connectParticles();
-            
-            requestAnimationFrame(animate);
-        }
-        
-        animate();
-        
-        window.addEventListener('resize', () => {
-            width = canvas.parentElement.offsetWidth;
-            height = canvas.parentElement.offsetHeight;
-            canvas.width = width;
-            canvas.height = height;
-        });
-    }
+    })();
 </script>
 </body>
 </html>
