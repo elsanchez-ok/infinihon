@@ -2,7 +2,7 @@
 // PANEL DE CONTROL VIP - INFINIHON
 // ==========================================
 const cerrarTodoElSitio = false; 
-const paginasEnObras = ["index", "tienda"]; 
+const paginasEnObras = ["", ""]; 
 const paginasIntocables = ["fix", "404", "elsanchezok"];
 
 // ==========================================
