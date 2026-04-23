@@ -1,8 +1,8 @@
 // ==========================================
 // PANEL DE CONTROL VIP - INFINIHON
 // ==========================================
-const cerrarTodoElSitio = true; 
-const paginasEnObras = ["", ""]; 
+const cerrarTodoElSitio = false; // 🔓 CAMBIADO A FALSE PARA ABRIR EL SITIO
+const paginasEnObras = []; // 🛠️ Dejado vacío correctamente para no bloquear nada por error
 const paginasIntocables = ["fix", "404", "elsanchezok"];
 
 // ==========================================
@@ -14,16 +14,14 @@ const parametrosURL = new URLSearchParams(window.location.search);
 // 1. GESTIÓN DE CREDENCIALES (Entrar/Salir)
 if (parametrosURL.get('admin') === 'infinihonVIP') {
     localStorage.setItem('paseAdministrador', 'activado');
+    // Limpiamos la URL para que no se vea el password
     window.history.replaceState({}, document.title, window.location.pathname);
-}
-if (parametrosURL.get('admin') === 'salir') {
-    localStorage.removeItem('paseAdministrador');
-    window.location.href = "fix.html";
 }
 
 const esAdmin = localStorage.getItem('paseAdministrador') === 'activado';
 
 // 2. VERIFICACIÓN DE ACCESO
+// Solo bloqueamos si NO es admin y la página NO es "intocable"
 const esIntocable = paginasIntocables.some(pagina => rutaActual.includes(pagina));
 
 if (!esIntocable && !esAdmin) {
@@ -31,12 +29,15 @@ if (!esIntocable && !esAdmin) {
 
     if (cerrarTodoElSitio === true) {
         guardiaDebeBloquear = true; 
-    } else if (paginasEnObras.some(pagina => rutaActual.includes(pagina))) {
+    } else if (paginasEnObras.length > 0 && paginasEnObras.some(pagina => pagina !== "" && rutaActual.includes(pagina))) {
         guardiaDebeBloquear = true; 
     }
 
     if (guardiaDebeBloquear) {
-        window.location.href = "fix.html"; 
+        // Evitar bucle infinito: solo redireccionar si no estamos ya en fix.html
+        if (!rutaActual.includes("fix.html")) {
+            window.location.href = "fix.html"; 
+        }
     }
 }
 
@@ -59,7 +60,7 @@ if (esAdmin && !rutaActual.includes("fix")) {
 
         botonSalir.onclick = () => {
             localStorage.removeItem('paseAdministrador');
-            window.location.href = "fix.html";
+            window.location.reload(); // Recarga para aplicar restricciones
         };
         document.body.appendChild(botonSalir);
     });
