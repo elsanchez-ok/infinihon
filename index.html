@@ -240,6 +240,144 @@
             opacity: 1;
             visibility: visible;
         }
+
+        /* ==========================================
+           GALERÍA DE IMÁGENES RESPONSIVE
+           ========================================== */
+        .hero-gallery {
+            position: relative;
+            width: 100%;
+            height: 50vh;
+            min-height: 300px;
+            max-height: 600px;
+            overflow: hidden;
+        }
+        
+        @media (min-width: 640px) {
+            .hero-gallery {
+                height: 55vh;
+                min-height: 350px;
+                max-height: 650px;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .hero-gallery {
+                height: 60vh;
+                min-height: 400px;
+                max-height: 700px;
+            }
+        }
+        
+        @media (min-width: 1280px) {
+            .hero-gallery {
+                height: 65vh;
+                min-height: 450px;
+                max-height: 750px;
+            }
+        }
+        
+        .gallery-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            object-fit: cover;
+            object-position: center;
+        }
+        
+        .gallery-slide.active {
+            opacity: 1;
+        }
+        
+        /* Overlay gradiente sobre la imagen */
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, 
+                rgba(2, 6, 23, 0.3) 0%, 
+                rgba(2, 6, 23, 0.1) 40%, 
+                rgba(2, 6, 23, 0.4) 80%, 
+                rgba(2, 6, 23, 0.8) 100%);
+            pointer-events: none;
+        }
+        
+        /* Indicadores de navegación */
+        .gallery-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+        
+        .gallery-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .gallery-dot.active {
+            background: #3b82f6;
+            border-color: #60a5fa;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+            transform: scale(1.2);
+        }
+        
+        /* Flechas de navegación */
+        .gallery-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background: rgba(2, 6, 23, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            color: white;
+        }
+        
+        .gallery-arrow:hover {
+            background: rgba(59, 130, 246, 0.5);
+            border-color: rgba(59, 130, 246, 0.8);
+        }
+        
+        .gallery-arrow-left {
+            left: 20px;
+        }
+        
+        .gallery-arrow-right {
+            right: 20px;
+        }
+        
+        @media (max-width: 640px) {
+            .gallery-arrow {
+                width: 32px;
+                height: 32px;
+            }
+            .gallery-arrow-left {
+                left: 10px;
+            }
+            .gallery-arrow-right {
+                right: 10px;
+            }
+        }
     </style>
 </head>
 <body class="selection:bg-blue-500/30 min-h-screen relative">
@@ -425,6 +563,42 @@
         <div class="hidden md:block w-20"></div>
     </div>
 </nav>
+
+<!-- ========================================== -->
+<!-- GALERÍA DE IMÁGENES RESPONSIVE -->
+<!-- ========================================== -->
+<div class="hero-gallery" id="heroGallery">
+    <!-- Imagen 1 -->
+    <img src="assets/img-index/infinihon.png" alt="Infraestructura IT" class="gallery-slide active" id="slide1">
+    <!-- Imagen 2 -->
+    <img src="imagenes/slide2.jpg" alt="Data Center" class="gallery-slide" id="slide2">
+    <!-- Imagen 3 -->
+    <img src="imagenes/slide3.jpg" alt="Servidores Enterprise" class="gallery-slide" id="slide3">
+    <!-- Imagen 4 -->
+    <img src="imagenes/slide4.jpg" alt="Tecnología de punta" class="gallery-slide" id="slide4">
+    <!-- Imagen 5 -->
+    <img src="imagenes/slide5.jpg" alt="Edge Computing" class="gallery-slide" id="slide5">
+    
+    <!-- Overlay gradiente -->
+    <div class="gallery-overlay"></div>
+    
+    <!-- Flechas de navegación -->
+    <button class="gallery-arrow gallery-arrow-left" onclick="prevSlide()" aria-label="Imagen anterior">
+        <i data-lucide="chevron-left" class="w-5 h-5"></i>
+    </button>
+    <button class="gallery-arrow gallery-arrow-right" onclick="nextSlide()" aria-label="Imagen siguiente">
+        <i data-lucide="chevron-right" class="w-5 h-5"></i>
+    </button>
+    
+    <!-- Indicadores -->
+    <div class="gallery-dots" id="galleryDots">
+        <span class="gallery-dot active" onclick="goToSlide(0)"></span>
+        <span class="gallery-dot" onclick="goToSlide(1)"></span>
+        <span class="gallery-dot" onclick="goToSlide(2)"></span>
+        <span class="gallery-dot" onclick="goToSlide(3)"></span>
+        <span class="gallery-dot" onclick="goToSlide(4)"></span>
+    </div>
+</div>
 
 <!-- Hero Section -->
 <section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-16 lg:pt-24 pb-8 sm:pb-12 animate-in">
@@ -758,7 +932,68 @@
     (function(){
         lucide.createIcons();
 
-        // Drawer lateral móvil
+        // ==========================================
+        // GALERÍA DE IMÁGENES
+        // ==========================================
+        const slides = document.querySelectorAll('.gallery-slide');
+        const dots = document.querySelectorAll('.gallery-dot');
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+        let autoPlayInterval;
+        
+        function showSlide(index) {
+            // Ocultar todos los slides
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            // Mostrar el slide actual
+            slides[index].classList.add('active');
+            dots[index].classList.add('active');
+            currentSlide = index;
+        }
+        
+        function nextSlide() {
+            const next = (currentSlide + 1) % totalSlides;
+            showSlide(next);
+        }
+        
+        function prevSlide() {
+            const prev = (currentSlide - 1 + totalSlides) % totalSlides;
+            showSlide(prev);
+        }
+        
+        function goToSlide(index) {
+            showSlide(index);
+            resetAutoPlay();
+        }
+        
+        function startAutoPlay() {
+            autoPlayInterval = setInterval(nextSlide, 5000); // Cambia cada 5 segundos (ajusta a 30000 para 30 segundos)
+        }
+        
+        function resetAutoPlay() {
+            clearInterval(autoPlayInterval);
+            startAutoPlay();
+        }
+        
+        // Exponer funciones globalmente
+        window.nextSlide = nextSlide;
+        window.prevSlide = prevSlide;
+        window.goToSlide = goToSlide;
+        
+        // Iniciar autoplay
+        startAutoPlay();
+        
+        // Pausar autoplay cuando el mouse está sobre la galería
+        const gallery = document.getElementById('heroGallery');
+        if (gallery) {
+            gallery.addEventListener('mouseenter', () => clearInterval(autoPlayInterval));
+            gallery.addEventListener('mouseleave', startAutoPlay);
+        }
+
+        // ==========================================
+        // DRAWER LATERAL MÓVIL
+        // ==========================================
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileDrawer = document.getElementById('mobileDrawer');
         const drawerOverlay = document.getElementById('drawerOverlay');
@@ -788,7 +1023,9 @@
             drawerOverlay.addEventListener('click', closeDrawer);
         }
 
-        // Cursor Personalizado
+        // ==========================================
+        // CURSOR PERSONALIZADO
+        // ==========================================
         const cursor = document.getElementById('custom-cursor');
         const cursorDot = document.getElementById('cursor-dot');
         const aura = document.getElementById('cursor-aura');
@@ -879,6 +1116,31 @@
                 closeDrawer();
             }
         });
+        
+        // Soporte para gestos táctiles en la galería
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        if (gallery) {
+            gallery.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            });
+            
+            gallery.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            });
+        }
+        
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            if (touchEndX < touchStartX - swipeThreshold) {
+                nextSlide();
+            }
+            if (touchEndX > touchStartX + swipeThreshold) {
+                prevSlide();
+            }
+        }
     })();
 </script>
 </body>
