@@ -242,38 +242,19 @@
         }
 
         /* ==========================================
-           GALERÍA DE IMÁGENES RESPONSIVE
+           GALERÍA DE IMÁGENES RESPONSIVE (CORREGIDA)
            ========================================== */
         .hero-gallery {
             position: relative;
             width: 100%;
-            height: 50vh;
-            min-height: 300px;
-            max-height: 600px;
+            /* Altura: ocupa toda la pantalla menos la AppBar (64px móvil, 80px desktop) */
+            height: calc(100vh - 64px);
             overflow: hidden;
         }
         
         @media (min-width: 640px) {
             .hero-gallery {
-                height: 55vh;
-                min-height: 350px;
-                max-height: 650px;
-            }
-        }
-        
-        @media (min-width: 1024px) {
-            .hero-gallery {
-                height: 60vh;
-                min-height: 400px;
-                max-height: 700px;
-            }
-        }
-        
-        @media (min-width: 1280px) {
-            .hero-gallery {
-                height: 65vh;
-                min-height: 450px;
-                max-height: 750px;
+                height: calc(100vh - 80px);
             }
         }
         
@@ -285,8 +266,10 @@
             height: 100%;
             opacity: 0;
             transition: opacity 1s ease-in-out;
-            object-fit: cover;
+            /* object-fit: contain muestra la imagen COMPLETA sin recortar */
+            object-fit: contain;
             object-position: center;
+            background-color: #020617;
         }
         
         .gallery-slide.active {
@@ -298,10 +281,10 @@
             position: absolute;
             inset: 0;
             background: linear-gradient(to bottom, 
-                rgba(2, 6, 23, 0.3) 0%, 
-                rgba(2, 6, 23, 0.1) 40%, 
-                rgba(2, 6, 23, 0.4) 80%, 
-                rgba(2, 6, 23, 0.8) 100%);
+                rgba(2, 6, 23, 0.2) 0%, 
+                rgba(2, 6, 23, 0.05) 30%, 
+                rgba(2, 6, 23, 0.3) 70%, 
+                rgba(2, 6, 23, 0.7) 100%);
             pointer-events: none;
         }
         
@@ -376,6 +359,16 @@
             }
             .gallery-arrow-right {
                 right: 10px;
+            }
+            
+            .gallery-dots {
+                bottom: 15px;
+                gap: 8px;
+            }
+            
+            .gallery-dot {
+                width: 8px;
+                height: 8px;
             }
         }
     </style>
@@ -565,11 +558,11 @@
 </nav>
 
 <!-- ========================================== -->
-<!-- GALERÍA DE IMÁGENES RESPONSIVE -->
+<!-- GALERÍA DE IMÁGENES RESPONSIVE (CORREGIDA) -->
 <!-- ========================================== -->
 <div class="hero-gallery" id="heroGallery">
     <!-- Imagen 1 -->
-    <img src="assets/img-index/infinihon.png" alt="Infraestructura IT" class="gallery-slide active" id="slide1">
+    <img src="assets/img-index/infinihon.png" alt="Bienvenida" class="gallery-slide active" id="slide1">
     <!-- Imagen 2 -->
     <img src="imagenes/slide2.jpg" alt="Data Center" class="gallery-slide" id="slide2">
     <!-- Imagen 3 -->
@@ -942,11 +935,9 @@
         let autoPlayInterval;
         
         function showSlide(index) {
-            // Ocultar todos los slides
             slides.forEach(slide => slide.classList.remove('active'));
             dots.forEach(dot => dot.classList.remove('active'));
             
-            // Mostrar el slide actual
             slides[index].classList.add('active');
             dots[index].classList.add('active');
             currentSlide = index;
@@ -968,7 +959,7 @@
         }
         
         function startAutoPlay() {
-            autoPlayInterval = setInterval(nextSlide, 5000); // Cambia cada 5 segundos (ajusta a 30000 para 30 segundos)
+            autoPlayInterval = setInterval(nextSlide, 5000);
         }
         
         function resetAutoPlay() {
@@ -976,15 +967,12 @@
             startAutoPlay();
         }
         
-        // Exponer funciones globalmente
         window.nextSlide = nextSlide;
         window.prevSlide = prevSlide;
         window.goToSlide = goToSlide;
         
-        // Iniciar autoplay
         startAutoPlay();
         
-        // Pausar autoplay cuando el mouse está sobre la galería
         const gallery = document.getElementById('heroGallery');
         if (gallery) {
             gallery.addEventListener('mouseenter', () => clearInterval(autoPlayInterval));
@@ -1011,17 +999,9 @@
             document.body.style.overflow = '';
         }
         
-        if (mobileMenuBtn) {
-            mobileMenuBtn.addEventListener('click', openDrawer);
-        }
-        
-        if (closeDrawerBtn) {
-            closeDrawerBtn.addEventListener('click', closeDrawer);
-        }
-        
-        if (drawerOverlay) {
-            drawerOverlay.addEventListener('click', closeDrawer);
-        }
+        if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', openDrawer);
+        if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', closeDrawer);
+        if (drawerOverlay) drawerOverlay.addEventListener('click', closeDrawer);
 
         // ==========================================
         // CURSOR PERSONALIZADO
@@ -1110,14 +1090,13 @@
             });
         }
         
-        // Cerrar drawer con tecla ESC
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && mobileDrawer && mobileDrawer.classList.contains('open')) {
                 closeDrawer();
             }
         });
         
-        // Soporte para gestos táctiles en la galería
+        // Gestos táctiles
         let touchStartX = 0;
         let touchEndX = 0;
         
@@ -1134,12 +1113,8 @@
         
         function handleSwipe() {
             const swipeThreshold = 50;
-            if (touchEndX < touchStartX - swipeThreshold) {
-                nextSlide();
-            }
-            if (touchEndX > touchStartX + swipeThreshold) {
-                prevSlide();
-            }
+            if (touchEndX < touchStartX - swipeThreshold) nextSlide();
+            if (touchEndX > touchStartX + swipeThreshold) prevSlide();
         }
     })();
 </script>
