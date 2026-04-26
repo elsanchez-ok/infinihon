@@ -242,14 +242,14 @@
         }
 
         /* ==========================================
-           GALERÍA DE IMÁGENES RESPONSIVE (CORREGIDA)
+           GALERÍA DE IMÁGENES - CORREGIDA
            ========================================== */
         .hero-gallery {
             position: relative;
             width: 100%;
-            /* Altura: ocupa toda la pantalla menos la AppBar (64px móvil, 80px desktop) */
             height: calc(100vh - 64px);
             overflow: hidden;
+            background-color: #020617;
         }
         
         @media (min-width: 640px) {
@@ -258,6 +258,7 @@
             }
         }
         
+        /* Slide individual */
         .gallery-slide {
             position: absolute;
             top: 0;
@@ -266,14 +267,31 @@
             height: 100%;
             opacity: 0;
             transition: opacity 1s ease-in-out;
-            /* object-fit: contain muestra la imagen COMPLETA sin recortar */
-            object-fit: contain;
+            object-fit: cover;
             object-position: center;
-            background-color: #020617;
+            z-index: 1; /* Por debajo de los botones */
         }
         
         .gallery-slide.active {
             opacity: 1;
+        }
+        
+        /* Mostrar/ocultar según dispositivo */
+        .img-desktop {
+            display: none;
+        }
+        
+        .img-mobile {
+            display: block;
+        }
+        
+        @media (min-width: 768px) {
+            .img-desktop {
+                display: block;
+            }
+            .img-mobile {
+                display: none;
+            }
         }
         
         /* Overlay gradiente sobre la imagen */
@@ -281,14 +299,23 @@
             position: absolute;
             inset: 0;
             background: linear-gradient(to bottom, 
-                rgba(2, 6, 23, 0.2) 0%, 
+                rgba(2, 6, 23, 0.15) 0%, 
                 rgba(2, 6, 23, 0.05) 30%, 
                 rgba(2, 6, 23, 0.3) 70%, 
                 rgba(2, 6, 23, 0.7) 100%);
             pointer-events: none;
+            z-index: 2;
         }
         
-        /* Indicadores de navegación */
+        /* Controles de navegación - z-index ALTO */
+        .gallery-controls {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        /* Indicadores */
         .gallery-dots {
             position: absolute;
             bottom: 20px;
@@ -296,7 +323,8 @@
             transform: translateX(-50%);
             display: flex;
             gap: 10px;
-            z-index: 10;
+            z-index: 11;
+            pointer-events: auto;
         }
         
         .gallery-dot {
@@ -321,24 +349,27 @@
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            width: 40px;
-            height: 40px;
-            background: rgba(2, 6, 23, 0.5);
+            width: 44px;
+            height: 44px;
+            background: rgba(2, 6, 23, 0.6);
             backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            z-index: 10;
+            z-index: 11;
             color: white;
+            pointer-events: auto;
         }
         
         .gallery-arrow:hover {
-            background: rgba(59, 130, 246, 0.5);
+            background: rgba(59, 130, 246, 0.6);
             border-color: rgba(59, 130, 246, 0.8);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
         }
         
         .gallery-arrow-left {
@@ -351,14 +382,14 @@
         
         @media (max-width: 640px) {
             .gallery-arrow {
-                width: 32px;
-                height: 32px;
+                width: 36px;
+                height: 36px;
             }
             .gallery-arrow-left {
-                left: 10px;
+                left: 12px;
             }
             .gallery-arrow-right {
-                right: 10px;
+                right: 12px;
             }
             
             .gallery-dots {
@@ -441,7 +472,6 @@
             </a>
         </div>
         
-        <!-- Footer del drawer -->
         <div class="mt-8 pt-6 border-t border-white/10 text-center">
             <p class="text-gray-500 text-xs font-mono-custom">© 2024 InfiniHon</p>
         </div>
@@ -548,7 +578,7 @@
             </div>
         </div>
         
-        <!-- Botón de menú móvil (hamburguesa) -->
+        <!-- Botón de menú móvil -->
         <button id="mobileMenuBtn" class="md:hidden text-white p-2 hover:bg-white/10 rounded-lg transition-all">
             <i data-lucide="menu" class="w-6 h-6"></i>
         </button>
@@ -558,38 +588,53 @@
 </nav>
 
 <!-- ========================================== -->
-<!-- GALERÍA DE IMÁGENES RESPONSIVE (CORREGIDA) -->
+<!-- GALERÍA DE IMÁGENES - IMÁGENES SEPARADAS -->
 <!-- ========================================== -->
 <div class="hero-gallery" id="heroGallery">
-    <!-- Imagen 1 -->
-    <img src="assets/img-index/infinihon.png" alt="Bienvenida" class="gallery-slide active" id="slide1">
-    <!-- Imagen 2 -->
-    <img src="assets/img-index/infinihon2.png" alt="Data Center" class="gallery-slide" id="slide2">
-    <!-- Imagen 3 -->
-    <img src="imagenes/slide3.jpg" alt="Servidores Enterprise" class="gallery-slide" id="slide3">
-    <!-- Imagen 4 -->
-    <img src="imagenes/slide4.jpg" alt="Tecnología de punta" class="gallery-slide" id="slide4">
-    <!-- Imagen 5 -->
-    <img src="imagenes/slide5.jpg" alt="Edge Computing" class="gallery-slide" id="slide5">
+    
+    <!-- ========== SLIDE 1 ========== -->
+    <!-- Imagen para desktop (1920x1080) -->
+    <img src="assets/img-index/infinihon.png" alt="Infraestructura IT" class="gallery-slide img-desktop active" data-slide="0">
+    <!-- Imagen para móvil (1080x1920) -->
+    <img src="assets/img-index/mobile/slide1.jpg" alt="Infraestructura IT" class="gallery-slide img-mobile active" data-slide="0">
+    
+    <!-- ========== SLIDE 2 ========== -->
+    <img src="assets/img-index/desktop/slide2.jpg" alt="Data Center" class="gallery-slide img-desktop" data-slide="1">
+    <img src="assets/img-index/mobile/slide2.jpg" alt="Data Center" class="gallery-slide img-mobile" data-slide="1">
+    
+    <!-- ========== SLIDE 3 ========== -->
+    <img src="assets/img-index/desktop/slide3.jpg" alt="Servidores Enterprise" class="gallery-slide img-desktop" data-slide="2">
+    <img src="assets/img-index/mobile/slide3.jpg" alt="Servidores Enterprise" class="gallery-slide img-mobile" data-slide="2">
+    
+    <!-- ========== SLIDE 4 ========== -->
+    <img src="assets/img-index/desktop/slide4.jpg" alt="Tecnología de punta" class="gallery-slide img-desktop" data-slide="3">
+    <img src="assets/img-index/mobile/slide4.jpg" alt="Tecnología de punta" class="gallery-slide img-mobile" data-slide="3">
+    
+    <!-- ========== SLIDE 5 ========== -->
+    <img src="assets/img-index/desktop/slide5.jpg" alt="Edge Computing" class="gallery-slide img-desktop" data-slide="4">
+    <img src="assets/img-index/mobile/slide5.jpg" alt="Edge Computing" class="gallery-slide img-mobile" data-slide="4">
     
     <!-- Overlay gradiente -->
     <div class="gallery-overlay"></div>
     
-    <!-- Flechas de navegación -->
-    <button class="gallery-arrow gallery-arrow-left" onclick="prevSlide()" aria-label="Imagen anterior">
-        <i data-lucide="chevron-left" class="w-5 h-5"></i>
-    </button>
-    <button class="gallery-arrow gallery-arrow-right" onclick="nextSlide()" aria-label="Imagen siguiente">
-        <i data-lucide="chevron-right" class="w-5 h-5"></i>
-    </button>
-    
-    <!-- Indicadores -->
-    <div class="gallery-dots" id="galleryDots">
-        <span class="gallery-dot active" onclick="goToSlide(0)"></span>
-        <span class="gallery-dot" onclick="goToSlide(1)"></span>
-        <span class="gallery-dot" onclick="goToSlide(2)"></span>
-        <span class="gallery-dot" onclick="goToSlide(3)"></span>
-        <span class="gallery-dot" onclick="goToSlide(4)"></span>
+    <!-- Controles -->
+    <div class="gallery-controls">
+        <!-- Flechas de navegación -->
+        <button class="gallery-arrow gallery-arrow-left" onclick="prevSlide()" aria-label="Imagen anterior">
+            <i data-lucide="chevron-left" class="w-5 h-5"></i>
+        </button>
+        <button class="gallery-arrow gallery-arrow-right" onclick="nextSlide()" aria-label="Imagen siguiente">
+            <i data-lucide="chevron-right" class="w-5 h-5"></i>
+        </button>
+        
+        <!-- Indicadores -->
+        <div class="gallery-dots" id="galleryDots">
+            <span class="gallery-dot active" onclick="goToSlide(0)"></span>
+            <span class="gallery-dot" onclick="goToSlide(1)"></span>
+            <span class="gallery-dot" onclick="goToSlide(2)"></span>
+            <span class="gallery-dot" onclick="goToSlide(3)"></span>
+            <span class="gallery-dot" onclick="goToSlide(4)"></span>
+        </div>
     </div>
 </div>
 
@@ -682,7 +727,6 @@
     </div>
     
     <div class="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6">
-        <!-- MicroTik -->
         <div class="md:col-span-8 bento-card glass rounded-2xl sm:rounded-[3rem] p-6 sm:p-8 lg:p-12 flex flex-col justify-between group" data-theme="#3b82f6">
             <div class="flex flex-col sm:flex-row justify-between items-start gap-4">
                 <div class="w-12 h-12 sm:w-16 sm:h-16 bg-blue-500/20 rounded-xl sm:rounded-2xl flex items-center justify-center border border-blue-500/30 group-hover:border-blue-400/60 transition-all">
@@ -712,7 +756,6 @@
             </div>
         </div>
         
-        <!-- Seguridad -->
         <div class="md:col-span-4 bento-card glass rounded-2xl sm:rounded-[3rem] p-6 sm:p-8 flex flex-col items-center justify-center text-center group" data-theme="#10b981">
             <i data-lucide="shield-check" class="w-14 h-14 sm:w-20 sm:h-20 text-emerald-400 mb-4 sm:mb-6 opacity-60 group-hover:opacity-100 transition-opacity"></i>
             <h4 class="text-xl sm:text-2xl font-bold text-white mb-2 sm:mb-3">Seguridad Soberana</h4>
@@ -721,7 +764,6 @@
             </p>
         </div>
         
-        <!-- Raspberry Pi -->
         <div class="md:col-span-4 bento-card glass rounded-2xl sm:rounded-[3rem] p-6 sm:p-8 flex flex-col justify-between group" data-theme="#a855f7">
             <div>
                 <div class="w-10 h-10 sm:w-12 sm:h-12 bg-purple-500/20 rounded-xl flex items-center justify-center border border-purple-500/30 mb-3 sm:mb-4">
@@ -739,7 +781,6 @@
             </div>
         </div>
         
-        <!-- ROI -->
         <div class="md:col-span-8 bento-card glass rounded-2xl sm:rounded-[3rem] p-6 sm:p-10 flex flex-col sm:flex-row items-center gap-6 sm:gap-8 bg-gradient-to-br from-blue-600/10 to-transparent" data-theme="#f59e0b">
             <div class="flex-1 text-center sm:text-left">
                 <h4 class="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4">Monetización y ROI</h4>
@@ -926,20 +967,39 @@
         lucide.createIcons();
 
         // ==========================================
-        // GALERÍA DE IMÁGENES
+        // GALERÍA DE IMÁGENES - CORREGIDA
         // ==========================================
-        const slides = document.querySelectorAll('.gallery-slide');
+        const slidesDesktop = document.querySelectorAll('.gallery-slide.img-desktop');
+        const slidesMobile = document.querySelectorAll('.gallery-slide.img-mobile');
         const dots = document.querySelectorAll('.gallery-dot');
         let currentSlide = 0;
-        const totalSlides = slides.length;
+        const totalSlides = 5; // Número fijo de slides
         let autoPlayInterval;
         
+        // Detectar si es móvil
+        function isMobile() {
+            return window.innerWidth < 768;
+        }
+        
+        // Obtener los slides activos según dispositivo
+        function getActiveSlides() {
+            return isMobile() ? slidesMobile : slidesDesktop;
+        }
+        
         function showSlide(index) {
+            const slides = getActiveSlides();
+            
+            // Ocultar todos los slides del tipo activo
             slides.forEach(slide => slide.classList.remove('active'));
             dots.forEach(dot => dot.classList.remove('active'));
             
-            slides[index].classList.add('active');
-            dots[index].classList.add('active');
+            // Mostrar el slide actual
+            if (slides[index]) {
+                slides[index].classList.add('active');
+            }
+            if (dots[index]) {
+                dots[index].classList.add('active');
+            }
             currentSlide = index;
         }
         
@@ -959,7 +1019,7 @@
         }
         
         function startAutoPlay() {
-            autoPlayInterval = setInterval(nextSlide, 5000);
+            autoPlayInterval = setInterval(nextSlide, 5000); // Cambiar a 30000 para 30 segundos
         }
         
         function resetAutoPlay() {
@@ -967,12 +1027,21 @@
             startAutoPlay();
         }
         
+        // Exponer funciones globalmente
         window.nextSlide = nextSlide;
         window.prevSlide = prevSlide;
         window.goToSlide = goToSlide;
         
+        // Iniciar con el slide correcto según dispositivo
+        showSlide(0);
         startAutoPlay();
         
+        // Cambiar slides al redimensionar
+        window.addEventListener('resize', () => {
+            showSlide(currentSlide);
+        });
+        
+        // Pausar autoplay cuando el mouse está sobre la galería
         const gallery = document.getElementById('heroGallery');
         if (gallery) {
             gallery.addEventListener('mouseenter', () => clearInterval(autoPlayInterval));
