@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>eGadgets - Electronics Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --bg-dark: #0d0d1a;
+  --bg-card: #13132a;
+  --bg-card2: #1a1a35;
+  --accent-blue: #1e90ff;
+  --accent-purple: #7c3aed;
+  --accent-cyan: #06b6d4;
+  --accent-yellow: #f59e0b;
+  --accent-green: #10b981;
+  --accent-red: #ef4444;
+  --text-primary: #ffffff;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  --border: #2d2d4e;
+  --nav-bg: #0a0a1a;
+  --header-bg: #111128;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Barlow', sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-primary);
+  font-size: 13px;
+  overflow-x: hidden;
+}
+
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
+
+/* ── TOP BAR ── */
+.top-bar {
+  background: #070714;
+  padding: 6px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
+}
+.top-bar a { color: var(--text-secondary); }
+.top-bar a:hover { color: var(--accent-blue); }
+.top-bar-left, .top-bar-right { display: flex; gap: 16px; align-items: center; }
+
+/* ── HEADER ── */
+header {
+  background: var(--header-bg);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.logo {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--accent-blue);
+  white-space: nowrap;
+  letter-spacing: -0.5px;
+}
+.logo span { color: #ffffff; }
+.search-bar {
+  flex: 1;
+  display: flex;
+  max-width: 500px;
+  border: 1.5px solid var(--accent-blue);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.search-bar select {
+  background: #1e1e3a;
+  border: none;
+  border-right: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 8px 10px;
+  font-size: 11px;
+  outline: none;
+  cursor: pointer;
+}
+.search-bar input {
+  flex: 1;
+  background: #1e1e3a;
+  border: none;
+  color: var(--text-primary);
+  padding: 8px 12px;
+  font-size: 12px;
+  outline: none;
+}
+.search-bar button {
+  background: var(--accent-blue);
+  border: none;
+  padding: 8px 16px;
+  color: white;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s;
+}
+.search-bar button:hover { background: #1577e0; }
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-left: auto;
+}
+.header-action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.header-action:hover { color: var(--accent-blue); }
+.header-action .icon { font-size: 20px; color: var(--accent-blue); }
+.header-action .label { font-size: 10px; color: var(--text-muted); line-height: 1.2; }
+.header-action .value { font-size: 12px; font-weight: 600; }
+.cart-btn {
+  background: var(--accent-blue);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+.cart-btn:hover { background: #1577e0; }
+
+/* ── NAV ── */
+nav {
+  background: var(--nav-bg);
+  border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  display: flex;
+  align-items: stretch;
+  max-width: 100%;
+}
+.shop-categories {
+  background: var(--accent-blue);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+.shop-categories:hover { background: #1577e0; }
+.nav-links {
+  display: flex;
+  align-items: stretch;
+}
+.nav-links li { position: relative; }
+.nav-links a {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--text-primary); }
+.nav-links a.active { color: var(--accent-blue); border-bottom: 2px solid var(--accent-blue); }
+.nav-links a .fa-chevron-down { font-size: 9px; }
+.nav-extra {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 16px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+.nav-extra span { color: var(--accent-blue); font-weight: 600; }
+
+/* ── BANNER ── */
+.banner {
+  position: relative;
+  background: linear-gradient(135deg, #0d0d2b 0%, #1a0a3a 40%, #0d1a3a 100%);
+  padding: 40px 40px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  min-height: 260px;
+}
+.banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 70% 50%, rgba(124,58,237,0.3) 0%, transparent 60%),
+              radial-gradient(ellipse at 30% 80%, rgba(30,144,255,0.2) 0%, transparent 50%);
+}
+.banner-content { position: relative; z-index: 2; max-width: 380px; }
+.banner-tag {
+  background: rgba(30,144,255,0.2);
+  border: 1px solid var(--accent-blue);
+  color: var(--accent-blue);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 2px;
+  display: inline-block;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.banner-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 52px;
+  font-weight: 800;
+  line-height: 0.95;
+  margin-bottom: 12px;
+  letter-spacing: -1px;
+}
+.banner-title .highlight { color: var(--accent-blue); }
+.banner-desc { color: var(--text-secondary); font-size: 13px; margin-bottom: 8px; }
+.banner-price { font-size: 22px; font-weight: 700; color: var(--accent-yellow); margin-bottom: 20px; }
+.banner-price span { font-size: 13px; color: var(--text-muted); font-weight: 400; }
+.btn-primary {
+  background: var(--accent-blue);
+  color: white;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary:hover { background: #1577e0; transform: translateY(-1px); }
+.banner-image {
+  position: absolute;
+  right: 60px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+.banner-image img {
+  height: 250px;
+  filter: drop-shadow(0 0 40px rgba(124,58,237,0.5));
+}
+.banner-dots { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; z-index: 3; }
+.banner-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.3); cursor: pointer; }
+.banner-dot.active { background: var(--accent-blue); width: 20px; border-radius: 3px; }
+
+/* ── FEATURES ── */
+.features {
+  background: #0f0f24;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-around;
+  padding: 14px 20px;
+}
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.feature-item .icon { font-size: 24px; color: var(--accent-blue); }
+.feature-item .text .title { font-size: 12px; font-weight: 700; }
+.feature-item .text .sub { font-size: 10px; color: var(--text-muted); }
+
+/* ── PROMO STRIP ── */
+.promo-strip {
+  background: var(--accent-blue);
+  padding: 8px 20px;
+  display: flex;
+  gap: 40px;
+  overflow: hidden;
+  font-size: 11px;
+  font-weight: 600;
+}
+.promo-strip span { white-space: nowrap; opacity: 0.9; }
+.promo-strip span i { margin-right: 5px; }
+
+/* ── PROMO CARDS ── */
+.promo-cards {
+  padding: 16px 16px 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.promo-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s;
+  position: relative;
+}
+.promo-card:hover { border-color: var(--accent-blue); transform: translateY(-2px); }
+.promo-card .badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+.badge-hot { background: var(--accent-red); }
+.badge-sale { background: var(--accent-yellow); color: #000; }
+.badge-new { background: var(--accent-green); }
+.badge-trending { background: var(--accent-purple); }
+.promo-card img { width: 80px; height: 60px; object-fit: contain; filter: brightness(1.1); }
+.promo-card .info .category { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.promo-card .info .name { font-size: 12px; font-weight: 700; margin: 2px 0; }
+.promo-card .info .price { font-size: 11px; color: var(--accent-blue); font-weight: 600; }
+
+/* ── SECTION HEADER ── */
+.section { padding: 20px 16px; }
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.section-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-title::before {
+  content: '';
+  width: 4px;
+  height: 20px;
+  background: var(--accent-blue);
+  border-radius: 2px;
+  display: inline-block;
+}
+.view-all { font-size: 11px; color: var(--accent-blue); font-weight: 600; cursor: pointer; }
+.view-all:hover { text-decoration: underline; }
+
+/* ── PRODUCT GRID ── */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+}
+.product-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+.product-card:hover {
+  border-color: var(--accent-blue);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(30,144,255,0.15);
+}
+.product-card .card-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 2px;
+  z-index: 1;
+}
+.product-card .wish {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--text-muted);
+  z-index: 1;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.product-card .wish:hover { background: rgba(239,68,68,0.2); border-color: var(--accent-red); color: var(--accent-red); }
+.product-img {
+  background: #18183a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  height: 130px;
+}
+.product-img img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.product-info { padding: 10px; }
+.product-info .brand { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+.product-info .name { font-size: 11px; font-weight: 600; margin-bottom: 6px; line-height: 1.3; color: var(--text-primary); }
+.stars { display: flex; gap: 2px; margin-bottom: 6px; }
+.stars i { font-size: 9px; color: var(--accent-yellow); }
+.stars span { font-size: 9px; color: var(--text-muted); margin-left: 3px; }
+.price-row { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+.price-new { font-size: 14px; font-weight: 700; color: var(--accent-blue); }
+.price-old { font-size: 10px; color: var(--text-muted); text-decoration: line-through; }
+.price-discount { font-size: 9px; color: var(--accent-green); font-weight: 700; background: rgba(16,185,129,0.1); padding: 1px 4px; border-radius: 2px; }
+.add-cart {
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--accent-blue);
+  color: var(--accent-blue);
+  padding: 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.add-cart:hover { background: var(--accent-blue); color: white; }
+
+/* ── DEALS OF THE DAY ── */
+.deals-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.deal-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.deal-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(30,144,255,0.05) 0%, transparent 60%);
+}
+.deal-card:hover { border-color: var(--accent-blue); transform: translateY(-2px); }
+.deal-img {
+  width: 140px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.deal-img img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.deal-info { flex: 1; position: relative; z-index: 1; }
+.deal-badge { font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 2px; display: inline-block; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+.deal-info .name { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+.deal-info .stars { margin-bottom: 10px; }
+.deal-price-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 12px; }
+.deal-price-new { font-size: 22px; font-weight: 800; color: var(--accent-blue); }
+.deal-price-old { font-size: 13px; color: var(--text-muted); text-decoration: line-through; }
+.progress-bar {
+  background: var(--bg-dark);
+  border-radius: 4px;
+  height: 5px;
+  margin-bottom: 6px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+  border-radius: 4px;
+}
+.stock-info { font-size: 10px; color: var(--text-muted); margin-bottom: 12px; }
+.stock-info span { color: var(--accent-green); font-weight: 600; }
+.countdown {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+  align-items: center;
+}
+.countdown .label { font-size: 10px; color: var(--text-muted); margin-right: 4px; }
+.countdown-item {
+  background: var(--bg-dark);
+  border: 1px solid var(--border);
+  padding: 4px 8px;
+  border-radius: 3px;
+  text-align: center;
+  min-width: 36px;
+}
+.countdown-item .num { font-size: 15px; font-weight: 800; line-height: 1; font-family: 'Barlow Condensed', sans-serif; }
+.countdown-item .unit { font-size: 8px; color: var(--text-muted); }
+.deal-btn {
+  background: var(--accent-blue);
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.deal-btn:hover { background: #1577e0; }
+
+/* ── FEATURED LARGE CARDS ── */
+.featured-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.featured-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s;
+  position: relative;
+}
+.featured-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(30,144,255,0.06) 0%, transparent 60%);
+}
+.featured-card:hover { border-color: var(--accent-blue); transform: translateY(-2px); }
+.featured-card .badge-tag {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: var(--accent-green);
+  font-size: 9px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+.featured-img { width: 120px; height: 100px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.featured-img img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.featured-info { position: relative; z-index: 1; }
+.featured-info .sub { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.featured-info .name { font-size: 16px; font-weight: 800; margin-bottom: 8px; font-family: 'Barlow Condensed', sans-serif; }
+.featured-info .price-row { display: flex; align-items: baseline; gap: 8px; }
+.featured-info .price { font-size: 20px; font-weight: 800; color: var(--accent-blue); }
+.featured-info .old { font-size: 12px; color: var(--text-muted); text-decoration: line-through; }
+
+/* ── BEST SELLERS ── */
+.bestseller-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: #080817;
+  border-top: 1px solid var(--border);
+  padding: 30px 20px 16px;
+  margin-top: 20px;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 24px;
+}
+.footer-brand .logo { font-size: 22px; margin-bottom: 10px; display: block; }
+.footer-brand p { font-size: 11px; color: var(--text-muted); line-height: 1.6; margin-bottom: 14px; }
+.social-links { display: flex; gap: 8px; }
+.social-link {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.social-link:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+.footer-col h4 { font-size: 12px; font-weight: 700; margin-bottom: 12px; color: var(--text-primary); }
+.footer-col ul { display: flex; flex-direction: column; gap: 7px; }
+.footer-col ul li a { font-size: 11px; color: var(--text-muted); transition: color 0.2s; }
+.footer-col ul li a:hover { color: var(--accent-blue); }
+.footer-bottom {
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.payment-icons { display: flex; gap: 6px; }
+.payment-icon {
+  background: #1a1a35;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 3px 8px;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-dark); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-blue); }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="top-bar-left">
+    <a href="#"><i class="fa fa-tag"></i> Try For Free</a>
+    <a href="#"><i class="fa fa-store"></i> Find A Store</a>
+    <a href="#"><i class="fa fa-percent"></i> News & Blog</a>
+  </div>
+  <div class="top-bar-right">
+    <a href="#"><i class="fa fa-phone"></i> +1(800) 123-456</a>
+    <a href="#">USD $</a>
+    <a href="#">ENG</a>
+    <a href="#"><i class="fa fa-sign-in-alt"></i> Sign In</a>
+    <a href="#"><i class="fa fa-user-plus"></i> Register</a>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">Infini<span>hon</span></div>
+  <div class="search-bar">
+    <select>
+      <option>All Categories</option>
+      <option>Laptops</option>
+      <option>Phones</option>
+      <option>Audio</option>
+      <option>Gaming</option>
+      <option>VR</option>
+    </select>
+    <input type="text" placeholder="Search products...">
+    <button><i class="fa fa-search"></i></button>
+  </div>
+  <div class="header-actions">
+    <div class="header-action">
+      <i class="fa fa-phone-alt icon"></i>
+      <div>
+        <div class="label">Call Us Now</div>
+        <div class="value">+1 (800) 123-456</div>
+      </div>
+    </div>
+    <div class="header-action">
+      <i class="fa fa-map-marker-alt icon"></i>
+      <div>
+        <div class="label">Delivery Company</div>
+        <div class="value">eGadgets Company Inc.</div>
+      </div>
+    </div>
+    <div class="header-action">
+      <i class="fa fa-heart icon"></i>
+      <div>
+        <div class="label">Wishlist</div>
+        <div class="value">0 Items</div>
+      </div>
+    </div>
+    <div class="cart-btn">
+      <i class="fa fa-shopping-cart"></i>
+      <div>
+        <div style="font-size:10px;opacity:0.8;">My Cart</div>
+        <div>$0.00</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="shop-categories">
+      <i class="fa fa-bars"></i> SHOP CATEGORIES
+    </div>
+    <ul class="nav-links">
+      <li><a href="#">Home <i class="fa fa-chevron-down"></i></a></li>
+      <li><a href="#" class="active">Shop <i class="fa fa-chevron-down"></i></a></li>
+      <li><a href="#">Blog <i class="fa fa-chevron-down"></i></a></li>
+      <li><a href="#">Megamenu <i class="fa fa-chevron-down"></i></a></li>
+      <li><a href="#">Vendors <i class="fa fa-chevron-down"></i></a></li>
+      <li><a href="#">Products <i class="fa fa-chevron-down"></i></a></li>
+      <li><a href="#">Features <i class="fa fa-chevron-down"></i></a></li>
+      <li><a href="#">Pages <i class="fa fa-chevron-down"></i></a></li>
+      <li><a href="#">Blog <i class="fa fa-chevron-down"></i></a></li>
+    </ul>
+    <div class="nav-extra">
+      <span><i class="fa fa-truck"></i></span> Free delivery over $150 · Fulfilled by Amazon
+      <span style="margin-left:8px;"><i class="fa fa-gift"></i></span> Flat 25% instant card discount on initial 4 EMI Loan for 4yr
+    </div>
+  </div>
+</nav>
+
+<!-- BANNER -->
+<div class="banner">
+  <div class="banner-content">
+    <div class="banner-tag">🔥 Hot Deal</div>
+    <div class="banner-title">
+      FLAT 25% OFF<br>
+      <span class="highlight">VIRTUAL</span><br>REALITY
+    </div>
+    <div class="banner-desc">Experience the future of gaming</div>
+    <div class="banner-price">from $129.99 <span>/ per unit</span></div>
+    <button class="btn-primary"><i class="fa fa-shopping-cart"></i> Shop Now</button>
+  </div>
+  <div class="banner-image">
+    <img src="https://placehold.co/300x250/1a1a35/7c3aed?text=VR+Headset" alt="VR Headset">
+  </div>
+  <div class="banner-dots">
+    <div class="banner-dot active"></div>
+    <div class="banner-dot"></div>
+    <div class="banner-dot"></div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div class="features">
+  <div class="feature-item">
+    <div class="icon"><i class="fa fa-shipping-fast"></i></div>
+    <div class="text">
+      <div class="title">Free Delivery</div>
+      <div class="sub">Free delivery on all orders</div>
+    </div>
+  </div>
+  <div class="feature-item">
+    <div class="icon"><i class="fa fa-store"></i></div>
+    <div class="text">
+      <div class="title">Buy At Shop</div>
+      <div class="sub">100+ partner stores</div>
+    </div>
+  </div>
+  <div class="feature-item">
+    <div class="icon"><i class="fa fa-headset"></i></div>
+    <div class="text">
+      <div class="title">Online Support 24/7</div>
+      <div class="sub">Available around the clock</div>
+    </div>
+  </div>
+  <div class="feature-item">
+    <div class="icon"><i class="fa fa-undo-alt"></i></div>
+    <div class="text">
+      <div class="title">Money Back Policy</div>
+      <div class="sub">30-day return guarantee</div>
+    </div>
+  </div>
+  <div class="feature-item">
+    <div class="icon"><i class="fa fa-tag"></i></div>
+    <div class="text">
+      <div class="title">Member Discount</div>
+      <div class="sub">Save extra $20.00</div>
+    </div>
+  </div>
+</div>
+
+<!-- PROMO STRIP -->
+<div class="promo-strip">
+  <span><i class="fa fa-truck"></i> Free delivery over $150 fulfilled by Amazon</span>
+  <span><i class="fa fa-credit-card"></i> Flat 25% instant card discount on initial 4 EMI loan for 4yr</span>
+  <span><i class="fa fa-tag"></i> Mega offers over all in-focus items! Up to 50% off!</span>
+</div>
+
+<!-- PROMO CARDS -->
+<div class="promo-cards">
+  <div class="promo-card">
+    <div class="badge badge-hot">Hot</div>
+    <img src="https://placehold.co/80x60/18183a/1e90ff?text=Laptop" alt="Laptop">
+    <div class="info">
+      <div class="category">Computing</div>
+      <div class="name">Gaming Laptop Pro</div>
+      <div class="price">From $899.99</div>
+    </div>
+  </div>
+  <div class="promo-card">
+    <div class="badge badge-new">New</div>
+    <img src="https://placehold.co/80x60/18183a/06b6d4?text=Phone" alt="Phone">
+    <div class="info">
+      <div class="category">Mobile</div>
+      <div class="name">Smartphone Ultra</div>
+      <div class="price">From $599.99</div>
+    </div>
+  </div>
+  <div class="promo-card">
+    <div class="badge badge-sale">Sale</div>
+    <img src="https://placehold.co/80x60/18183a/f59e0b?text=VR" alt="VR">
+    <div class="info">
+      <div class="category">Virtual Reality</div>
+      <div class="name">Mega VR Kit</div>
+      <div class="price">From $129.99</div>
+    </div>
+  </div>
+  <div class="promo-card">
+    <div class="badge badge-trending">Trending</div>
+    <img src="https://placehold.co/80x60/18183a/7c3aed?text=Mouse" alt="Mouse">
+    <div class="info">
+      <div class="category">Peripherals</div>
+      <div class="name">RGB Gaming Mouse</div>
+      <div class="price">From $49.99</div>
+    </div>
+  </div>
+</div>
+
+<!-- NEW PRODUCTS -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-title">New Products</div>
+    <a class="view-all">View All Products →</a>
+  </div>
+  <div class="product-grid">
+    <!-- Product 1 -->
+    <div class="product-card">
+      <span class="card-badge badge-new">NEW</span>
+      <div class="wish"><i class="fa fa-heart"></i></div>
+      <div class="product-img">
+        <img src="https://placehold.co/100x80/18183a/1e90ff?text=VR+Set" alt="VR">
+      </div>
+      <div class="product-info">
+        <div class="brand">Sony</div>
+        <div class="name">PlayStation VR Headset v2</div>
+        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><span>(42)</span></div>
+        <div class="price-row"><span class="price-new">$299.99</span><span class="price-old">$399.00</span></div>
+        <button class="add-cart"><i class="fa fa-cart-plus"></i> Add to Cart</button>
+      </div>
+    </div>
+    <!-- Product 2 -->
+    <div class="product-card">
+      <span class="card-badge badge-hot">HOT</span>
+      <div class="wish"><i class="fa fa-heart"></i></div>
+      <div class="product-img">
+        <img src="https://placehold.co/100x80/18183a/06b6d4?text=ASUS+Mouse" alt="Mouse">
+      </div>
+      <div class="product-info">
+        <div class="brand">ASUS</div>
+        <div class="name">ASUS ROG Keris Gaming Mouse</div>
+        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><span>(87)</span></div>
+        <div class="price-row"><span class="price-new">$89.99</span><span class="price-old">$120.00</span><span class="price-discount">-25%</span></div>
+        <button class="add-cart"><i class="fa fa-cart-plus"></i> Add to Cart</button>
+      </div>
+    </div>
+    <!-- Product 3 -->
+    <div class="product-card">
+      <span class="card-badge badge-sale">SALE</span>
+      <div class="wish"><i class="fa fa-heart"></i></div>
+      <div class="product-img">
+        <img src="https://placehold.co/100x80/18183a/f59e0b?text=RGB+Mouse" alt="RGB Mouse">
+      </div>
+      <div class="product-info">
+        <div class="brand">Logitech</div>
+        <div class="name">RGB Gaming Mouse Wireless</div>
+        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><span>(156)</span></div>
+        <div class="price-row"><span class="price-new">$59.99</span><span class="price-old">$79.00</span><span class="price-discount">-24%</span></div>
+        <button class="add-cart"><i class="fa fa-cart-plus"></i> Add to Cart</button>
+      </div>
+    </div>
+    <!-- Product 4 -->
+    <div class="product-card">
+      <span class="card-badge badge-new">NEW</span>
+      <div class="wish"><i class="fa fa-heart"></i></div>
+      <div class="product-img">
+        <img src="https://placehold.co/100x80/18183a/7c3aed?text=VR+Kit" alt="VR Kit">
+      </div>
+      <div class="product-info">
+        <div class="brand">Oculus</div>
+        <div class="name">3D VR Reality Glasses Kit</div>
+        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><span>(23)</span></div>
+        <div class="price-row"><span class="price-new">$199.99</span><span class="price-old">$249.00</span></div>
+        <button class="add-cart"><i class="fa fa-cart-plus"></i> Add to Cart</button>
+      </div>
+    </div>
+    <!-- Product 5 -->
+    <div class="product-card">
+      <span class="card-badge badge-trending" style="background:#06b6d4;">DEAL</span>
+      <div class="wish"><i class="fa fa-heart"></i></div>
+      <div class="product-img">
+        <img src="https://placehold.co/100x80/18183a/10b981?text=RGB+Kit" alt="RGB Kit">
+      </div>
+      <div class="product-info">
+        <div class="brand">Razer</div>
+        <div class="name">RGB Gaming Keyboard Kit</div>
+        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i><span>(61)</span></div>
+        <div class="price-row"><span class="price-new">$129.99</span><span class="price-old">$169.00</span><span class="price-discount">-23%</span></div>
+        <button class="add-cart"><i class="fa fa-cart-plus"></i> Add to Cart</button>
+      </div>
+    </div>
+    <!-- Product 6 -->
+    <div class="product-card">
+      <span class="card-badge badge-hot">HOT</span>
+      <div class="wish"><i class="fa fa-heart"></i></div>
+      <div class="product-img">
+        <img src="https://placehold.co/100x80/18183a/ef4444?text=Headset" alt="Headset">
+      </div>
+      <div class="product-info">
+        <div class="brand">HyperX</div>
+        <div class="name">Cloud Alpha Wireless Headset</div>
+        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><span>(214)</span></div>
+        <div class="price-row"><span class="price-new">$149.99</span><span class="price-old">$199.00</span><span class="price-discount">-25%</span></div>
+        <button class="add-cart"><i class="fa fa-cart-plus"></i> Add to Cart</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DEALS OF THE DAY -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-title">Deals of the Day</div>
+    <a class="view-all">View All Deals →</a>
+  </div>
+  <div class="deals-grid">
+    <!-- Deal 1 -->
+    <div class="deal-card">
+      <div class="deal-img">
+        <img src="https://placehold.co/140x120/13132a/1e90ff?text=PS+VR2" alt="PS VR2">
+      </div>
+      <div class="deal-info">
+        <span class="deal-badge badge-hot">🔥 HOT DEAL</span>
+        <div class="name">Sony PlayStation VR Headset v2</div>
+        <div class="stars">
+          <i class="fas fa-star" style="font-size:10px;color:#f59e0b;"></i>
+          <i class="fas fa-star" style="font-size:10px;color:#f59e0b;"></i>
+          <i class="fas fa-star" style="font-size:10px;color:#f59e0b;"></i>
+          <i class="fas fa-star" style="font-size:10px;color:#f59e0b;"></i>
+          <i class="fas fa-star-half-alt" style="font-size:10px;color:#f59e0b;"></i>
+          <span style="font-size:10px;color:#6b7280;">(4.2)</span>
+        </div>
+        <div class="deal-price-row">
+          <span class="deal-price-new">$299.99</span>
+          <span class="deal-price-old">$499.99</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:65%"></div></div>
+        <div class="stock-info">Available: <span>42 items</span> left out of 120</div>
+        <div class="countdown">
+          <span class="label">Ends in:</span>
+          <div class="countdown-item"><div class="num" id="h1">08</div><div class="unit">HRS</div></div>
+          <div class="countdown-item"><div class="num" id="m1">34</div><div class="unit">MIN</div></div>
+          <div class="countdown-item"><div class="num" id="s1">17</div><div class="unit">SEC</div></div>
+        </div>
+        <button class="deal-btn"><i class="fa fa-bolt"></i> Add to Cart · $299.99</button>
+      </div>
+    </div>
+    <!-- Deal 2 -->
+    <div class="deal-card">
+      <div class="deal-img">
+        <img src="https://placehold.co/140x120/13132a/06b6d4?text=DELL+Laptop" alt="Laptop">
+      </div>
+      <div class="deal-info">
+        <span class="deal-badge badge-sale" style="background:#f59e0b;color:#000;">⚡ FLASH SALE</span>
+        <div class="name">DELL Alienware M15 AMD Ryzen 7</div>
+        <div class="stars">
+          <i class="fas fa-star" style="font-size:10px;color:#f59e0b;"></i>
+          <i class="fas fa-star" style="font-size:10px;color:#f59e0b;"></i>
+          <i class="fas fa-star" style="font-size:10px;color:#f59e0b;"></i>
+          <i class="fas fa-star" style="font-size:10px;color:#f59e0b;"></i>
+          <i class="far fa-star" style="font-size:10px;color:#f59e0b;"></i>
+          <span style="font-size:10px;color:#6b7280;">(3.8)</span>
+        </div>
+        <div class="deal-price-row">
+          <span class="deal-price-new">$1,099.99</span>
+          <span class="deal-price-old">$1,499.99</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:40%"></div></div>
+        <div class="stock-info">Available: <span>18 items</span> left out of 50</div>
+        <div class="countdown">
+          <span class="label">Ends in:</span>
+          <div class="countdown-item"><div class="num" id="h2">12</div><div class="unit">HRS</div></div>
+          <div class="countdown-item"><div class="num" id="m2">08</div><div class="unit">MIN</div></div>
+          <div class="countdown-item"><div class="num" id="s2">44</div><div class="unit">SEC</div></div>
+        </div>
+        <button class="deal-btn"><i class="fa fa-bolt"></i> Add to Cart · $1,099.99</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURED PRODUCTS -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-title">Featured Products</div>
+    <a class="view-all">View All →</a>
+  </div>
+  <div class="featured-grid">
+    <div class="featured-card">
+      <span class="badge-tag">LATEST</span>
+      <div class="featured-img">
+        <img src="https://placehold.co/120x100/1a1a35/1e90ff?text=ASUS+AURA" alt="Router">
+      </div>
+      <div class="featured-info">
+        <div class="sub">Networking</div>
+        <div class="name">ASUS AURA RGB Gaming Router</div>
+        <div class="stars">
+          <i class="fas fa-star" style="font-size:9px;color:#f59e0b;"></i>
+          <i class="fas fa-star" style="font-size:9px;color:#f59e0b;"></i>
+          <i class="fas fa-star" style="font-size:9px;color:#f59e0b;"></i>
+          <i class="fas fa-star" style="font-size:9px;color:#f59e0b;"></i>
+          <i class="fas fa-star-half-alt" style="font-size:9px;color:#f59e0b;"></i>
+        </div>
+        <div class="price-row">
+          <span class="price">$249.99</span>
+          <span class="old">$329.99</span>
+        </div>
+        <button class="btn-primary" style="font-size:10px;padding:7px 16px;margin-top:10px;"><i class="fa fa-cart-plus"></i> Add to Cart</button>
+      </div>
+    </div>
+    <div class="featured-card">
+      <span class="badge-tag" style="background:var(--accent-purple);">PRO</span>
+      <div class="featured-img">
+        <img src="https://placehold.co/120x100/1a1a35/7c3aed?text=P1+PRO" alt="P1 Pro">
+      </div>
+      <div class="featured-info">
+        <div class="sub">Action Camera</div>
+        <div class="name">P1 PRO & ONE HRD</div>
+        <div class="stars">
+          <i class="fas fa-star" style="font-size:9px;color:#f59e0b;"></i>
+          <i class="fas fa-star" style="font-size:9px;color:#f59e0b;"></i>
+          <i class="fas fa-star" style="font-size:9px;color:#f59e0b;"></i>
+          <i class="fas fa-star" style="font-size:9px;color:#f59e0b;"></i>
+          <i class="far fa-star" style="font-size:9px;color:#f59e0b;"></i>
+        </div>
+        <div class="price-row">
+          <span class="price">$379.99</span>
+          <span class="old">$499.99</span>
+        </div>
+        <button class="btn-primary" style="font-size:10px;padding:7px 16px;margin-top:10px;"><i class="fa fa-cart-plus"></i> Add to Cart</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BEST SELLERS -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-title">Best Sellers</div>
+    <a class="view-all">View All →</a>
+  </div>
+  <div class="bestseller-grid">
+    <div class="product-card">
+      <span class="card-badge badge-hot">HOT</span>
+      <div class="wish"><i class="fa fa-heart"></i></div>
+      <div class="product-img" style="height:110px;">
+        <img src="https://placehold.co/90x75/18183a/ef4444?text=Controller" alt="Controller">
+      </div>
+      <div class="product-info">
+        <div class="brand">PlayStation</div>
+        <div class="name">DualSense Wireless Controller</div>
+        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><span>(340)</span></div>
+        <div class="price-row"><span class="price-new">$69.99</span><span class="price-old">$89.00</span><span class="price-discount">-21%</span></div>
+        <button class="add-cart"><i class="fa fa-cart-plus"></i> Add to Cart</button>
+      </div>
+    </div>
+    <div class="product-card">
+      <span class="card-badge badge-new">NEW</span>
+      <div class="wish"><i class="fa fa-heart"></i></div>
+      <div class="product-img" style="height:110px;">
+        <img src="https://placehold.co/90x75/18183a/06b6d4?text=Headphones" alt="Headphones">
+      </div>
+      <div class="product-info">
+        <div class="brand">Sony</div>
+        <div class="name">WH-1000XM5 Wireless NC</div>
+        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><span>(512)</span></div>
+        <div class="price-row"><span class="price-new">$279.99</span><span class="price-old">$349.00</span><span class="price-discount">-20%</span></div>
+        <button class="add-cart"><i class="fa fa-cart-plus"></i> Add to Cart</button>
+      </div>
+    </div>
+    <div class="product-card">
+      <span class="card-badge badge-sale">SALE</span>
+      <div class="wish"><i class="fa fa-heart"></i></div>
+      <div class="product-img" style="height:110px;">
+        <img src="https://placehold.co/90x75/18183a/10b981?text=Earbuds" alt="Earbuds">
+      </div>
+      <div class="product-info">
+        <div class="brand">Apple</div>
+        <div class="name">AirPods Pro 2nd Generation</div>
+        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><span>(891)</span></div>
+        <div class="price-row"><span class="price-new">$199.99</span><span class="price-old">$249.00</span></div>
+        <button class="add-cart"><i class="fa fa-cart-plus"></i> Add to Cart</button>
+      </div>
+    </div>
+    <div class="product-card">
+      <span class="card-badge badge-trending">TOP</span>
+      <div class="wish"><i class="fa fa-heart"></i></div>
+      <div class="product-img" style="height:110px;">
+        <img src="https://placehold.co/90x75/18183a/f59e0b?text=VR+Glasses" alt="VR Glasses">
+      </div>
+      <div class="product-info">
+        <div class="brand">Meta</div>
+        <div class="name">Quest 3 VR Headset 128GB</div>
+        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><span>(278)</span></div>
+        <div class="price-row"><span class="price-new">$499.99</span><span class="price-old">$599.00</span><span class="price-discount">-17%</span></div>
+        <button class="add-cart"><i class="fa fa-cart-plus"></i> Add to Cart</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <span class="logo">e<span style="color:#fff">Gadgets</span></span>
+      <p>Your ultimate destination for premium electronics, gaming gear, and cutting-edge technology at unbeatable prices.</p>
+      <div class="social-links">
+        <div class="social-link"><i class="fab fa-facebook-f"></i></div>
+        <div class="social-link"><i class="fab fa-twitter"></i></div>
+        <div class="social-link"><i class="fab fa-instagram"></i></div>
+        <div class="social-link"><i class="fab fa-youtube"></i></div>
+        <div class="social-link"><i class="fab fa-tiktok"></i></div>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Press Room</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Affiliates</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Customer Service</h4>
+      <ul>
+        <li><a href="#">Help Center</a></li>
+        <li><a href="#">Returns & Refunds</a></li>
+        <li><a href="#">Order Status</a></li>
+        <li><a href="#">Shipping Info</a></li>
+        <li><a href="#">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+        <li><a href="#">Cookie Policy</a></li>
+        <li><a href="#">Accessibility</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Categories</h4>
+      <ul>
+        <li><a href="#">Laptops & PCs</a></li>
+        <li><a href="#">Smartphones</a></li>
+        <li><a href="#">Gaming Gear</a></li>
+        <li><a href="#">Audio & Sound</a></li>
+        <li><a href="#">VR & AR</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 eGadgets. All rights reserved.</span>
+    <div class="payment-icons">
+      <div class="payment-icon">VISA</div>
+      <div class="payment-icon">MC</div>
+      <div class="payment-icon">AMEX</div>
+      <div class="payment-icon">PAYPAL</div>
+      <div class="payment-icon">CRYPTO</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Countdown timer
+function pad(n) { return n < 10 ? '0' + n : n; }
+
+let s1 = 17, m1 = 34, h1 = 8;
+let s2 = 44, m2 = 8, h2 = 12;
+
+setInterval(() => {
+  s1--;
+  if (s1 < 0) { s1 = 59; m1--; }
+  if (m1 < 0) { m1 = 59; h1--; }
+  if (h1 < 0) { h1 = 0; m1 = 0; s1 = 0; }
+  document.getElementById('h1').textContent = pad(h1);
+  document.getElementById('m1').textContent = pad(m1);
+  document.getElementById('s1').textContent = pad(s1);
+
+  s2--;
+  if (s2 < 0) { s2 = 59; m2--; }
+  if (m2 < 0) { m2 = 59; h2--; }
+  if (h2 < 0) { h2 = 0; m2 = 0; s2 = 0; }
+  document.getElementById('h2').textContent = pad(h2);
+  document.getElementById('m2').textContent = pad(m2);
+  document.getElementById('s2').textContent = pad(s2);
+}, 1000);
+
+// Banner dot control
+const dots = document.querySelectorAll('.banner-dot');
+let currentDot = 0;
+setInterval(() => {
+  dots[currentDot].classList.remove('active');
+  currentDot = (currentDot + 1) % dots.length;
+  dots[currentDot].classList.add('active');
+}, 3000);
+dots.forEach((dot, i) => {
+  dot.addEventListener('click', () => {
+    dots[currentDot].classList.remove('active');
+    currentDot = i;
+    dot.classList.add('active');
+  });
+});
+
+// Add to cart feedback
+document.querySelectorAll('.add-cart, .deal-btn').forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    const orig = this.innerHTML;
+    this.innerHTML = '<i class="fa fa-check"></i> Added!';
+    this.style.background = 'var(--accent-green)';
+    this.style.borderColor = 'var(--accent-green)';
+    this.style.color = 'white';
+    setTimeout(() => {
+      this.innerHTML = orig;
+      this.style.background = '';
+      this.style.borderColor = '';
+      this.style.color = '';
+    }, 1200);
+  });
+});
+
+// Wishlist toggle
+document.querySelectorAll('.wish').forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    const icon = this.querySelector('i');
+    if (icon.classList.contains('fas')) {
+      icon.classList.replace('fas', 'far');
+      this.style.color = '';
+    } else {
+      icon.classList.replace('far', 'fas');
+      this.style.color = 'var(--accent-red)';
+      this.style.borderColor = 'var(--accent-red)';
+    }
+  });
+});
+</script>
+</body>
+</html>
