@@ -3,10 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InfiniHon - Cargando Infraestructura Industrial</title>
+    <title>InfiniHon - Cargando</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
+        :root {
+            --bg-deep: #020617;
+            --accent: #3b82f6;
+            --accent-secondary: #06b6d4;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -14,778 +21,693 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: #0a0c10;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-deep);
             overflow: hidden;
             height: 100vh;
             width: 100vw;
-        }
-
-        /* Contenedor principal - Estética industrial */
-        .industrial-loader {
-            position: relative;
-            width: 100%;
-            height: 100vh;
-            background: linear-gradient(135deg, #030712 0%, #111827 50%, #030712 100%);
-            overflow: hidden;
-        }
-
-        /* Capa de engranajes de fondo */
-        .gears-bg {
-            position: absolute;
-            inset: 0;
-            opacity: 0.15;
-            z-index: 1;
-        }
-
-        .gear {
-            position: absolute;
-            border: 2px solid #3b82f6;
-            border-radius: 50%;
-            animation: rotateGear 20s linear infinite;
-        }
-
-        .gear::before, .gear::after {
-            content: '';
-            position: absolute;
-            background: #3b82f6;
-        }
-
-        .gear::before {
-            width: 30%;
-            height: 6px;
-            top: 50%;
-            left: -15%;
-            transform: translateY(-50%);
-        }
-
-        .gear::after {
-            width: 6px;
-            height: 30%;
-            left: 50%;
-            top: -15%;
-            transform: translateX(-50%);
-        }
-
-        @keyframes rotateGear {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* Líneas de alta tensión */
-        .power-lines {
-            position: absolute;
-            inset: 0;
-            z-index: 2;
-        }
-
-        .power-line {
-            position: absolute;
-            background: linear-gradient(90deg, transparent, #3b82f6, #22d3ee, #3b82f6, transparent);
-            height: 2px;
-            width: 100%;
-            animation: powerPulse 4s ease-in-out infinite;
-        }
-
-        .power-line-vertical {
-            width: 2px;
-            height: 100%;
-            background: linear-gradient(180deg, transparent, #3b82f6, #22d3ee, #3b82f6, transparent);
-        }
-
-        @keyframes powerPulse {
-            0%, 100% { opacity: 0.1; transform: scaleX(0.8); }
-            50% { opacity: 0.5; transform: scaleX(1.2); }
-        }
-
-        /* Centro de poder */
-        .power-core {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80vmin;
-            height: 80vmin;
-            border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, 
-                rgba(59, 130, 246, 0.3) 0%,
-                rgba(6, 182, 212, 0.2) 30%,
-                transparent 70%);
-            filter: blur(40px);
-            z-index: 5;
-            animation: corePulse 5s ease-in-out infinite;
-        }
-
-        @keyframes corePulse {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
-            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
-        }
-
-        /* Anillos de energía */
-        .energy-rings {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 60vmin;
-            height: 60vmin;
-            z-index: 10;
-        }
-
-        .ring {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border: 2px solid rgba(59, 130, 246, 0.3);
-            border-radius: 50%;
-            animation: ringExpand 4s ease-out infinite;
-        }
-
-        .ring:nth-child(1) { width: 30vmin; height: 30vmin; animation-delay: 0s; }
-        .ring:nth-child(2) { width: 45vmin; height: 45vmin; animation-delay: 1s; }
-        .ring:nth-child(3) { width: 60vmin; height: 60vmin; animation-delay: 2s; }
-
-        @keyframes ringExpand {
-            0% {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(0.3);
-                border-color: rgba(59, 130, 246, 0.8);
-            }
-            100% {
-                opacity: 0;
-                transform: translate(-50%, -50%) scale(1.5);
-                border-color: rgba(6, 182, 212, 0);
-            }
-        }
-
-        /* Contenido principal */
-        .industrial-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 30;
-            text-align: center;
-            width: 100%;
-            max-width: 800px;
-            padding: 2rem;
-        }
-
-        /* Logo con efecto metalizado */
-        .industrial-logo {
-            position: relative;
-            width: 200px;
-            height: 200px;
-            margin: 0 auto 2rem;
-            perspective: 1000px;
-        }
-
-        .logo-metal {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            animation: metalFloat 8s ease-in-out infinite;
-        }
-
-        .metal-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, 
-                #2a3f5e 0%,
-                #4a6b8f 25%,
-                #2a3f5e 50%,
-                #4a6b8f 75%,
-                #2a3f5e 100%);
-            background-size: 400% 400%;
-            border-radius: 20% 80% 80% 20% / 20% 20% 80% 80%;
-            box-shadow: 
-                0 0 50px rgba(59, 130, 246, 0.3),
-                inset 0 0 50px rgba(255, 255, 255, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
-            animation: metalShine 4s ease-in-out infinite;
         }
 
-        .metal-face::before {
-            content: 'I';
-            font-size: 6rem;
-            font-weight: 800;
-            color: #fff;
-            text-shadow: 
-                0 0 30px rgba(59, 130, 246, 0.8),
-                2px 2px 0 rgba(0, 0, 0, 0.5);
-            transform: translateZ(20px);
+        /* Fondo sutil con gradiente radial */
+        .bg-ambient {
+            position: fixed;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.08) 0%, transparent 60%),
+                radial-gradient(circle at 30% 70%, rgba(6, 182, 212, 0.04) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
         }
 
-        .metal-face-back {
-            transform: rotateY(180deg);
-            background: linear-gradient(135deg, 
-                #1e2f4a 0%,
-                #3a5670 25%,
-                #1e2f4a 50%,
-                #3a5670 75%,
-                #1e2f4a 100%);
+        /* Partículas minimalistas */
+        .particles {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
         }
 
-        @keyframes metalFloat {
-            0%, 100% { transform: translateY(0) rotateY(0deg); }
-            25% { transform: translateY(-10px) rotateY(5deg); }
-            75% { transform: translateY(10px) rotateY(-5deg); }
-        }
-
-        @keyframes metalShine {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        /* Texto industrial */
-        .industrial-title {
-            font-size: 3.5rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            color: transparent;
-            -webkit-text-stroke: 2px rgba(59, 130, 246, 0.5);
-            margin-bottom: 1rem;
-            letter-spacing: 0.5rem;
-            position: relative;
-            animation: titleGlow 3s ease-in-out infinite;
-        }
-
-        .industrial-title span {
-            color: #fff;
-            -webkit-text-stroke: 0;
-            text-shadow: 0 0 30px rgba(59, 130, 246, 0.8);
-        }
-
-        .industrial-subtitle {
-            font-size: 1rem;
-            color: #9ca3af;
-            font-family: 'JetBrains Mono', monospace;
-            letter-spacing: 0.3rem;
-            margin-bottom: 3rem;
-            position: relative;
-        }
-
-        .industrial-subtitle::before,
-        .industrial-subtitle::after {
-            content: '';
+        .particle {
             position: absolute;
-            width: 50px;
+            width: 2px;
             height: 2px;
-            background: #3b82f6;
-            top: 50%;
+            background: var(--accent);
+            border-radius: 50%;
+            opacity: 0;
+            animation: floatUp 6s ease-in infinite;
         }
 
-        .industrial-subtitle::before { left: -70px; }
-        .industrial-subtitle::after { right: -70px; }
-
-        @keyframes titleGlow {
-            0%, 100% { text-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
-            50% { text-shadow: 0 0 50px rgba(59, 130, 246, 0.8); }
+        @keyframes floatUp {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) scale(0);
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.2;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-10vh) scale(1);
+            }
         }
 
-        /* Barra de progreso industrial */
-        .industrial-progress {
-            width: 80%;
-            max-width: 600px;
-            margin: 3rem auto;
+        /* Contenedor principal */
+        .loader-container {
             position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2.5rem;
+            padding: 2rem;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ==========================================
+           ESPACIO PARA EL LOGO (IMAGEN)
+           ========================================== */
+        .logo-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Anillo giratorio sutil alrededor del logo */
+        .logo-ring {
+            position: absolute;
+            inset: -8px;
+            border-radius: 28% 72% 72% 28% / 28% 28% 72% 72%;
+            border: 2px solid transparent;
+            border-top-color: rgba(59, 130, 246, 0.4);
+            border-right-color: rgba(6, 182, 212, 0.3);
+            animation: morphRotate 8s linear infinite;
+        }
+
+        .logo-ring:nth-child(2) {
+            inset: -16px;
+            border-top-color: rgba(6, 182, 212, 0.3);
+            border-left-color: rgba(59, 130, 246, 0.3);
+            animation-direction: reverse;
+            animation-duration: 12s;
+        }
+
+        @keyframes morphRotate {
+            0% {
+                transform: rotate(0deg);
+                border-radius: 28% 72% 72% 28% / 28% 28% 72% 72%;
+            }
+            25% {
+                border-radius: 72% 28% 28% 72% / 72% 72% 28% 28%;
+            }
+            50% {
+                transform: rotate(180deg);
+                border-radius: 28% 72% 72% 28% / 28% 28% 72% 72%;
+            }
+            75% {
+                border-radius: 72% 28% 28% 72% / 72% 72% 28% 28%;
+            }
+            100% {
+                transform: rotate(360deg);
+                border-radius: 28% 72% 72% 28% / 28% 28% 72% 72%;
+            }
+        }
+
+        /* Glow detrás del logo */
+        .logo-glow {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(20px);
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% {
+                transform: scale(0.8);
+                opacity: 0.4;
+            }
+            50% {
+                transform: scale(1.3);
+                opacity: 0.8;
+            }
+        }
+
+        /* Imagen del logo - AQUÍ PONES TU LOGO */
+        .logo-image {
+            position: relative;
+            z-index: 5;
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.5));
+            animation: logoFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+
+        /* Placeholder si no hay imagen */
+        .logo-placeholder {
+            position: relative;
+            z-index: 5;
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(6, 182, 212, 0.2));
+            border: 2px solid rgba(59, 130, 246, 0.4);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            text-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
+            animation: logoFloat 6s ease-in-out infinite;
+        }
+
+        /* Nombre de la marca */
+        .brand-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            letter-spacing: 0.05em;
+        }
+
+        .brand-name .accent {
+            color: var(--accent);
+            font-weight: 800;
+        }
+
+        /* Tagline */
+        .tagline {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: #64748b;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+        }
+
+        /* Barra de progreso minimalista */
+        .progress-wrapper {
+            width: 280px;
+            max-width: 80vw;
         }
 
         .progress-track {
             width: 100%;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            position: relative;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 4px;
             overflow: hidden;
         }
 
         .progress-fill {
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, 
-                #1e40af, 
-                #3b82f6, 
-                #22d3ee, 
-                #3b82f6, 
-                #1e40af);
-            background-size: 500% 100%;
-            position: relative;
-            animation: fillGlow 2s linear infinite;
-            transition: width 0.1s linear;
+            background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+            border-radius: 4px;
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.5);
+            transition: width 0.15s linear;
         }
 
-        @keyframes fillGlow {
-            0% { background-position: 0% 0; }
-            100% { background-position: 500% 0; }
-        }
-
-        .progress-markers {
+        .progress-text {
             display: flex;
             justify-content: space-between;
-            margin-top: 1rem;
+            margin-top: 0.5rem;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-            color: #4b5563;
+            font-size: 0.65rem;
+            color: #475569;
         }
 
-        .progress-marker {
-            position: relative;
-        }
-
-        .progress-marker.active {
-            color: #60a5fa;
-        }
-
-        .progress-marker::before {
-            content: '';
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 2px;
-            height: 10px;
-            background: currentColor;
-        }
-
-        /* Medidores industriales */
-        .industrial-gauges {
-            display: flex;
-            justify-content: center;
-            gap: 3rem;
-            margin-top: 3rem;
-        }
-
-        .gauge {
-            text-align: center;
-        }
-
-        .gauge-number {
-            font-size: 2rem;
-            font-weight: 300;
+        /* Mensaje de estado */
+        .status-message {
             font-family: 'JetBrains Mono', monospace;
-            color: #60a5fa;
-            text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
-        }
-
-        .gauge-label {
             font-size: 0.7rem;
-            color: #6b7280;
-            text-transform: uppercase;
-            letter-spacing: 0.1rem;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        /* Mensaje de sistema */
-        .system-message {
-            margin-top: 3rem;
-            padding: 1rem 2rem;
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            display: inline-block;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-            color: #9ca3af;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .system-message::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.2), transparent);
-            animation: messageScan 3s linear infinite;
-        }
-
-        @keyframes messageScan {
-            to { left: 100%; }
-        }
-
-        .cursor {
-            display: inline-block;
-            width: 10px;
-            height: 1.2rem;
-            background: #60a5fa;
-            margin-left: 5px;
-            animation: blink 1s step-end infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-
-        /* Logo final */
-        .final-showcase {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            z-index: 50;
-            text-align: center;
-            opacity: 0;
-            transition: all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .final-showcase.active {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 1;
-        }
-
-        .final-logo-container {
-            width: 300px;
-            height: 300px;
-            margin: 0 auto 2rem;
-            position: relative;
-        }
-
-        .final-logo-ring {
-            position: absolute;
-            inset: 0;
-            border: 4px solid transparent;
-            border-top-color: #3b82f6;
-            border-right-color: #22d3ee;
+        .status-dot {
+            width: 5px;
+            height: 5px;
+            background: var(--accent);
             border-radius: 50%;
-            animation: spinRing 3s linear infinite;
+            animation: statusBlink 1.5s ease-in-out infinite;
         }
 
-        .final-logo-ring:nth-child(2) {
-            width: 80%;
-            height: 80%;
-            top: 10%;
-            left: 10%;
-            border-top-color: #22d3ee;
-            border-left-color: #3b82f6;
-            animation-direction: reverse;
-            animation-duration: 4s;
+        @keyframes statusBlink {
+            0%, 100% {
+                opacity: 0.3;
+                box-shadow: 0 0 4px rgba(59, 130, 246, 0.3);
+            }
+            50% {
+                opacity: 1;
+                box-shadow: 0 0 12px rgba(59, 130, 246, 0.8);
+            }
         }
 
-        @keyframes spinRing {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .final-logo-core {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 150px;
-            height: 150px;
-            background: linear-gradient(135deg, #1e40af, #3b82f6, #22d3ee);
-            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+        /* ==========================================
+           PANTALLA DE BIENVENIDA FINAL
+           ========================================== */
+        .welcome-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-deep);
+            z-index: 100;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 100px rgba(59, 130, 246, 0.6);
-            animation: coreFloat 3s ease-in-out infinite;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease;
         }
 
-        .final-logo-core span {
-            font-size: 5rem;
-            font-weight: 800;
-            color: white;
-            text-shadow: 0 0 50px rgba(255, 255, 255, 0.5);
+        .welcome-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
         }
 
-        @keyframes coreFloat {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -50%) scale(1.05); }
+        .welcome-content {
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .final-title {
+        .welcome-overlay.active .welcome-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Saludo dinámico */
+        .greeting {
+            font-size: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.6s ease 0.2s;
+        }
+
+        .welcome-overlay.active .greeting {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Logo grande final */
+        .welcome-logo {
+            width: 140px;
+            height: 140px;
+            object-fit: contain;
+            margin: 0 auto 2rem;
+            filter: drop-shadow(0 0 40px rgba(59, 130, 246, 0.6));
+            animation: welcomeFloat 4s ease-in-out infinite;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s;
+        }
+
+        .welcome-overlay.active .welcome-logo {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        @keyframes welcomeFloat {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        /* Placeholder del logo en welcome */
+        .welcome-logo-placeholder {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 2rem;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(6, 182, 212, 0.3));
+            border: 2px solid rgba(59, 130, 246, 0.5);
+            border-radius: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 4rem;
             font-weight: 800;
             color: white;
-            text-transform: uppercase;
-            letter-spacing: 1rem;
-            margin-bottom: 1rem;
-            text-shadow: 0 0 30px rgba(59, 130, 246, 0.8);
-        }
-
-        .final-subtitle {
-            font-size: 1.2rem;
-            color: #60a5fa;
-            font-family: 'JetBrains Mono', monospace;
-            margin-bottom: 2rem;
-        }
-
-        .final-badge {
-            display: inline-block;
-            padding: 0.5rem 2rem;
-            background: linear-gradient(90deg, #1e40af, #3b82f6);
-            color: white;
-            font-weight: 600;
-            letter-spacing: 0.2rem;
-            font-size: 0.8rem;
-            clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
-        }
-
-        /* Overlay final */
-        .final-overlay {
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at center, transparent 0%, #030712 100%);
-            z-index: 45;
+            text-shadow: 0 0 40px rgba(59, 130, 246, 0.6);
+            animation: welcomeFloat 4s ease-in-out infinite;
             opacity: 0;
-            transition: opacity 1s ease;
-            pointer-events: none;
+            transform: scale(0.8);
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s;
         }
 
-        .final-overlay.active {
+        .welcome-overlay.active .welcome-logo-placeholder {
             opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Título de bienvenida */
+        .welcome-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #f1f5f9;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.6s ease 0.5s;
+        }
+
+        .welcome-overlay.active .welcome-title {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .welcome-title .accent {
+            color: var(--accent);
+        }
+
+        /* Mensaje de bienvenida */
+        .welcome-message {
+            font-size: 1.1rem;
+            color: #94a3b8;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.6s ease 0.6s;
+        }
+
+        .welcome-overlay.active .welcome-message {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Badge de redirección */
+        .redirect-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.5rem;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 100px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--accent);
+            letter-spacing: 0.1em;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.6s ease 0.8s;
+        }
+
+        .welcome-overlay.active .redirect-badge {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .redirect-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: statusBlink 1.5s ease-in-out infinite;
+        }
+
+        /* Transición de salida del loader */
+        .loader-container.fade-out {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
     </style>
 </head>
 <body>
-    <div class="industrial-loader" id="industrialLoader">
+
+    <!-- Fondo ambiental -->
+    <div class="bg-ambient"></div>
+
+    <!-- Partículas -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Contenedor principal del loader -->
+    <div class="loader-container" id="loaderContainer">
         
-        <!-- Engranajes de fondo -->
-        <div class="gears-bg" id="gearsBg"></div>
-        
-        <!-- Líneas de alta tensión -->
-        <div class="power-lines">
-            <div class="power-line" style="top: 20%;"></div>
-            <div class="power-line" style="top: 50%;"></div>
-            <div class="power-line" style="top: 80%;"></div>
-            <div class="power-line power-line-vertical" style="left: 30%;"></div>
-            <div class="power-line power-line-vertical" style="left: 70%;"></div>
-        </div>
-        
-        <!-- Núcleo de energía -->
-        <div class="power-core"></div>
-        
-        <!-- Anillos de energía -->
-        <div class="energy-rings">
-            <div class="ring"></div>
-            <div class="ring"></div>
-            <div class="ring"></div>
-        </div>
-        
-        <!-- Contenido industrial -->
-        <div class="industrial-content" id="industrialContent">
-            <!-- Logo metalizado -->
-            <div class="industrial-logo">
-                <div class="logo-metal">
-                    <div class="metal-face"></div>
-                    <div class="metal-face metal-face-back"></div>
-                </div>
-            </div>
+        <!-- ==========================================
+             ESPACIO PARA EL LOGO (IMAGEN)
+             Cambia el src por la ruta de tu logo
+             ========================================== -->
+        <div class="logo-container">
+            <!-- Anillos decorativos -->
+            <div class="logo-ring"></div>
+            <div class="logo-ring"></div>
             
-            <!-- Título industrial -->
-            <h1 class="industrial-title">
-                <span>INFINI</span>HON
-            </h1>
+            <!-- Glow detrás -->
+            <div class="logo-glow"></div>
             
-            <div class="industrial-subtitle">
-                INFRAESTRUCTURA DE GRADO INDUSTRIAL
-            </div>
+            <!-- LOGO COMO IMAGEN - Cambia el src -->
+            <img 
+                src="assets/logo.png" 
+                alt="InfiniHon Logo" 
+                class="logo-image"
+                id="logoImage"
+                onerror="this.style.display='none'; document.getElementById('logoPlaceholder').style.display='flex';"
+            >
             
-            <!-- Barra de progreso -->
-            <div class="industrial-progress">
-                <div class="progress-track">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-                <div class="progress-markers">
-                    <span class="progress-marker active">00%</span>
-                    <span class="progress-marker">25%</span>
-                    <span class="progress-marker">50%</span>
-                    <span class="progress-marker">75%</span>
-                    <span class="progress-marker">100%</span>
-                </div>
-            </div>
-            
-            <!-- Medidores industriales -->
-            <div class="industrial-gauges">
-                <div class="gauge">
-                    <div class="gauge-number" id="powerGauge">0.0</div>
-                    <div class="gauge-label">POTENCIA (GW)</div>
-                </div>
-                <div class="gauge">
-                    <div class="gauge-number" id="tempGauge">0.0</div>
-                    <div class="gauge-label">TEMP (°C)</div>
-                </div>
-                <div class="gauge">
-                    <div class="gauge-number" id="loadGauge">0%</div>
-                    <div class="gauge-label">CARGA</div>
-                </div>
-            </div>
-            
-            <!-- Mensaje de sistema -->
-            <div class="system-message" id="systemMessage">
-                <span>></span> INICIALIZANDO SISTEMAS PRINCIPALES<span class="cursor"></span>
+            <!-- Placeholder (se muestra si no hay imagen) -->
+            <div 
+                class="logo-placeholder" 
+                id="logoPlaceholder" 
+                style="display: none;"
+            >
+                I
             </div>
         </div>
-        
-        <!-- Overlay final -->
-        <div class="final-overlay" id="finalOverlay"></div>
-        
-        <!-- Logo final -->
-        <div class="final-showcase" id="finalShowcase">
-            <div class="final-logo-container">
-                <div class="final-logo-ring"></div>
-                <div class="final-logo-ring"></div>
-                <div class="final-logo-core">
-                    <span>I</span>
-                </div>
+
+        <!-- Nombre de la marca -->
+        <h1 class="brand-name">
+            Infini<span class="accent">Hon</span>
+        </h1>
+
+        <!-- Tagline -->
+        <p class="tagline">Infraestructura de Grado Industrial</p>
+
+        <!-- Barra de progreso -->
+        <div class="progress-wrapper">
+            <div class="progress-track">
+                <div class="progress-fill" id="progressFill"></div>
             </div>
-            <h2 class="final-title">INFINIHON</h2>
-            <div class="final-subtitle">INDUSTRIAL GRADE INFRASTRUCTURE</div>
-            <div class="final-badge">EST. 2025</div>
-            <p class="text-gray-400 text-sm mt-8 font-mono">REDIRIGIENDO A LA PLATAFORMA...</p>
+            <div class="progress-text">
+                <span>INICIALIZANDO</span>
+                <span id="progressPercent">0%</span>
+            </div>
+        </div>
+
+        <!-- Mensaje de estado -->
+        <div class="status-message">
+            <span class="status-dot"></span>
+            <span id="statusText">Preparando sistemas...</span>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         PANTALLA DE BIENVENIDA FINAL
+         ========================================== -->
+    <div class="welcome-overlay" id="welcomeOverlay">
+        <div class="welcome-content">
+            
+            <!-- Saludo dinámico según hora -->
+            <p class="greeting" id="greetingText">BUENOS DÍAS</p>
+            
+            <!-- Logo grande -->
+            <img 
+                src="assets/logo.png" 
+                alt="InfiniHon Logo" 
+                class="welcome-logo"
+                id="welcomeLogo"
+                onerror="this.style.display='none'; document.getElementById('welcomeLogoPlaceholder').style.display='flex';"
+            >
+            <div 
+                class="welcome-logo-placeholder" 
+                id="welcomeLogoPlaceholder" 
+                style="display: none;"
+            >
+                I
+            </div>
+            
+            <!-- Título -->
+            <h2 class="welcome-title">
+                Infini<span class="accent">Hon</span>
+            </h2>
+            
+            <!-- Mensaje de bienvenida profesional -->
+            <p class="welcome-message" id="welcomeMessage">
+                Bienvenido a la infraestructura del futuro
+            </p>
+            
+            <!-- Badge de redirección -->
+            <div class="redirect-badge">
+                <span class="redirect-dot"></span>
+                REDIRIGIENDO A LA PLATAFORMA
+            </div>
         </div>
     </div>
 
     <script>
-        // Generar engranajes de fondo
-        function createGears() {
-            const gearsBg = document.getElementById('gearsBg');
-            const gearCount = 12;
+        // ==========================================
+        // DETECTAR HORA DEL DÍA PARA EL SALUDO
+        // ==========================================
+        function obtenerSaludo() {
+            const hora = new Date().getHours();
             
-            for (let i = 0; i < gearCount; i++) {
-                const gear = document.createElement('div');
-                gear.className = 'gear';
-                
-                const size = Math.random() * 150 + 50;
-                gear.style.width = `${size}px`;
-                gear.style.height = `${size}px`;
-                gear.style.left = `${Math.random() * 100}%`;
-                gear.style.top = `${Math.random() * 100}%`;
-                
-                const speed = Math.random() * 10 + 10;
-                gear.style.animationDuration = `${speed}s`;
-                
-                gear.style.opacity = Math.random() * 0.3;
-                
-                gearsBg.appendChild(gear);
+            if (hora >= 5 && hora < 12) {
+                return {
+                    saludo: 'BUENOS DÍAS',
+                    mensaje: 'Bienvenido a la infraestructura del futuro'
+                };
+            } else if (hora >= 12 && hora < 17) {
+                return {
+                    saludo: 'BUENAS TARDES',
+                    mensaje: 'Bienvenido a la infraestructura del futuro'
+                };
+            } else if (hora >= 17 && hora < 21) {
+                return {
+                    saludo: 'BUENAS TARDES',
+                    mensaje: 'Bienvenido a la infraestructura del futuro'
+                };
+            } else {
+                return {
+                    saludo: 'BUENAS NOCHES',
+                    mensaje: 'Bienvenido a la infraestructura del futuro'
+                };
             }
         }
 
-        // Mensajes del sistema
-        const systemMessages = [
-            '> INICIALIZANDO SISTEMAS PRINCIPALES',
-            '> CARGANDO MÓDULOS DE INFRAESTRUCTURA',
-            '> ESTABLECIENDO CONEXIONES DE ALTA VELOCIDAD',
-            '> VERIFICANDO INTEGRIDAD DE SERVIDORES',
-            '> OPTIMIZANDO RENDIMIENTO INDUSTRIAL',
-            '> SISTEMAS OPERATIVOS EN LÍNEA',
-            '> INFINIHON - POTENCIA INDUSTRIAL',
-            '> BIENVENIDO A LA INFRAESTRUCTURA DEL FUTURO'
+        // ==========================================
+        // CREAR PARTÍCULAS
+        // ==========================================
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const count = 25;
+
+            for (let i = 0; i < count; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // ==========================================
+        // MENSAJES DE ESTADO
+        // ==========================================
+        const statusMessages = [
+            'Preparando sistemas...',
+            'Inicializando núcleos...',
+            'Cargando módulos de red...',
+            'Verificando integridad...',
+            'Optimizando rendimiento...',
+            'Estableciendo conexiones seguras...',
+            'Calibrando potencia industrial...',
+            'Sistemas listos. Bienvenido.'
         ];
 
-        // Variables de progreso
-        let progress = 0;
+        // ==========================================
+        // ELEMENTOS
+        // ==========================================
         const progressFill = document.getElementById('progressFill');
-        const systemMessage = document.getElementById('systemMessage');
-        const powerGauge = document.getElementById('powerGauge');
-        const tempGauge = document.getElementById('tempGauge');
-        const loadGauge = document.getElementById('loadGauge');
-        const industrialContent = document.getElementById('industrialContent');
-        const finalShowcase = document.getElementById('finalShowcase');
-        const finalOverlay = document.getElementById('finalOverlay');
-        const markers = document.querySelectorAll('.progress-marker');
+        const progressPercent = document.getElementById('progressPercent');
+        const statusText = document.getElementById('statusText');
+        const loaderContainer = document.getElementById('loaderContainer');
+        const welcomeOverlay = document.getElementById('welcomeOverlay');
+        const greetingText = document.getElementById('greetingText');
+        const welcomeMessage = document.getElementById('welcomeMessage');
 
-        // Valores de los medidores
-        let power = 0;
-        let temp = 20;
-        let load = 0;
+        let progress = 0;
 
-        // Actualizar medidores
-        function updateGauges() {
-            // Potencia (0-9.9 GW)
-            power = (progress / 100) * 9.9;
-            powerGauge.textContent = power.toFixed(1);
-            
-            // Temperatura (20-85°C)
-            temp = 20 + (progress / 100) * 65;
-            tempGauge.textContent = temp.toFixed(1);
-            
-            // Carga (0-100%)
-            load = progress;
-            loadGauge.textContent = Math.floor(load) + '%';
-        }
-
-        // Actualizar marcadores de progreso
-        function updateMarkers() {
-            markers.forEach((marker, index) => {
-                const value = index * 25;
-                if (progress >= value) {
-                    marker.classList.add('active');
-                    marker.textContent = value + '%';
-                } else {
-                    marker.classList.remove('active');
-                    marker.textContent = value + '%';
-                }
-            });
-        }
-
-        // Simular carga industrial
-        function industrialLoading() {
+        // ==========================================
+        // SIMULAR CARGA
+        // ==========================================
+        function updateLoading() {
             if (progress < 100) {
-                // Incremento más realista (a veces más rápido, a veces más lento)
-                const increment = Math.random() * 3 + 1;
-                progress += increment;
-                if (progress > 100) progress = 100;
-                
+                // Incremento variable para simular carga real
+                const increment = Math.random() * 2.5 + 0.5;
+                progress = Math.min(progress + increment, 100);
+
                 // Actualizar barra
-                progressFill.style.width = `${progress}%`;
-                
-                // Actualizar medidores
-                updateGauges();
-                
-                // Actualizar marcadores
-                updateMarkers();
-                
-                // Cambiar mensaje según progreso
-                const messageIndex = Math.floor((progress / 100) * (systemMessages.length - 1));
-                const message = systemMessages[messageIndex];
-                systemMessage.innerHTML = `${message}<span class="cursor"></span>`;
-                
-                // Llamar de nuevo con intervalo variable
-                setTimeout(industrialLoading, Math.random() * 100 + 50);
+                progressFill.style.width = progress + '%';
+                progressPercent.textContent = Math.floor(progress) + '%';
+
+                // Actualizar mensaje de estado
+                const messageIndex = Math.floor((progress / 100) * (statusMessages.length - 1));
+                statusText.textContent = statusMessages[messageIndex];
+
+                // Continuar carga
+                const delay = progress > 90 ? Math.random() * 200 + 100 : Math.random() * 80 + 30;
+                setTimeout(updateLoading, delay);
             } else {
                 // Carga completada
-                systemMessage.innerHTML = '> SISTEMAS OPERATIVOS - LISTO PARA OPERAR<span class="cursor"></span>';
-                
-                // Efecto de finalización épico
+                progressFill.style.width = '100%';
+                progressPercent.textContent = '100%';
+                statusText.textContent = 'Sistemas listos.';
+
+                // Transición: ocultar loader
                 setTimeout(() => {
-                    // Desvanecer contenido
-                    industrialContent.style.transition = 'opacity 0.8s ease';
-                    industrialContent.style.opacity = '0';
-                    
+                    loaderContainer.classList.add('fade-out');
+                }, 400);
+
+                // Mostrar pantalla de bienvenida
+                setTimeout(() => {
+                    // Configurar saludo según hora
+                    const saludo = obtenerSaludo();
+                    greetingText.textContent = saludo.saludo;
+                    welcomeMessage.textContent = saludo.mensaje;
+
                     // Activar overlay
-                    finalOverlay.classList.add('active');
-                    
-                    // Mostrar logo final
+                    welcomeOverlay.classList.add('active');
+
+                    // Redirigir después de mostrar el mensaje
                     setTimeout(() => {
-                        finalShowcase.classList.add('active');
-                        
-                        // Efecto de vibración al aparecer
-                        finalShowcase.style.animation = 'none';
-                        finalShowcase.offsetHeight;
-                        finalShowcase.style.animation = 'coreFloat 3s ease-in-out infinite';
-                        
-                        // Redirigir después de 4 segundos
-                        setTimeout(() => {
-                            window.location.href = 'index.html';
-                        }, 4000);
-                    }, 800);
+                        window.location.href = 'index.html';
+                    }, 3500);
                 }, 800);
             }
         }
 
-        // Iniciar todo
-        window.addEventListener('load', function() {
-            createGears();
-            industrialLoading();
+        // ==========================================
+        // INICIAR
+        // ==========================================
+        window.addEventListener('load', () => {
+            createParticles();
+            // Pequeña pausa antes de empezar la carga
+            setTimeout(updateLoading, 400);
         });
     </script>
 </body>
