@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Markivo — Digital Marketing Agency</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+/* ─── TOKENS ─────────────────────────────────────────── */
+:root{
+  --navy:     #0b1437;
+  --navy2:    #0d1b4b;
+  --navy3:    #111e54;
+  --blue:     #1a56db;
+  --blue2:    #1747c2;
+  --blue-light:#3b82f6;
+  --cyan:     #06b6d4;
+  --yellow:   #fbbf24;
+  --white:    #ffffff;
+  --off-white:#f8faff;
+  --gray:     #94a3b8;
+  --gray2:    #64748b;
+  --border:   rgba(255,255,255,0.08);
+  --card-bg:  rgba(255,255,255,0.04);
+  --card-hover:rgba(255,255,255,0.07);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--navy);color:var(--white);overflow-x:hidden;font-size:14px;line-height:1.6;}
+a{text-decoration:none;color:inherit;}
+ul{list-style:none;}
+img{max-width:100%;display:block;}
+.container{max-width:1180px;margin:0 auto;padding:0 24px;}
+
+/* ─── BUTTONS ─────────────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 24px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;transition:all .25s;border:none;font-family:inherit;}
+.btn-blue{background:var(--blue);color:var(--white);}
+.btn-blue:hover{background:var(--blue2);transform:translateY(-1px);box-shadow:0 8px 24px rgba(26,86,219,.4);}
+.btn-outline{background:transparent;color:var(--white);border:1.5px solid rgba(255,255,255,.3);}
+.btn-outline:hover{border-color:var(--white);background:rgba(255,255,255,.05);}
+.btn-sm{padding:8px 18px;font-size:12px;}
+.badge{display:inline-block;background:rgba(26,86,219,.2);border:1px solid rgba(26,86,219,.4);color:#93c5fd;font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;letter-spacing:.5px;margin-bottom:14px;}
+
+/* ─── SECTION LABELS ──────────────────────────────────── */
+.sec-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.sec-label::before{content:'';width:20px;height:2px;background:var(--cyan);}
+.sec-title{font-family:'Manrope',sans-serif;font-size:clamp(26px,4vw,40px);font-weight:800;line-height:1.15;color:var(--white);}
+.sec-title span{color:var(--blue-light);}
+.sec-sub{font-size:14px;color:var(--gray);line-height:1.8;max-width:520px;}
+
+/* ─── NAV ─────────────────────────────────────────────── */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(11,20,55,.95);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+nav{
+  display:flex;align-items:center;
+  height:64px;gap:0;
+}
+.nav-logo{
+  font-family:'Manrope',sans-serif;
+  font-size:20px;font-weight:800;
+  color:var(--white);
+  display:flex;align-items:center;gap:6px;
+  margin-right:40px;white-space:nowrap;
+}
+.nav-logo .dot{width:8px;height:8px;background:var(--blue);border-radius:50%;}
+.nav-links{display:flex;align-items:center;gap:4px;}
+.nav-links a{
+  font-size:13px;font-weight:500;
+  color:var(--gray);padding:6px 14px;
+  border-radius:5px;transition:all .2s;white-space:nowrap;
+}
+.nav-links a:hover,.nav-links a.active{color:var(--white);background:var(--card-bg);}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:12px;}
+.nav-icon{width:36px;height:36px;border-radius:8px;background:var(--card-bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--gray);transition:all .2s;}
+.nav-icon:hover{color:var(--white);border-color:rgba(255,255,255,.2);}
+
+/* ─── HERO ────────────────────────────────────────────── */
+#hero{
+  min-height:100vh;
+  background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 50%,#091230 100%);
+  display:flex;align-items:center;
+  padding-top:64px;
+  position:relative;overflow:hidden;
+}
+.hero-dots{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(circle,rgba(255,255,255,.06) 1px,transparent 1px);
+  background-size:30px 30px;
+}
+.hero-glow{
+  position:absolute;top:-100px;right:-100px;
+  width:600px;height:600px;
+  background:radial-gradient(circle,rgba(26,86,219,.18) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-glow2{
+  position:absolute;bottom:-100px;left:-100px;
+  width:400px;height:400px;
+  background:radial-gradient(circle,rgba(6,182,212,.1) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-inner{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:60px;align-items:center;
+  padding:80px 0;position:relative;z-index:2;
+}
+.hero-eyebrow{
+  display:flex;align-items:center;gap:10px;
+  font-size:12px;color:var(--gray);margin-bottom:20px;
+}
+.hero-eyebrow .tag{
+  background:rgba(6,182,212,.15);border:1px solid rgba(6,182,212,.3);
+  color:var(--cyan);padding:3px 10px;border-radius:20px;
+  font-size:11px;font-weight:600;
+}
+.hero-title{
+  font-family:'Manrope',sans-serif;
+  font-size:clamp(38px,5.5vw,62px);
+  font-weight:800;line-height:1.1;
+  color:var(--white);margin-bottom:20px;
+}
+.hero-title span{
+  background:linear-gradient(135deg,var(--blue-light),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-desc{font-size:15px;color:var(--gray);line-height:1.8;max-width:460px;margin-bottom:32px;}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:40px;}
+.hero-video-link{
+  display:flex;align-items:center;gap:10px;
+  color:var(--gray);font-size:13px;font-weight:500;cursor:pointer;
+  transition:color .2s;
+}
+.hero-video-link:hover{color:var(--white);}
+.play-btn{
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(26,86,219,.2);border:1.5px solid rgba(26,86,219,.5);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;color:var(--blue-light);
+  transition:all .25s;
+}
+.play-btn:hover{background:var(--blue);color:var(--white);}
+.hero-avatars{display:flex;align-items:center;gap:12px;}
+.avatar-stack{display:flex;}
+.avatar-stack .av{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  border:2px solid var(--navy);
+  margin-left:-10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;color:var(--white);font-weight:700;
+}
+.avatar-stack .av:first-child{margin-left:0;}
+.hero-stat-text{font-size:12px;color:var(--gray);}
+.hero-stat-text strong{color:var(--white);font-weight:700;}
+
+.hero-visual{
+  position:relative;display:flex;align-items:center;justify-content:center;
+}
+.hero-person-card{
+  width:100%;max-width:420px;
+  aspect-ratio:3/3.5;
+  background:linear-gradient(160deg,var(--navy3),var(--navy2));
+  border:1px solid var(--border);
+  border-radius:20px;
+  overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+}
+.hero-person-card::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 60% 30%,rgba(26,86,219,.2) 0%,transparent 60%);
+}
+.hero-person-card i{font-size:160px;color:rgba(255,255,255,.05);position:relative;z-index:1;}
+.hero-float{
+  position:absolute;
+  background:rgba(11,20,55,.9);
+  border:1px solid var(--border);
+  border-radius:12px;backdrop-filter:blur(12px);
+  padding:12px 16px;
+}
+.hero-float.top-right{top:20px;right:-20px;}
+.hero-float.bottom-left{bottom:40px;left:-20px;}
+.float-stat{font-family:'Manrope',sans-serif;font-size:22px;font-weight:800;color:var(--white);}
+.float-label{font-size:11px;color:var(--gray);}
+.float-icon{font-size:20px;margin-bottom:4px;}
+.float-icon.blue{color:var(--blue-light);}
+.float-icon.yellow{color:var(--yellow);}
+
+/* ─── TRUSTED BY ─────────────────────────────────────── */
+#trusted{
+  padding:28px 0;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  background:rgba(255,255,255,.02);
+}
+.trusted-inner{
+  display:flex;align-items:center;gap:40px;flex-wrap:wrap;
+}
+.trusted-label{font-size:12px;color:var(--gray2);white-space:nowrap;font-weight:500;}
+.trusted-logos{
+  display:flex;align-items:center;gap:32px;flex-wrap:wrap;flex:1;justify-content:space-around;
+}
+.logo-item{
+  font-family:'Manrope',sans-serif;
+  font-size:16px;font-weight:700;
+  color:var(--gray2);letter-spacing:1px;
+  display:flex;align-items:center;gap:6px;
+  transition:color .2s;cursor:pointer;
+}
+.logo-item:hover{color:var(--white);}
+.logo-item i{font-size:18px;}
+
+/* ─── ABOUT / INFLUENCER ─────────────────────────────── */
+#about{padding:100px 0;background:var(--navy);}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+.about-img-block{position:relative;}
+.about-main-img{
+  width:100%;aspect-ratio:1;
+  background:linear-gradient(160deg,var(--navy3),var(--navy2));
+  border:1px solid var(--border);border-radius:16px;
+  overflow:hidden;display:flex;align-items:center;justify-content:center;
+  position:relative;
+}
+.about-main-img::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 30% 40%,rgba(26,86,219,.15) 0%,transparent 65%);
+}
+.about-main-img i{font-size:100px;color:rgba(255,255,255,.05);position:relative;z-index:1;}
+.about-badge{
+  position:absolute;bottom:-16px;right:24px;
+  background:var(--blue);border-radius:10px;
+  padding:12px 20px;
+  box-shadow:0 8px 32px rgba(26,86,219,.4);
+}
+.about-badge .num{font-family:'Manrope',sans-serif;font-size:28px;font-weight:800;color:var(--white);line-height:1;}
+.about-badge .lbl{font-size:11px;color:rgba(255,255,255,.7);}
+.about-extra-cards{
+  position:absolute;top:20px;left:-20px;
+  display:flex;flex-direction:column;gap:8px;
+}
+.mini-card{
+  background:rgba(11,20,55,.9);border:1px solid var(--border);
+  border-radius:8px;padding:10px 14px;
+  backdrop-filter:blur(12px);min-width:140px;
+}
+.mini-card .mc-num{font-family:'Manrope',sans-serif;font-size:20px;font-weight:800;color:var(--white);}
+.mini-card .mc-lbl{font-size:10px;color:var(--gray);}
+.about-content{}
+.about-desc{font-size:14px;color:var(--gray);line-height:1.8;margin-bottom:28px;}
+.about-points{display:flex;flex-direction:column;gap:14px;margin-bottom:32px;}
+.about-point{display:flex;align-items:flex-start;gap:12px;font-size:13px;color:var(--gray);}
+.about-point i{color:var(--blue-light);font-size:14px;margin-top:2px;flex-shrink:0;}
+.about-point strong{color:var(--white);display:block;margin-bottom:2px;font-size:13px;}
+.about-actions{display:flex;gap:12px;flex-wrap:wrap;}
+.color-dots{display:flex;gap:6px;margin-top:20px;}
+.cdot{width:32px;height:32px;border-radius:6px;cursor:pointer;transition:transform .2s;}
+.cdot:hover{transform:scale(1.15);}
+
+/* ─── SERVICES ───────────────────────────────────────── */
+#services{padding:100px 0;background:linear-gradient(180deg,var(--navy2) 0%,var(--navy) 100%);}
+.services-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px;flex-wrap:wrap;gap:20px;}
+.services-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+.service-card{
+  background:var(--card-bg);border:1px solid var(--border);
+  border-radius:14px;padding:24px 20px;
+  transition:all .3s;cursor:pointer;position:relative;overflow:hidden;
+}
+.service-card::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(26,86,219,.08) 0%,transparent 60%);
+  opacity:0;transition:opacity .3s;
+}
+.service-card:hover{border-color:rgba(26,86,219,.4);transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.3);}
+.service-card:hover::before{opacity:1;}
+.service-icon-wrap{
+  width:52px;height:52px;border-radius:12px;
+  background:rgba(26,86,219,.15);border:1px solid rgba(26,86,219,.25);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;color:var(--blue-light);
+  margin-bottom:16px;transition:all .3s;
+}
+.service-card:hover .service-icon-wrap{background:var(--blue);color:var(--white);}
+.service-title{font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;color:var(--white);margin-bottom:10px;}
+.service-text{font-size:12px;color:var(--gray);line-height:1.7;margin-bottom:16px;}
+.service-link{font-size:12px;color:var(--blue-light);font-weight:600;display:flex;align-items:center;gap:6px;transition:gap .2s;}
+.service-link:hover{gap:10px;}
+
+/* ─── STATS BAR ──────────────────────────────────────── */
+#stats{
+  padding:48px 0;
+  background:var(--blue);
+  position:relative;overflow:hidden;
+}
+#stats::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle,rgba(255,255,255,.06) 1px,transparent 1px);
+  background-size:24px 24px;
+}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;z-index:1;}
+.stat-item{
+  text-align:center;padding:20px;
+  border-right:1px solid rgba(255,255,255,.15);
+}
+.stat-item:last-child{border-right:none;}
+.stat-num{font-family:'Manrope',sans-serif;font-size:36px;font-weight:800;color:var(--white);line-height:1;}
+.stat-plus{color:rgba(255,255,255,.7);}
+.stat-label{font-size:12px;color:rgba(255,255,255,.7);margin-top:4px;}
+
+/* ─── DIGITAL AGENCY ─────────────────────────────────── */
+#agency{
+  padding:100px 0;
+  background:linear-gradient(135deg,var(--navy2) 0%,var(--navy3) 100%);
+  position:relative;overflow:hidden;
+}
+.agency-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.agency-visual{
+  position:relative;
+  width:100%;aspect-ratio:1;
+  background:linear-gradient(160deg,rgba(26,86,219,.1),transparent);
+  border:1px solid var(--border);border-radius:20px;
+  display:flex;align-items:center;justify-content:center;
+}
+.agency-visual i{font-size:120px;color:rgba(255,255,255,.05);}
+.agency-tags{position:absolute;bottom:20px;left:20px;display:flex;flex-wrap:wrap;gap:8px;}
+.agency-tag{
+  background:rgba(26,86,219,.3);border:1px solid rgba(26,86,219,.5);
+  color:#93c5fd;font-size:11px;font-weight:600;
+  padding:5px 12px;border-radius:20px;
+}
+.agency-title{font-family:'Manrope',sans-serif;font-size:clamp(26px,3.5vw,38px);font-weight:800;color:var(--white);line-height:1.2;margin-bottom:24px;}
+.agency-title span{color:var(--yellow);}
+.agency-desc{font-size:14px;color:var(--gray);line-height:1.8;margin-bottom:32px;}
+.agency-points{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px;}
+.agency-point{
+  background:var(--card-bg);border:1px solid var(--border);
+  border-radius:10px;padding:16px;
+}
+.agency-point .ap-icon{font-size:20px;color:var(--blue-light);margin-bottom:8px;}
+.agency-point .ap-title{font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px;}
+.agency-point .ap-text{font-size:11px;color:var(--gray);}
+.agency-cta{display:flex;gap:12px;flex-wrap:wrap;}
+
+/* ─── PROJECTS ───────────────────────────────────────── */
+#projects{padding:100px 0;background:var(--navy);}
+.projects-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px;flex-wrap:wrap;gap:20px;}
+.projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.project-card{
+  background:var(--card-bg);border:1px solid var(--border);
+  border-radius:14px;overflow:hidden;cursor:pointer;
+  transition:all .3s;
+}
+.project-card:hover{border-color:rgba(26,86,219,.4);transform:translateY(-4px);}
+.project-img{
+  aspect-ratio:16/10;
+  background:linear-gradient(135deg,var(--navy3),var(--navy2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:60px;color:rgba(255,255,255,.05);
+  position:relative;overflow:hidden;
+}
+.project-img::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at center,rgba(26,86,219,.12) 0%,transparent 70%);
+}
+.project-tag{
+  position:absolute;top:12px;left:12px;
+  background:var(--blue);color:var(--white);
+  font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;
+}
+.project-info{padding:20px;}
+.project-cat{font-size:11px;color:var(--cyan);font-weight:600;letter-spacing:.5px;margin-bottom:6px;}
+.project-title{font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;color:var(--white);margin-bottom:8px;line-height:1.3;}
+.project-desc{font-size:12px;color:var(--gray);line-height:1.7;}
+
+/* ─── TESTIMONIAL ────────────────────────────────────── */
+#testimonials{
+  padding:100px 0;
+  background:linear-gradient(180deg,var(--navy2) 0%,var(--navy) 100%);
+}
+.testi-layout{display:grid;grid-template-columns:1fr 1.5fr;gap:60px;align-items:center;}
+.testi-left{}
+.testi-stars{display:flex;gap:4px;margin-bottom:16px;}
+.testi-stars i{font-size:14px;color:var(--yellow);}
+.testi-quote{
+  font-size:16px;line-height:1.8;color:var(--white);
+  font-style:italic;margin-bottom:24px;position:relative;
+}
+.testi-quote::before{
+  content:'"';font-size:60px;color:rgba(26,86,219,.3);
+  position:absolute;top:-20px;left:-10px;line-height:1;font-style:normal;
+  font-family:'Manrope',sans-serif;font-weight:800;
+}
+.testi-author{display:flex;align-items:center;gap:12px;}
+.testi-av{
+  width:48px;height:48px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  border:2px solid rgba(255,255,255,.15);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;color:var(--white);
+}
+.testi-name{font-weight:700;color:var(--white);font-size:14px;}
+.testi-role{font-size:12px;color:var(--gray);}
+.testi-right{}
+.review-sources{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:32px;}
+.review-source{
+  background:var(--card-bg);border:1px solid var(--border);
+  border-radius:10px;padding:14px 20px;
+  display:flex;align-items:center;gap:10px;
+  cursor:pointer;transition:all .3s;flex:1;min-width:130px;
+}
+.review-source:hover{border-color:rgba(26,86,219,.4);}
+.rs-icon{font-size:20px;}
+.rs-num{font-family:'Manrope',sans-serif;font-size:18px;font-weight:800;color:var(--white);}
+.rs-label{font-size:11px;color:var(--gray);}
+.review-source .rs-stars{display:flex;gap:2px;margin-top:2px;}
+.review-source .rs-stars i{font-size:9px;color:var(--yellow);}
+
+/* ─── TEAM ───────────────────────────────────────────── */
+#team{padding:100px 0;background:var(--navy);}
+.team-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px;flex-wrap:wrap;gap:20px;}
+.team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+.team-card{
+  background:var(--card-bg);border:1px solid var(--border);
+  border-radius:14px;overflow:hidden;cursor:pointer;
+  transition:all .3s;text-align:center;
+}
+.team-card:hover{border-color:rgba(26,86,219,.4);transform:translateY(-4px);}
+.team-img{
+  aspect-ratio:1;
+  background:linear-gradient(160deg,var(--navy3),var(--navy2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:64px;color:rgba(255,255,255,.07);
+  position:relative;overflow:hidden;
+}
+.team-img::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 30%,rgba(26,86,219,.15) 0%,transparent 65%);
+}
+.team-info{padding:16px;}
+.team-name{font-family:'Manrope',sans-serif;font-weight:700;font-size:15px;color:var(--white);margin-bottom:4px;}
+.team-role{font-size:12px;color:var(--blue-light);}
+.team-social{display:flex;justify-content:center;gap:8px;margin-top:12px;}
+.team-social a{
+  width:30px;height:30px;border-radius:6px;
+  background:rgba(255,255,255,.05);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;color:var(--gray);transition:all .2s;
+}
+.team-social a:hover{background:var(--blue);color:var(--white);border-color:var(--blue);}
+
+/* ─── PRICING ────────────────────────────────────────── */
+#pricing{padding:100px 0;background:linear-gradient(180deg,var(--navy2) 0%,var(--navy) 100%);}
+.pricing-header{text-align:center;margin-bottom:48px;}
+.pricing-header .sec-sub{margin:12px auto 0;}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:900px;margin:0 auto;}
+.pricing-card{
+  background:var(--card-bg);border:1px solid var(--border);
+  border-radius:16px;padding:32px 28px;
+  transition:all .3s;position:relative;overflow:hidden;
+}
+.pricing-card.featured{
+  background:var(--blue);border-color:var(--blue);
+  box-shadow:0 20px 60px rgba(26,86,219,.4);
+  transform:scale(1.04);
+}
+.pricing-card:not(.featured):hover{border-color:rgba(26,86,219,.4);transform:translateY(-4px);}
+.pricing-tag{
+  position:absolute;top:16px;right:16px;
+  background:rgba(255,255,255,.2);color:var(--white);
+  font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;
+}
+.pricing-name{font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;color:var(--white);margin-bottom:8px;}
+.pricing-desc{font-size:12px;color:rgba(255,255,255,.6);margin-bottom:20px;}
+.pricing-price{
+  font-family:'Manrope',sans-serif;
+  font-size:36px;font-weight:800;color:var(--white);
+  line-height:1;margin-bottom:4px;
+}
+.pricing-price sup{font-size:18px;font-weight:600;}
+.pricing-period{font-size:12px;color:rgba(255,255,255,.5);margin-bottom:24px;}
+.pricing-divider{border:none;border-top:1px solid rgba(255,255,255,.12);margin:0 0 20px;}
+.pricing-features{display:flex;flex-direction:column;gap:10px;margin-bottom:28px;}
+.pricing-feature{display:flex;align-items:center;gap:10px;font-size:12px;color:rgba(255,255,255,.8);}
+.pricing-feature i{font-size:12px;color:var(--cyan);}
+.pricing-card.featured .pricing-feature i{color:rgba(255,255,255,.9);}
+.pricing-btn-white{background:var(--white);color:var(--blue);font-family:inherit;font-weight:700;font-size:13px;padding:12px;width:100%;border-radius:8px;border:none;cursor:pointer;transition:all .25s;}
+.pricing-btn-white:hover{background:var(--off-white);}
+.pricing-btn-outline{background:transparent;color:var(--white);border:1.5px solid rgba(255,255,255,.25);font-family:inherit;font-weight:700;font-size:13px;padding:12px;width:100%;border-radius:8px;cursor:pointer;transition:all .25s;}
+.pricing-btn-outline:hover{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.5);}
+
+/* ─── FAQ ────────────────────────────────────────────── */
+#faq{padding:100px 0;background:var(--navy);}
+.faq-header{text-align:center;margin-bottom:48px;}
+.faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:1000px;margin:0 auto;}
+.faq-item{
+  background:var(--card-bg);border:1px solid var(--border);
+  border-radius:10px;overflow:hidden;cursor:pointer;
+}
+.faq-q{
+  padding:18px 20px;display:flex;justify-content:space-between;align-items:center;
+  gap:12px;
+}
+.faq-q-text{font-size:13px;font-weight:600;color:var(--white);}
+.faq-icon{width:24px;height:24px;border-radius:6px;background:rgba(26,86,219,.2);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--blue-light);flex-shrink:0;transition:all .3s;}
+.faq-item.open .faq-icon{background:var(--blue);color:var(--white);transform:rotate(45deg);}
+.faq-a{font-size:12px;color:var(--gray);line-height:1.8;padding:0 20px;max-height:0;overflow:hidden;transition:all .4s ease;}
+.faq-item.open .faq-a{max-height:200px;padding-bottom:18px;}
+
+/* ─── BLOG ───────────────────────────────────────────── */
+#blog{padding:100px 0;background:linear-gradient(180deg,var(--navy2) 0%,var(--navy) 100%);}
+.blog-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px;flex-wrap:wrap;gap:20px;}
+.blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.blog-card{
+  background:var(--card-bg);border:1px solid var(--border);
+  border-radius:14px;overflow:hidden;cursor:pointer;
+  transition:all .3s;
+}
+.blog-card:hover{border-color:rgba(26,86,219,.4);transform:translateY(-4px);}
+.blog-img{
+  aspect-ratio:16/9;
+  background:linear-gradient(135deg,var(--navy3),var(--navy2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:48px;color:rgba(255,255,255,.06);
+  position:relative;overflow:hidden;
+}
+.blog-img::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at center,rgba(26,86,219,.1) 0%,transparent 70%);
+}
+.blog-cat{
+  position:absolute;top:12px;left:12px;
+  background:var(--blue);color:var(--white);
+  font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;
+}
+.blog-info{padding:20px;}
+.blog-meta{display:flex;align-items:center;gap:12px;font-size:11px;color:var(--gray2);margin-bottom:10px;}
+.blog-meta span{display:flex;align-items:center;gap:4px;}
+.blog-title{font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;color:var(--white);margin-bottom:10px;line-height:1.4;}
+.blog-excerpt{font-size:12px;color:var(--gray);line-height:1.7;margin-bottom:16px;}
+.blog-link{font-size:12px;color:var(--blue-light);font-weight:600;display:flex;align-items:center;gap:6px;transition:gap .2s;}
+.blog-link:hover{gap:10px;}
+
+/* ─── CONTACT ────────────────────────────────────────── */
+#contact{padding:100px 0;background:var(--navy);}
+.contact-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:60px;align-items:start;}
+.contact-info{}
+.contact-items{display:flex;flex-direction:column;gap:12px;margin-top:32px;}
+.contact-item{
+  background:var(--card-bg);border:1px solid var(--border);
+  border-radius:10px;padding:16px 20px;
+  display:flex;align-items:center;gap:14px;
+  transition:all .3s;cursor:pointer;
+}
+.contact-item:hover{border-color:rgba(26,86,219,.4);background:var(--card-hover);}
+.ci-icon{width:40px;height:40px;border-radius:10px;background:rgba(26,86,219,.15);border:1px solid rgba(26,86,219,.25);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--blue-light);flex-shrink:0;}
+.ci-label{font-size:11px;color:var(--gray2);font-weight:500;margin-bottom:2px;}
+.ci-value{font-size:13px;color:var(--white);font-weight:600;}
+.contact-form-wrap{
+  background:var(--card-bg);border:1px solid var(--border);
+  border-radius:16px;padding:40px;
+}
+.form-title{font-family:'Manrope',sans-serif;font-size:20px;font-weight:800;color:var(--white);margin-bottom:24px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.form-group{margin-bottom:16px;}
+.form-group label{display:block;font-size:11px;font-weight:600;color:var(--gray);letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px;}
+.form-group input,.form-group textarea,.form-group select{
+  width:100%;background:rgba(255,255,255,.04);
+  border:1.5px solid var(--border);border-radius:8px;
+  padding:12px 16px;font-family:inherit;font-size:13px;
+  color:var(--white);outline:none;transition:border-color .25s;
+}
+.form-group input::placeholder,.form-group textarea::placeholder{color:var(--gray2);}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:rgba(26,86,219,.5);background:rgba(26,86,219,.05);}
+.form-group textarea{resize:vertical;min-height:110px;}
+.form-group select{cursor:pointer;color:var(--gray);}
+.form-group select option{background:var(--navy2);}
+.form-submit{width:100%;padding:14px;font-size:14px;justify-content:center;margin-top:4px;border-radius:8px;}
+
+/* ─── BOTTOM GUARANTEE BAR ───────────────────────────── */
+#guarantee{
+  padding:20px 0;
+  background:var(--navy2);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+.guarantee-inner{display:flex;align-items:center;justify-content:space-around;flex-wrap:wrap;gap:20px;}
+.g-item{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--gray);}
+.g-item i{font-size:18px;color:var(--blue-light);}
+.g-item strong{color:var(--white);font-weight:700;}
+
+/* ─── FOOTER ─────────────────────────────────────────── */
+footer{background:var(--navy);border-top:1px solid var(--border);padding:64px 0 0;}
+.footer-top{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px;}
+.footer-logo{font-family:'Manrope',sans-serif;font-size:22px;font-weight:800;color:var(--white);display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+.footer-logo .dot{width:8px;height:8px;background:var(--blue);border-radius:50%;}
+.footer-desc{font-size:13px;color:var(--gray);line-height:1.8;max-width:280px;margin-bottom:20px;}
+.footer-social{display:flex;gap:8px;}
+.footer-social a{width:34px;height:34px;border-radius:8px;background:var(--card-bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--gray);transition:all .2s;}
+.footer-social a:hover{background:var(--blue);color:var(--white);border-color:var(--blue);}
+.footer-col h4{font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;color:var(--white);margin-bottom:18px;letter-spacing:.3px;}
+.footer-col ul{display:flex;flex-direction:column;gap:10px;}
+.footer-col ul li a{font-size:12px;color:var(--gray);transition:color .2s;display:flex;align-items:center;gap:6px;}
+.footer-col ul li a:hover{color:var(--blue-light);}
+.footer-col ul li a i{font-size:10px;color:var(--border);}
+.footer-bottom{border-top:1px solid var(--border);padding:20px 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.footer-bottom p{font-size:12px;color:var(--gray2);}
+.footer-bottom a{color:var(--gray2);transition:color .2s;}
+.footer-bottom a:hover{color:var(--blue-light);}
+.footer-links{display:flex;gap:20px;}
+
+/* ─── SCROLL PROGRESS ─────────────────────────────────── */
+.scroll-bar-wrap{position:fixed;top:64px;left:0;right:0;height:2px;z-index:99;}
+.scroll-bar-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));width:0;transition:width .1s;}
+
+/* ─── ANIMATIONS ──────────────────────────────────────── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+@keyframes pulse{0%,100%{opacity:.4;transform:scale(1);}50%{opacity:.7;transform:scale(1.1);}}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.in{opacity:1;transform:translateY(0);}
+
+/* ─── RESPONSIVE ──────────────────────────────────────── */
+@media(max-width:1024px){
+  .hero-inner,.about-grid,.agency-grid,.testi-layout,.contact-grid{grid-template-columns:1fr;gap:40px;}
+  .hero-visual,.about-extra-cards{display:none;}
+  .services-grid,.team-grid{grid-template-columns:1fr 1fr;}
+  .projects-grid,.blog-grid{grid-template-columns:1fr 1fr;}
+  .footer-top{grid-template-columns:1fr 1fr;}
+  .agency-points{grid-template-columns:1fr;}
+}
+@media(max-width:768px){
+  .nav-links{display:none;}
+  .services-grid,.team-grid,.pricing-grid,.faq-grid,.projects-grid,.blog-grid{grid-template-columns:1fr;}
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .form-row{grid-template-columns:1fr;}
+  .pricing-card.featured{transform:scale(1);}
+  .footer-top{grid-template-columns:1fr;}
+  .review-sources{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:480px){
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .trusted-logos{gap:16px;}
+  #stats{padding:32px 0;}
+}
+</style>
+</head>
+<body>
+
+<!-- SCROLL PROGRESS -->
+<div class="scroll-bar-wrap"><div class="scroll-bar-fill" id="scrollFill"></div></div>
+
+<!-- ═══ NAV ═════════════════════════════════════════════════ -->
+<header>
+  <nav class="container">
+    <div class="nav-logo"><div class="dot"></div>Markivo</div>
+    <ul class="nav-links">
+      <li><a href="#" class="active">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#team">Our Team</a></li>
+      <li><a href="#blog">Pages</a></li>
+      <li><a href="#blog">Blog</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="nav-icon"><i class="fa fa-search"></i></div>
+      <div class="nav-icon"><i class="fa fa-bell"></i></div>
+      <a href="#contact" class="btn btn-blue btn-sm">Get Started</a>
+    </div>
+  </nav>
+</header>
+
+<!-- ═══ HERO ═════════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-dots"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="container">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-eyebrow">
+          <span class="tag">Welcome to Markivo</span>
+          <span>Digital Agency</span>
+        </div>
+        <h1 class="hero-title">
+          Smart Ideas<br>For Your Brands<br><span>Here.</span>
+        </h1>
+        <p class="hero-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida.</p>
+        <div class="hero-actions">
+          <a href="#contact" class="btn btn-blue"><i class="fa fa-rocket"></i> Get Started</a>
+          <div class="hero-video-link">
+            <div class="play-btn"><i class="fa fa-play"></i></div>
+            <span>Watch Video</span>
+          </div>
+        </div>
+        <div class="hero-avatars">
+          <div class="avatar-stack">
+            <div class="av">J</div>
+            <div class="av" style="background:linear-gradient(135deg,#7c3aed,#a78bfa);">M</div>
+            <div class="av" style="background:linear-gradient(135deg,#059669,#34d399);">A</div>
+            <div class="av" style="background:linear-gradient(135deg,#dc2626,#f87171);">K</div>
+          </div>
+          <div class="hero-stat-text"><strong>2,500+</strong> Happy Clients Worldwide</div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-person-card">
+          <i class="fas fa-user-tie"></i>
+        </div>
+        <div class="hero-float top-right">
+          <div class="float-icon yellow"><i class="fa fa-star"></i></div>
+          <div class="float-stat">550+</div>
+          <div class="float-label">Projects Done</div>
+        </div>
+        <div class="hero-float bottom-left">
+          <div class="float-icon blue"><i class="fa fa-chart-line"></i></div>
+          <div class="float-stat">98%</div>
+          <div class="float-label">Success Rate</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TRUSTED BY ════════════════════════════════════════════ -->
+<section id="trusted">
+  <div class="container">
+    <div class="trusted-inner">
+      <span class="trusted-label">Trusted by more than 500+ companies</span>
+      <div class="trusted-logos">
+        <div class="logo-item"><i class="fab fa-google"></i> Google</div>
+        <div class="logo-item"><i class="fab fa-microsoft"></i> Microsoft</div>
+        <div class="logo-item"><i class="fab fa-slack"></i> Slack</div>
+        <div class="logo-item"><i class="fab fa-amazon"></i> Amazon</div>
+        <div class="logo-item"><i class="fab fa-shopify"></i> Shopify</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ABOUT ═════════════════════════════════════════════════ -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-img-block reveal">
+        <div class="about-extra-cards">
+          <div class="mini-card">
+            <div class="mc-num" style="color:var(--blue-light);">450+</div>
+            <div class="mc-lbl">Your Growth, Our Mission</div>
+          </div>
+          <div class="mini-card">
+            <div class="mc-num" style="color:var(--cyan);">750+</div>
+            <div class="mc-lbl">5 Star Client</div>
+          </div>
+        </div>
+        <div class="about-main-img"><i class="fas fa-users"></i></div>
+        <div class="about-badge">
+          <div class="num">12+</div>
+          <div class="lbl">Years Experience</div>
+        </div>
+      </div>
+      <div class="about-content reveal" style="transition-delay:.15s;">
+        <div class="sec-label">About Our Agency</div>
+        <h2 class="sec-title" style="margin-bottom:20px;">Influencer Marketing Solutions<br>for Business</h2>
+        <p class="about-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida.</p>
+        <div class="about-points">
+          <div class="about-point">
+            <i class="fas fa-check-circle"></i>
+            <div>
+              <strong>Your Growth, Our Mission</strong>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit labore magna.
+            </div>
+          </div>
+          <div class="about-point">
+            <i class="fas fa-check-circle"></i>
+            <div>
+              <strong>Innovating for Your Success</strong>
+              Consequat semper viverra nam libero justo laoreet sit amet cursus.
+            </div>
+          </div>
+        </div>
+        <div class="about-actions">
+          <a href="#contact" class="btn btn-blue">Learn More <i class="fa fa-arrow-right"></i></a>
+          <a href="#services" class="btn btn-outline">Our Services</a>
+        </div>
+        <div class="color-dots">
+          <div class="cdot" style="background:#1a56db;" title="Blue"></div>
+          <div class="cdot" style="background:#059669;" title="Green"></div>
+          <div class="cdot" style="background:#dc2626;" title="Red"></div>
+          <div class="cdot" style="background:#d97706;" title="Orange"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SERVICES ══════════════════════════════════════════════ -->
+<section id="services">
+  <div class="container">
+    <div class="services-header reveal">
+      <div>
+        <div class="sec-label">Our Exclusive Services</div>
+        <h2 class="sec-title">Our Exclusive Services</h2>
+      </div>
+      <div>
+        <p class="sec-sub">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <a href="#contact" class="btn btn-blue btn-sm" style="margin-top:16px;">View All</a>
+      </div>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-icon-wrap"><i class="fas fa-search"></i></div>
+        <div class="service-title">Keyword Research &amp; Optimization</div>
+        <p class="service-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+        <a class="service-link">Learn More <i class="fa fa-arrow-right"></i></a>
+      </div>
+      <div class="service-card reveal" style="transition-delay:.1s;">
+        <div class="service-icon-wrap" style="background:rgba(6,182,212,.15);border-color:rgba(6,182,212,.25);"><i class="fas fa-globe" style="color:var(--cyan);"></i></div>
+        <div class="service-title">Search Engine Optimization (SEO)</div>
+        <p class="service-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+        <a class="service-link">Learn More <i class="fa fa-arrow-right"></i></a>
+      </div>
+      <div class="service-card reveal" style="transition-delay:.2s;">
+        <div class="service-icon-wrap" style="background:rgba(251,191,36,.12);border-color:rgba(251,191,36,.25);"><i class="fas fa-share-alt" style="color:var(--yellow);"></i></div>
+        <div class="service-title">Social Media Marketing (SMM)</div>
+        <p class="service-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+        <a class="service-link">Learn More <i class="fa fa-arrow-right"></i></a>
+      </div>
+      <div class="service-card reveal" style="transition-delay:.3s;">
+        <div class="service-icon-wrap" style="background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.25);"><i class="fas fa-bullseye" style="color:#34d399;"></i></div>
+        <div class="service-title">Conversion Rate Optimization (CRO)</div>
+        <p class="service-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+        <a class="service-link">Learn More <i class="fa fa-arrow-right"></i></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STATS ═════════════════════════════════════════════════ -->
+<section id="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item reveal">
+        <div class="stat-num">620<span class="stat-plus">+</span></div>
+        <div class="stat-label">Projects Completed</div>
+      </div>
+      <div class="stat-item reveal" style="transition-delay:.1s;">
+        <div class="stat-num">725<span class="stat-plus">+</span></div>
+        <div class="stat-label">Happy Clients</div>
+      </div>
+      <div class="stat-item reveal" style="transition-delay:.2s;">
+        <div class="stat-num">45<span class="stat-plus">+</span></div>
+        <div class="stat-label">Team Members</div>
+      </div>
+      <div class="stat-item reveal" style="transition-delay:.3s;">
+        <div class="stat-num">55<span class="stat-plus">+</span></div>
+        <div class="stat-label">Awards Won</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DIGITAL AGENCY ════════════════════════════════════════ -->
+<section id="agency">
+  <div class="container">
+    <div class="agency-grid">
+      <div class="agency-visual reveal">
+        <i class="fas fa-chart-network"></i>
+        <div class="agency-tags">
+          <span class="agency-tag">Digital Solutions</span>
+          <span class="agency-tag">Growth Hacking</span>
+          <span class="agency-tag">Brand Strategy</span>
+        </div>
+      </div>
+      <div class="reveal" style="transition-delay:.15s;">
+        <div class="sec-label">Why Choose Us</div>
+        <h2 class="agency-title">We are a digital Agency with added<br><span>Value For your Business</span></h2>
+        <p class="agency-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida risus commodo.</p>
+        <div class="agency-points">
+          <div class="agency-point">
+            <div class="ap-icon"><i class="fas fa-user-check"></i></div>
+            <div class="ap-title">Our Partners</div>
+            <div class="ap-text">Lorem ipsum dolor sit amet consectet adipiscing.</div>
+          </div>
+          <div class="agency-point">
+            <div class="ap-icon"><i class="fas fa-chart-line"></i></div>
+            <div class="ap-title">Proven Results</div>
+            <div class="ap-text">Consequat semper viverra nam libero justo laoreet.</div>
+          </div>
+          <div class="agency-point">
+            <div class="ap-icon"><i class="fas fa-handshake"></i></div>
+            <div class="ap-title">Trusted Partner</div>
+            <div class="ap-text">Viverra nam libero justo laoreet sit amet cursus.</div>
+          </div>
+          <div class="agency-point">
+            <div class="ap-icon"><i class="fas fa-shield-alt"></i></div>
+            <div class="ap-title">Digital Solutions</div>
+            <div class="ap-text">Semper viverra nam libero adipiscing elit sed tempor.</div>
+          </div>
+        </div>
+        <div class="agency-cta">
+          <a href="#contact" class="btn btn-blue">Get Started <i class="fa fa-arrow-right"></i></a>
+          <a href="#services" class="btn btn-outline">Our Services</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PROJECTS ══════════════════════════════════════════════ -->
+<section id="projects">
+  <div class="container">
+    <div class="projects-header reveal">
+      <div>
+        <div class="sec-label">Our Projects</div>
+        <h2 class="sec-title">Explore Our Projects</h2>
+      </div>
+      <div>
+        <p class="sec-sub" style="max-width:360px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
+        <a href="#" class="btn btn-blue btn-sm" style="margin-top:16px;">View All</a>
+      </div>
+    </div>
+    <div class="projects-grid">
+      <div class="project-card reveal">
+        <div class="project-img">
+          <span class="project-tag">SMM</span>
+          <i class="fas fa-share-nodes"></i>
+        </div>
+        <div class="project-info">
+          <div class="project-cat">Social Media</div>
+          <div class="project-title">Social Media Growth Strategy for a Startup</div>
+          <p class="project-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
+        </div>
+      </div>
+      <div class="project-card reveal" style="transition-delay:.1s;">
+        <div class="project-img" style="background:linear-gradient(135deg,#0a1f3d,#0d1b4b);">
+          <span class="project-tag">SEO</span>
+          <i class="fas fa-ranking-star"></i>
+        </div>
+        <div class="project-info">
+          <div class="project-cat">SEO Strategy</div>
+          <div class="project-title">Ranked 50+ Keywords on Google</div>
+          <p class="project-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
+        </div>
+      </div>
+      <div class="project-card reveal" style="transition-delay:.2s;">
+        <div class="project-img" style="background:linear-gradient(135deg,#0a2a1f,#0d1b3d);">
+          <span class="project-tag" style="background:#059669;">PPC</span>
+          <i class="fas fa-ad"></i>
+        </div>
+        <div class="project-info">
+          <div class="project-cat">Google Ads</div>
+          <div class="project-title">Driving 3X ROI with Targeted Google Ads</div>
+          <p class="project-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TESTIMONIALS ══════════════════════════════════════════ -->
+<section id="testimonials">
+  <div class="container">
+    <div class="testi-layout">
+      <div class="reveal">
+        <div class="sec-label">Testimonials</div>
+        <h2 class="sec-title" style="margin-bottom:24px;">What Our Client Say!</h2>
+        <div class="testi-stars">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+          <i class="fas fa-star"></i><i class="fas fa-star"></i>
+        </div>
+        <p class="testi-quote">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida risus commodo viverra maecenas.</p>
+        <div class="testi-author">
+          <div class="testi-av"><i class="fas fa-user"></i></div>
+          <div>
+            <div class="testi-name">Global Reviews</div>
+            <div class="testi-role">CEO, Marketing Company</div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal" style="transition-delay:.15s;">
+        <div class="review-sources">
+          <div class="review-source">
+            <div class="rs-icon" style="color:#4285f4;"><i class="fab fa-google"></i></div>
+            <div>
+              <div class="rs-num">4.9</div>
+              <div class="rs-label">Google</div>
+              <div class="rs-stars">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+              </div>
+            </div>
+          </div>
+          <div class="review-source">
+            <div class="rs-icon" style="color:#0077b5;"><i class="fab fa-linkedin"></i></div>
+            <div>
+              <div class="rs-num">4.8</div>
+              <div class="rs-label">Trustpilot</div>
+              <div class="rs-stars">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="sec-sub">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <br>
+        <p class="testi-quote" style="font-size:14px;">"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore. Quis ipsum suspendisse ultrices gravida."</p>
+        <div class="testi-author" style="margin-top:12px;">
+          <div class="testi-av" style="background:linear-gradient(135deg,#7c3aed,#a78bfa);"><i class="fas fa-user"></i></div>
+          <div>
+            <div class="testi-name">Nadine Moore</div>
+            <div class="testi-role">PR Studio Director</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TEAM ══════════════════════════════════════════════════ -->
+<section id="team">
+  <div class="container">
+    <div class="team-header reveal">
+      <div>
+        <div class="sec-label">Our Team</div>
+        <h2 class="sec-title">Our Team Members</h2>
+      </div>
+      <div>
+        <p class="sec-sub" style="max-width:360px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
+        <a href="#" class="btn btn-blue btn-sm" style="margin-top:16px;">View All</a>
+      </div>
+    </div>
+    <div class="team-grid">
+      <div class="team-card reveal">
+        <div class="team-img"><i class="fas fa-user-tie"></i></div>
+        <div class="team-info">
+          <div class="team-name">John Diyar</div>
+          <div class="team-role">CEO &amp; Founder</div>
+          <div class="team-social">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="team-card reveal" style="transition-delay:.1s;">
+        <div class="team-img" style="background:linear-gradient(160deg,#1a0a3d,#0d1b4b);"><i class="fas fa-user-circle"></i></div>
+        <div class="team-info">
+          <div class="team-name">Jessica Dayara</div>
+          <div class="team-role">Designer</div>
+          <div class="team-social">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="team-card reveal" style="transition-delay:.2s;">
+        <div class="team-img" style="background:linear-gradient(160deg,#0a2a1f,#0d1b3d);"><i class="fas fa-user-astronaut"></i></div>
+        <div class="team-info">
+          <div class="team-name">Justin Diyar</div>
+          <div class="team-role">Developer</div>
+          <div class="team-social">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="team-card reveal" style="transition-delay:.3s;">
+        <div class="team-img" style="background:linear-gradient(160deg,#2a1a0a,#1b0d0d);"><i class="fas fa-user-graduate"></i></div>
+        <div class="team-info">
+          <div class="team-name">Jordana Diya</div>
+          <div class="team-role">HR &amp; Lead</div>
+          <div class="team-social">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PRICING ═══════════════════════════════════════════════ -->
+<section id="pricing">
+  <div class="container">
+    <div class="pricing-header reveal">
+      <div class="sec-label" style="justify-content:center;">Our Pricing</div>
+      <h2 class="sec-title" style="text-align:center;">Take a Look of Our Pricing and<br>Select Your Choice</h2>
+      <p class="sec-sub" style="margin:12px auto 0;text-align:center;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
+    </div>
+    <div class="pricing-grid">
+      <!-- Basic -->
+      <div class="pricing-card reveal">
+        <div class="pricing-name">Basic Plan</div>
+        <p class="pricing-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <div class="pricing-price"><sup>$</sup>9.99</div>
+        <div class="pricing-period">/month</div>
+        <hr class="pricing-divider">
+        <div class="pricing-features">
+          <div class="pricing-feature"><i class="fa fa-check"></i>Keyword Research (SEO)</div>
+          <div class="pricing-feature"><i class="fa fa-check"></i>5 blog posts per month</div>
+          <div class="pricing-feature"><i class="fa fa-check"></i>Basic analytics report</div>
+          <div class="pricing-feature"><i class="fa fa-check"></i>Email support</div>
+          <div class="pricing-feature"><i class="fa fa-times" style="color:var(--gray2);"></i>Social media management</div>
+        </div>
+        <button class="pricing-btn-outline" onclick="selectPlan(this,'Basic')">Choose Plan</button>
+      </div>
+      <!-- Standard FEATURED -->
+      <div class="pricing-card featured reveal" style="transition-delay:.1s;">
+        <div class="pricing-tag">Popular</div>
+        <div class="pricing-name">Standard Plan</div>
+        <p class="pricing-desc" style="color:rgba(255,255,255,.7);">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <div class="pricing-price"><sup>$</sup>19.99</div>
+        <div class="pricing-period" style="color:rgba(255,255,255,.5);">/month</div>
+        <hr class="pricing-divider">
+        <div class="pricing-features">
+          <div class="pricing-feature"><i class="fa fa-check"></i>Everything in Basic</div>
+          <div class="pricing-feature"><i class="fa fa-check"></i>15 blog posts per month</div>
+          <div class="pricing-feature"><i class="fa fa-check"></i>Advanced analytics</div>
+          <div class="pricing-feature"><i class="fa fa-check"></i>Social media (3 platforms)</div>
+          <div class="pricing-feature"><i class="fa fa-check"></i>Priority email support</div>
+        </div>
+        <button class="pricing-btn-white" onclick="selectPlan(this,'Standard')">Choose Plan</button>
+      </div>
+      <!-- Premium -->
+      <div class="pricing-card reveal" style="transition-delay:.2s;">
+        <div class="pricing-name">Premium Plan</div>
+        <p class="pricing-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <div class="pricing-price"><sup>$</sup>24.99</div>
+        <div class="pricing-period">/month</div>
+        <hr class="pricing-divider">
+        <div class="pricing-features">
+          <div class="pricing-feature"><i class="fa fa-check"></i>Everything in Standard</div>
+          <div class="pricing-feature"><i class="fa fa-check"></i>Unlimited blog posts</div>
+          <div class="pricing-feature"><i class="fa fa-check"></i>Full campaign management</div>
+          <div class="pricing-feature"><i class="fa fa-check"></i>Dedicated account manager</div>
+          <div class="pricing-feature"><i class="fa fa-check"></i>24/7 phone support</div>
+        </div>
+        <button class="pricing-btn-outline" onclick="selectPlan(this,'Premium')">Choose Plan</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FAQ ═══════════════════════════════════════════════════ -->
+<section id="faq">
+  <div class="container">
+    <div class="faq-header reveal">
+      <div class="sec-label" style="justify-content:center;">FAQ</div>
+      <h2 class="sec-title" style="text-align:center;">You can reach us via email, phone, or the<br>contact form on our website.</h2>
+      <p class="sec-sub" style="margin:12px auto 0;text-align:center;">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    </div>
+    <div class="faq-grid" id="faqGrid">
+      <div class="faq-item open">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">What services does your digital agency provide?</span>
+          <div class="faq-icon"><i class="fa fa-plus"></i></div>
+        </div>
+        <div class="faq-a">We offer a comprehensive range of digital marketing services including SEO, social media management, PPC advertising, content marketing, email campaigns, and conversion rate optimization tailored to your business goals.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">Do you generate leads in digital marketing?</span>
+          <div class="faq-icon"><i class="fa fa-plus"></i></div>
+        </div>
+        <div class="faq-a">Yes, lead generation is one of our core specialties. We use targeted campaigns, landing page optimization, and marketing automation to attract and convert qualified prospects for your business.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">How long does it take to complete a website project?</span>
+          <div class="faq-icon"><i class="fa fa-plus"></i></div>
+        </div>
+        <div class="faq-a">The timeline depends on scope and complexity. A basic website typically takes 2–4 weeks, while larger projects with custom features may take 6–12 weeks. We'll give you a clear timeline during discovery.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">How long does it take to complete a Shopify project?</span>
+          <div class="faq-icon"><i class="fa fa-plus"></i></div>
+        </div>
+        <div class="faq-a">A standard Shopify store typically takes 3–6 weeks. Custom theme development or complex integrations may extend this to 8–10 weeks depending on your requirements and the number of revision cycles.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">How much does a marketing campaign cost?</span>
+          <div class="faq-icon"><i class="fa fa-plus"></i></div>
+        </div>
+        <div class="faq-a">Campaign costs vary based on channels, target audience, and goals. Our packages start at $9.99/month. We'll work within your budget to maximize ROI and provide transparent reporting throughout.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">How can I improve my search engine ranking?</span>
+          <div class="faq-icon"><i class="fa fa-plus"></i></div>
+        </div>
+        <div class="faq-a">Improving search rankings requires a combination of on-page SEO, technical optimization, high-quality content creation, and authoritative backlink building. Our team creates customized strategies for sustainable ranking growth.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ BLOG ═══════════════════════════════════════════════════ -->
+<section id="blog">
+  <div class="container">
+    <div class="blog-header reveal">
+      <div>
+        <div class="sec-label">Latest News</div>
+        <h2 class="sec-title">Latest News &amp; Articles</h2>
+      </div>
+      <div>
+        <p class="sec-sub" style="max-width:340px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
+        <a href="#" class="btn btn-blue btn-sm" style="margin-top:16px;">View All</a>
+      </div>
+    </div>
+    <div class="blog-grid">
+      <div class="blog-card reveal">
+        <div class="blog-img">
+          <span class="blog-cat">SEO</span>
+          <i class="fas fa-newspaper"></i>
+        </div>
+        <div class="blog-info">
+          <div class="blog-meta">
+            <span><i class="fa fa-calendar"></i> Jan 15, 2025</span>
+            <span><i class="fa fa-user"></i> Admin</span>
+          </div>
+          <div class="blog-title">Lorem ipsum is simply dummy text of the printing.</div>
+          <p class="blog-excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+          <a class="blog-link">Read More <i class="fa fa-arrow-right"></i></a>
+        </div>
+      </div>
+      <div class="blog-card reveal" style="transition-delay:.1s;">
+        <div class="blog-img" style="background:linear-gradient(135deg,#0a1f3d,#0d1b4b);">
+          <span class="blog-cat" style="background:#059669;">Social</span>
+          <i class="fas fa-rss"></i>
+        </div>
+        <div class="blog-info">
+          <div class="blog-meta">
+            <span><i class="fa fa-calendar"></i> Feb 3, 2025</span>
+            <span><i class="fa fa-user"></i> Admin</span>
+          </div>
+          <div class="blog-title">It has survived not only five centuries, but also.</div>
+          <p class="blog-excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+          <a class="blog-link">Read More <i class="fa fa-arrow-right"></i></a>
+        </div>
+      </div>
+      <div class="blog-card reveal" style="transition-delay:.2s;">
+        <div class="blog-img" style="background:linear-gradient(135deg,#0a2a1f,#0d1b3d);">
+          <span class="blog-cat" style="background:#d97706;">PPC</span>
+          <i class="fas fa-chart-bar"></i>
+        </div>
+        <div class="blog-info">
+          <div class="blog-meta">
+            <span><i class="fa fa-calendar"></i> Mar 20, 2025</span>
+            <span><i class="fa fa-user"></i> Admin</span>
+          </div>
+          <div class="blog-title">If you are going to use a passage of Lorem Ipsum.</div>
+          <p class="blog-excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+          <a class="blog-link">Read More <i class="fa fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CONTACT ════════════════════════════════════════════════ -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="reveal">
+        <div class="sec-label">Get In Touch</div>
+        <h2 class="sec-title" style="margin-bottom:32px;">Get In Touch</h2>
+        <div class="contact-items">
+          <div class="contact-item">
+            <div class="ci-icon"><i class="fa fa-phone"></i></div>
+            <div>
+              <div class="ci-label">Contact Number</div>
+              <div class="ci-value">+1 (800) 123-456</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="ci-icon"><i class="fa fa-envelope"></i></div>
+            <div>
+              <div class="ci-label">Our Email</div>
+              <div class="ci-value">hello@markivo.com</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="ci-icon"><i class="fa fa-globe"></i></div>
+            <div>
+              <div class="ci-label">Our Website</div>
+              <div class="ci-value">www.markivo.com</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="ci-icon"><i class="fab fa-youtube"></i></div>
+            <div>
+              <div class="ci-label">Our Channel</div>
+              <div class="ci-value">@MarkivoOfficial</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="contact-form-wrap reveal" style="transition-delay:.15s;">
+        <div class="form-title">Send Us a Message</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" placeholder="John">
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" placeholder="Doe">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="john@example.com">
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" placeholder="+1 (555) 000-0000">
+        </div>
+        <div class="form-group">
+          <label>Service Interested In</label>
+          <select>
+            <option value="" disabled selected>Select a service</option>
+            <option>SEO Optimization</option>
+            <option>Social Media Marketing</option>
+            <option>PPC / Google Ads</option>
+            <option>Content Marketing</option>
+            <option>Web Design</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Your Message</label>
+          <textarea placeholder="Tell us about your project..."></textarea>
+        </div>
+        <button class="btn btn-blue form-submit" onclick="submitForm(this)">
+          <i class="fa fa-paper-plane"></i> Send Message
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ GUARANTEE BAR ══════════════════════════════════════════ -->
+<section id="guarantee">
+  <div class="container">
+    <div class="guarantee-inner">
+      <div class="g-item"><i class="fas fa-award"></i><span><strong>100% SECURE PAYMENT</strong></span></div>
+      <div class="g-item"><i class="fas fa-headset"></i><span><strong>24/7 LIVE SUPPORT</strong></span></div>
+      <div class="g-item"><i class="fas fa-shield-alt"></i><span><strong>TRUSTED BY THOUSANDS</strong></span></div>
+      <div class="g-item"><i class="fas fa-leaf"></i><span><strong>100% NATURAL COMPANY</strong></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ════════════════════════════════════════════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo"><div class="dot"></div>Markivo</div>
+        <p class="footer-desc">We are a diverse group of individuals who are passionate about what we love — digital marketing. We help brands grow through data-driven strategies and creative campaigns.</p>
+        <div class="footer-social">
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#"><i class="fa fa-chevron-right"></i> About Us</a></li>
+          <li><a href="#"><i class="fa fa-chevron-right"></i> Our Team</a></li>
+          <li><a href="#"><i class="fa fa-chevron-right"></i> Careers</a></li>
+          <li><a href="#"><i class="fa fa-chevron-right"></i> Press Room</a></li>
+          <li><a href="#"><i class="fa fa-chevron-right"></i> Blog</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="#"><i class="fa fa-chevron-right"></i> Services</a></li>
+          <li><a href="#"><i class="fa fa-chevron-right"></i> Projects</a></li>
+          <li><a href="#"><i class="fa fa-chevron-right"></i> Pricing</a></li>
+          <li><a href="#"><i class="fa fa-chevron-right"></i> Testimonials</a></li>
+          <li><a href="#"><i class="fa fa-chevron-right"></i> Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Newsletter</h4>
+        <p style="font-size:12px;color:var(--gray);margin-bottom:16px;">Subscribe to get the latest news and updates from Markivo.</p>
+        <div style="display:flex;gap:8px;">
+          <input type="email" placeholder="Your email" style="flex:1;background:var(--card-bg);border:1px solid var(--border);border-radius:6px;padding:10px 14px;font-size:12px;color:var(--white);outline:none;font-family:inherit;">
+          <button class="btn btn-blue btn-sm" style="white-space:nowrap;">Subscribe</button>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© Copyright 2025 — Markivo. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+        <a href="#">Cookie Settings</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══ SCRIPTS ═══════════════════════════════════════════════ -->
+<script>
+// Scroll progress
+window.addEventListener('scroll',()=>{
+  const pct=(window.scrollY/(document.documentElement.scrollHeight-window.innerHeight))*100;
+  document.getElementById('scrollFill').style.width=pct+'%';
+});
+
+// Reveal on scroll
+const reveals=document.querySelectorAll('.reveal');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){setTimeout(()=>e.target.classList.add('in'),i*80);}
+  });
+},{threshold:0.1});
+reveals.forEach(el=>obs.observe(el));
+
+// Nav active
+const secs=document.querySelectorAll('section[id]');
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY+80;
+  secs.forEach(sec=>{
+    const link=document.querySelector(`.nav-links a[href="#${sec.id}"]`);
+    if(link){
+      const top=sec.offsetTop,h=sec.offsetHeight;
+      link.classList.toggle('active',y>=top&&y<top+h);
+    }
+  });
+});
+
+// FAQ toggle
+function toggleFaq(btn){
+  const item=btn.closest('.faq-item');
+  const isOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+  if(!isOpen)item.classList.add('open');
+}
+
+// Form submit
+function submitForm(btn){
+  btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Sending...';
+  btn.disabled=true;
+  setTimeout(()=>{
+    btn.innerHTML='<i class="fas fa-check-circle"></i> Message Sent!';
+    btn.style.background='#059669';
+    setTimeout(()=>{
+      btn.innerHTML='<i class="fa fa-paper-plane"></i> Send Message';
+      btn.style.background='';btn.disabled=false;
+    },3000);
+  },1600);
+}
+
+// Pricing plan select
+function selectPlan(btn,plan){
+  const orig=btn.textContent;
+  btn.textContent='✓ Plan Selected!';
+  setTimeout(()=>{btn.textContent=orig;},2000);
+}
+
+// Animated counters
+function animateCounters(){
+  document.querySelectorAll('.stat-num').forEach(el=>{
+    const target=parseInt(el.textContent);
+    let current=0;
+    const inc=Math.ceil(target/50);
+    const timer=setInterval(()=>{
+      current=Math.min(current+inc,target);
+      el.innerHTML=current+'<span class="stat-plus">+</span>';
+      if(current>=target)clearInterval(timer);
+    },30);
+  });
+}
+const statsObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){animateCounters();statsObs.disconnect();}});
+},{threshold:.5});
+const statsEl=document.querySelector('#stats');
+if(statsEl)statsObs.observe(statsEl);
+</script>
+</body>
+</html>
