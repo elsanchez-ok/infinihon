@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InfiniHon — Servicios</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+/* ─── TOKENS (idénticos al index) ───────────────────── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:       #050508;
+  --bg2:      #08080f;
+  --bg3:      #0d0d18;
+  --card:     #0f0f1a;
+  --card2:    #12121f;
+  --border:   rgba(255,255,255,0.07);
+  --border2:  rgba(255,255,255,0.12);
+  --blue:     #2563eb;
+  --blue2:    #1d4ed8;
+  --blue-glow:rgba(37,99,235,0.35);
+  --cyan:     #38bdf8;
+  --white:    #ffffff;
+  --gray:     #6b7280;
+  --gray2:    #9ca3af;
+  --text:     #d1d5db;
+  --green:    #22c55e;
+  --purple:   #a855f7;
+  --radius:   10px;
+  --radius-lg:18px;
+}
+html{scroll-behavior:smooth;font-size:16px;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);color:var(--text);
+  overflow-x:hidden;line-height:1.6;
+}
+a{text-decoration:none;color:inherit;}
+ul{list-style:none;}
+img{max-width:100%;display:block;}
+button{font-family:inherit;cursor:pointer;}
+.container{max-width:1200px;margin:0 auto;padding:0 clamp(16px,4vw,40px);}
+
+/* ─── SCROLLBAR ─────────────────────────────────────── */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--blue);border-radius:2px;}
+
+/* ─── PROGRESS BAR ──────────────────────────────────── */
+#progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:999;}
+#progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));width:0;transition:width .1s linear;}
+
+/* ─── BOTONES ───────────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:40px;font-size:13px;font-weight:600;border:none;transition:all .25s;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;}
+.btn-blue{background:var(--blue);color:#fff;}
+.btn-blue:hover{background:var(--blue2);transform:translateY(-1px);box-shadow:0 8px 28px var(--blue-glow);}
+.btn-ghost{background:rgba(255,255,255,0.06);color:var(--white);border:1px solid var(--border2);}
+.btn-ghost:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.2);}
+.btn-sm{padding:8px 18px;font-size:12px;}
+.btn-outline{background:transparent;color:var(--white);border:1px solid var(--border2);}
+.btn-outline:hover{background:rgba(255,255,255,0.05);}
+
+/* ─── NAV (idéntico al index) ───────────────────────── */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:0 clamp(16px,4vw,40px);
+  background:rgba(5,5,8,0.88);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+nav{
+  max-width:1200px;margin:0 auto;
+  display:flex;align-items:center;
+  height:64px;
+}
+.nav-logo{
+  font-family:'Syne',sans-serif;
+  font-size:18px;font-weight:800;
+  color:var(--white);letter-spacing:-.5px;
+  margin-right:auto;
+}
+.nav-links{display:flex;align-items:center;gap:4px;margin:0 32px;}
+.nav-links a{
+  font-size:13px;font-weight:500;color:var(--gray2);
+  padding:6px 12px;border-radius:6px;transition:color .2s;
+}
+.nav-links a:hover{color:var(--white);}
+.nav-links a.active{color:var(--white);background:rgba(255,255,255,.05);}
+.nav-right{display:flex;align-items:center;gap:10px;}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px;}
+.hamburger span{width:22px;height:2px;background:var(--white);transition:all .3s;}
+.mobile-menu{
+  display:none;position:fixed;top:64px;left:0;right:0;
+  background:rgba(5,5,8,0.98);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:20px clamp(16px,4vw,40px) 28px;
+  flex-direction:column;gap:4px;z-index:99;
+}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{font-size:15px;font-weight:500;color:var(--gray2);padding:10px 14px;border-radius:8px;transition:all .2s;}
+.mobile-menu a:hover{color:var(--white);background:rgba(255,255,255,0.05);}
+.mobile-menu .divider{height:1px;background:var(--border);margin:8px 0;}
+
+/* ─── PAGE HERO ─────────────────────────────────────── */
+#page-hero{
+  padding:clamp(110px,14vw,160px) 0 clamp(60px,8vw,100px);
+  position:relative;overflow:hidden;
+}
+.page-orb{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:min(700px,120vw);height:min(700px,120vw);
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(37,99,235,.14) 0%,rgba(37,99,235,.04) 40%,transparent 70%);
+  pointer-events:none;
+  animation:orbPulse 6s ease-in-out infinite;
+}
+@keyframes orbPulse{0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-50%,-50%) scale(1.07);}}
+.hero-grid-bg{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse at center,black 25%,transparent 75%);
+  pointer-events:none;
+}
+.page-hero-inner{
+  position:relative;z-index:2;
+  text-align:center;
+}
+.page-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,0.05);
+  border:1px solid var(--border2);
+  border-radius:40px;padding:6px 16px;
+  font-size:12px;color:var(--gray2);margin-bottom:28px;
+}
+.page-eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--blue);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+.page-h1{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(42px,8vw,90px);
+  font-weight:800;line-height:.95;
+  color:var(--white);letter-spacing:-3px;
+  margin-bottom:20px;
+}
+.page-h1 span{
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.page-sub{
+  font-size:clamp(14px,2vw,17px);color:var(--gray);
+  line-height:1.8;max-width:560px;margin:0 auto 36px;
+}
+.page-hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+
+/* ─── TICKER (idéntico) ──────────────────────────────── */
+#ticker{
+  padding:14px 0;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  overflow:hidden;background:rgba(255,255,255,.02);
+}
+.ticker-track{display:flex;gap:60px;animation:ticker 22s linear infinite;width:max-content;}
+.ticker-track:hover{animation-play-state:paused;}
+@keyframes ticker{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+.ticker-item{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:600;color:var(--gray);letter-spacing:1px;text-transform:uppercase;white-space:nowrap;}
+.ticker-item i{color:var(--blue);font-size:14px;}
+.ticker-sep{color:var(--border2);font-size:18px;}
+
+/* ─── SECTION LABEL ROW (idéntico) ──────────────────── */
+.section-label-row{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:clamp(32px,4vw,56px);flex-wrap:wrap;gap:16px;
+}
+.section-label{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(22px,3vw,28px);font-weight:700;color:var(--white);
+}
+.section-label span{color:var(--blue);}
+
+/* ─── SERVICIOS ACCORDION (idéntico al index) ─────────── */
+#servicios-acordion{padding:80px 0;}
+.servicios-layout{display:grid;grid-template-columns:1fr 1.4fr;gap:clamp(32px,5vw,80px);align-items:start;}
+.servicios-left{position:sticky;top:100px;}
+.servicios-big-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(44px,8vw,88px);font-weight:800;
+  line-height:.95;letter-spacing:-3px;color:var(--white);
+  margin-bottom:16px;
+}
+.servicios-big-title .accent{color:var(--blue);}
+.servicios-right{display:flex;flex-direction:column;gap:0;}
+.service-row{
+  padding:clamp(20px,3vw,32px) 0;
+  border-bottom:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+  cursor:pointer;transition:all .3s;gap:16px;
+}
+.service-row:first-child{border-top:1px solid var(--border);}
+.service-row:hover .sr-title{color:var(--blue);}
+.sr-left{display:flex;flex-direction:column;gap:6px;}
+.sr-num{font-size:11px;color:var(--gray);font-weight:600;letter-spacing:1px;}
+.sr-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(18px,3vw,28px);font-weight:700;
+  color:var(--white);transition:color .3s;letter-spacing:-.5px;
+}
+.sr-desc{font-size:13px;color:var(--gray);max-width:340px;display:none;line-height:1.75;}
+.sr-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;display:none;}
+.service-row.open .sr-desc,.service-row.open .sr-tags{display:flex;}
+.service-row.open .sr-desc{display:block;}
+.sr-tag{
+  background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.2);
+  color:#93c5fd;font-size:10px;font-weight:700;
+  padding:3px 10px;border-radius:20px;white-space:nowrap;
+}
+.sr-icon{
+  width:44px;height:44px;flex-shrink:0;
+  border-radius:50%;background:rgba(255,255,255,.04);
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;color:var(--gray2);
+  transition:all .3s;
+}
+.service-row:hover .sr-icon,.service-row.open .sr-icon{background:var(--blue);color:#fff;border-color:var(--blue);}
+
+/* ─── BENTO CARDS ────────────────────────────────────── */
+#bento{padding:80px 0;}
+.bento-intro{max-width:540px;margin-bottom:48px;}
+.bento-intro .section-label{margin-bottom:12px;}
+.bento-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  grid-template-rows:auto;
+  gap:16px;
+}
+/* Tarjeta grande: columna 1, span 2 filas */
+.bento-grid .bento-main{grid-column:1;grid-row:1/3;}
+/* Tarjeta mediana col2: span 2 filas */
+.bento-grid .bento-tall{grid-column:3;grid-row:1/3;}
+
+.bento-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:clamp(20px,3vw,32px);
+  display:flex;flex-direction:column;
+  position:relative;overflow:hidden;
+  transition:all .35s cubic-bezier(.23,1,.32,1);
+  cursor:pointer;
+}
+.bento-card::before{
+  content:'';position:absolute;inset:0;
+  opacity:0;transition:opacity .35s;
+}
+.bento-card:hover{border-color:var(--border2);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.4);}
+.bento-card:hover::before{opacity:1;}
+
+/* Color themes */
+.bento-blue::before{background:linear-gradient(135deg,rgba(37,99,235,.08) 0%,transparent 60%);}
+.bento-blue:hover{border-color:rgba(37,99,235,.35);}
+.bento-purple::before{background:linear-gradient(135deg,rgba(168,85,247,.08) 0%,transparent 60%);}
+.bento-purple:hover{border-color:rgba(168,85,247,.35);}
+.bento-cyan::before{background:linear-gradient(135deg,rgba(56,189,248,.08) 0%,transparent 60%);}
+.bento-cyan:hover{border-color:rgba(56,189,248,.35);}
+.bento-green::before{background:linear-gradient(135deg,rgba(34,197,94,.08) 0%,transparent 60%);}
+.bento-green:hover{border-color:rgba(34,197,94,.35);}
+.bento-orange::before{background:linear-gradient(135deg,rgba(249,115,22,.08) 0%,transparent 60%);}
+.bento-orange:hover{border-color:rgba(249,115,22,.35);}
+
+.bento-icon{
+  width:52px;height:52px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;margin-bottom:18px;
+  transition:transform .3s;position:relative;z-index:1;
+  flex-shrink:0;
+}
+.bento-card:hover .bento-icon{transform:scale(1.1);}
+.icon-blue{background:rgba(37,99,235,.15);border:1px solid rgba(37,99,235,.25);color:#60a5fa;}
+.icon-purple{background:rgba(168,85,247,.15);border:1px solid rgba(168,85,247,.25);color:#c084fc;}
+.icon-cyan{background:rgba(56,189,248,.15);border:1px solid rgba(56,189,248,.25);color:#38bdf8;}
+.icon-green{background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.25);color:#4ade80;}
+.icon-orange{background:rgba(249,115,22,.15);border:1px solid rgba(249,115,22,.25);color:#fb923c;}
+
+.bento-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(16px,2vw,21px);font-weight:700;
+  color:var(--white);margin-bottom:10px;
+  position:relative;z-index:1;line-height:1.2;
+}
+.bento-text{
+  font-size:13px;color:var(--gray);line-height:1.8;
+  margin-bottom:18px;position:relative;z-index:1;flex:1;
+}
+.bento-list{
+  display:flex;flex-direction:column;gap:8px;
+  margin-bottom:20px;position:relative;z-index:1;
+}
+.bento-list li{
+  display:flex;align-items:center;gap:8px;
+  font-size:12px;color:var(--gray2);
+}
+.bento-list li i{font-size:11px;color:var(--blue);flex-shrink:0;}
+.bento-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;position:relative;z-index:1;}
+.b-tag{
+  font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;
+}
+.b-tag-blue{background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.2);color:#93c5fd;}
+.b-tag-purple{background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.2);color:#d8b4fe;}
+.b-tag-cyan{background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.2);color:#7dd3fc;}
+.b-tag-green{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);color:#86efac;}
+.b-tag-orange{background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.2);color:#fdba74;}
+
+.bento-stats{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:10px;margin-bottom:20px;position:relative;z-index:1;
+}
+.bento-stat{
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  border-radius:8px;padding:12px;text-align:center;
+}
+.bento-stat .s-num{
+  font-family:'Syne',sans-serif;font-size:20px;font-weight:800;
+  color:var(--white);line-height:1;
+}
+.bento-stat .s-lbl{font-size:10px;color:var(--gray);margin-top:3px;}
+
+.bento-btn{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:12px;font-weight:700;
+  padding:9px 18px;border-radius:8px;
+  transition:all .25s;cursor:pointer;
+  border:none;font-family:inherit;
+  position:relative;z-index:1;
+  align-self:flex-start;
+  margin-top:auto;
+}
+.bento-btn-blue{background:transparent;color:#60a5fa;border:1px solid rgba(37,99,235,.3);}
+.bento-btn-blue:hover{background:var(--blue);color:#fff;border-color:var(--blue);}
+.bento-btn-purple{background:transparent;color:#c084fc;border:1px solid rgba(168,85,247,.3);}
+.bento-btn-purple:hover{background:rgba(168,85,247,.2);color:#e9d5ff;}
+.bento-btn-cyan{background:transparent;color:#38bdf8;border:1px solid rgba(56,189,248,.3);}
+.bento-btn-cyan:hover{background:rgba(56,189,248,.15);color:#e0f2fe;}
+.bento-btn-green{background:transparent;color:#4ade80;border:1px solid rgba(34,197,94,.3);}
+.bento-btn-green:hover{background:rgba(34,197,94,.15);color:#dcfce7;}
+.bento-btn-orange{background:transparent;color:#fb923c;border:1px solid rgba(249,115,22,.3);}
+.bento-btn-orange:hover{background:rgba(249,115,22,.15);color:#fed7aa;}
+
+/* ─── TICKER TECH ────────────────────────────────────── */
+#tech-ticker{
+  padding:48px 0;
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+}
+.tech-label{
+  text-align:center;
+  font-size:11px;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;color:var(--gray);
+  margin-bottom:24px;
+}
+.tech-scroll-wrap{
+  overflow:hidden;
+  mask-image:linear-gradient(to right,transparent,black 10%,black 90%,transparent);
+}
+.tech-track{
+  display:flex;gap:0;
+  animation:techScroll 24s linear infinite;
+  width:max-content;
+}
+.tech-track:hover{animation-play-state:paused;}
+@keyframes techScroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+.tech-item{
+  display:flex;align-items:center;gap:8px;
+  padding:0 28px;
+  font-family:'Syne',sans-serif;font-size:15px;font-weight:700;
+  color:var(--gray2);white-space:nowrap;
+  transition:color .2s;cursor:default;
+}
+.tech-item i{font-size:16px;color:var(--blue);}
+.tech-sep{color:var(--border2);font-size:20px;flex-shrink:0;}
+
+/* ─── PROCESO ────────────────────────────────────────── */
+#proceso{padding:100px 0;}
+.proceso-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:2px;border:1px solid var(--border);
+  border-radius:var(--radius-lg);overflow:hidden;
+  margin-top:48px;
+}
+.paso-card{
+  padding:clamp(20px,3vw,32px);
+  background:var(--card);
+  border-right:1px solid var(--border);
+  transition:all .3s;cursor:pointer;
+}
+.paso-card:last-child{border-right:none;}
+.paso-card:hover{background:var(--card2);}
+.paso-num{
+  font-family:'Syne',sans-serif;
+  font-size:56px;font-weight:800;
+  color:rgba(37,99,235,.1);
+  line-height:1;margin-bottom:8px;
+  transition:color .3s;
+}
+.paso-card:hover .paso-num{color:rgba(37,99,235,.25);}
+.paso-icon{
+  width:48px;height:48px;border-radius:var(--radius);
+  background:rgba(37,99,235,.08);border:1px solid rgba(37,99,235,.15);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;color:var(--blue);margin-bottom:14px;
+  transition:all .3s;
+}
+.paso-card:hover .paso-icon{background:var(--blue);color:#fff;}
+.paso-title{
+  font-family:'Syne',sans-serif;font-size:15px;font-weight:700;
+  color:var(--white);margin-bottom:8px;
+}
+.paso-text{font-size:12px;color:var(--gray);line-height:1.7;}
+
+/* ─── STATS BAR ─────────────────────────────────────── */
+#stats-bar{
+  padding:0;
+  background:var(--blue);
+  position:relative;overflow:hidden;
+}
+#stats-bar::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle,rgba(255,255,255,.06) 1px,transparent 1px);
+  background-size:24px 24px;
+}
+.stats-inner{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  position:relative;z-index:1;
+}
+.stat-item{
+  padding:clamp(28px,4vw,48px) 20px;
+  text-align:center;
+  border-right:1px solid rgba(255,255,255,.15);
+}
+.stat-item:last-child{border-right:none;}
+.stat-num{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(28px,5vw,44px);font-weight:800;
+  color:var(--white);line-height:1;
+}
+.stat-label{font-size:12px;color:rgba(255,255,255,.7);margin-top:6px;}
+
+/* ─── TESTIMONIAL (idéntico al index) ────────────────── */
+#testimony{
+  padding:clamp(48px,6vw,80px);
+  margin:100px clamp(16px,4vw,40px);
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  display:grid;grid-template-columns:1fr 1.5fr;
+  gap:clamp(32px,5vw,60px);align-items:center;
+}
+.big-quote{
+  font-size:clamp(48px,8vw,80px);
+  color:rgba(37,99,235,.3);line-height:.8;
+  font-family:Georgia,serif;margin-bottom:16px;
+}
+.testimony-text{
+  font-size:clamp(15px,2vw,18px);
+  color:var(--white);line-height:1.75;
+  font-style:italic;margin-bottom:24px;
+}
+.testimony-author{display:flex;align-items:center;gap:12px;}
+.t-av{
+  width:44px;height:44px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;color:#fff;
+}
+.t-name{font-weight:700;color:var(--white);font-size:14px;}
+.t-role{font-size:12px;color:var(--gray);}
+.testimony-right{}
+.tech-logos{
+  display:flex;align-items:center;gap:clamp(12px,2vw,24px);flex-wrap:wrap;
+  margin-bottom:32px;padding-bottom:28px;border-bottom:1px solid var(--border);
+}
+.tech-logo{
+  font-size:clamp(14px,2vw,18px);font-weight:700;
+  color:var(--gray2);display:flex;align-items:center;gap:6px;
+  transition:color .2s;cursor:pointer;
+}
+.tech-logo:hover{color:var(--white);}
+.tech-logo i{color:var(--blue);}
+
+/* ─── FAQ ────────────────────────────────────────────── */
+#faq{padding:100px 0;}
+.faq-header{margin-bottom:clamp(32px,4vw,56px);}
+.faq-list{display:flex;flex-direction:column;gap:0;border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;}
+.faq-item{border-bottom:1px solid var(--border);}
+.faq-item:last-child{border-bottom:none;}
+.faq-q{padding:clamp(18px,2.5vw,26px);display:flex;justify-content:space-between;align-items:center;cursor:pointer;gap:16px;transition:background .2s;}
+.faq-q:hover{background:rgba(255,255,255,.02);}
+.faq-q-text{font-size:clamp(14px,1.8vw,16px);font-weight:600;color:var(--white);}
+.faq-toggle{
+  width:28px;height:28px;border-radius:50%;flex-shrink:0;
+  background:rgba(255,255,255,.05);border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;color:var(--gray2);transition:all .3s;
+}
+.faq-item.open .faq-toggle{background:var(--blue);color:#fff;border-color:var(--blue);transform:rotate(45deg);}
+.faq-a{
+  font-size:14px;color:var(--gray);line-height:1.8;
+  max-height:0;overflow:hidden;
+  transition:max-height .4s ease,padding .4s ease;
+  padding:0 clamp(18px,2.5vw,26px);
+}
+.faq-item.open .faq-a{max-height:300px;padding-bottom:clamp(18px,2.5vw,26px);}
+.faq-item.active-highlight{background:rgba(37,99,235,.06);border-color:rgba(37,99,235,.2);}
+.faq-item.active-highlight .faq-q-text{color:var(--blue);}
+
+/* ─── CTA FINAL (idéntico al index) ──────────────────── */
+#cta-final{
+  padding:100px clamp(16px,4vw,40px);
+  text-align:center;position:relative;overflow:hidden;
+}
+.cta-orb{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(37,99,235,.15) 0%,transparent 65%);
+  pointer-events:none;
+}
+.cta-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(36px,7vw,80px);font-weight:800;
+  color:var(--white);letter-spacing:-2px;
+  line-height:.95;margin-bottom:20px;
+  position:relative;z-index:1;
+}
+.cta-title span{
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.cta-sub{font-size:clamp(14px,2vw,16px);color:var(--gray);margin-bottom:36px;position:relative;z-index:1;}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1;}
+
+/* ─── FOOTER (idéntico al index) ──────────────────────── */
+footer{border-top:1px solid var(--border);padding:clamp(40px,6vw,80px) 0 0;}
+.footer-top{
+  display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;
+  gap:clamp(24px,4vw,60px);margin-bottom:clamp(40px,5vw,60px);
+}
+.footer-logo{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--white);margin-bottom:14px;}
+.footer-desc{font-size:13px;color:var(--gray);line-height:1.8;max-width:260px;margin-bottom:20px;}
+.footer-social{display:flex;gap:8px;}
+.fs-btn{
+  width:34px;height:34px;border-radius:8px;
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;color:var(--gray);transition:all .2s;
+}
+.fs-btn:hover{background:var(--blue);color:#fff;border-color:var(--blue);}
+.footer-col h5{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--white);margin-bottom:16px;}
+.footer-col ul{display:flex;flex-direction:column;gap:10px;}
+.footer-col ul li a{font-size:13px;color:var(--gray);transition:color .2s;}
+.footer-col ul li a:hover{color:var(--blue);}
+.footer-bottom{
+  border-top:1px solid var(--border);
+  padding:clamp(16px,2vw,24px) 0;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:12px;
+}
+.footer-bottom p,.footer-bottom a{font-size:12px;color:var(--gray);}
+.footer-bottom a:hover{color:var(--white);}
+.footer-links{display:flex;gap:20px;}
+
+/* ─── REVEAL ──────────────────────────────────────────── */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.in{opacity:1;transform:translateY(0);}
+.reveal-left{opacity:0;transform:translateX(-24px);transition:opacity .65s ease,transform .65s ease;}
+.reveal-left.in{opacity:1;transform:translateX(0);}
+.reveal-right{opacity:0;transform:translateX(24px);transition:opacity .65s ease,transform .65s ease;}
+.reveal-right.in{opacity:1;transform:translateX(0);}
+
+/* ─── RESPONSIVE ──────────────────────────────────────── */
+@media(max-width:1024px){
+  .servicios-layout{grid-template-columns:1fr;}
+  .servicios-left{position:static;}
+  .bento-grid{grid-template-columns:1fr 1fr;}
+  .bento-grid .bento-main,.bento-grid .bento-tall{grid-column:auto;grid-row:auto;}
+  .proceso-grid{grid-template-columns:1fr 1fr;}
+  .footer-top{grid-template-columns:1fr 1fr;}
+  #testimony{grid-template-columns:1fr;}
+  .stats-inner{grid-template-columns:1fr 1fr;}
+  .stat-item{border-bottom:1px solid rgba(255,255,255,.15);}
+  .stat-item:nth-child(2),.stat-item:nth-child(4){border-right:none;}
+}
+@media(max-width:768px){
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+  .bento-grid{grid-template-columns:1fr;}
+  .proceso-grid{grid-template-columns:1fr;}
+  .paso-card{border-right:none;border-bottom:1px solid var(--border);}
+  .footer-top{grid-template-columns:1fr;}
+  #testimony{margin:60px 0;padding:32px 24px;}
+  .stats-inner{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:480px){
+  .stats-inner{grid-template-columns:1fr 1fr;}
+  .page-h1{letter-spacing:-2px;}
+}
+</style>
+</head>
+<body>
+
+<!-- PROGRESO DE SCROLL -->
+<div id="progress"><div id="progress-fill"></div></div>
+
+<!-- ══ NAV ══════════════════════════════════════════════════ -->
+<header>
+  <nav>
+    <div class="nav-logo">InfiniHon</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="index.html#works">Proyectos</a></li>
+      <li><a href="servicios.html" class="active">Servicios</a></li>
+      <li><a href="index.html#pricing">Precios</a></li>
+      <li><a href="index.html#members">Equipo</a></li>
+      <li><a href="index.html#press">Blog</a></li>
+      <li><a href="#cta-final">Contacto</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="tienda.html" class="btn btn-blue btn-sm">Tienda</a>
+      <button class="hamburger" id="ham" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<!-- MENÚ MÓVIL -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="toggleMenu()">Inicio</a>
+  <a href="index.html#works" onclick="toggleMenu()">Proyectos</a>
+  <a href="servicios.html" onclick="toggleMenu()">Servicios</a>
+  <a href="index.html#pricing" onclick="toggleMenu()">Precios</a>
+  <a href="index.html#members" onclick="toggleMenu()">Equipo</a>
+  <a href="index.html#press" onclick="toggleMenu()">Blog</a>
+  <div class="divider"></div>
+  <a href="#cta-final" onclick="toggleMenu()">Contacto</a>
+</div>
+
+<!-- ══ HERO DE PÁGINA ════════════════════════════════════════ -->
+<section id="page-hero">
+  <div class="page-orb"></div>
+  <div class="hero-grid-bg"></div>
+  <div class="container">
+    <div class="page-hero-inner">
+      <div class="page-eyebrow reveal">
+        <span class="dot"></span>
+        Soluciones Enterprise — 2025
+      </div>
+      <h1 class="page-h1 reveal" style="transition-delay:.08s;">
+        Nuestros<br><span>Servicios</span>
+      </h1>
+      <p class="page-sub reveal" style="transition-delay:.16s;">
+        Implementamos soluciones robustas y escalables para empresas que exigen lo mejor en infraestructura IT. Desde redes MikroTik hasta clusters en la nube.
+      </p>
+      <div class="page-hero-btns reveal" style="transition-delay:.24s;">
+        <a href="#bento" class="btn btn-blue"><i class="fa fa-layer-group"></i> Explorar Servicios</a>
+        <a href="#cta-final" class="btn btn-ghost">Solicitar Consultoría</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TICKER ════════════════════════════════════════════════ -->
+<div id="ticker">
+  <div class="ticker-track">
+    <div class="ticker-item"><i class="fa fa-network-wired"></i>Redes MikroTik</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-server"></i>Clusters Raspberry Pi</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-shield-alt"></i>Seguridad IT</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-cloud"></i>Consultoría Cloud</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-terminal"></i>DevOps & Automatización</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-chart-bar"></i>Monitorización</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-code"></i>Desarrollo a Medida</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-headset"></i>Soporte 24/7</div>
+    <div class="ticker-sep">·</div>
+    <!-- repeat -->
+    <div class="ticker-item"><i class="fa fa-network-wired"></i>Redes MikroTik</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-server"></i>Clusters Raspberry Pi</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-shield-alt"></i>Seguridad IT</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-cloud"></i>Consultoría Cloud</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-terminal"></i>DevOps & Automatización</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-chart-bar"></i>Monitorización</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-code"></i>Desarrollo a Medida</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-headset"></i>Soporte 24/7</div>
+  </div>
+</div>
+
+<!-- ══ ACORDEÓN DE SERVICIOS ═════════════════════════════════ -->
+<section id="servicios-acordion">
+  <div class="container">
+    <div class="section-label-row reveal">
+      <div class="section-label">Lo que <span>Hacemos</span></div>
+      <a href="#cta-final" class="btn btn-ghost btn-sm">Iniciar Proyecto</a>
+    </div>
+    <div class="servicios-layout">
+      <div class="servicios-left reveal-left">
+        <div class="servicios-big-title">
+          Redes<br>
+          <span class="accent">Seguridad</span><br>
+          Cloud<br>
+          DevOps
+        </div>
+        <p style="font-size:14px;color:var(--gray);line-height:1.8;max-width:300px;margin-top:20px;">
+          Ofrecemos servicios integrales de infraestructura IT diseñados para transformar y escalar tu negocio con tecnología de alto rendimiento.
+        </p>
+      </div>
+      <div class="servicios-right reveal-right">
+        <div class="service-row open" onclick="toggleService(this)">
+          <div class="sr-left">
+            <div class="sr-num">01</div>
+            <div class="sr-title">Administración de Redes MikroTik</div>
+            <div class="sr-desc">Gestión profesional de infraestructura de red con RouterOS. Configuración avanzada de VPNs, firewalls, QoS, MPLS, BGP y enrutamiento dinámico para entornos empresariales.</div>
+            <div class="sr-tags">
+              <span class="sr-tag">RouterOS</span>
+              <span class="sr-tag">SwOS</span>
+              <span class="sr-tag">MPLS</span>
+              <span class="sr-tag">BGP</span>
+              <span class="sr-tag">VPN</span>
+            </div>
+          </div>
+          <div class="sr-icon"><i class="fa fa-plus"></i></div>
+        </div>
+        <div class="service-row" onclick="toggleService(this)">
+          <div class="sr-left">
+            <div class="sr-num">02</div>
+            <div class="sr-title">Clusters Raspberry Pi</div>
+            <div class="sr-desc">Implementación de clusters de alto rendimiento para edge computing, Kubernetes (K3s) y procesamiento paralelo. Soluciones de bajo consumo y alta disponibilidad.</div>
+            <div class="sr-tags">
+              <span class="sr-tag">K3s</span>
+              <span class="sr-tag">Docker</span>
+              <span class="sr-tag">Kubernetes</span>
+              <span class="sr-tag">Alta Disponibilidad</span>
+            </div>
+          </div>
+          <div class="sr-icon"><i class="fa fa-plus"></i></div>
+        </div>
+        <div class="service-row" onclick="toggleService(this)">
+          <div class="sr-left">
+            <div class="sr-num">03</div>
+            <div class="sr-title">Seguridad y Auditoría IT</div>
+            <div class="sr-desc">Auditoría completa de servidores y redes, hardening de sistemas Linux/Windows, implementación de políticas de seguridad, análisis de vulnerabilidades y cumplimiento normativo.</div>
+            <div class="sr-tags">
+              <span class="sr-tag">Hardening</span>
+              <span class="sr-tag">Auditoría</span>
+              <span class="sr-tag">Firewall</span>
+              <span class="sr-tag">Zero Trust</span>
+            </div>
+          </div>
+          <div class="sr-icon"><i class="fa fa-plus"></i></div>
+        </div>
+        <div class="service-row" onclick="toggleService(this)">
+          <div class="sr-left">
+            <div class="sr-num">04</div>
+            <div class="sr-title">Consultoría Cloud</div>
+            <div class="sr-desc">Estrategias de migración y optimización en AWS, Azure y Google Cloud. Arquitecturas multi-cloud, reducción de costos y diseño de infraestructura serverless.</div>
+            <div class="sr-tags">
+              <span class="sr-tag">AWS</span>
+              <span class="sr-tag">Azure</span>
+              <span class="sr-tag">GCP</span>
+              <span class="sr-tag">Serverless</span>
+            </div>
+          </div>
+          <div class="sr-icon"><i class="fa fa-plus"></i></div>
+        </div>
+        <div class="service-row" onclick="toggleService(this)">
+          <div class="sr-left">
+            <div class="sr-num">05</div>
+            <div class="sr-title">Automatización DevOps</div>
+            <div class="sr-desc">Implementación de pipelines CI/CD, infraestructura como código con Terraform y Ansible, monitorización con Prometheus y Grafana. Cultura DevOps de extremo a extremo.</div>
+            <div class="sr-tags">
+              <span class="sr-tag">Terraform</span>
+              <span class="sr-tag">Ansible</span>
+              <span class="sr-tag">CI/CD</span>
+              <span class="sr-tag">Prometheus</span>
+            </div>
+          </div>
+          <div class="sr-icon"><i class="fa fa-plus"></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ESTADÍSTICAS ══════════════════════════════════════════ -->
+<div id="stats-bar">
+  <div class="container">
+    <div class="stats-inner">
+      <div class="stat-item reveal">
+        <div class="stat-num" data-target="150">0+</div>
+        <div class="stat-label">Proyectos Completados</div>
+      </div>
+      <div class="stat-item reveal" style="transition-delay:.1s;">
+        <div class="stat-num" data-target="99">0%</div>
+        <div class="stat-label">Uptime Garantizado</div>
+      </div>
+      <div class="stat-item reveal" style="transition-delay:.2s;">
+        <div class="stat-num">24/7</div>
+        <div class="stat-label">Soporte Técnico</div>
+      </div>
+      <div class="stat-item reveal" style="transition-delay:.3s;">
+        <div class="stat-num" data-target="8">0+</div>
+        <div class="stat-label">Años de Experiencia</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ BENTO CARDS ══════════════════════════════════════════ -->
+<section id="bento">
+  <div class="container">
+    <div class="bento-intro reveal">
+      <div class="section-label" style="margin-bottom:12px;">Soluciones <span>Detalladas</span></div>
+      <p style="font-size:14px;color:var(--gray);line-height:1.8;">
+        Cada servicio está diseñado para resolver desafíos reales de infraestructura con tecnología probada y equipos expertos.
+      </p>
+    </div>
+
+    <div class="bento-grid">
+
+      <!-- Redes MikroTik — GRANDE (span 2 rows) -->
+      <div class="bento-card bento-blue bento-main reveal">
+        <div class="bento-icon icon-blue"><i class="fa fa-network-wired"></i></div>
+        <div class="bento-title">Administración de Redes MikroTik</div>
+        <p class="bento-text">
+          Gestión profesional de infraestructura de red con RouterOS. Configuración avanzada de VPNs, firewalls, QoS y enrutamiento dinámico para entornos empresariales de alta demanda.
+        </p>
+        <ul class="bento-list">
+          <li><i class="fa fa-check-circle"></i>Configuración de RouterOS y SwOS</li>
+          <li><i class="fa fa-check-circle"></i>Implementación de MPLS y BGP</li>
+          <li><i class="fa fa-check-circle"></i>Monitorización con The Dude</li>
+          <li><i class="fa fa-check-circle"></i>VPN site-to-site y remote access</li>
+          <li><i class="fa fa-check-circle"></i>Segmentación y VLAN avanzadas</li>
+        </ul>
+        <div class="bento-tags">
+          <span class="b-tag b-tag-blue">RouterOS</span>
+          <span class="b-tag b-tag-blue">SwOS</span>
+          <span class="b-tag b-tag-blue">MPLS</span>
+          <span class="b-tag b-tag-blue">BGP</span>
+          <span class="b-tag b-tag-blue">OSPF</span>
+        </div>
+        <button class="bento-btn bento-btn-blue" onclick="irAContacto()">
+          Configurar mi red <i class="fa fa-arrow-right"></i>
+        </button>
+      </div>
+
+      <!-- Clusters Raspberry Pi -->
+      <div class="bento-card bento-purple reveal" style="transition-delay:.08s;">
+        <div class="bento-icon icon-purple"><i class="fa fa-server"></i></div>
+        <div class="bento-title">Clusters Raspberry Pi</div>
+        <p class="bento-text">
+          Implementación de clusters para edge computing y Kubernetes de bajo costo y alto rendimiento.
+        </p>
+        <div class="bento-tags">
+          <span class="b-tag b-tag-purple">K3s</span>
+          <span class="b-tag b-tag-purple">Docker</span>
+          <span class="b-tag b-tag-purple">HA</span>
+          <span class="b-tag b-tag-purple">Kubernetes</span>
+        </div>
+        <button class="bento-btn bento-btn-purple" onclick="irAContacto()">
+          Implementar <i class="fa fa-arrow-right"></i>
+        </button>
+      </div>
+
+      <!-- Seguridad — GRANDE (span 2 rows, col 3) -->
+      <div class="bento-card bento-cyan bento-tall reveal" style="transition-delay:.1s;">
+        <div class="bento-icon icon-cyan"><i class="fa fa-shield-alt"></i></div>
+        <div class="bento-title">Seguridad y Auditoría IT</div>
+        <p class="bento-text">
+          Auditoría completa de servidores, hardening de sistemas, implementación de políticas de seguridad y cumplimiento normativo. Protege tu infraestructura con metodologías probadas.
+        </p>
+        <div class="bento-stats">
+          <div class="bento-stat">
+            <div class="s-num" style="color:var(--cyan);">100%</div>
+            <div class="s-lbl">Cobertura</div>
+          </div>
+          <div class="bento-stat">
+            <div class="s-num" style="color:var(--cyan);">24/7</div>
+            <div class="s-lbl">Monitoreo</div>
+          </div>
+        </div>
+        <ul class="bento-list">
+          <li><i class="fa fa-check-circle" style="color:var(--cyan);"></i>Análisis de vulnerabilidades</li>
+          <li><i class="fa fa-check-circle" style="color:var(--cyan);"></i>Hardening Linux & Windows</li>
+          <li><i class="fa fa-check-circle" style="color:var(--cyan);"></i>Políticas Zero Trust</li>
+          <li><i class="fa fa-check-circle" style="color:var(--cyan);"></i>Cumplimiento normativo (ISO 27001)</li>
+        </ul>
+        <button class="bento-btn bento-btn-cyan" onclick="irAContacto()">
+          Auditar sistemas <i class="fa fa-arrow-right"></i>
+        </button>
+      </div>
+
+      <!-- Cloud -->
+      <div class="bento-card bento-blue reveal" style="transition-delay:.16s;">
+        <div class="bento-icon icon-blue" style="width:40px;height:40px;font-size:17px;"><i class="fa fa-cloud"></i></div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:1;margin-bottom:10px;">
+          <div class="bento-title" style="margin-bottom:0;">Consultoría Cloud</div>
+          <span class="b-tag b-tag-blue">Nuevo</span>
+        </div>
+        <p class="bento-text">Migración y optimización en AWS, Azure y Google Cloud. Arquitecturas multi-cloud y diseño serverless.</p>
+        <button class="bento-btn bento-btn-blue" onclick="irAContacto()">
+          Explorar <i class="fa fa-arrow-right"></i>
+        </button>
+      </div>
+
+      <!-- DevOps -->
+      <div class="bento-card bento-green reveal" style="transition-delay:.22s;">
+        <div class="bento-icon icon-green" style="width:40px;height:40px;font-size:17px;"><i class="fa fa-terminal"></i></div>
+        <div class="bento-title">Automatización DevOps</div>
+        <p class="bento-text">CI/CD, infraestructura como código y automatización con Ansible y Terraform para equipos ágiles.</p>
+        <div class="bento-tags">
+          <span class="b-tag b-tag-green">Terraform</span>
+          <span class="b-tag b-tag-green">Ansible</span>
+          <span class="b-tag b-tag-green">CI/CD</span>
+        </div>
+        <button class="bento-btn bento-btn-green" onclick="irAContacto()">
+          Automatizar <i class="fa fa-arrow-right"></i>
+        </button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ TICKER TECNOLOGÍAS ════════════════════════════════════ -->
+<div id="tech-ticker">
+  <div class="container">
+    <p class="tech-label">Tecnologías que implementamos</p>
+    <div class="tech-scroll-wrap">
+      <div class="tech-track">
+        <span class="tech-item"><i class="fa fa-network-wired"></i>MikroTik</span>
+        <span class="tech-sep">·</span>
+        <span class="tech-item"><i class="fa fa-server"></i>Raspberry Pi</span>
+        <span class="tech-sep">·</span>
+        <span class="tech-item"><i class="fab fa-docker"></i>Docker</span>
+        <span class="tech-sep">·</span>
+        <span class="tech-item"><i class="fa fa-cubes"></i>Kubernetes</span>
+        <span class="tech-sep">·</span>
+        <span class="tech-item"><i class="fa fa-cogs"></i>Ansible</span>
+        <span class="tech-sep">·</span>
+        <span class="tech-item"><i class="fa fa-code-branch"></i>Terraform</span>
+        <span class="tech-sep">·</span>
+        <span class="tech-item"><i class="fa fa-chart-line"></i>Prometheus</span>
+        <span class="tech-sep">·</span>
+        <span class="tech-item"><i class="fa fa-chart-bar"></i>Grafana</span>
+        <span class="tech-sep">·</span>
+        <span class="tech-item"><i class="fab fa-aws"></i>AWS</span>
+        <span class="tech-sep">·</span>
+        <span class="tech-item"><i class="fab fa-microsoft"></i>Azure</span>
+        <span class="tech-sep">·</span>
+        <span class="tech-item"><i class="fab fa-google"></i>GCP</span>
+        <span class="tech-sep">·</span>
+        <!-- repeat -->
+        <span class="tech-item"><i class="fa fa-network-wired"></i>MikroTik</span>
+        <span class="tech-sep">·</span>
+        <span class="tech-item"><i class="fa fa-server"></i>Raspberry Pi</span>
+        <span class="tech-sep">·</span>
+        <span class="tech-item"><i class="fab fa-docker"></i>Docker</span>
+        <span class="tech-sep">·</span>
+        <span class="tech-item"><i class="fa fa-cubes"></i>Kubernetes</span>
+        <span class="tech-sep">·</span>
+        <span class="tech-item"><i class="fa fa-cogs"></i>Ansible</span>
+        <span class="tech-sep">·</span>
+        <span class="tech-item"><i class="fa fa-code-branch"></i>Terraform</span>
+        <span class="tech-sep">·</span>
+        <span class="tech-item"><i class="fa fa-chart-line"></i>Prometheus</span>
+        <span class="tech-sep">·</span>
+        <span class="tech-item"><i class="fa fa-chart-bar"></i>Grafana</span>
+        <span class="tech-sep">·</span>
+        <span class="tech-item"><i class="fab fa-aws"></i>AWS</span>
+        <span class="tech-sep">·</span>
+        <span class="tech-item"><i class="fab fa-microsoft"></i>Azure</span>
+        <span class="tech-sep">·</span>
+        <span class="tech-item"><i class="fab fa-google"></i>GCP</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PROCESO ═══════════════════════════════════════════════ -->
+<section id="proceso">
+  <div class="container">
+    <div class="section-label-row reveal">
+      <div class="section-label">Cómo <span>Trabajamos</span></div>
+    </div>
+    <p style="font-size:14px;color:var(--gray);max-width:480px;" class="reveal">
+      Un proceso claro y transparente para garantizar que cada proyecto se entregue a tiempo, dentro del presupuesto y superando expectativas.
+    </p>
+    <div class="proceso-grid">
+      <div class="paso-card reveal">
+        <div class="paso-num">01</div>
+        <div class="paso-icon"><i class="fa fa-comments"></i></div>
+        <div class="paso-title">Consultoría Inicial</div>
+        <p class="paso-text">Analizamos tu infraestructura actual, objetivos de negocio y requerimientos técnicos en una sesión gratuita de diagnóstico.</p>
+      </div>
+      <div class="paso-card reveal" style="transition-delay:.08s;">
+        <div class="paso-num">02</div>
+        <div class="paso-icon"><i class="fa fa-drafting-compass"></i></div>
+        <div class="paso-title">Diseño & Propuesta</div>
+        <p class="paso-text">Diseñamos la arquitectura óptima y presentamos un plan detallado con costos transparentes, tiempos y entregables claros.</p>
+      </div>
+      <div class="paso-card reveal" style="transition-delay:.16s;">
+        <div class="paso-num">03</div>
+        <div class="paso-icon"><i class="fa fa-tools"></i></div>
+        <div class="paso-title">Implementación</div>
+        <p class="paso-text">Desplegamos la solución con mínimo impacto en tu operación. Cada cambio es probado y documentado antes de aplicarse en producción.</p>
+      </div>
+      <div class="paso-card reveal" style="transition-delay:.24s;">
+        <div class="paso-num">04</div>
+        <div class="paso-icon"><i class="fa fa-headset"></i></div>
+        <div class="paso-title">Soporte Continuo</div>
+        <p class="paso-text">Monitorización 24/7, actualizaciones proactivas y soporte técnico especializado para mantener tu infraestructura en óptimas condiciones.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TESTIMONIO ════════════════════════════════════════════ -->
+<div id="testimony" class="reveal">
+  <div class="testimony-left">
+    <div class="big-quote">"</div>
+    <p class="testimony-text">InfiniHon transformó completamente nuestra infraestructura de red. Pasamos de caídas constantes a un uptime del 99.9%. Su equipo es profesional, transparente y realmente entiende los desafíos técnicos del mundo real."</p>
+    <div class="testimony-author">
+      <div class="t-av"><i class="fas fa-user-tie"></i></div>
+      <div>
+        <div class="t-name">Carlos Méndez</div>
+        <div class="t-role">CTO en Grupo TechLatam</div>
+      </div>
+    </div>
+  </div>
+  <div class="testimony-right">
+    <div class="tech-logos">
+      <div class="tech-logo"><i class="fab fa-github"></i> GitHub</div>
+      <div class="tech-logo"><i class="fab fa-docker"></i> Docker</div>
+      <div class="tech-logo"><i class="fab fa-aws"></i> AWS</div>
+      <div class="tech-logo"><i class="fa fa-server"></i> MikroTik</div>
+    </div>
+    <p style="font-size:13px;color:var(--gray);line-height:1.8;">
+      Hemos construido alianzas con las herramientas y plataformas líderes de la industria, asegurando que nuestro flujo de trabajo esté siempre alineado con las mejores prácticas en infraestructura y seguridad IT.
+    </p>
+    <div style="display:flex;gap:24px;margin-top:20px;flex-wrap:wrap;">
+      <div><div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--white);">150+</div><div style="font-size:11px;color:var(--gray);">Proyectos Entregados</div></div>
+      <div><div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--white);">8yr</div><div style="font-size:11px;color:var(--gray);">En el Mercado</div></div>
+      <div><div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--white);">99.9%</div><div style="font-size:11px;color:var(--gray);">Uptime Promedio</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FAQ ═══════════════════════════════════════════════════ -->
+<section id="faq">
+  <div class="container">
+    <div class="faq-header reveal">
+      <div class="section-label" style="margin-bottom:10px;">Preguntas <span>Frecuentes</span></div>
+      <p style="font-size:14px;color:var(--gray);max-width:480px;">
+        Todo lo que necesitas saber sobre nuestros servicios. ¿No encuentras tu respuesta?
+        <a href="#cta-final" style="color:var(--blue);">Escríbenos directamente.</a>
+      </p>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item open active-highlight">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">¿Cuánto tiempo tarda la implementación de una red MikroTik?</span>
+          <div class="faq-toggle"><i class="fa fa-plus"></i></div>
+        </div>
+        <div class="faq-a">Depende de la complejidad de tu infraestructura. Una red empresarial básica puede configurarse en 1–3 días. Proyectos más complejos con MPLS, BGP o múltiples sedes pueden requerir 1–3 semanas. Siempre entregamos un cronograma detallado antes de comenzar.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">¿Ofrecen soporte post-implementación?</span>
+          <div class="faq-toggle"><i class="fa fa-plus"></i></div>
+        </div>
+        <div class="faq-a">Sí. Todos nuestros proyectos incluyen un período de soporte incluido (mínimo 30 días). Adicionalmente ofrecemos contratos de mantenimiento mensual o anual con monitorización 24/7, actualizaciones proactivas y tiempo de respuesta garantizado según el SLA elegido.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">¿Pueden auditar nuestra infraestructura actual sin interrumpir operaciones?</span>
+          <div class="faq-toggle"><i class="fa fa-plus"></i></div>
+        </div>
+        <div class="faq-a">Absolutamente. Nuestras auditorías de seguridad se realizan de forma no intrusiva. Utilizamos herramientas de análisis pasivo y ventanas de mantenimiento programadas para garantizar cero impacto en tu operación diaria. El informe final incluye hallazgos priorizados y un plan de remediación.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">¿Trabajan con empresas pequeñas o solo con grandes corporaciones?</span>
+          <div class="faq-toggle"><i class="fa fa-plus"></i></div>
+        </div>
+        <div class="faq-a">Trabajamos con todo tipo de organizaciones, desde startups y pymes hasta grandes empresas. Nuestros servicios son escalables y adaptados a cada presupuesto. Creemos que la infraestructura de calidad no debe ser exclusiva de las grandes corporaciones.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">¿Cómo es el proceso de migración a la nube?</span>
+          <div class="faq-toggle"><i class="fa fa-plus"></i></div>
+        </div>
+        <div class="faq-a">Comenzamos con un assessment de tu infraestructura actual, identificamos dependencias y diseñamos una estrategia de migración por fases. Priorizamos la continuidad del servicio usando técnicas de migración lift-and-shift o re-arquitectura según el caso. El proceso incluye pruebas exhaustivas antes de cada corte.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">¿Tienen experiencia con entornos híbridos (on-premise + cloud)?</span>
+          <div class="faq-toggle"><i class="fa fa-plus"></i></div>
+        </div>
+        <div class="faq-a">Sí, es uno de nuestros principales campos de especialización. Diseñamos e implementamos arquitecturas híbridas que conectan tu infraestructura local con servicios cloud de forma segura y eficiente, usando VPNs, ExpressRoute, Direct Connect y tecnologías de SD-WAN.</div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:32px;">
+      <a href="#cta-final" class="btn btn-ghost">¿Más preguntas? Contáctanos <i class="fa fa-arrow-right" style="margin-left:4px;"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA FINAL ══════════════════════════════════════════════ -->
+<section id="cta-final">
+  <div class="cta-orb"></div>
+  <div class="container">
+    <h2 class="cta-title reveal">
+      ¿Listo para<br>transformar tu <span>infraestructura?</span>
+    </h2>
+    <p class="cta-sub reveal" style="transition-delay:.1s;">
+      Nuestro equipo de expertos está listo para diseñar la solución perfecta para tus necesidades. Consultoría inicial gratuita.
+    </p>
+    <div class="cta-btns reveal" style="transition-delay:.2s;">
+      <a href="mailto:info@infinihon.com" class="btn btn-blue"><i class="fa fa-envelope"></i> info@infinihon.com</a>
+      <a href="index.html#pricing" class="btn btn-ghost">Ver Precios</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ═════════════════════════════════════════════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">InfiniHon</div>
+        <p class="footer-desc">Infraestructura IT de grado industrial para empresas modernas. Soluciones robustas, escalables y seguras.</p>
+        <div class="footer-social">
+          <a href="#" class="fs-btn"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="fs-btn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" class="fs-btn"><i class="fab fa-github"></i></a>
+          <a href="#" class="fs-btn"><i class="fab fa-youtube"></i></a>
+          <a href="#" class="fs-btn"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Servicios</h5>
+        <ul>
+          <li><a href="#servicios-acordion">Redes MikroTik</a></li>
+          <li><a href="#servicios-acordion">Clusters Raspberry Pi</a></li>
+          <li><a href="#servicios-acordion">Seguridad IT</a></li>
+          <li><a href="#servicios-acordion">Consultoría Cloud</a></li>
+          <li><a href="#servicios-acordion">Automatización DevOps</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Compañía</h5>
+        <ul>
+          <li><a href="sobre_nosotros.html">Sobre Nosotros</a></li>
+          <li><a href="index.html#works">Proyectos</a></li>
+          <li><a href="index.html#members">Equipo</a></li>
+          <li><a href="index.html#press">Blog</a></li>
+          <li><a href="#cta-final">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Legal</h5>
+        <ul>
+          <li><a href="#">Política de Privacidad</a></li>
+          <li><a href="#">Términos de Servicio</a></li>
+          <li><a href="#">Política de Cookies</a></li>
+          <li><a href="#">Accesibilidad</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 InfiniHon Studio. Todos los derechos reservados.</p>
+      <div class="footer-links">
+        <a href="#">Privacidad</a>
+        <a href="#">Términos</a>
+        <a href="#">Mapa del Sitio</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ══ SCRIPTS ════════════════════════════════════════════════ -->
+<script>
+// Progreso de scroll
+window.addEventListener('scroll',()=>{
+  const p=(window.scrollY/(document.documentElement.scrollHeight-innerHeight))*100;
+  document.getElementById('progress-fill').style.width=p+'%';
+});
+
+// Reveal on scroll
+const reveals=document.querySelectorAll('.reveal,.reveal-left,.reveal-right');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting)setTimeout(()=>e.target.classList.add('in'),i*60);
+  });
+},{threshold:0.08});
+reveals.forEach(el=>obs.observe(el));
+
+// Menú móvil
+function toggleMenu(){
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+document.addEventListener('click',e=>{
+  const m=document.getElementById('mobileMenu');
+  const h=document.getElementById('ham');
+  if(m.classList.contains('open')&&!m.contains(e.target)&&!h.contains(e.target)){
+    m.classList.remove('open');
+  }
+});
+
+// Acordeón de servicios
+function toggleService(row){
+  const isOpen=row.classList.contains('open');
+  document.querySelectorAll('.service-row').forEach(r=>r.classList.remove('open'));
+  if(!isOpen)row.classList.add('open');
+}
+
+// FAQ Acordeón
+function toggleFaq(btn){
+  const item=btn.closest('.faq-item');
+  const isOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open','active-highlight'));
+  if(!isOpen)item.classList.add('open','active-highlight');
+}
+
+// Ir a contacto
+function irAContacto(){
+  document.getElementById('cta-final').scrollIntoView({behavior:'smooth'});
+}
+
+// Contadores animados en stats
+function animarContadores(){
+  document.querySelectorAll('.stat-num[data-target]').forEach(el=>{
+    const target=parseInt(el.dataset.target);
+    const sufijo=el.textContent.replace(/\d+/,'');
+    let current=0;
+    const inc=Math.ceil(target/50);
+    const timer=setInterval(()=>{
+      current=Math.min(current+inc,target);
+      el.textContent=current+sufijo;
+      if(current>=target)clearInterval(timer);
+    },25);
+  });
+}
+const statsObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){animarContadores();statsObs.disconnect();}
+  });
+},{threshold:.5});
+const statsEl=document.getElementById('stats-bar');
+if(statsEl)statsObs.observe(statsEl);
+</script>
+</body>
+</html>
