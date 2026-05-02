@@ -1,0 +1,1889 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InfiniHon Store — Hardware Especializado</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+/* ═══════════════════════════════════════
+   RESET & TOKENS
+═══════════════════════════════════════ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:        #050508;
+  --bg2:       #07070e;
+  --bg3:       #0a0a14;
+  --card:      #0d0d1a;
+  --card2:     #111125;
+  --border:    rgba(255,255,255,0.06);
+  --border2:   rgba(255,255,255,0.11);
+  --blue:      #2563eb;
+  --blue2:     #1d4ed8;
+  --blue3:     #3b82f6;
+  --blue-glow: rgba(37,99,235,0.32);
+  --cyan:      #38bdf8;
+  --purple:    #a855f7;
+  --pink:      #ec4899;
+  --green:     #22c55e;
+  --amber:     #f59e0b;
+  --red:       #ef4444;
+  --white:     #ffffff;
+  --gray:      #6b7280;
+  --gray2:     #9ca3af;
+  --text:      #c8d0dc;
+  --radius:    12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+}
+html{scroll-behavior:smooth;font-size:16px;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6;}
+a{text-decoration:none;color:inherit;}
+ul{list-style:none;}
+img{max-width:100%;display:block;}
+button{font-family:inherit;cursor:pointer;}
+.container{max-width:1280px;margin:0 auto;padding:0 clamp(16px,4vw,48px);}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--blue);border-radius:2px;}
+
+/* ── PROGRESS ── */
+#progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:999;}
+#progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan),var(--purple));width:0;transition:width .1s linear;}
+
+/* ═══════════════════════════════════════
+   FONDO AMBIENTE
+═══════════════════════════════════════ */
+.ambient-bg{
+  position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(37,99,235,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 20%, rgba(56,189,248,0.05) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 60% at 50% 80%, rgba(168,85,247,0.04) 0%, transparent 60%),
+    var(--bg);
+  animation:ambientShift 20s ease-in-out infinite alternate;
+}
+@keyframes ambientShift{
+  0%{background-position:0% 0%,100% 0%,50% 100%;}
+  100%{background-position:5% 10%,90% 15%,45% 95%;}
+}
+
+/* ═══════════════════════════════════════
+   BARRA SUPERIOR
+═══════════════════════════════════════ */
+.top-bar{
+  background:rgba(5,5,8,0.95);
+  border-bottom:1px solid var(--border);
+  padding:7px clamp(16px,4vw,48px);
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:11px;color:var(--gray);letter-spacing:.3px;
+}
+.top-bar-left,.top-bar-right{display:flex;gap:20px;align-items:center;}
+.top-bar a{color:var(--gray);transition:color .2s;}
+.top-bar a:hover{color:var(--cyan);}
+.top-bar .live-dot{
+  display:inline-flex;align-items:center;gap:5px;
+  color:var(--green);font-size:10px;font-weight:600;
+}
+.top-bar .live-dot::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:var(--green);animation:blink 2s infinite;
+}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+/* ═══════════════════════════════════════
+   HEADER NAV
+═══════════════════════════════════════ */
+header{
+  position:sticky;top:0;z-index:100;
+  background:rgba(5,5,8,0.88);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+  padding:0 clamp(16px,4vw,48px);
+}
+nav{
+  max-width:1280px;margin:0 auto;
+  display:flex;align-items:center;height:66px;gap:16px;
+}
+.nav-logo{
+  font-family:'Syne',sans-serif;font-size:19px;font-weight:800;
+  color:var(--white);letter-spacing:-.5px;white-space:nowrap;margin-right:4px;
+}
+.nav-logo span{
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.nav-store-tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;font-weight:600;letter-spacing:2px;
+  color:var(--cyan);text-transform:uppercase;
+  background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.2);
+  border-radius:4px;padding:2px 7px;flex-shrink:0;
+}
+
+/* Search */
+.nav-search{
+  flex:1;max-width:440px;margin:0 16px;
+  display:flex;align-items:center;
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border2);
+  border-radius:10px;overflow:hidden;
+  transition:all .25s;
+}
+.nav-search:focus-within{
+  border-color:rgba(37,99,235,.5);
+  background:rgba(37,99,235,.06);
+  box-shadow:0 0 0 3px rgba(37,99,235,.12);
+}
+.nav-search input{
+  flex:1;background:none;border:none;outline:none;
+  color:var(--white);font-size:13px;padding:10px 14px;
+  font-family:'DM Sans',sans-serif;
+}
+.nav-search input::placeholder{color:var(--gray);}
+.nav-search button{
+  background:none;border:none;
+  padding:10px 14px;color:var(--gray);
+  transition:color .2s;
+}
+.nav-search button:hover{color:var(--cyan);}
+
+.nav-links{display:flex;align-items:center;gap:2px;}
+.nav-links a{
+  font-size:13px;font-weight:500;color:var(--gray2);
+  padding:6px 11px;border-radius:7px;transition:all .2s;white-space:nowrap;
+}
+.nav-links a:hover,.nav-links a.active{color:var(--white);}
+
+.nav-right{display:flex;align-items:center;gap:8px;margin-left:auto;}
+
+/* Botón carrito */
+.cart-btn{
+  position:relative;
+  display:flex;align-items:center;gap:8px;
+  background:rgba(37,99,235,.12);
+  border:1px solid rgba(37,99,235,.3);
+  border-radius:40px;padding:8px 16px;
+  color:var(--white);font-size:13px;font-weight:600;
+  transition:all .25s;cursor:pointer;
+}
+.cart-btn:hover{background:rgba(37,99,235,.2);border-color:rgba(37,99,235,.5);}
+.cart-count{
+  position:absolute;top:-6px;right:-6px;
+  background:var(--blue);color:#fff;
+  font-size:10px;font-weight:700;
+  width:18px;height:18px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  border:2px solid var(--bg);
+}
+
+/* BTN genérico */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;border-radius:40px;font-size:13px;font-weight:600;border:none;transition:all .25s;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;}
+.btn-blue{background:var(--blue);color:#fff;}
+.btn-blue:hover{background:var(--blue2);transform:translateY(-2px);box-shadow:0 10px 32px var(--blue-glow);}
+.btn-ghost{background:rgba(255,255,255,.06);color:var(--white);border:1px solid var(--border2);}
+.btn-ghost:hover{background:rgba(255,255,255,.1);}
+.btn-sm{padding:8px 16px;font-size:12px;}
+
+/* Hamburger */
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;padding:4px;}
+.hamburger span{width:22px;height:2px;background:var(--white);transition:all .3s;}
+.mobile-menu{
+  display:none;position:fixed;top:66px;left:0;right:0;
+  background:rgba(5,5,8,0.98);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:16px;flex-direction:column;gap:4px;z-index:99;
+}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{font-size:14px;font-weight:500;color:var(--gray2);padding:10px 14px;border-radius:8px;transition:all .2s;}
+.mobile-menu a:hover{color:var(--white);background:rgba(255,255,255,.05);}
+
+/* ═══════════════════════════════════════
+   HERO TIENDA
+═══════════════════════════════════════ */
+#hero-store{
+  position:relative;overflow:hidden;
+  padding:clamp(60px,8vw,100px) 0 clamp(48px,6vw,80px);
+}
+.hero-orb{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:min(800px,130vw);height:min(800px,130vw);
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(37,99,235,.13) 0%,rgba(37,99,235,.04) 40%,transparent 70%);
+  pointer-events:none;
+  animation:orbPulse 7s ease-in-out infinite;
+}
+@keyframes orbPulse{0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-50%,-50%) scale(1.07);}}
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
+  background-size:55px 55px;
+  mask-image:radial-gradient(ellipse at center,black 20%,transparent 70%);
+  pointer-events:none;
+}
+
+.hero-inner{
+  position:relative;z-index:2;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:clamp(32px,5vw,80px);flex-wrap:wrap;
+}
+.hero-text{max-width:560px;}
+
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.05);border:1px solid var(--border2);
+  border-radius:40px;padding:5px 14px;font-size:11px;
+  color:var(--gray2);margin-bottom:24px;letter-spacing:.5px;
+  font-family:'JetBrains Mono',monospace;
+}
+.hero-eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--blue);animation:blink 2s infinite;}
+
+.hero-h1{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(38px,6vw,72px);
+  font-weight:800;line-height:.95;
+  color:var(--white);letter-spacing:-2px;margin-bottom:20px;
+}
+.hero-h1 .grad{
+  background:linear-gradient(135deg,var(--blue),var(--cyan) 50%,var(--purple));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+
+.hero-desc{
+  font-size:clamp(14px,1.8vw,16px);color:var(--gray);
+  line-height:1.8;margin-bottom:32px;max-width:460px;
+}
+
+.hero-btns{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:40px;}
+
+.hero-stats{display:flex;gap:clamp(20px,3vw,40px);flex-wrap:wrap;}
+.h-stat{display:flex;flex-direction:column;}
+.h-stat-num{
+  font-family:'Syne',sans-serif;font-size:clamp(24px,3.5vw,36px);
+  font-weight:800;color:var(--white);line-height:1;
+}
+.h-stat-num span{color:var(--cyan);}
+.h-stat-label{font-size:11px;color:var(--gray);margin-top:4px;letter-spacing:.3px;}
+
+/* Tarjeta showcase hero derecha */
+.hero-showcase{
+  flex:1;min-width:280px;max-width:400px;
+  display:grid;gap:12px;
+}
+.showcase-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:18px 20px;
+  display:flex;align-items:center;gap:14px;
+  transition:all .3s;cursor:pointer;
+  position:relative;overflow:hidden;
+}
+.showcase-card::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(37,99,235,.04),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.showcase-card:hover{border-color:rgba(37,99,235,.3);transform:translateX(4px);}
+.showcase-card:hover::before{opacity:1;}
+.showcase-icon{
+  width:44px;height:44px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;
+}
+.showcase-info .title{font-size:13px;font-weight:600;color:var(--white);margin-bottom:2px;}
+.showcase-info .price{font-size:12px;font-weight:700;color:var(--cyan);}
+.showcase-info .cat{font-size:11px;color:var(--gray);}
+.showcase-badge-new{
+  margin-left:auto;font-size:9px;font-weight:700;letter-spacing:1px;
+  background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.2);
+  color:var(--green);border-radius:4px;padding:2px 7px;text-transform:uppercase;flex-shrink:0;
+}
+
+/* ═══════════════════════════════════════
+   TICKER
+═══════════════════════════════════════ */
+#ticker{
+  padding:12px 0;
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  overflow:hidden;background:rgba(255,255,255,.015);
+}
+.ticker-track{display:flex;gap:56px;animation:ticker 24s linear infinite;width:max-content;}
+.ticker-track:hover{animation-play-state:paused;}
+@keyframes ticker{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+.ticker-item{display:flex;align-items:center;gap:10px;font-size:11px;font-weight:600;color:var(--gray);letter-spacing:1.5px;text-transform:uppercase;white-space:nowrap;font-family:'JetBrains Mono',monospace;}
+.ticker-item i{color:var(--blue);}
+.ticker-sep{color:var(--border2);font-size:16px;}
+
+/* ═══════════════════════════════════════
+   CATEGORÍAS
+═══════════════════════════════════════ */
+#categorias{padding:clamp(60px,8vw,100px) 0 0;}
+.section-head{margin-bottom:clamp(28px,4vw,48px);}
+.section-eyebrow{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:14px;
+}
+.section-eyebrow::before{content:'//';opacity:.4;}
+.section-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(26px,4vw,42px);font-weight:800;
+  color:var(--white);letter-spacing:-1px;line-height:1.1;
+}
+.section-title span{color:var(--blue);}
+.section-sub{font-size:14px;color:var(--gray);margin-top:10px;max-width:480px;}
+
+.cats-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  gap:12px;
+}
+.cat-pill{
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;
+  padding:20px 16px;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);
+  cursor:pointer;transition:all .3s;text-align:center;
+}
+.cat-pill:hover,.cat-pill.active{
+  border-color:rgba(37,99,235,.4);
+  background:rgba(37,99,235,.06);
+  transform:translateY(-3px);
+  box-shadow:0 12px 36px rgba(0,0,0,.3);
+}
+.cat-pill.active .cat-name{color:var(--blue);}
+.cat-icon-wrap{
+  width:44px;height:44px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+}
+.cat-name{font-size:12px;font-weight:600;color:var(--gray2);transition:color .2s;}
+.cat-count{font-size:10px;color:var(--gray);font-family:'JetBrains Mono',monospace;}
+
+/* ═══════════════════════════════════════
+   ZONA PRINCIPAL: FILTROS + PRODUCTOS
+═══════════════════════════════════════ */
+#productos-section{padding:clamp(48px,6vw,80px) 0;}
+.store-layout{display:grid;grid-template-columns:260px 1fr;gap:clamp(20px,3vw,40px);align-items:start;}
+
+/* ── SIDEBAR FILTROS ── */
+.filtros-sidebar{
+  position:sticky;top:86px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius-xl);padding:24px;
+}
+.filter-title{
+  font-family:'Syne',sans-serif;font-size:14px;font-weight:700;
+  color:var(--white);margin-bottom:20px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.filter-reset{
+  font-size:11px;color:var(--gray);font-family:'DM Sans',sans-serif;
+  font-weight:400;cursor:pointer;transition:color .2s;
+}
+.filter-reset:hover{color:var(--cyan);}
+
+.filter-group{margin-bottom:24px;}
+.filter-label{
+  font-size:11px;font-weight:600;color:var(--gray);
+  letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;
+  font-family:'JetBrains Mono',monospace;
+}
+.filter-select{
+  width:100%;background:var(--bg3);border:1px solid var(--border2);
+  color:var(--text);font-size:12px;padding:9px 12px;border-radius:8px;
+  outline:none;cursor:pointer;font-family:'DM Sans',sans-serif;
+  transition:border-color .2s;
+}
+.filter-select:focus{border-color:rgba(37,99,235,.5);}
+
+/* Rango precio */
+.price-inputs{display:flex;gap:8px;align-items:center;}
+.price-input{
+  flex:1;background:var(--bg3);border:1px solid var(--border2);
+  color:var(--white);font-size:12px;padding:9px 10px;border-radius:8px;
+  outline:none;font-family:'JetBrains Mono',monospace;
+  transition:border-color .2s;
+}
+.price-input:focus{border-color:rgba(37,99,235,.5);}
+.price-input::placeholder{color:var(--gray);}
+.price-sep{color:var(--gray);font-size:12px;flex-shrink:0;}
+
+/* Checkbox pills */
+.check-pills{display:flex;flex-wrap:wrap;gap:6px;}
+.check-pill{
+  font-size:11px;font-weight:600;padding:5px 11px;border-radius:20px;
+  background:var(--bg3);border:1px solid var(--border);
+  color:var(--gray2);cursor:pointer;transition:all .2s;user-select:none;
+}
+.check-pill.active{
+  background:rgba(37,99,235,.15);border-color:rgba(37,99,235,.4);color:var(--blue3);
+}
+
+.filter-divider{height:1px;background:var(--border);margin:4px 0 20px;}
+
+/* ── ÁREA PRODUCTOS ── */
+.products-area{}
+
+/* Toolbar */
+.products-toolbar{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:24px;gap:12px;flex-wrap:wrap;
+}
+.products-count{font-size:13px;color:var(--gray);}
+.products-count strong{color:var(--white);font-weight:700;}
+.toolbar-right{display:flex;align-items:center;gap:10px;}
+.sort-select{
+  background:var(--card);border:1px solid var(--border2);
+  color:var(--text);font-size:12px;padding:8px 12px;border-radius:8px;
+  outline:none;cursor:pointer;font-family:'DM Sans',sans-serif;
+}
+.view-btns{display:flex;gap:4px;}
+.view-btn{
+  width:32px;height:32px;border-radius:7px;background:var(--card);
+  border:1px solid var(--border);color:var(--gray);display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .2s;font-size:13px;
+}
+.view-btn.active,.view-btn:hover{border-color:rgba(37,99,235,.4);color:var(--blue3);}
+
+/* Grid productos */
+.products-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+  gap:16px;
+}
+.products-grid.list-view{grid-template-columns:1fr;}
+
+/* ── PRODUCT CARD ── */
+.product-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius-xl);
+  overflow:hidden;
+  transition:all .35s cubic-bezier(.22,1,.36,1);
+  position:relative;
+  cursor:pointer;
+}
+.product-card:hover{
+  border-color:rgba(37,99,235,.3);
+  transform:translateY(-6px);
+  box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 0 1px rgba(37,99,235,.1);
+}
+
+/* Imagen / icono */
+.card-img{
+  height:160px;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.card-img-inner{
+  width:72px;height:72px;border-radius:20px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:32px;position:relative;z-index:1;
+  transition:transform .35s;
+}
+.product-card:hover .card-img-inner{transform:scale(1.12) rotate(-3deg);}
+.card-img-glow{
+  position:absolute;inset:0;
+  background:radial-gradient(circle at center,currentColor 0%,transparent 70%);
+  opacity:.08;
+  transition:opacity .35s;
+}
+.product-card:hover .card-img-glow{opacity:.14;}
+
+/* Badges */
+.card-badges{
+  position:absolute;top:10px;left:10px;
+  display:flex;flex-direction:column;gap:5px;z-index:2;
+}
+.badge{
+  font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+  border-radius:5px;padding:3px 8px;
+}
+.badge-new{background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.25);color:var(--green);}
+.badge-hot{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.25);color:var(--red);}
+.badge-sale{background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.25);color:var(--amber);}
+.badge-stock{background:rgba(168,85,247,.15);border:1px solid rgba(168,85,247,.25);color:var(--purple);}
+
+/* Wishlist */
+.wishlist-btn{
+  position:absolute;top:10px;right:10px;z-index:2;
+  width:30px;height:30px;border-radius:8px;
+  background:rgba(5,5,8,.7);border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--gray);font-size:12px;cursor:pointer;
+  transition:all .2s;
+}
+.wishlist-btn:hover{color:var(--red);border-color:rgba(239,68,68,.3);}
+.wishlist-btn.active{color:var(--red);border-color:rgba(239,68,68,.3);}
+
+/* Body card */
+.card-body{padding:16px;}
+.card-cat{
+  font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;
+  margin-bottom:6px;font-family:'JetBrains Mono',monospace;
+}
+.card-name{
+  font-family:'Syne',sans-serif;font-size:14px;font-weight:700;
+  color:var(--white);line-height:1.3;margin-bottom:8px;
+}
+.card-desc{font-size:11px;color:var(--gray);line-height:1.6;margin-bottom:12px;}
+
+/* Stars */
+.card-stars{display:flex;align-items:center;gap:4px;margin-bottom:12px;}
+.stars{color:var(--amber);font-size:11px;letter-spacing:1px;}
+.rating-count{font-size:10px;color:var(--gray);}
+
+/* Specs mini */
+.card-specs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px;}
+.spec-tag{
+  font-size:9px;font-weight:600;font-family:'JetBrains Mono',monospace;
+  padding:3px 8px;border-radius:5px;
+  background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--gray2);
+}
+
+/* Footer card */
+.card-footer{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:12px 16px 14px;
+  border-top:1px solid var(--border);
+}
+.card-price{
+  display:flex;flex-direction:column;
+}
+.price-main{
+  font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--white);line-height:1;
+}
+.price-main span{font-size:12px;font-weight:600;color:var(--cyan);}
+.price-old{font-size:11px;color:var(--gray);text-decoration:line-through;}
+.add-cart-btn{
+  display:flex;align-items:center;gap:6px;
+  background:var(--blue);color:#fff;
+  border:none;border-radius:10px;padding:9px 14px;
+  font-size:12px;font-weight:700;cursor:pointer;
+  transition:all .25s;white-space:nowrap;font-family:'DM Sans',sans-serif;
+}
+.add-cart-btn:hover{background:var(--blue2);transform:translateY(-1px);box-shadow:0 8px 24px var(--blue-glow);}
+
+/* Quick view */
+.quick-view-btn{
+  position:absolute;bottom:70px;left:50%;transform:translateX(-50%) translateY(8px);
+  background:rgba(5,5,8,.9);border:1px solid var(--border2);
+  color:var(--white);font-size:11px;font-weight:600;
+  padding:7px 16px;border-radius:20px;white-space:nowrap;
+  opacity:0;transition:all .25s;pointer-events:none;cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+}
+.product-card:hover .quick-view-btn{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto;}
+
+/* ═══════════════════════════════════════
+   LISTA VIEW
+═══════════════════════════════════════ */
+.products-grid.list-view .product-card{
+  display:flex;flex-direction:row;
+}
+.products-grid.list-view .card-img{
+  width:160px;min-width:160px;height:auto;border-radius:0;
+}
+.products-grid.list-view .card-body{flex:1;}
+.products-grid.list-view .card-footer{border-top:none;padding:0 16px 14px;flex-direction:column;align-items:flex-start;}
+.products-grid.list-view .quick-view-btn{display:none;}
+
+/* ═══════════════════════════════════════
+   PAGINACIÓN
+═══════════════════════════════════════ */
+.pagination{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  margin-top:40px;
+}
+.page-btn{
+  width:36px;height:36px;border-radius:8px;background:var(--card);
+  border:1px solid var(--border);color:var(--gray2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;font-weight:600;
+}
+.page-btn:hover,.page-btn.active{
+  background:rgba(37,99,235,.15);border-color:rgba(37,99,235,.4);color:var(--blue3);
+}
+.page-btn.arrow{font-size:11px;}
+.page-btn:disabled{opacity:.3;cursor:not-allowed;}
+
+/* ═══════════════════════════════════════
+   BANNER PROMO
+═══════════════════════════════════════ */
+#promo-banner{padding:60px 0;}
+.promo-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.promo-card{
+  border-radius:var(--radius-xl);padding:clamp(24px,3vw,40px);
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  min-height:220px;cursor:pointer;
+  transition:transform .3s;
+}
+.promo-card:hover{transform:scale(1.02);}
+.promo-card-1{background:linear-gradient(135deg,#0a1628 0%,#0d1f3c 40%,#0f2a55 100%);}
+.promo-card-2{background:linear-gradient(135deg,#0f0a1e 0%,#18082e 40%,#220b45 100%);}
+.promo-glow{
+  position:absolute;top:-30%;right:-10%;
+  width:60%;height:140%;
+  border-radius:50%;
+  pointer-events:none;
+}
+.promo-card-1 .promo-glow{background:radial-gradient(circle,rgba(37,99,235,.35) 0%,transparent 70%);}
+.promo-card-2 .promo-glow{background:radial-gradient(circle,rgba(168,85,247,.3) 0%,transparent 70%);}
+.promo-icon{
+  position:absolute;top:20px;right:20px;
+  font-size:60px;opacity:.15;
+}
+.promo-tag{
+  font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;
+  letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;
+}
+.promo-card-1 .promo-tag{color:var(--cyan);}
+.promo-card-2 .promo-tag{color:var(--purple);}
+.promo-title{
+  font-family:'Syne',sans-serif;font-size:clamp(20px,3vw,28px);
+  font-weight:800;color:var(--white);line-height:1.1;margin-bottom:8px;
+}
+.promo-sub{font-size:12px;color:var(--gray2);margin-bottom:16px;}
+
+/* ═══════════════════════════════════════
+   MARCAS
+═══════════════════════════════════════ */
+#marcas{padding:clamp(48px,6vw,80px) 0;}
+.marcas-track-wrap{overflow:hidden;position:relative;}
+.marcas-track-wrap::before,.marcas-track-wrap::after{
+  content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;
+}
+.marcas-track-wrap::before{left:0;background:linear-gradient(90deg,var(--bg),transparent);}
+.marcas-track-wrap::after{right:0;background:linear-gradient(-90deg,var(--bg),transparent);}
+.marcas-track{display:flex;gap:40px;animation:marcas 25s linear infinite;width:max-content;}
+.marcas-track:hover{animation-play-state:paused;}
+@keyframes marcas{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+.marca-item{
+  display:flex;align-items:center;gap:10px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:12px 20px;white-space:nowrap;
+  font-size:13px;font-weight:700;color:var(--gray);
+  transition:all .3s;cursor:pointer;
+}
+.marca-item:hover{border-color:rgba(37,99,235,.3);color:var(--white);}
+.marca-item i{font-size:18px;}
+
+/* ═══════════════════════════════════════
+   TESTIMONIOS
+═══════════════════════════════════════ */
+#testimonios{padding:clamp(48px,6vw,80px) 0;}
+.testi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
+.testi-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius-xl);padding:24px;
+  transition:all .3s;
+}
+.testi-card:hover{border-color:rgba(37,99,235,.25);transform:translateY(-3px);}
+.testi-stars{color:var(--amber);font-size:13px;margin-bottom:12px;}
+.testi-text{font-size:13px;color:var(--gray2);line-height:1.7;margin-bottom:16px;font-style:italic;}
+.testi-author{display:flex;align-items:center;gap:10px;}
+.testi-avatar{
+  width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:800;color:#fff;flex-shrink:0;
+}
+.testi-name{font-size:13px;font-weight:700;color:var(--white);}
+.testi-role{font-size:11px;color:var(--gray);}
+
+/* ═══════════════════════════════════════
+   CTA FINAL
+═══════════════════════════════════════ */
+#cta-store{
+  padding:clamp(60px,8vw,100px) 0;
+  position:relative;overflow:hidden;text-align:center;
+}
+.cta-orb{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(37,99,235,.18) 0%,rgba(37,99,235,.05) 45%,transparent 70%);
+  pointer-events:none;animation:orbPulse 6s ease-in-out infinite;
+}
+.cta-h2{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(32px,6vw,64px);font-weight:800;
+  color:var(--white);letter-spacing:-2px;
+  line-height:1;margin-bottom:16px;position:relative;
+}
+.cta-h2 span{
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.cta-sub{font-size:15px;color:var(--gray);margin-bottom:32px;position:relative;}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;}
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+footer{
+  border-top:1px solid var(--border);
+  padding:clamp(40px,5vw,72px) 0 0;
+}
+.footer-top{
+  display:grid;
+  grid-template-columns:1.8fr 1fr 1fr 1fr;
+  gap:clamp(24px,4vw,60px);
+  margin-bottom:48px;
+}
+.footer-logo{
+  font-family:'Syne',sans-serif;font-size:20px;font-weight:800;
+  color:var(--white);margin-bottom:12px;
+}
+.footer-logo span{
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.footer-desc{font-size:13px;color:var(--gray);line-height:1.7;margin-bottom:20px;}
+.footer-social{display:flex;gap:8px;}
+.fs-btn{
+  width:34px;height:34px;border-radius:8px;
+  background:rgba(255,255,255,.05);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--gray);font-size:13px;transition:all .2s;
+}
+.fs-btn:hover{background:rgba(37,99,235,.12);border-color:rgba(37,99,235,.3);color:var(--blue3);}
+.footer-col h5{
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
+  color:var(--white);margin-bottom:14px;
+}
+.footer-col ul li{margin-bottom:9px;}
+.footer-col ul li a{font-size:13px;color:var(--gray);transition:color .2s;}
+.footer-col ul li a:hover{color:var(--white);}
+.footer-bottom{
+  border-top:1px solid var(--border);
+  padding:20px 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;
+}
+.footer-bottom p{font-size:12px;color:var(--gray);}
+.footer-links{display:flex;gap:16px;}
+.footer-links a{font-size:12px;color:var(--gray);transition:color .2s;}
+.footer-links a:hover{color:var(--white);}
+
+/* ═══════════════════════════════════════
+   CARRITO SIDEBAR
+═══════════════════════════════════════ */
+.cart-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+  backdrop-filter:blur(4px);
+}
+.cart-overlay.open{opacity:1;pointer-events:auto;}
+.cart-sidebar{
+  position:fixed;top:0;right:-420px;width:420px;max-width:100vw;
+  height:100vh;z-index:201;
+  background:var(--card2);border-left:1px solid var(--border2);
+  display:flex;flex-direction:column;
+  transition:right .35s cubic-bezier(.22,1,.36,1);
+}
+.cart-sidebar.open{right:0;}
+.cart-header{
+  padding:20px 22px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+}
+.cart-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--white);}
+.cart-close{
+  width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.06);
+  border:1px solid var(--border);color:var(--gray);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .2s;
+}
+.cart-close:hover{color:var(--white);}
+
+/* Shipping progress */
+.shipping-bar{padding:14px 22px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.shipping-text{font-size:11px;color:var(--gray);margin-bottom:6px;}
+.shipping-progress-track{height:4px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden;}
+.shipping-progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:2px;width:0;transition:width .5s;}
+
+/* Items */
+.cart-items{flex:1;overflow-y:auto;padding:16px 22px;}
+.cart-item{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 0;border-bottom:1px solid var(--border);
+}
+.cart-item:last-child{border-bottom:none;}
+.cart-item-icon{
+  width:44px;height:44px;border-radius:10px;
+  background:var(--bg3);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex-shrink:0;
+}
+.cart-item-info{flex:1;min-width:0;}
+.cart-item-name{font-size:12px;font-weight:600;color:var(--white);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.cart-item-price{font-size:12px;font-weight:700;color:var(--cyan);}
+.cart-item-qty{display:flex;align-items:center;gap:6px;margin-top:5px;}
+.qty-btn{
+  width:22px;height:22px;border-radius:5px;
+  background:var(--bg3);border:1px solid var(--border);
+  color:var(--white);font-size:13px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .2s;
+}
+.qty-btn:hover{border-color:rgba(37,99,235,.4);color:var(--blue3);}
+.qty-num{font-size:12px;color:var(--white);min-width:18px;text-align:center;}
+.cart-item-del{
+  background:none;border:none;color:var(--gray);font-size:12px;
+  cursor:pointer;margin-left:auto;transition:color .2s;padding:4px;
+}
+.cart-item-del:hover{color:var(--red);}
+
+/* Footer carrito */
+.cart-footer{
+  padding:16px 22px 20px;border-top:1px solid var(--border);flex-shrink:0;
+}
+.cart-subtotal{
+  display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;
+}
+.cart-subtotal span{font-size:13px;color:var(--gray);}
+.cart-subtotal strong{
+  font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--white);
+}
+.checkout-btn{
+  width:100%;background:var(--blue);color:#fff;border:none;
+  border-radius:12px;padding:14px;font-size:14px;font-weight:700;
+  cursor:pointer;transition:all .25s;font-family:'DM Sans',sans-serif;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.checkout-btn:hover{background:var(--blue2);box-shadow:0 10px 32px var(--blue-glow);}
+.cart-clear{
+  width:100%;background:none;border:1px solid var(--border);
+  color:var(--gray);border-radius:12px;padding:10px;
+  font-size:12px;cursor:pointer;transition:all .2s;margin-top:8px;
+  font-family:'DM Sans',sans-serif;
+}
+.cart-clear:hover{border-color:rgba(239,68,68,.3);color:var(--red);}
+
+/* ═══════════════════════════════════════
+   MODAL QUICK VIEW
+═══════════════════════════════════════ */
+.qv-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:300;
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+  backdrop-filter:blur(8px);
+}
+.qv-overlay.open{opacity:1;pointer-events:auto;}
+.qv-modal{
+  background:var(--card2);border:1px solid var(--border2);
+  border-radius:var(--radius-xl);width:100%;max-width:560px;
+  max-height:90vh;overflow-y:auto;
+  transform:translateY(20px) scale(.97);
+  transition:transform .35s cubic-bezier(.22,1,.36,1);
+}
+.qv-overlay.open .qv-modal{transform:translateY(0) scale(1);}
+.qv-top{
+  padding:24px;border-bottom:1px solid var(--border);
+  display:flex;align-items:flex-start;justify-content:space-between;gap:16px;
+}
+.qv-icon-wrap{
+  width:80px;height:80px;border-radius:20px;
+  display:flex;align-items:center;justify-content:center;font-size:36px;flex-shrink:0;
+}
+.qv-info{flex:1;}
+.qv-tag{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:6px;}
+.qv-name{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--white);margin-bottom:4px;}
+.qv-price{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--white);}
+.qv-price span{font-size:14px;color:var(--cyan);}
+.qv-close{
+  width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.06);
+  border:1px solid var(--border);color:var(--gray);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .2s;flex-shrink:0;
+}
+.qv-close:hover{color:var(--white);}
+.qv-body{padding:24px;}
+.qv-desc{font-size:13px;color:var(--gray);line-height:1.8;margin-bottom:20px;}
+.qv-specs-title{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--gray);font-family:'JetBrains Mono',monospace;margin-bottom:10px;}
+.qv-specs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:24px;}
+.qv-spec{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:8px;padding:10px 12px;
+}
+.qv-spec-k{font-size:10px;color:var(--gray);margin-bottom:3px;font-family:'JetBrains Mono',monospace;}
+.qv-spec-v{font-size:12px;font-weight:600;color:var(--white);}
+.qv-actions{display:flex;gap:10px;}
+.qv-add-btn{
+  flex:1;background:var(--blue);color:#fff;border:none;border-radius:12px;
+  padding:13px;font-size:14px;font-weight:700;cursor:pointer;
+  transition:all .25s;font-family:'DM Sans',sans-serif;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.qv-add-btn:hover{background:var(--blue2);box-shadow:0 8px 28px var(--blue-glow);}
+.qv-wish-btn{
+  width:48px;height:48px;border-radius:12px;background:var(--bg3);
+  border:1px solid var(--border2);color:var(--gray);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;cursor:pointer;transition:all .2s;flex-shrink:0;
+}
+.qv-wish-btn:hover{color:var(--red);border-color:rgba(239,68,68,.3);}
+
+/* ═══════════════════════════════════════
+   NOTIFICACIÓN TOAST
+═══════════════════════════════════════ */
+.toast{
+  position:fixed;bottom:24px;right:24px;z-index:500;
+  background:var(--card2);border:1px solid rgba(34,197,94,.3);
+  border-radius:12px;padding:12px 18px;
+  display:flex;align-items:center;gap:10px;
+  font-size:13px;font-weight:600;color:var(--white);
+  transform:translateX(120%);transition:transform .4s cubic-bezier(.22,1,.36,1);
+  min-width:220px;max-width:320px;
+  box-shadow:0 8px 32px rgba(0,0,0,.4);
+}
+.toast.show{transform:translateX(0);}
+.toast i{color:var(--green);font-size:15px;}
+
+/* ═══════════════════════════════════════
+   REVEAL ANIMACIONES
+═══════════════════════════════════════ */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s cubic-bezier(.22,1,.36,1);}
+.reveal.in{opacity:1;transform:translateY(0);}
+
+/* ═══════════════════════════════════════
+   SKELETON LOADER
+═══════════════════════════════════════ */
+.skeleton-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius-xl);overflow:hidden;
+}
+.skel{
+  background:linear-gradient(90deg,var(--card2) 0%,rgba(37,99,235,.06) 50%,var(--card2) 100%);
+  background-size:200% 100%;
+  animation:shimmer 1.8s infinite;border-radius:6px;
+}
+@keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media(max-width:1024px){
+  .store-layout{grid-template-columns:1fr;}
+  .filtros-sidebar{position:static;display:none;}
+  .filtros-sidebar.mobile-open{display:block;}
+  .footer-top{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:768px){
+  .nav-links,.nav-search,.nav-store-tag{display:none;}
+  .hamburger{display:flex;}
+  .hero-inner{flex-direction:column;}
+  .hero-showcase{max-width:100%;width:100%;}
+  .promo-grid{grid-template-columns:1fr;}
+  .store-layout{grid-template-columns:1fr;}
+  .products-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));}
+  .footer-top{grid-template-columns:1fr;}
+  .footer-bottom{flex-direction:column;text-align:center;}
+  .top-bar-left{display:none;}
+  .cart-sidebar{width:100vw;}
+}
+</style>
+</head>
+<body>
+
+<div class="ambient-bg"></div>
+
+<!-- PROGRESS -->
+<div id="progress"><div id="progress-fill"></div></div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><i class="fa fa-check-circle"></i><span id="toast-msg">Producto añadido</span></div>
+
+<!-- OVERLAY CARRITO -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+
+<!-- CARRITO SIDEBAR -->
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <div class="cart-title">🛒 Tu Carrito</div>
+    <button class="cart-close" onclick="toggleCart()"><i class="fa fa-times"></i></button>
+  </div>
+  <div class="shipping-bar">
+    <div class="shipping-text" id="shippingText">Agrega L 3,500 para envío gratis</div>
+    <div class="shipping-progress-track">
+      <div class="shipping-progress-fill" id="shippingProgress"></div>
+    </div>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div style="text-align:center;padding:48px 16px;">
+      <i class="fa fa-box-open" style="font-size:48px;color:var(--gray);display:block;margin-bottom:12px;"></i>
+      <p style="font-size:13px;color:var(--gray);">Tu carrito está vacío</p>
+    </div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-subtotal">
+      <span>Subtotal</span>
+      <strong id="cartTotal">L 0.00</strong>
+    </div>
+    <button class="checkout-btn" onclick="irACheckout()">
+      <i class="fa fa-lock"></i> Proceder al Pago
+    </button>
+    <button class="cart-clear" onclick="vaciarCarrito()">Vaciar carrito</button>
+  </div>
+</div>
+
+<!-- QUICK VIEW MODAL -->
+<div class="qv-overlay" id="qvModal" onclick="e=>e.target===this&&closeQV()">
+  <div class="qv-modal">
+    <div class="qv-top">
+      <div class="qv-icon-wrap" id="qvIconWrap">
+        <i class="fa fa-microchip" id="qvIcon" style="color:var(--cyan);"></i>
+      </div>
+      <div class="qv-info">
+        <div class="qv-tag" id="qvTag">Categoría</div>
+        <div class="qv-name" id="qvName">Nombre del producto</div>
+        <div class="qv-price"><span>L</span> <span id="qvPrice">0.00</span></div>
+      </div>
+      <button class="qv-close" onclick="closeQV()"><i class="fa fa-times"></i></button>
+    </div>
+    <div class="qv-body">
+      <p class="qv-desc" id="qvDesc">Descripción del producto.</p>
+      <div class="qv-specs-title">Especificaciones</div>
+      <div class="qv-specs" id="qvSpecs"></div>
+      <div class="qv-actions">
+        <button class="qv-add-btn" id="qvAddBtn"><i class="fa fa-cart-plus"></i> Añadir al Carrito</button>
+        <button class="qv-wish-btn"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="top-bar-left">
+    <span class="live-dot">Tienda en línea</span>
+    <span>📍 Honduras — Envíos a todo el país</span>
+    <span>📞 +504 0000-0000</span>
+  </div>
+  <div class="top-bar-right">
+    <a href="index.html">Inicio</a>
+    <a href="servicios.html">Servicios</a>
+    <a href="#">Seguimiento de pedido</a>
+    <a href="#cta-store">Contacto</a>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <nav>
+    <a href="index.html" class="nav-logo">InfiniHon<span>.</span></a>
+    <div class="nav-store-tag">Store</div>
+
+    <div class="nav-search">
+      <input type="text" id="searchInput" placeholder="Buscar productos, marcas...">
+      <button onclick="buscarProducto()"><i class="fa fa-search"></i></button>
+    </div>
+
+    <div class="nav-links">
+      <a href="index.html">Inicio</a>
+      <a href="servicios.html">Servicios</a>
+      <a href="#" class="active">Tienda</a>
+      <a href="#cta-store">Contacto</a>
+    </div>
+
+    <div class="nav-right">
+      <button class="cart-btn" onclick="toggleCart()">
+        <i class="fa fa-shopping-cart"></i>
+        <span id="cartTotalHeader">L 0.00</span>
+        <div class="cart-count" id="cartCount">0</div>
+      </button>
+      <button class="hamburger" id="ham" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html"><i class="fa fa-home" style="width:18px;"></i> Inicio</a>
+  <a href="servicios.html"><i class="fa fa-server" style="width:18px;"></i> Servicios</a>
+  <a href="#" style="color:var(--white);"><i class="fa fa-store" style="width:18px;"></i> Tienda</a>
+  <a href="#cta-store"><i class="fa fa-envelope" style="width:18px;"></i> Contacto</a>
+</div>
+
+<!-- ══ HERO ══ -->
+<section id="hero-store">
+  <div class="hero-orb"></div>
+  <div class="hero-grid"></div>
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <div class="hero-eyebrow">
+          <div class="dot"></div>
+          Hardware Especializado · Honduras
+        </div>
+        <h1 class="hero-h1">
+          Tu tienda de<br>
+          <span class="grad">tecnología</span><br>
+          profesional
+        </h1>
+        <p class="hero-desc">Equipamiento IT de grado industrial para redes, servidores y automatización. Stock real, soporte experto y envíos a todo el país.</p>
+        <div class="hero-btns">
+          <a href="#productos-section" class="btn btn-blue"><i class="fa fa-rocket"></i> Ver Productos</a>
+          <a href="servicios.html" class="btn btn-ghost"><i class="fa fa-headset"></i> Asesoría Gratuita</a>
+        </div>
+        <div class="hero-stats">
+          <div class="h-stat">
+            <div class="h-stat-num">+<span>500</span></div>
+            <div class="h-stat-label">Productos en stock</div>
+          </div>
+          <div class="h-stat">
+            <div class="h-stat-num"><span>48</span>h</div>
+            <div class="h-stat-label">Entrega express</div>
+          </div>
+          <div class="h-stat">
+            <div class="h-stat-num"><span>99</span>%</div>
+            <div class="h-stat-label">Clientes satisfechos</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-showcase">
+        <div class="showcase-card" onclick="scrollToProducts()">
+          <div class="showcase-icon" style="background:rgba(37,99,235,.12);">
+            <i class="fa fa-network-wired" style="color:var(--blue3);"></i>
+          </div>
+          <div class="showcase-info">
+            <div class="title">MikroTik hEX RB750Gr3</div>
+            <div class="price">L 1,450.00</div>
+            <div class="cat">Redes / Router</div>
+          </div>
+          <div class="showcase-badge-new">Nuevo</div>
+        </div>
+        <div class="showcase-card" onclick="scrollToProducts()">
+          <div class="showcase-icon" style="background:rgba(56,189,248,.1);">
+            <i class="fa fa-raspberry-pi" style="color:var(--cyan);"></i>
+          </div>
+          <div class="showcase-info">
+            <div class="title">Raspberry Pi 5 — 8GB</div>
+            <div class="price">L 2,890.00</div>
+            <div class="cat">Computación / SBC</div>
+          </div>
+          <div class="showcase-badge-new">Hot</div>
+        </div>
+        <div class="showcase-card" onclick="scrollToProducts()">
+          <div class="showcase-icon" style="background:rgba(168,85,247,.1);">
+            <i class="fa fa-shield-halved" style="color:var(--purple);"></i>
+          </div>
+          <div class="showcase-info">
+            <div class="title">UniFi AP WiFi 6 Pro</div>
+            <div class="price">L 5,200.00</div>
+            <div class="cat">Wireless / Access Point</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div id="ticker">
+  <div class="ticker-track">
+    <div class="ticker-item"><i class="fa fa-truck"></i> Envío a todo Honduras</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-shield-alt"></i> Garantía oficial</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-headset"></i> Soporte técnico incluido</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-bolt"></i> Entrega express 48h</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-credit-card"></i> Pago en cuotas sin interés</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-certificate"></i> Productos certificados</div>
+    <div class="ticker-sep">·</div>
+    <!-- duplicate -->
+    <div class="ticker-item"><i class="fa fa-truck"></i> Envío a todo Honduras</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-shield-alt"></i> Garantía oficial</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-headset"></i> Soporte técnico incluido</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-bolt"></i> Entrega express 48h</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-credit-card"></i> Pago en cuotas sin interés</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-certificate"></i> Productos certificados</div>
+  </div>
+</div>
+
+<!-- ══ CATEGORÍAS ══ -->
+<section id="categorias">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow">Navegar</div>
+      <h2 class="section-title">Categorías <span>principales</span></h2>
+      <p class="section-sub">Filtra por especialidad para encontrar exactamente lo que necesitas.</p>
+    </div>
+    <div class="cats-grid reveal" style="transition-delay:.1s;">
+      <div class="cat-pill active" onclick="filterByCategory('todos')">
+        <div class="cat-icon-wrap" style="background:rgba(37,99,235,.12);"><i class="fa fa-th-large" style="color:var(--blue3);"></i></div>
+        <div class="cat-name">Todo</div>
+        <div class="cat-count">500+</div>
+      </div>
+      <div class="cat-pill" onclick="filterByCategory('redes')">
+        <div class="cat-icon-wrap" style="background:rgba(56,189,248,.1);"><i class="fa fa-network-wired" style="color:var(--cyan);"></i></div>
+        <div class="cat-name">Redes</div>
+        <div class="cat-count">142</div>
+      </div>
+      <div class="cat-pill" onclick="filterByCategory('sbc')">
+        <div class="cat-icon-wrap" style="background:rgba(34,197,94,.1);"><i class="fa fa-microchip" style="color:var(--green);"></i></div>
+        <div class="cat-name">SBC / SoC</div>
+        <div class="cat-count">87</div>
+      </div>
+      <div class="cat-pill" onclick="filterByCategory('seguridad')">
+        <div class="cat-icon-wrap" style="background:rgba(239,68,68,.1);"><i class="fa fa-shield-halved" style="color:var(--red);"></i></div>
+        <div class="cat-name">Seguridad</div>
+        <div class="cat-count">64</div>
+      </div>
+      <div class="cat-pill" onclick="filterByCategory('almacenamiento')">
+        <div class="cat-icon-wrap" style="background:rgba(168,85,247,.1);"><i class="fa fa-hard-drive" style="color:var(--purple);"></i></div>
+        <div class="cat-name">Almacenamiento</div>
+        <div class="cat-count">93</div>
+      </div>
+      <div class="cat-pill" onclick="filterByCategory('cables')">
+        <div class="cat-icon-wrap" style="background:rgba(245,158,11,.1);"><i class="fa fa-plug" style="color:var(--amber);"></i></div>
+        <div class="cat-name">Cables & UPS</div>
+        <div class="cat-count">115</div>
+      </div>
+      <div class="cat-pill" onclick="filterByCategory('wireless')">
+        <div class="cat-icon-wrap" style="background:rgba(236,72,153,.1);"><i class="fa fa-wifi" style="color:var(--pink);"></i></div>
+        <div class="cat-name">Wireless</div>
+        <div class="cat-count">78</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PRODUCTOS ══ -->
+<section id="productos-section">
+  <div class="container">
+    <div class="store-layout">
+
+      <!-- FILTROS -->
+      <aside class="filtros-sidebar reveal">
+        <div class="filter-title">
+          Filtros
+          <span class="filter-reset" onclick="limpiarFiltros()">Limpiar</span>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-label">Categoría</div>
+          <select class="filter-select" id="categoria-filter" onchange="aplicarFiltros()">
+            <option value="">Todas las categorías</option>
+            <option value="redes">Redes MikroTik</option>
+            <option value="sbc">SBC / Raspberry Pi</option>
+            <option value="seguridad">Seguridad IT</option>
+            <option value="almacenamiento">Almacenamiento</option>
+            <option value="cables">Cables & UPS</option>
+            <option value="wireless">Wireless / WiFi</option>
+          </select>
+        </div>
+
+        <div class="filter-divider"></div>
+
+        <div class="filter-group">
+          <div class="filter-label">Disponibilidad</div>
+          <div class="check-pills">
+            <div class="check-pill active" onclick="togglePill(this)">En stock</div>
+            <div class="check-pill" onclick="togglePill(this)">Pre-orden</div>
+            <div class="check-pill" onclick="togglePill(this)">Oferta</div>
+          </div>
+        </div>
+
+        <div class="filter-divider"></div>
+
+        <div class="filter-group">
+          <div class="filter-label">Rendimiento</div>
+          <select class="filter-select" id="rendimiento-filter" onchange="aplicarFiltros()">
+            <option value="todos">Todos los niveles</option>
+            <option value="basico">Básico / SOHO</option>
+            <option value="profesional">Profesional</option>
+            <option value="enterprise">Enterprise</option>
+          </select>
+        </div>
+
+        <div class="filter-divider"></div>
+
+        <div class="filter-group">
+          <div class="filter-label">Rango de precio (L)</div>
+          <div class="price-inputs">
+            <input type="number" class="price-input" id="precio-min" placeholder="Mín" onchange="aplicarFiltros()">
+            <span class="price-sep">—</span>
+            <input type="number" class="price-input" id="precio-max" placeholder="Máx" onchange="aplicarFiltros()">
+          </div>
+        </div>
+
+        <div class="filter-divider"></div>
+
+        <div class="filter-group">
+          <div class="filter-label">Marca</div>
+          <div class="check-pills">
+            <div class="check-pill" onclick="togglePill(this)">MikroTik</div>
+            <div class="check-pill" onclick="togglePill(this)">Raspberry Pi</div>
+            <div class="check-pill" onclick="togglePill(this)">Ubiquiti</div>
+            <div class="check-pill" onclick="togglePill(this)">TP-Link</div>
+            <div class="check-pill" onclick="togglePill(this)">Seagate</div>
+            <div class="check-pill" onclick="togglePill(this)">APC</div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- PRODUCTOS -->
+      <div class="products-area">
+        <div class="products-toolbar reveal">
+          <div class="products-count">Mostrando <strong id="productsShown">12</strong> de <strong>500+</strong> productos</div>
+          <div class="toolbar-right">
+            <select class="sort-select" id="ordenar-por" onchange="aplicarFiltros()">
+              <option value="relevancia">Más relevantes</option>
+              <option value="precio-asc">Precio: menor a mayor</option>
+              <option value="precio-desc">Precio: mayor a menor</option>
+              <option value="nuevo">Más nuevos</option>
+              <option value="popular">Más populares</option>
+            </select>
+            <div class="view-btns">
+              <button class="view-btn active" id="gridViewBtn" onclick="setView('grid')" title="Vista cuadrícula"><i class="fa fa-grip"></i></button>
+              <button class="view-btn" id="listViewBtn" onclick="setView('list')" title="Vista lista"><i class="fa fa-list"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="products-grid reveal" id="productsGrid" style="transition-delay:.1s;">
+          <!-- Productos generados por JS -->
+        </div>
+
+        <div class="pagination reveal" id="pagination" style="transition-delay:.2s;margin-top:40px;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ BANNER PROMO ══ -->
+<section id="promo-banner">
+  <div class="container">
+    <div class="promo-grid reveal">
+      <div class="promo-card promo-card-1">
+        <div class="promo-glow"></div>
+        <i class="fa fa-network-wired promo-icon"></i>
+        <div>
+          <div class="promo-tag">Oferta especial</div>
+          <h3 class="promo-title">Kits de red<br>MikroTik completos</h3>
+          <p class="promo-sub">Router + Switch + Access Point con descuento por paquete</p>
+          <a href="#productos-section" class="btn btn-blue btn-sm">Ver kits <i class="fa fa-arrow-right"></i></a>
+        </div>
+      </div>
+      <div class="promo-card promo-card-2">
+        <div class="promo-glow"></div>
+        <i class="fa fa-server promo-icon"></i>
+        <div>
+          <div class="promo-tag">Nuevo stock</div>
+          <h3 class="promo-title">Raspberry Pi 5<br>disponible ahora</h3>
+          <p class="promo-sub">La SBC más poderosa del mercado, ahora en Honduras</p>
+          <a href="#productos-section" class="btn btn-ghost btn-sm" style="border-color:rgba(168,85,247,.4);color:var(--purple);">Ver stock <i class="fa fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MARCAS ══ -->
+<section id="marcas">
+  <div class="container">
+    <div class="section-head reveal" style="text-align:center;margin-bottom:32px;">
+      <div class="section-eyebrow" style="justify-content:center;">Marcas</div>
+      <h2 class="section-title">Distribuidores <span>autorizados</span></h2>
+    </div>
+  </div>
+  <div class="marcas-track-wrap reveal" style="transition-delay:.1s;">
+    <div class="marcas-track">
+      <div class="marca-item"><i class="fa fa-network-wired"></i> MikroTik</div>
+      <div class="marca-item"><i class="fa fa-microchip"></i> Raspberry Pi</div>
+      <div class="marca-item"><i class="fa fa-wifi"></i> Ubiquiti</div>
+      <div class="marca-item"><i class="fa fa-server"></i> TP-Link</div>
+      <div class="marca-item"><i class="fa fa-hard-drive"></i> Seagate</div>
+      <div class="marca-item"><i class="fa fa-bolt"></i> APC</div>
+      <div class="marca-item"><i class="fa fa-memory"></i> Kingston</div>
+      <div class="marca-item"><i class="fa fa-shield-halved"></i> Fortinet</div>
+      <div class="marca-item"><i class="fa fa-cloud"></i> Synology</div>
+      <!-- duplicado -->
+      <div class="marca-item"><i class="fa fa-network-wired"></i> MikroTik</div>
+      <div class="marca-item"><i class="fa fa-microchip"></i> Raspberry Pi</div>
+      <div class="marca-item"><i class="fa fa-wifi"></i> Ubiquiti</div>
+      <div class="marca-item"><i class="fa fa-server"></i> TP-Link</div>
+      <div class="marca-item"><i class="fa fa-hard-drive"></i> Seagate</div>
+      <div class="marca-item"><i class="fa fa-bolt"></i> APC</div>
+      <div class="marca-item"><i class="fa fa-memory"></i> Kingston</div>
+      <div class="marca-item"><i class="fa fa-shield-halved"></i> Fortinet</div>
+      <div class="marca-item"><i class="fa fa-cloud"></i> Synology</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TESTIMONIOS ══ -->
+<section id="testimonios">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow">Testimonios</div>
+      <h2 class="section-title">Lo que dicen <span>nuestros clientes</span></h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Pedí un kit MikroTik completo para nuestra empresa y llegó en 2 días. La atención técnica es excepcional, nos ayudaron a configurarlo todo sin costo adicional."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:linear-gradient(135deg,#2563eb,#38bdf8);">CR</div>
+          <div>
+            <div class="testi-name">Carlos Ramírez</div>
+            <div class="testi-role">Gerente IT · Tegucigalpa</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal" style="transition-delay:.1s;">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Compré 3 Raspberry Pi 5 para nuestro cluster de monitoreo. Precios competitivos, producto original y con garantía. Lo mejor de Honduras en tech."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:linear-gradient(135deg,#a855f7,#ec4899);">ML</div>
+          <div>
+            <div class="testi-name">María López</div>
+            <div class="testi-role">Desarrolladora · San Pedro Sula</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal" style="transition-delay:.2s;">
+        <div class="testi-stars">★★★★☆</div>
+        <p class="testi-text">"Excelente tienda para conseguir hardware especializado. Tienen stock de productos que no encuentras en otras tiendas locales. Muy recomendado."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:linear-gradient(135deg,#22c55e,#38bdf8);">JM</div>
+          <div>
+            <div class="testi-name">José Martínez</div>
+            <div class="testi-role">Sysadmin · La Ceiba</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA FINAL ══ -->
+<section id="cta-store">
+  <div class="cta-orb"></div>
+  <div class="container">
+    <h2 class="cta-h2 reveal">
+      ¿Necesitas<br>asesoría <span>técnica</span>?
+    </h2>
+    <p class="cta-sub reveal" style="transition-delay:.1s;">
+      Nuestro equipo de expertos te ayuda a elegir el hardware perfecto para tu proyecto.
+    </p>
+    <div class="cta-btns reveal" style="transition-delay:.2s;">
+      <a href="mailto:info@infinihon.com" class="btn btn-blue"><i class="fa fa-envelope"></i> info@infinihon.com</a>
+      <a href="servicios.html" class="btn btn-ghost"><i class="fa fa-arrow-right"></i> Ver Servicios</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">InfiniHon<span>.</span></div>
+        <p class="footer-desc">Infraestructura IT de grado industrial para Honduras. Hardware especializado, soporte experto y precios competitivos.</p>
+        <div class="footer-social">
+          <a href="#" class="fs-btn"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="fs-btn"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="fs-btn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" class="fs-btn"><i class="fab fa-github"></i></a>
+          <a href="#" class="fs-btn"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Tienda</h5>
+        <ul>
+          <li><a href="#categorias">Redes MikroTik</a></li>
+          <li><a href="#categorias">Raspberry Pi</a></li>
+          <li><a href="#categorias">Seguridad IT</a></li>
+          <li><a href="#categorias">Almacenamiento</a></li>
+          <li><a href="#categorias">Wireless</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Compañía</h5>
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="servicios.html">Servicios</a></li>
+          <li><a href="index.html#members">Equipo</a></li>
+          <li><a href="index.html#press">Blog</a></li>
+          <li><a href="#cta-store">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Ayuda</h5>
+        <ul>
+          <li><a href="#">Política de Envíos</a></li>
+          <li><a href="#">Garantías</a></li>
+          <li><a href="#">Devoluciones</a></li>
+          <li><a href="#">Privacidad</a></li>
+          <li><a href="#">Términos de Uso</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 InfiniHon Studio. Todos los derechos reservados. 🇭🇳 Hecho en Honduras.</p>
+      <div class="footer-links">
+        <a href="#">Privacidad</a>
+        <a href="#">Términos</a>
+        <a href="#">Mapa del Sitio</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════
+   DATOS DE PRODUCTOS
+═══════════════════════════════════════ */
+const PRODUCTOS = [
+  { id:1, nombre:'MikroTik hEX RB750Gr3', cat:'redes', catLabel:'Redes', precio:1450, precioOld:null, marca:'MikroTik', icon:'fa-network-wired', color:'#2563eb', rating:4.8, reviews:124, specs:['5x Gigabit','RouterOS L4','880MHz CPU','256MB RAM'], desc:'Router compacto ideal para oficinas pequeñas y medianas. RouterOS nivel 4, 5 puertos Gigabit, bajo consumo y alto rendimiento.', badge:'popular', rendimiento:'profesional' },
+  { id:2, nombre:'Raspberry Pi 5 — 8GB RAM', cat:'sbc', catLabel:'SBC/SoC', precio:2890, precioOld:3200, marca:'Raspberry Pi', icon:'fa-microchip', color:'#22c55e', rating:5.0, reviews:89, specs:['8GB LPDDR4X','ARM Cortex-A76','PCIe 2.0','2x USB-C'], desc:'La Raspberry Pi más potente jamás creada. Hasta 3x más rápida que la Pi 4, con PCIe nativo y soporte para accesorios M.2.', badge:'hot', rendimiento:'profesional' },
+  { id:3, nombre:'UniFi AP WiFi 6 Pro', cat:'wireless', catLabel:'Wireless', precio:5200, precioOld:null, marca:'Ubiquiti', icon:'fa-wifi', color:'#38bdf8', rating:4.9, reviews:56, specs:['WiFi 6 / 802.11ax','4x4 MU-MIMO','PoE+','5.3Gbps'], desc:'Access Point de alto rendimiento con soporte WiFi 6. Ideal para oficinas densas y espacios con muchos dispositivos simultáneos.', badge:'nuevo', rendimiento:'enterprise' },
+  { id:4, nombre:'MikroTik CSS326-24G-2S+RM', cat:'redes', catLabel:'Redes', precio:3750, precioOld:4100, marca:'MikroTik', icon:'fa-server', color:'#3b82f6', rating:4.7, reviews:41, specs:['24x Gigabit','2x SFP+','SwOS','Rack 1U'], desc:'Switch administrable de 24 puertos Gigabit para rack 1U. Perfecto para pequeñas y medianas redes empresariales.', badge:'sale', rendimiento:'profesional' },
+  { id:5, nombre:'Raspberry Pi 4 — 4GB RAM', cat:'sbc', catLabel:'SBC/SoC', precio:1850, precioOld:null, marca:'Raspberry Pi', icon:'fa-microchip', color:'#10b981', rating:4.6, reviews:203, specs:['4GB LPDDR4','ARM Cortex-A72','2x USB 3.0','Gigabit LAN'], desc:'La plataforma SBC más popular del mundo. Ideal para proyectos de automatización, servidores caseros, clusters y desarrollo.', badge:null, rendimiento:'basico' },
+  { id:6, nombre:'Seagate IronWolf 4TB NAS', cat:'almacenamiento', catLabel:'Almacenamiento', precio:2150, precioOld:null, marca:'Seagate', icon:'fa-hard-drive', color:'#a855f7', rating:4.5, reviews:77, specs:['4TB','7200 RPM','SATA III','NAS optimizado'], desc:'Disco duro diseñado para sistemas NAS. Optimizado para operación 24/7, con tecnología AgileArray y hasta 300TB/año de carga.', badge:null, rendimiento:'profesional' },
+  { id:7, nombre:'APC Back-UPS 1500VA', cat:'cables', catLabel:'Cables & UPS', precio:4800, precioOld:5500, marca:'APC', icon:'fa-bolt', color:'#f59e0b', rating:4.8, reviews:92, specs:['1500VA / 865W','8 tomas','USB protegida','Autotest'], desc:'UPS para protección de equipos críticos en oficinas. Regulación automática de voltaje, protección ante surge y batería de respaldo.', badge:'sale', rendimiento:'profesional' },
+  { id:8, nombre:'MikroTik hAP ax²', cat:'wireless', catLabel:'Wireless', precio:2450, precioOld:null, marca:'MikroTik', icon:'fa-wifi', color:'#06b6d4', rating:4.7, reviews:38, specs:['WiFi 6 dual-band','5x Gigabit','RouterOS L4','USB 3.0'], desc:'Router doméstico con WiFi 6 integrado. Potente para hogares y pequeñas oficinas que requieren velocidad y estabilidad excepcionales.', badge:'nuevo', rendimiento:'basico' },
+  { id:9, nombre:'Kingston NV2 1TB M.2 NVMe', cat:'almacenamiento', catLabel:'Almacenamiento', precio:1280, precioOld:1500, marca:'Kingston', icon:'fa-memory', color:'#ef4444', rating:4.6, reviews:145, specs:['1TB NVMe','PCIe 4.0 M.2','3500MB/s lect.','2800MB/s escrit.'], desc:'SSD NVMe compacto y rápido para upgrading de laptops, servidores compactos y clústeres Raspberry Pi con soporte M.2.', badge:'sale', rendimiento:'profesional' },
+  { id:10, nombre:'MikroTik RB5009 UG+S+IN', cat:'redes', catLabel:'Redes', precio:6900, precioOld:null, marca:'MikroTik', icon:'fa-network-wired', color:'#2563eb', rating:4.9, reviews:29, specs:['7x Gigabit','1x 2.5G','SFP+ 10G','ARM Cortex-A72'], desc:'El router más potente de la gama doméstica/SOHO de MikroTik. Con CPU quad-core de alto rendimiento y múltiples interfaces de alta velocidad.', badge:'hot', rendimiento:'enterprise' },
+  { id:11, nombre:'TP-Link TL-SG108 8-Port', cat:'redes', catLabel:'Redes', precio:680, precioOld:null, marca:'TP-Link', icon:'fa-server', color:'#3b82f6', rating:4.3, reviews:312, specs:['8x Gigabit','No administrable','Fanless','Plug & Play'], desc:'Switch Gigabit de 8 puertos no administrable. Ideal para ampliación de red en el hogar u oficinas pequeñas. Silencioso y eficiente.', badge:null, rendimiento:'basico' },
+  { id:12, nombre:'Fortinet FortiAP 231F', cat:'seguridad', catLabel:'Seguridad', precio:8750, precioOld:null, marca:'Fortinet', icon:'fa-shield-halved', color:'#ec4899', rating:4.8, reviews:18, specs:['WiFi 6','FortiOS integrado','WIDS/WIPS','PoE 802.3at'], desc:'Access Point de seguridad integrado con FortiOS. Inspección profunda de tráfico, detección de intrusos y gestión centralizada FortiManager.', badge:'nuevo', rendimiento:'enterprise' },
+];
+
+let carrito = JSON.parse(localStorage.getItem('infini-carrito') || '[]');
+let currentPage = 1;
+const perPage = 12;
+let filteredProducts = [...PRODUCTOS];
+let currentView = 'grid';
+
+/* ─── RENDER PRODUCTOS ─── */
+function renderProducts(products = filteredProducts) {
+  const grid = document.getElementById('productsGrid');
+  const shown = document.getElementById('productsShown');
+  shown.textContent = products.length;
+
+  if (!products.length) {
+    grid.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:60px;">
+        <i class="fa fa-search" style="font-size:40px;color:var(--gray);display:block;margin-bottom:16px;"></i>
+        <p style="color:var(--gray);font-size:15px;">No se encontraron productos con esos filtros.</p>
+        <button onclick="limpiarFiltros()" class="btn btn-ghost btn-sm" style="margin-top:16px;">Limpiar filtros</button>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = products.map(p => {
+    const badgeHTML = p.badge ? `<div class="card-badges"><div class="badge badge-${p.badge === 'popular' ? 'stock' : p.badge === 'hot' ? 'hot' : p.badge === 'nuevo' ? 'new' : 'sale'}">${p.badge === 'popular' ? 'Popular' : p.badge === 'hot' ? '🔥 Hot' : p.badge === 'nuevo' ? 'Nuevo' : '% Oferta'}</div></div>` : '';
+    const starsHTML = '★'.repeat(Math.floor(p.rating)) + (p.rating % 1 ? '½' : '');
+    const specsHTML = p.specs.slice(0,3).map(s => `<div class="spec-tag">${s}</div>`).join('');
+    const oldPriceHTML = p.precioOld ? `<div class="price-old">L ${p.precioOld.toLocaleString('es-HN', {minimumFractionDigits:2})}</div>` : '';
+    return `
+    <div class="product-card">
+      ${badgeHTML}
+      <button class="wishlist-btn" onclick="toggleWishlist(this)"><i class="far fa-heart"></i></button>
+      <div class="card-img" style="background:linear-gradient(135deg,${p.color}18,${p.color}08);">
+        <div style="position:absolute;inset:0;background:radial-gradient(circle at center,${p.color}20 0%,transparent 70%);"></div>
+        <div class="card-img-inner" style="background:${p.color}18;">
+          <i class="fa ${p.icon}" style="color:${p.color};"></i>
+        </div>
+      </div>
+      <button class="quick-view-btn" onclick="openQV(${p.id})">
+        <i class="fa fa-eye"></i> Vista rápida
+      </button>
+      <div class="card-body">
+        <div class="card-cat" style="color:${p.color};">${p.catLabel}</div>
+        <div class="card-name">${p.nombre}</div>
+        <div class="card-desc">${p.desc.substring(0,80)}...</div>
+        <div class="card-stars">
+          <span class="stars">${starsHTML}</span>
+          <span class="rating-count">(${p.reviews})</span>
+        </div>
+        <div class="card-specs">${specsHTML}</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-price">
+          <div class="price-main"><span>L</span> ${p.precio.toLocaleString('es-HN', {minimumFractionDigits:2})}</div>
+          ${oldPriceHTML}
+        </div>
+        <button class="add-cart-btn" onclick="agregarAlCarrito(${p.id},'${p.nombre.replace(/'/g,"\\'")}',${p.precio})">
+          <i class="fa fa-cart-plus"></i> Añadir
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+
+  renderPagination();
+  revealNew();
+}
+
+/* ─── PAGINACIÓN ─── */
+function renderPagination() {
+  const total = Math.ceil(filteredProducts.length / perPage);
+  const pag = document.getElementById('pagination');
+  if (total <= 1) { pag.innerHTML = ''; return; }
+  let html = `<button class="page-btn arrow" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}><i class="fa fa-chevron-left"></i></button>`;
+  for (let i=1;i<=total;i++) {
+    html += `<button class="page-btn${i===currentPage?' active':''}" onclick="goPage(${i})">${i}</button>`;
+  }
+  html += `<button class="page-btn arrow" onclick="goPage(${currentPage+1})" ${currentPage===total?'disabled':''}><i class="fa fa-chevron-right"></i></button>`;
+  pag.innerHTML = html;
+}
+function goPage(p) {
+  const total = Math.ceil(filteredProducts.length / perPage);
+  if (p < 1 || p > total) return;
+  currentPage = p;
+  const start = (p-1)*perPage, end = start+perPage;
+  renderProducts(filteredProducts.slice(start, end));
+  document.getElementById('productos-section').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ─── FILTROS ─── */
+function aplicarFiltros() {
+  const cat = document.getElementById('categoria-filter').value;
+  const rend = document.getElementById('rendimiento-filter').value;
+  const pMin = parseFloat(document.getElementById('precio-min').value) || 0;
+  const pMax = parseFloat(document.getElementById('precio-max').value) || Infinity;
+  const orden = document.getElementById('ordenar-por').value;
+
+  filteredProducts = PRODUCTOS.filter(p => {
+    if (cat && p.cat !== cat) return false;
+    if (rend !== 'todos' && p.rendimiento !== rend) return false;
+    if (p.precio < pMin || p.precio > pMax) return false;
+    return true;
+  });
+
+  if (orden === 'precio-asc') filteredProducts.sort((a,b)=>a.precio-b.precio);
+  else if (orden === 'precio-desc') filteredProducts.sort((a,b)=>b.precio-a.precio);
+  else if (orden === 'popular') filteredProducts.sort((a,b)=>b.reviews-a.reviews);
+  else if (orden === 'nuevo') filteredProducts.reverse();
+
+  currentPage = 1;
+  renderProducts(filteredProducts.slice(0, perPage));
+}
+
+function limpiarFiltros() {
+  document.getElementById('categoria-filter').value = '';
+  document.getElementById('rendimiento-filter').value = 'todos';
+  document.getElementById('precio-min').value = '';
+  document.getElementById('precio-max').value = '';
+  document.getElementById('ordenar-por').value = 'relevancia';
+  document.querySelectorAll('.check-pill').forEach(p => p.classList.remove('active'));
+  filteredProducts = [...PRODUCTOS];
+  currentPage = 1;
+  renderProducts(filteredProducts.slice(0, perPage));
+}
+
+function filterByCategory(cat) {
+  document.querySelectorAll('.cat-pill').forEach(p=>p.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  document.getElementById('categoria-filter').value = cat === 'todos' ? '' : cat;
+  aplicarFiltros();
+  document.getElementById('productos-section').scrollIntoView({behavior:'smooth'});
+}
+
+function togglePill(el) {
+  el.classList.toggle('active');
+}
+
+/* ─── VISTA ─── */
+function setView(v) {
+  currentView = v;
+  const grid = document.getElementById('productsGrid');
+  document.getElementById('gridViewBtn').classList.toggle('active', v==='grid');
+  document.getElementById('listViewBtn').classList.toggle('active', v==='list');
+  grid.classList.toggle('list-view', v==='list');
+}
+
+/* ─── CARRITO ─── */
+function agregarAlCarrito(id, nombre, precio) {
+  const ex = carrito.find(i=>i.id===id);
+  ex ? ex.cantidad++ : carrito.push({id,nombre,precio,cantidad:1});
+  localStorage.setItem('infini-carrito', JSON.stringify(carrito));
+  actualizarCarritoUI();
+  showToast(`${nombre.substring(0,28)}... añadido ✓`);
+}
+
+function eliminarDelCarrito(id) {
+  carrito = carrito.filter(i=>i.id!==id);
+  localStorage.setItem('infini-carrito', JSON.stringify(carrito));
+  actualizarCarritoUI();
+}
+
+function vaciarCarrito() {
+  if (!carrito.length) return;
+  carrito = [];
+  localStorage.setItem('infini-carrito', JSON.stringify(carrito));
+  actualizarCarritoUI();
+}
+
+function actualizarCantidad(id, cant) {
+  if (cant < 1) { eliminarDelCarrito(id); return; }
+  const item = carrito.find(i=>i.id===id);
+  if (item) { item.cantidad = cant; localStorage.setItem('infini-carrito', JSON.stringify(carrito)); actualizarCarritoUI(); }
+}
+
+function actualizarCarritoUI() {
+  const count = carrito.reduce((s,i)=>s+i.cantidad,0);
+  const sub = carrito.reduce((s,i)=>s+i.precio*i.cantidad,0);
+  document.getElementById('cartCount').textContent = count;
+  document.getElementById('cartTotal').textContent = `L ${sub.toFixed(2)}`;
+  document.getElementById('cartTotalHeader').textContent = `L ${sub.toFixed(2)}`;
+  const falta = Math.max(0, 3500-sub);
+  document.getElementById('shippingText').textContent = falta > 0 ? `Faltan L ${falta.toFixed(2)} para envío gratis` : '¡Envío gratis! 🎉';
+  document.getElementById('shippingProgress').style.width = `${Math.min(100,(sub/3500)*100)}%`;
+
+  const items = document.getElementById('cartItems');
+  if (!carrito.length) {
+    items.innerHTML = `<div style="text-align:center;padding:48px 16px;"><i class="fa fa-box-open" style="font-size:48px;color:var(--gray);display:block;margin-bottom:12px;"></i><p style="font-size:13px;color:var(--gray);">Tu carrito está vacío</p></div>`;
+  } else {
+    items.innerHTML = carrito.map(item => {
+      const p = PRODUCTOS.find(x=>x.id===item.id);
+      return `
+      <div class="cart-item">
+        <div class="cart-item-icon" style="background:${p?.color||'var(--blue)'}18;">
+          <i class="fa ${p?.icon||'fa-box'}" style="color:${p?.color||'var(--blue)'};"></i>
+        </div>
+        <div class="cart-item-info">
+          <div class="cart-item-name">${item.nombre}</div>
+          <div class="cart-item-price">L ${item.precio.toFixed(2)}</div>
+          <div class="cart-item-qty">
+            <button class="qty-btn" onclick="actualizarCantidad(${item.id},${item.cantidad-1})">−</button>
+            <span class="qty-num">${item.cantidad}</span>
+            <button class="qty-btn" onclick="actualizarCantidad(${item.id},${item.cantidad+1})">+</button>
+          </div>
+        </div>
+        <button class="cart-item-del" onclick="eliminarDelCarrito(${item.id})"><i class="fa fa-trash"></i></button>
+      </div>`;
+    }).join('');
+  }
+}
+
+/* ─── CARRITO TOGGLE ─── */
+function toggleCart() {
+  document.getElementById('cartSidebar').classList.toggle('open');
+  document.getElementById('cartOverlay').classList.toggle('open');
+}
+function irACheckout() {
+  if (!carrito.length) { showToast('Tu carrito está vacío'); return; }
+  showToast('Redirigiendo al checkout...');
+}
+
+/* ─── QUICK VIEW ─── */
+function openQV(id) {
+  const p = PRODUCTOS.find(x=>x.id===id);
+  if (!p) return;
+  document.getElementById('qvName').textContent = p.nombre;
+  document.getElementById('qvPrice').textContent = p.precio.toLocaleString('es-HN',{minimumFractionDigits:2});
+  document.getElementById('qvTag').textContent = p.catLabel;
+  document.getElementById('qvTag').style.color = p.color;
+  document.getElementById('qvIcon').className = `fa ${p.icon}`;
+  document.getElementById('qvIcon').style.color = p.color;
+  document.getElementById('qvIconWrap').style.background = p.color+'18';
+  document.getElementById('qvDesc').textContent = p.desc;
+  document.getElementById('qvSpecs').innerHTML = p.specs.map(s=>`
+    <div class="qv-spec">
+      <div class="qv-spec-k">Especificación</div>
+      <div class="qv-spec-v">${s}</div>
+    </div>`).join('');
+  document.getElementById('qvAddBtn').onclick = ()=>{ agregarAlCarrito(p.id,p.nombre,p.precio); closeQV(); };
+  document.getElementById('qvModal').classList.add('open');
+}
+function closeQV() { document.getElementById('qvModal').classList.remove('open'); }
+
+/* ─── WISHLIST ─── */
+function toggleWishlist(el) {
+  const icon = el.querySelector('i');
+  icon.classList.toggle('fas');
+  icon.classList.toggle('far');
+  el.classList.toggle('active');
+}
+
+/* ─── BÚSQUEDA ─── */
+function buscarProducto() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  if (!q) { filteredProducts = [...PRODUCTOS]; renderProducts(filteredProducts.slice(0,perPage)); return; }
+  filteredProducts = PRODUCTOS.filter(p =>
+    p.nombre.toLowerCase().includes(q) ||
+    p.catLabel.toLowerCase().includes(q) ||
+    p.marca.toLowerCase().includes(q) ||
+    p.desc.toLowerCase().includes(q)
+  );
+  currentPage = 1;
+  renderProducts(filteredProducts.slice(0,perPage));
+  document.getElementById('productos-section').scrollIntoView({behavior:'smooth'});
+}
+
+/* ─── TOAST ─── */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(()=>t.classList.remove('show'), 3000);
+}
+
+/* ─── SCROLL ─── */
+function scrollToProducts() {
+  document.getElementById('productos-section').scrollIntoView({behavior:'smooth'});
+}
+
+/* ─── MOBILE MENU ─── */
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+/* ─── REVEAL ─── */
+function revealNew() {
+  document.querySelectorAll('.reveal:not(.in)').forEach(el=>{
+    if (el.getBoundingClientRect().top < window.innerHeight + 60) el.classList.add('in');
+  });
+}
+const revObs = new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting) setTimeout(()=>e.target.classList.add('in'), i*70);
+  });
+},{threshold:.07});
+document.querySelectorAll('.reveal').forEach(el=>revObs.observe(el));
+
+/* ─── PROGRESS BAR ─── */
+window.addEventListener('scroll',()=>{
+  const p=(window.scrollY/(document.documentElement.scrollHeight-innerHeight))*100;
+  document.getElementById('progress-fill').style.width=p+'%';
+  revealNew();
+});
+
+/* ─── SEARCHBAR ENTER ─── */
+document.getElementById('searchInput').addEventListener('keydown',e=>{
+  if(e.key==='Enter') buscarProducto();
+});
+
+/* ─── ESC ─── */
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){ closeQV(); document.getElementById('cartSidebar').classList.remove('open'); document.getElementById('cartOverlay').classList.remove('open'); }
+});
+document.getElementById('qvModal').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeQV(); });
+document.querySelectorAll('.cat-pill').forEach(el=>el.addEventListener('click',function(){
+  document.querySelectorAll('.cat-pill').forEach(p=>p.classList.remove('active'));
+  this.classList.add('active');
+}));
+
+/* ─── INIT ─── */
+renderProducts(PRODUCTOS.slice(0, perPage));
+actualizarCarritoUI();
+</script>
+</body>
+</html>
