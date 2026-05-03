@@ -1,0 +1,1886 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InfiniHon — Alianzas Estratégicas</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+/* ════════════════════════════════════════════════════════
+   TOKENS — Cadena de diseño InfiniHon (index.html base)
+   ════════════════════════════════════════════════════════ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:       #050508;
+  --bg2:      #08080f;
+  --bg3:      #0d0d18;
+  --card:     #0f0f1a;
+  --card2:    #12121f;
+  --border:   rgba(255,255,255,0.07);
+  --border2:  rgba(255,255,255,0.12);
+  --blue:     #2563eb;
+  --blue2:    #1d4ed8;
+  --blue-glow:rgba(37,99,235,0.35);
+  --cyan:     #38bdf8;
+  --white:    #ffffff;
+  --gray:     #6b7280;
+  --gray2:    #9ca3af;
+  --text:     #d1d5db;
+  --green:    #22c55e;
+  --purple:   #a855f7;
+  --orange:   #f97316;
+  --radius:   10px;
+  --radius-lg:18px;
+}
+html{scroll-behavior:smooth;font-size:16px;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);color:var(--text);
+  overflow-x:hidden;line-height:1.6;
+  cursor:none;
+}
+a{text-decoration:none;color:inherit;}
+ul{list-style:none;}
+button{font-family:inherit;cursor:none;}
+.container{max-width:1200px;margin:0 auto;padding:0 clamp(16px,4vw,40px);}
+
+/* ─── SCROLLBAR ─────────────────────────────────────── */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--blue);border-radius:2px;}
+
+/* ─── PROGRESS BAR ──────────────────────────────────── */
+#progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:999;}
+#progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));width:0;transition:width .1s linear;}
+
+/* ════════════════════════════════════════════════════════
+   CURSOR PERSONALIZADO
+   ════════════════════════════════════════════════════════ */
+#cursor{
+  position:fixed;width:12px;height:12px;
+  background:var(--blue);border-radius:50%;
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:width .2s,height .2s,background .2s;
+  mix-blend-mode:normal;
+}
+#cursor-ring{
+  position:fixed;width:36px;height:36px;
+  border:1.5px solid rgba(37,99,235,.5);
+  border-radius:50%;pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:width .35s cubic-bezier(.23,1,.32,1),
+             height .35s cubic-bezier(.23,1,.32,1),
+             border-color .3s,
+             left .08s linear,top .08s linear;
+}
+#cursor-aura{
+  position:fixed;width:400px;height:400px;
+  background:radial-gradient(circle,rgba(37,99,235,.12) 0%,transparent 70%);
+  border-radius:50%;pointer-events:none;z-index:9997;
+  transform:translate(-50%,-50%);
+  transition:left .15s,top .15s;
+}
+body:has(*:hover) #cursor-ring{width:52px;height:52px;border-color:rgba(37,99,235,.8);}
+
+/* ════════════════════════════════════════════════════════
+   CANVAS PARTICLES BG (detrás de todo)
+   ════════════════════════════════════════════════════════ */
+#particle-canvas{
+  position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
+}
+
+/* ─── MALLA DE FONDO ─────────────────────────────────── */
+.mesh-bg{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 10% 20%,rgba(37,99,235,.08) 0%,transparent 50%),
+    radial-gradient(ellipse at 90% 70%,rgba(56,189,248,.06) 0%,transparent 50%),
+    radial-gradient(ellipse at 50% 100%,rgba(168,85,247,.06) 0%,transparent 50%);
+  animation:meshDrift 20s ease-in-out infinite alternate;
+}
+@keyframes meshDrift{
+  0%{transform:translate(0,0) scale(1);}
+  100%{transform:translate(1%,2%) scale(1.05);}
+}
+
+/* ════════════════════════════════════════════════════════
+   BOTONES (idénticos al index)
+   ════════════════════════════════════════════════════════ */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:40px;font-size:13px;font-weight:600;border:none;transition:all .25s;cursor:none;font-family:'DM Sans',sans-serif;white-space:nowrap;}
+.btn-blue{background:var(--blue);color:#fff;}
+.btn-blue:hover{background:var(--blue2);transform:translateY(-1px);box-shadow:0 8px 28px var(--blue-glow);}
+.btn-ghost{background:rgba(255,255,255,0.06);color:var(--white);border:1px solid var(--border2);}
+.btn-ghost:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.2);}
+.btn-sm{padding:8px 18px;font-size:12px;}
+.btn-outline{background:transparent;color:var(--white);border:1px solid var(--border2);}
+.btn-outline:hover{background:rgba(255,255,255,0.05);}
+
+/* ════════════════════════════════════════════════════════
+   NAV — idéntico al index
+   ════════════════════════════════════════════════════════ */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:0 clamp(16px,4vw,40px);
+  background:rgba(5,5,8,0.88);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+nav{
+  max-width:1200px;margin:0 auto;
+  display:flex;align-items:center;height:64px;
+}
+.nav-logo{
+  font-family:'Syne',sans-serif;
+  font-size:18px;font-weight:800;
+  color:var(--white);letter-spacing:-.5px;
+  margin-right:auto;
+}
+.nav-links{display:flex;align-items:center;gap:4px;margin:0 32px;}
+.nav-links a{
+  font-size:13px;font-weight:500;color:var(--gray2);
+  padding:6px 12px;border-radius:6px;transition:color .2s;
+}
+.nav-links a:hover{color:var(--white);}
+.nav-links a.active{color:var(--white);background:rgba(255,255,255,.05);}
+.nav-right{display:flex;align-items:center;gap:10px;}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:none;padding:4px;}
+.hamburger span{width:22px;height:2px;background:var(--white);transition:all .3s;}
+.mobile-menu{
+  display:none;position:fixed;top:64px;left:0;right:0;
+  background:rgba(5,5,8,0.98);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:20px clamp(16px,4vw,40px) 28px;
+  flex-direction:column;gap:4px;z-index:99;
+}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{font-size:15px;font-weight:500;color:var(--gray2);padding:10px 14px;border-radius:8px;transition:all .2s;}
+.mobile-menu a:hover{color:var(--white);background:rgba(255,255,255,0.05);}
+.mobile-menu .divider{height:1px;background:var(--border);margin:8px 0;}
+
+/* ════════════════════════════════════════════════════════
+   TICKER (idéntico al index)
+   ════════════════════════════════════════════════════════ */
+.ticker-wrap{
+  padding:14px 0;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  overflow:hidden;background:rgba(255,255,255,.02);
+  position:relative;z-index:1;
+}
+.ticker-track{display:flex;gap:60px;animation:ticker 28s linear infinite;width:max-content;}
+.ticker-track:hover{animation-play-state:paused;}
+@keyframes ticker{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+.ticker-item{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:600;color:var(--gray);letter-spacing:1px;text-transform:uppercase;white-space:nowrap;}
+.ticker-item i{color:var(--blue);font-size:14px;}
+.ticker-sep{color:var(--border2);font-size:18px;}
+
+/* ════════════════════════════════════════════════════════
+   HERO — SPLIT SCREEN CON ORB 3D ORBITAL
+   ════════════════════════════════════════════════════════ */
+#hero{
+  min-height:100vh;
+  display:grid;grid-template-columns:1fr 1fr;
+  align-items:center;
+  padding-top:64px;
+  position:relative;overflow:hidden;
+}
+/* Grid animado de fondo hero */
+.hero-grid{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 0%,transparent 100%);
+}
+.hero-left{
+  padding:clamp(40px,6vw,80px) clamp(16px,4vw,40px) clamp(40px,6vw,80px) clamp(16px,4vw,80px);
+  position:relative;z-index:2;
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,0.05);
+  border:1px solid var(--border2);
+  border-radius:40px;padding:6px 16px;
+  font-size:12px;color:var(--gray2);margin-bottom:28px;
+}
+.hero-eyebrow .dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--green);animation:blink 2s infinite;
+}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
+.hero-h1{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(44px,7vw,88px);
+  font-weight:800;line-height:.93;
+  color:var(--white);letter-spacing:-3px;
+  margin-bottom:24px;
+}
+.hero-h1 .line2{
+  display:block;
+  background:linear-gradient(135deg,var(--blue),var(--cyan),var(--purple));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  background-size:200% auto;
+  animation:gradShift 4s linear infinite;
+}
+@keyframes gradShift{to{background-position:200% center;}}
+.hero-desc{font-size:15px;color:var(--gray);line-height:1.8;max-width:420px;margin-bottom:36px;}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:48px;}
+.hero-mini-stats{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1px;background:var(--border);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);overflow:hidden;
+}
+.hms-item{
+  background:var(--card);padding:16px 20px;
+}
+.hms-num{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(22px,3vw,32px);font-weight:800;
+  color:var(--white);line-height:1;
+}
+.hms-num span{color:var(--blue);}
+.hms-label{font-size:11px;color:var(--gray);margin-top:4px;}
+
+/* ORBITAL 3D en el hero right */
+.hero-right{
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+  height:100%;min-height:500px;
+}
+.orbital-scene{
+  position:relative;
+  width:clamp(300px,40vw,480px);
+  height:clamp(300px,40vw,480px);
+}
+/* Orb central */
+.orb-core{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:clamp(100px,15vw,160px);
+  height:clamp(100px,15vw,160px);
+  border-radius:50%;
+  background:linear-gradient(135deg,#1d3a8a,var(--blue),#60a5fa);
+  box-shadow:
+    0 0 60px rgba(37,99,235,.6),
+    0 0 120px rgba(37,99,235,.3),
+    inset 0 0 40px rgba(255,255,255,.1);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;
+  font-size:clamp(14px,2vw,18px);font-weight:800;
+  color:#fff;letter-spacing:1px;
+  animation:coreBreath 4s ease-in-out infinite;
+  z-index:3;
+}
+@keyframes coreBreath{
+  0%,100%{box-shadow:0 0 60px rgba(37,99,235,.6),0 0 120px rgba(37,99,235,.3),inset 0 0 40px rgba(255,255,255,.1);}
+  50%{box-shadow:0 0 80px rgba(37,99,235,.8),0 0 160px rgba(37,99,235,.4),inset 0 0 60px rgba(255,255,255,.15);}
+}
+
+/* Anillos orbitales */
+.orbit-ring{
+  position:absolute;top:50%;left:50%;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.06);
+  transform:translate(-50%,-50%) rotateX(70deg);
+  transform-style:preserve-3d;
+}
+.orbit-ring-1{
+  width:60%;height:60%;
+  border-color:rgba(37,99,235,.2);
+  animation:orbitSpin1 8s linear infinite;
+}
+.orbit-ring-2{
+  width:82%;height:82%;
+  border-color:rgba(56,189,248,.15);
+  animation:orbitSpin2 14s linear infinite reverse;
+}
+.orbit-ring-3{
+  width:100%;height:100%;
+  border-color:rgba(168,85,247,.1);
+  animation:orbitSpin1 20s linear infinite;
+}
+@keyframes orbitSpin1{from{transform:translate(-50%,-50%) rotateX(70deg) rotateZ(0deg);}to{transform:translate(-50%,-50%) rotateX(70deg) rotateZ(360deg);}}
+@keyframes orbitSpin2{from{transform:translate(-50%,-50%) rotateX(60deg) rotateZ(0deg);}to{transform:translate(-50%,-50%) rotateX(60deg) rotateZ(360deg);}}
+
+/* Planetas/Socios en órbita */
+.orbit-planet{
+  position:absolute;
+  top:50%;left:50%;
+  transform-style:preserve-3d;
+  animation:inherit;
+}
+.planet-dot{
+  position:absolute;
+  transform:translate(-50%,-50%);
+  width:clamp(36px,5vw,52px);
+  height:clamp(36px,5vw,52px);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:clamp(14px,2vw,20px);
+  border:1px solid var(--border2);
+  box-shadow:0 4px 20px rgba(0,0,0,.4);
+  transition:transform .3s;
+  animation:counterSpin1 8s linear infinite reverse;
+  z-index:4;
+}
+.planet-dot:hover{transform:translate(-50%,-50%) scale(1.3);}
+.pd-blue{background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;}
+.pd-purple{background:linear-gradient(135deg,#5b21b6,#a855f7);color:#fff;}
+.pd-cyan{background:linear-gradient(135deg,#0e7490,#38bdf8);color:#fff;}
+.pd-green{background:linear-gradient(135deg,#065f46,#22c55e);color:#fff;}
+.pd-orange{background:linear-gradient(135deg,#9a3412,#f97316);color:#fff;}
+@keyframes counterSpin1{from{transform:translate(-50%,-50%) rotate(0deg);}to{transform:translate(-50%,-50%) rotate(-360deg);}}
+
+/* Tooltip de planeta */
+.planet-tooltip{
+  position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);
+  background:rgba(5,5,8,.95);border:1px solid var(--border2);
+  border-radius:6px;padding:4px 10px;
+  font-size:10px;font-weight:700;color:var(--white);
+  white-space:nowrap;pointer-events:none;
+  opacity:0;transition:opacity .2s;
+}
+.planet-dot:hover .planet-tooltip{opacity:1;}
+
+/* ════════════════════════════════════════════════════════
+   SECCIÓN LABEL ROW (idéntica al index)
+   ════════════════════════════════════════════════════════ */
+.section-label-row{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:clamp(32px,4vw,56px);flex-wrap:wrap;gap:16px;
+}
+.section-label{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(22px,3vw,28px);font-weight:700;color:var(--white);
+}
+.section-label span{color:var(--blue);}
+
+/* ════════════════════════════════════════════════════════
+   PARTNER TIERS — TABLA VISUAL 3D
+   ════════════════════════════════════════════════════════ */
+#tiers{padding:100px 0;position:relative;z-index:1;}
+.tiers-intro{max-width:600px;margin-bottom:56px;}
+
+/* Cards de nivel en perspectiva */
+.tier-cards{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:16px;
+  perspective:1200px;
+}
+.tier-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:clamp(20px,3vw,32px) clamp(16px,2.5vw,24px);
+  display:flex;flex-direction:column;
+  position:relative;overflow:hidden;
+  transition:transform .4s cubic-bezier(.23,1,.32,1),box-shadow .4s,border-color .3s;
+  transform-style:preserve-3d;
+  cursor:none;
+}
+.tier-card::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.04),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.tier-card:hover{
+  transform:translateY(-8px) rotateX(3deg);
+  box-shadow:0 24px 60px rgba(0,0,0,.5);
+}
+.tier-card:hover::after{opacity:1;}
+
+/* Tiers por color */
+.tier-platinum{border-color:rgba(148,163,184,.2);}
+.tier-platinum:hover{border-color:rgba(148,163,184,.5);box-shadow:0 24px 60px rgba(148,163,184,.15);}
+.tier-gold{border-color:rgba(234,179,8,.2);}
+.tier-gold:hover{border-color:rgba(234,179,8,.5);box-shadow:0 24px 60px rgba(234,179,8,.15);}
+.tier-silver{border-color:rgba(107,114,128,.2);}
+.tier-silver:hover{border-color:rgba(107,114,128,.4);box-shadow:0 24px 60px rgba(107,114,128,.12);}
+.tier-tech{border-color:rgba(37,99,235,.2);}
+.tier-tech:hover{border-color:rgba(37,99,235,.5);box-shadow:0 24px 60px rgba(37,99,235,.2);}
+
+.tier-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;
+  padding:4px 12px;border-radius:20px;margin-bottom:20px;align-self:flex-start;
+}
+.badge-platinum{background:rgba(148,163,184,.1);border:1px solid rgba(148,163,184,.25);color:#cbd5e1;}
+.badge-gold{background:rgba(234,179,8,.1);border:1px solid rgba(234,179,8,.25);color:#fbbf24;}
+.badge-silver{background:rgba(107,114,128,.1);border:1px solid rgba(107,114,128,.25);color:#9ca3af;}
+.badge-tech{background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.25);color:#93c5fd;}
+
+.tier-icon-wrap{
+  width:56px;height:56px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;margin-bottom:16px;
+  position:relative;z-index:1;
+}
+.tw-platinum{background:rgba(148,163,184,.1);border:1px solid rgba(148,163,184,.2);color:#cbd5e1;}
+.tw-gold{background:rgba(234,179,8,.1);border:1px solid rgba(234,179,8,.2);color:#fbbf24;}
+.tw-silver{background:rgba(107,114,128,.1);border:1px solid rgba(107,114,128,.2);color:#9ca3af;}
+.tw-tech{background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.2);color:#60a5fa;}
+
+.tier-name{
+  font-family:'Syne',sans-serif;font-size:20px;font-weight:800;
+  color:var(--white);margin-bottom:8px;position:relative;z-index:1;
+}
+.tier-sub{font-size:12px;color:var(--gray);margin-bottom:16px;position:relative;z-index:1;}
+.tier-features{
+  display:flex;flex-direction:column;gap:8px;
+  margin-bottom:20px;flex:1;position:relative;z-index:1;
+}
+.tf-item{
+  display:flex;align-items:center;gap:8px;
+  font-size:12px;color:var(--gray2);
+}
+.tf-item i{font-size:11px;color:var(--blue);flex-shrink:0;}
+.tier-partners{
+  display:flex;gap:6px;flex-wrap:wrap;
+  margin-top:auto;padding-top:16px;
+  border-top:1px solid var(--border);
+  position:relative;z-index:1;
+}
+.tp-chip{
+  font-size:10px;font-weight:700;padding:3px 8px;
+  border-radius:20px;
+  background:rgba(255,255,255,.05);border:1px solid var(--border);
+  color:var(--gray2);white-space:nowrap;
+}
+
+/* Decoración de fondo en card */
+.tier-bg-deco{
+  position:absolute;bottom:-20px;right:-20px;
+  width:100px;height:100px;border-radius:50%;
+  opacity:.08;pointer-events:none;
+}
+.deco-platinum{background:radial-gradient(circle,#94a3b8,transparent);}
+.deco-gold{background:radial-gradient(circle,#eab308,transparent);}
+.deco-silver{background:radial-gradient(circle,#6b7280,transparent);}
+.deco-tech{background:radial-gradient(circle,#2563eb,transparent);}
+
+/* ════════════════════════════════════════════════════════
+   SOCIOS EN GRID BENTO — ESTILO MASONRY CREATIVO
+   ════════════════════════════════════════════════════════ */
+#socios{padding:100px 0;position:relative;z-index:1;}
+.socios-bento{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  grid-auto-rows:80px;
+  gap:12px;
+}
+
+/* Cada tarjeta de socio */
+.socio-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  display:flex;flex-direction:column;justify-content:center;
+  padding:20px;position:relative;overflow:hidden;
+  transition:all .35s cubic-bezier(.23,1,.32,1);
+  cursor:none;
+}
+.socio-card:hover{border-color:var(--border2);transform:scale(1.02) translateY(-2px);}
+.socio-card::before{
+  content:'';position:absolute;inset:0;
+  opacity:0;transition:opacity .3s;
+}
+.socio-card:hover::before{opacity:1;}
+
+/* Span sizes para el bento */
+.sc-xl{grid-column:span 2;grid-row:span 3;}
+.sc-lg{grid-column:span 2;grid-row:span 2;}
+.sc-md{grid-column:span 2;grid-row:span 2;}
+.sc-sm{grid-column:span 2;grid-row:span 1;}
+.sc-wide{grid-column:span 3;grid-row:span 2;}
+.sc-tall{grid-column:span 1;grid-row:span 3;}
+.sc-std{grid-column:span 2;grid-row:span 2;}
+
+/* Themes */
+.sc-blue::before{background:linear-gradient(135deg,rgba(37,99,235,.08),transparent);}
+.sc-blue:hover{border-color:rgba(37,99,235,.4);}
+.sc-purple::before{background:linear-gradient(135deg,rgba(168,85,247,.08),transparent);}
+.sc-purple:hover{border-color:rgba(168,85,247,.4);}
+.sc-cyan::before{background:linear-gradient(135deg,rgba(56,189,248,.08),transparent);}
+.sc-cyan:hover{border-color:rgba(56,189,248,.4);}
+.sc-orange::before{background:linear-gradient(135deg,rgba(249,115,22,.08),transparent);}
+.sc-orange:hover{border-color:rgba(249,115,22,.4);}
+.sc-green::before{background:linear-gradient(135deg,rgba(34,197,94,.08),transparent);}
+.sc-green:hover{border-color:rgba(34,197,94,.4);}
+.sc-gray::before{background:linear-gradient(135deg,rgba(100,116,139,.08),transparent);}
+.sc-gray:hover{border-color:rgba(100,116,139,.4);}
+
+.socio-icon-lg{font-size:clamp(28px,4vw,44px);margin-bottom:12px;position:relative;z-index:1;}
+.socio-icon-sm{font-size:clamp(20px,3vw,28px);margin-bottom:8px;position:relative;z-index:1;}
+.socio-name-lg{
+  font-family:'Syne',sans-serif;font-size:clamp(16px,2vw,22px);font-weight:800;
+  color:var(--white);margin-bottom:4px;position:relative;z-index:1;
+}
+.socio-name-sm{
+  font-family:'Syne',sans-serif;font-size:14px;font-weight:700;
+  color:var(--white);margin-bottom:2px;position:relative;z-index:1;
+}
+.socio-tier{
+  font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:var(--gray);position:relative;z-index:1;
+}
+.socio-desc{font-size:12px;color:var(--gray);line-height:1.6;margin-top:8px;position:relative;z-index:1;}
+.socio-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:10px;position:relative;z-index:1;}
+.st{font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--gray2);}
+.socio-since{
+  font-size:10px;color:var(--gray2);margin-top:auto;padding-top:8px;
+  border-top:1px solid var(--border);position:relative;z-index:1;
+  display:flex;align-items:center;gap:4px;
+}
+.socio-since i{font-size:9px;}
+/* Número enorme decorativo en el fondo */
+.socio-deco-num{
+  position:absolute;bottom:-10px;right:10px;
+  font-family:'Syne',sans-serif;font-size:80px;font-weight:800;
+  color:rgba(255,255,255,.03);line-height:1;pointer-events:none;
+  user-select:none;
+}
+/* Badge de nivel sobre la tarjeta */
+.socio-lvl{
+  position:absolute;top:12px;right:12px;
+  font-size:9px;font-weight:800;letter-spacing:1px;
+  padding:3px 8px;border-radius:10px;
+}
+.lvl-1{background:rgba(148,163,184,.15);color:#cbd5e1;border:1px solid rgba(148,163,184,.25);}
+.lvl-2{background:rgba(234,179,8,.12);color:#fbbf24;border:1px solid rgba(234,179,8,.25);}
+.lvl-3{background:rgba(37,99,235,.12);color:#93c5fd;border:1px solid rgba(37,99,235,.25);}
+
+/* ════════════════════════════════════════════════════════
+   FILOSOFÍA — SPLIT CON GLASSMORPHISM AVANZADO
+   ════════════════════════════════════════════════════════ */
+#filosofia{padding:100px 0;position:relative;z-index:1;}
+.filosofia-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:clamp(32px,5vw,80px);align-items:center;
+}
+.filosofia-visual{position:relative;}
+.ceo-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  overflow:hidden;
+  position:relative;
+}
+.ceo-backdrop{
+  aspect-ratio:3/4;
+  background:linear-gradient(160deg,#0d1b4b,#050508);
+  display:flex;align-items:flex-end;
+  position:relative;overflow:hidden;
+}
+/* Bokeh lights en el fondo del CEO */
+.bokeh{
+  position:absolute;border-radius:50%;filter:blur(40px);pointer-events:none;
+  animation:bokehFloat 6s ease-in-out infinite;
+}
+.b1{width:200px;height:200px;background:rgba(37,99,235,.2);top:10%;left:10%;animation-delay:0s;}
+.b2{width:150px;height:150px;background:rgba(56,189,248,.15);top:30%;right:10%;animation-delay:2s;}
+.b3{width:180px;height:180px;background:rgba(168,85,247,.12);bottom:20%;left:30%;animation-delay:4s;}
+@keyframes bokehFloat{0%,100%{transform:translate(0,0);}50%{transform:translate(10px,-15px);}}
+.ceo-avatar{
+  width:120px;height:120px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-size:40px;font-weight:800;
+  color:#fff;margin:0 auto 20px;
+  box-shadow:0 0 40px rgba(37,99,235,.4);
+  border:3px solid rgba(255,255,255,.1);
+}
+.ceo-info-glass{
+  background:rgba(5,5,8,.8);
+  backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);
+  padding:24px;width:100%;
+}
+.ceo-name{
+  font-family:'Syne',sans-serif;font-size:20px;font-weight:800;
+  color:var(--white);margin-bottom:4px;
+}
+.ceo-title{font-size:12px;color:var(--blue);font-weight:600;margin-bottom:12px;}
+.ceo-badges{display:flex;gap:6px;flex-wrap:wrap;}
+.ceo-badge{
+  font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;
+  background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.2);color:#93c5fd;
+}
+/* Floating card extra sobre la imagen */
+.floating-metric{
+  position:absolute;
+  background:rgba(5,5,8,.9);backdrop-filter:blur(16px);
+  border:1px solid var(--border2);
+  border-radius:12px;padding:12px 16px;
+  animation:floatMetric 4s ease-in-out infinite;
+}
+.fm-1{top:20px;right:-20px;animation-delay:0s;}
+.fm-2{bottom:100px;left:-20px;animation-delay:2s;}
+@keyframes floatMetric{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.fm-num{
+  font-family:'Syne',sans-serif;font-size:22px;font-weight:800;
+  color:var(--white);line-height:1;
+}
+.fm-num span{color:var(--blue);}
+.fm-label{font-size:10px;color:var(--gray);margin-top:3px;}
+
+.filosofia-content{}
+.filosofia-content .section-label{margin-bottom:20px;}
+.filosofia-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(32px,5vw,52px);font-weight:800;
+  color:var(--white);letter-spacing:-2px;line-height:1.05;
+  margin-bottom:24px;
+}
+.filosofia-pillars{
+  display:flex;flex-direction:column;gap:16px;margin-bottom:32px;
+}
+.pillar{
+  display:flex;align-items:flex-start;gap:14px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:16px;
+  transition:border-color .3s,transform .3s;cursor:none;
+}
+.pillar:hover{border-color:var(--border2);transform:translateX(4px);}
+.pillar-icon{
+  width:40px;height:40px;border-radius:10px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+}
+.pi-blue{background:rgba(37,99,235,.15);border:1px solid rgba(37,99,235,.2);color:#60a5fa;}
+.pi-cyan{background:rgba(56,189,248,.15);border:1px solid rgba(56,189,248,.2);color:#38bdf8;}
+.pi-purple{background:rgba(168,85,247,.15);border:1px solid rgba(168,85,247,.2);color:#c084fc;}
+.pillar-title{font-weight:700;color:var(--white);font-size:14px;margin-bottom:3px;}
+.pillar-text{font-size:12px;color:var(--gray);line-height:1.6;}
+.filosofia-quote{
+  font-size:clamp(14px,2vw,16px);
+  color:var(--gray2);line-height:1.8;font-style:italic;
+  padding-left:16px;border-left:3px solid var(--blue);
+}
+
+/* ════════════════════════════════════════════════════════
+   BENEFITS — GRID GLASSMORPHISM CON HOVER REVEAL
+   ════════════════════════════════════════════════════════ */
+#benefits{padding:100px 0;position:relative;z-index:1;}
+.benefits-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:16px;margin-top:48px;
+}
+.benefit-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:clamp(24px,3vw,36px);
+  position:relative;overflow:hidden;
+  transition:all .35s cubic-bezier(.23,1,.32,1);
+  cursor:none;
+  /* Clip-path reveal effect */
+  clip-path:polygon(0 0,100% 0,100% 100%,0 100%);
+}
+.benefit-card:hover{
+  border-color:var(--border2);
+  transform:translateY(-6px);
+  box-shadow:0 20px 60px rgba(0,0,0,.4);
+}
+/* Shine sweep */
+.benefit-card::before{
+  content:'';position:absolute;top:0;left:-100%;
+  width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.04),transparent);
+  transition:left .5s ease;
+}
+.benefit-card:hover::before{left:100%;}
+
+.bc-num{
+  font-family:'Syne',sans-serif;font-size:56px;font-weight:800;
+  color:rgba(37,99,235,.08);line-height:1;margin-bottom:4px;
+}
+.bc-icon{
+  width:52px;height:52px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;margin-bottom:16px;transition:transform .3s;
+}
+.benefit-card:hover .bc-icon{transform:scale(1.1) rotate(-5deg);}
+.bc-title{
+  font-family:'Syne',sans-serif;font-size:18px;font-weight:700;
+  color:var(--white);margin-bottom:10px;
+}
+.bc-text{font-size:13px;color:var(--gray);line-height:1.75;margin-bottom:16px;}
+.bc-list{display:flex;flex-direction:column;gap:6px;}
+.bc-list li{
+  display:flex;align-items:center;gap:8px;
+  font-size:12px;color:var(--gray2);
+}
+.bc-list li i{font-size:10px;color:var(--green);}
+
+/* ════════════════════════════════════════════════════════
+   TIMELINE PROCESO DE PARTNERSHIP
+   ════════════════════════════════════════════════════════ */
+#proceso{padding:100px 0;position:relative;z-index:1;}
+.timeline{
+  position:relative;
+  max-width:800px;margin:56px auto 0;
+}
+/* Línea central */
+.timeline::before{
+  content:'';
+  position:absolute;top:0;bottom:0;left:50%;
+  width:1px;background:linear-gradient(to bottom,transparent,var(--blue),var(--cyan),transparent);
+  transform:translateX(-50%);
+}
+.tl-item{
+  display:flex;align-items:center;gap:32px;
+  margin-bottom:48px;
+  position:relative;
+}
+.tl-item:nth-child(odd){flex-direction:row;}
+.tl-item:nth-child(even){flex-direction:row-reverse;}
+.tl-content{
+  flex:1;background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:24px;
+  transition:all .3s;cursor:none;
+}
+.tl-content:hover{border-color:var(--border2);transform:translateY(-2px);}
+.tl-step{
+  width:48px;height:48px;flex-shrink:0;
+  border-radius:50%;
+  background:var(--blue);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-size:16px;font-weight:800;
+  color:#fff;
+  box-shadow:0 0 20px rgba(37,99,235,.4);
+  position:relative;z-index:2;
+}
+.tl-step-ghost{flex:1;}/* para alinear en lados alternos */
+.tl-num{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--blue);margin-bottom:6px;}
+.tl-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--white);margin-bottom:6px;}
+.tl-text{font-size:12px;color:var(--gray);line-height:1.7;}
+.tl-eta{
+  display:inline-flex;align-items:center;gap:5px;
+  margin-top:10px;font-size:10px;font-weight:700;
+  color:var(--green);
+}
+
+/* ════════════════════════════════════════════════════════
+   STATS COUNTER BAR (idéntico al servicios)
+   ════════════════════════════════════════════════════════ */
+#stats-bar{
+  padding:0;background:var(--blue);
+  position:relative;overflow:hidden;z-index:1;
+}
+#stats-bar::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle,rgba(255,255,255,.06) 1px,transparent 1px);
+  background-size:24px 24px;
+}
+.stats-inner{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  position:relative;z-index:1;
+}
+.stat-item{padding:clamp(28px,4vw,48px) 20px;text-align:center;border-right:1px solid rgba(255,255,255,.15);}
+.stat-item:last-child{border-right:none;}
+.stat-num{font-family:'Syne',sans-serif;font-size:clamp(28px,5vw,44px);font-weight:800;color:#fff;line-height:1;}
+.stat-label{font-size:12px;color:rgba(255,255,255,.7);margin-top:6px;}
+
+/* ════════════════════════════════════════════════════════
+   TESTIMONIAL CARD (idéntica al servicios)
+   ════════════════════════════════════════════════════════ */
+#testimony{
+  padding:clamp(48px,6vw,80px);
+  margin:100px clamp(16px,4vw,40px);
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  display:grid;grid-template-columns:1fr 1.5fr;
+  gap:clamp(32px,5vw,60px);align-items:center;
+  position:relative;z-index:1;
+}
+.big-quote{font-size:clamp(48px,8vw,80px);color:rgba(37,99,235,.3);line-height:.8;font-family:Georgia,serif;margin-bottom:16px;}
+.testimony-text{font-size:clamp(15px,2vw,18px);color:var(--white);line-height:1.75;font-style:italic;margin-bottom:24px;}
+.testimony-author{display:flex;align-items:center;gap:12px;}
+.t-av{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;}
+.t-name{font-weight:700;color:var(--white);font-size:14px;}
+.t-role{font-size:12px;color:var(--gray);}
+
+/* ════════════════════════════════════════════════════════
+   CTA FINAL ESPECTACULAR
+   ════════════════════════════════════════════════════════ */
+#cta-final{
+  padding:120px clamp(16px,4vw,40px);
+  text-align:center;position:relative;overflow:hidden;z-index:1;
+}
+.cta-orb{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:800px;height:800px;border-radius:50%;
+  background:radial-gradient(circle,rgba(37,99,235,.12) 0%,transparent 60%);
+  pointer-events:none;animation:orbPulse 6s ease-in-out infinite;
+}
+@keyframes orbPulse{0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-50%,-50%) scale(1.08);}}
+.cta-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.05);border:1px solid var(--border2);
+  border-radius:40px;padding:6px 16px;
+  font-size:12px;color:var(--gray2);margin-bottom:24px;position:relative;z-index:1;
+}
+.cta-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(40px,8vw,96px);font-weight:800;
+  color:var(--white);letter-spacing:-3px;
+  line-height:.9;margin-bottom:24px;
+  position:relative;z-index:1;
+}
+.cta-title span{
+  display:block;
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.cta-sub{
+  font-size:clamp(14px,2vw,17px);color:var(--gray);
+  margin-bottom:40px;position:relative;z-index:1;max-width:480px;margin-left:auto;margin-right:auto;
+}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1;margin-bottom:24px;}
+.cta-note{font-size:12px;color:var(--gray2);position:relative;z-index:1;}
+.cta-note i{color:var(--green);}
+
+/* Botón magnético */
+.btn-magnetic{
+  position:relative;overflow:hidden;
+  background:var(--blue);color:#fff;
+  padding:16px 40px;border-radius:40px;
+  font-family:'Syne',sans-serif;font-size:16px;font-weight:700;
+  border:none;cursor:none;transition:all .25s;
+  box-shadow:0 8px 40px rgba(37,99,235,.4);
+}
+.btn-magnetic::after{
+  content:'';position:absolute;top:50%;left:50%;
+  width:0;height:0;border-radius:50%;
+  background:rgba(255,255,255,.15);
+  transform:translate(-50%,-50%);
+  transition:width .6s ease,height .6s ease;
+}
+.btn-magnetic:hover::after{width:300px;height:300px;}
+.btn-magnetic:hover{transform:translateY(-2px);box-shadow:0 16px 60px rgba(37,99,235,.6);}
+
+/* ════════════════════════════════════════════════════════
+   FOOTER (idéntico al index)
+   ════════════════════════════════════════════════════════ */
+footer{border-top:1px solid var(--border);padding:clamp(40px,6vw,80px) 0 0;position:relative;z-index:1;}
+.footer-top{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:clamp(24px,4vw,60px);margin-bottom:clamp(40px,5vw,60px);}
+.footer-logo{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--white);margin-bottom:14px;}
+.footer-desc{font-size:13px;color:var(--gray);line-height:1.8;max-width:260px;margin-bottom:20px;}
+.footer-social{display:flex;gap:8px;}
+.fs-btn{width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--gray);transition:all .2s;}
+.fs-btn:hover{background:var(--blue);color:#fff;border-color:var(--blue);}
+.footer-col h5{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--white);margin-bottom:16px;}
+.footer-col ul{display:flex;flex-direction:column;gap:10px;}
+.footer-col ul li a{font-size:13px;color:var(--gray);transition:color .2s;}
+.footer-col ul li a:hover{color:var(--blue);}
+.footer-bottom{border-top:1px solid var(--border);padding:clamp(16px,2vw,24px) 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.footer-bottom p,.footer-bottom a{font-size:12px;color:var(--gray);}
+.footer-bottom a:hover{color:var(--white);}
+.footer-links{display:flex;gap:20px;}
+
+/* ════════════════════════════════════════════════════════
+   REVEAL ANIMATIONS
+   ════════════════════════════════════════════════════════ */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.in{opacity:1;transform:translateY(0);}
+.reveal-left{opacity:0;transform:translateX(-30px);transition:opacity .65s ease,transform .65s ease;}
+.reveal-left.in{opacity:1;transform:translateX(0);}
+.reveal-right{opacity:0;transform:translateX(30px);transition:opacity .65s ease,transform .65s ease;}
+.reveal-right.in{opacity:1;transform:translateX(0);}
+.reveal-scale{opacity:0;transform:scale(.92);transition:opacity .65s ease,transform .65s ease;}
+.reveal-scale.in{opacity:1;transform:scale(1);}
+
+/* ════════════════════════════════════════════════════════
+   RESPONSIVE
+   ════════════════════════════════════════════════════════ */
+@media(max-width:1024px){
+  #hero{grid-template-columns:1fr;min-height:auto;padding-top:80px;}
+  .hero-right{min-height:400px;}
+  .filosofia-grid{grid-template-columns:1fr;}
+  .tier-cards{grid-template-columns:1fr 1fr;}
+  .benefits-grid{grid-template-columns:1fr 1fr;}
+  .footer-top{grid-template-columns:1fr 1fr;}
+  .socios-bento{grid-template-columns:repeat(4,1fr);}
+  .sc-xl{grid-column:span 2;}
+  .sc-wide{grid-column:span 4;}
+  #testimony{grid-template-columns:1fr;}
+  .stats-inner{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:768px){
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+  .tier-cards{grid-template-columns:1fr;}
+  .benefits-grid{grid-template-columns:1fr;}
+  .socios-bento{grid-template-columns:1fr 1fr;}
+  .sc-xl,.sc-lg,.sc-md,.sc-wide,.sc-tall,.sc-std{grid-column:span 2;grid-row:span 2;}
+  .sc-sm{grid-column:span 2;grid-row:span 1;}
+  .timeline::before{left:24px;}
+  .tl-item,.tl-item:nth-child(even){flex-direction:row;}
+  .tl-step-ghost{display:none;}
+  .tl-content{margin-left:0;}
+  .footer-top{grid-template-columns:1fr;}
+  #testimony{margin:60px 0;padding:32px 24px;}
+  .hero-mini-stats{grid-template-columns:1fr 1fr 1fr;}
+}
+@media(max-width:480px){
+  .stats-inner{grid-template-columns:1fr 1fr;}
+  .hero-mini-stats{grid-template-columns:1fr}
+  .socios-bento{grid-template-columns:1fr;}
+  .sc-xl,.sc-lg,.sc-md,.sc-wide,.sc-tall,.sc-std,.sc-sm{grid-column:span 1;grid-row:span 2;}
+}
+</style>
+</head>
+<body>
+
+<!-- CANVAS PARTICLES -->
+<canvas id="particle-canvas"></canvas>
+<div class="mesh-bg"></div>
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+<div id="cursor-aura"></div>
+
+<!-- PROGRESS BAR -->
+<div id="progress"><div id="progress-fill"></div></div>
+
+<!-- ══ NAV ══════════════════════════════════════════════════ -->
+<header>
+  <nav>
+    <div class="nav-logo">InfiniHon</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="servicios.html">Servicios</a></li>
+      <li><a href="tienda.html">Tienda</a></li>
+      <li><a href="alianzas.html" class="active">Alianzas</a></li>
+      <li><a href="index.html#members">Equipo</a></li>
+      <li><a href="index.html#press">Blog</a></li>
+      <li><a href="#cta-final">Contacto</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="#cta-final" class="btn btn-blue btn-sm"><i class="fa fa-handshake"></i> Ser Socio</a>
+      <button class="hamburger" id="ham" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<!-- MENÚ MÓVIL -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="toggleMenu()">Inicio</a>
+  <a href="servicios.html" onclick="toggleMenu()">Servicios</a>
+  <a href="tienda.html" onclick="toggleMenu()">Tienda</a>
+  <a href="alianzas.html" onclick="toggleMenu()">Alianzas</a>
+  <a href="index.html#members" onclick="toggleMenu()">Equipo</a>
+  <div class="divider"></div>
+  <a href="#cta-final" onclick="toggleMenu()">Ser Socio</a>
+</div>
+
+<!-- ══ HERO — SPLIT SCREEN ═══════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-grid"></div>
+
+  <div class="hero-left">
+    <div class="hero-eyebrow reveal">
+      <span class="dot"></span>
+      Ecosistema Estratégico 2025
+    </div>
+    <h1 class="hero-h1 reveal" style="transition-delay:.08s;">
+      Alianzas que<br>
+      <span class="line2">Transforman</span>
+    </h1>
+    <p class="hero-desc reveal" style="transition-delay:.16s;">
+      Construimos un ecosistema de partners tecnológicos de élite para ofrecer soluciones integrales de vanguardia en infraestructura IT de grado industrial. Juntos, redefinimos los límites de lo posible.
+    </p>
+    <div class="hero-btns reveal" style="transition-delay:.24s;">
+      <a href="#socios" class="btn btn-blue"><i class="fa fa-layer-group"></i> Ver Socios</a>
+      <a href="#cta-final" class="btn btn-ghost">Unirse al Ecosistema</a>
+    </div>
+    <div class="hero-mini-stats reveal" style="transition-delay:.32s;">
+      <div class="hms-item">
+        <div class="hms-num">25<span>+</span></div>
+        <div class="hms-label">Socios Activos</div>
+      </div>
+      <div class="hms-item">
+        <div class="hms-num">15</div>
+        <div class="hms-label">Países</div>
+      </div>
+      <div class="hms-item">
+        <div class="hms-num">3</div>
+        <div class="hms-label">Continentes</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ORBITAL 3D -->
+  <div class="hero-right">
+    <div class="orbital-scene">
+      <!-- Anillos -->
+      <div class="orbit-ring orbit-ring-1"></div>
+      <div class="orbit-ring orbit-ring-2"></div>
+      <div class="orbit-ring orbit-ring-3"></div>
+
+      <!-- Orb central -->
+      <div class="orb-core">IH</div>
+
+      <!-- Planetas en anillo 1 (60%) -->
+      <div style="position:absolute;top:50%;left:50%;width:60%;height:60%;transform:translate(-50%,-50%);animation:orbitSpin1 8s linear infinite;">
+        <div class="planet-dot pd-blue" style="top:0%;left:50%;">
+          <i class="fa fa-network-wired"></i>
+          <div class="planet-tooltip">MikroTik</div>
+        </div>
+        <div class="planet-dot pd-purple" style="top:100%;left:50%;">
+          <i class="fa fa-server"></i>
+          <div class="planet-tooltip">Raspberry Pi</div>
+        </div>
+      </div>
+
+      <!-- Planetas en anillo 2 (82%) -->
+      <div style="position:absolute;top:50%;left:50%;width:82%;height:82%;transform:translate(-50%,-50%);animation:orbitSpin2 14s linear infinite reverse;">
+        <div class="planet-dot pd-orange" style="top:0%;left:50%;">
+          <i class="fab fa-aws"></i>
+          <div class="planet-tooltip">AWS</div>
+        </div>
+        <div class="planet-dot pd-cyan" style="top:50%;left:0%;">
+          <i class="fa fa-shield-alt"></i>
+          <div class="planet-tooltip">Cisco</div>
+        </div>
+        <div class="planet-dot pd-green" style="top:100%;left:50%;">
+          <i class="fab fa-linux"></i>
+          <div class="planet-tooltip">Red Hat</div>
+        </div>
+      </div>
+
+      <!-- Planetas en anillo 3 (100%) -->
+      <div style="position:absolute;top:50%;left:50%;width:100%;height:100%;transform:translate(-50%,-50%);animation:orbitSpin1 20s linear infinite;">
+        <div class="planet-dot pd-blue" style="top:0%;left:50%;width:36px;height:36px;font-size:13px;">
+          <i class="fab fa-microsoft"></i>
+          <div class="planet-tooltip">Azure</div>
+        </div>
+        <div class="planet-dot pd-purple" style="top:50%;left:100%;width:36px;height:36px;font-size:13px;">
+          <i class="fab fa-docker"></i>
+          <div class="planet-tooltip">Docker</div>
+        </div>
+        <div class="planet-dot pd-cyan" style="top:100%;left:50%;width:36px;height:36px;font-size:13px;">
+          <i class="fa fa-database"></i>
+          <div class="planet-tooltip">Dell</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TICKER ════════════════════════════════════════════════ -->
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <div class="ticker-item"><i class="fa fa-handshake"></i>Platinum Partner</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-star"></i>MikroTik</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-server"></i>Raspberry Pi</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fab fa-aws"></i>Amazon Web Services</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-shield-alt"></i>Cisco Systems</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fab fa-linux"></i>Red Hat Enterprise</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fab fa-microsoft"></i>Azure Cloud</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-network-wired"></i>Dell Technologies</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-handshake"></i>Platinum Partner</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-star"></i>MikroTik</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-server"></i>Raspberry Pi</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fab fa-aws"></i>Amazon Web Services</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-shield-alt"></i>Cisco Systems</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fab fa-linux"></i>Red Hat Enterprise</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fab fa-microsoft"></i>Azure Cloud</div>
+    <div class="ticker-sep">·</div>
+    <div class="ticker-item"><i class="fa fa-network-wired"></i>Dell Technologies</div>
+  </div>
+</div>
+
+<!-- ══ PARTNER TIERS ══════════════════════════════════════════ -->
+<section id="tiers">
+  <div class="container">
+    <div class="section-label-row reveal">
+      <div>
+        <div class="section-label">Niveles de <span>Partnership</span></div>
+        <p style="font-size:14px;color:var(--gray);margin-top:8px;max-width:400px;">Cuatro niveles de colaboración diseñados para maximizar el valor mutuo.</p>
+      </div>
+      <a href="#cta-final" class="btn btn-ghost btn-sm">Ver Beneficios <i class="fa fa-arrow-right"></i></a>
+    </div>
+
+    <div class="tier-cards">
+      <!-- PLATINUM -->
+      <div class="tier-card tier-platinum reveal" style="transition-delay:.0s;">
+        <div class="tier-bg-deco deco-platinum"></div>
+        <span class="tier-badge badge-platinum"><i class="fa fa-gem"></i> Platinum</span>
+        <div class="tier-icon-wrap tw-platinum"><i class="fa fa-crown"></i></div>
+        <div class="tier-name">Platinum Partner</div>
+        <div class="tier-sub">Máximo nivel de colaboración y exclusividad</div>
+        <div class="tier-features">
+          <div class="tf-item"><i class="fa fa-check"></i>Acceso 24/7 dedicado</div>
+          <div class="tf-item"><i class="fa fa-check"></i>Co-desarrollo de productos</div>
+          <div class="tf-item"><i class="fa fa-check"></i>Revenue sharing premium</div>
+          <div class="tf-item"><i class="fa fa-check"></i>Eventos exclusivos globales</div>
+          <div class="tf-item"><i class="fa fa-check"></i>Co-marketing internacional</div>
+        </div>
+        <div class="tier-partners">
+          <span class="tp-chip">MikroTik</span>
+          <span class="tp-chip">Nation II</span>
+        </div>
+      </div>
+
+      <!-- GOLD -->
+      <div class="tier-card tier-gold reveal" style="transition-delay:.08s;">
+        <div class="tier-bg-deco deco-gold"></div>
+        <span class="tier-badge badge-gold"><i class="fa fa-star"></i> Gold</span>
+        <div class="tier-icon-wrap tw-gold"><i class="fa fa-medal"></i></div>
+        <div class="tier-name">Gold Partner</div>
+        <div class="tier-sub">Colaboración avanzada con beneficios premium</div>
+        <div class="tier-features">
+          <div class="tf-item"><i class="fa fa-check"></i>Soporte prioritario 8h</div>
+          <div class="tf-item"><i class="fa fa-check"></i>Certificaciones conjuntas</div>
+          <div class="tf-item"><i class="fa fa-check"></i>Portal de partners exclusivo</div>
+          <div class="tf-item"><i class="fa fa-check"></i>Formación técnica avanzada</div>
+          <div class="tf-item"><i class="fa fa-times" style="color:var(--gray2);"></i>Co-desarrollo</div>
+        </div>
+        <div class="tier-partners">
+          <span class="tp-chip">Cisco</span>
+          <span class="tp-chip">Dell</span>
+        </div>
+      </div>
+
+      <!-- SILVER -->
+      <div class="tier-card tier-silver reveal" style="transition-delay:.16s;">
+        <div class="tier-bg-deco deco-silver"></div>
+        <span class="tier-badge badge-silver"><i class="fa fa-shield-alt"></i> Silver</span>
+        <div class="tier-icon-wrap tw-silver"><i class="fa fa-award"></i></div>
+        <div class="tier-name">Silver Partner</div>
+        <div class="tier-sub">Alianza sólida con soporte técnico</div>
+        <div class="tier-features">
+          <div class="tf-item"><i class="fa fa-check"></i>Soporte técnico base</div>
+          <div class="tf-item"><i class="fa fa-check"></i>Acceso a documentación</div>
+          <div class="tf-item"><i class="fa fa-check"></i>Descuentos comerciales</div>
+          <div class="tf-item"><i class="fa fa-times" style="color:var(--gray2);"></i>Portal exclusivo</div>
+          <div class="tf-item"><i class="fa fa-times" style="color:var(--gray2);"></i>Co-marketing</div>
+        </div>
+        <div class="tier-partners">
+          <span class="tp-chip">Red Hat</span>
+          <span class="tp-chip">+5 más</span>
+        </div>
+      </div>
+
+      <!-- TECH -->
+      <div class="tier-card tier-tech reveal" style="transition-delay:.24s;">
+        <div class="tier-bg-deco deco-tech"></div>
+        <span class="tier-badge badge-tech"><i class="fa fa-code"></i> Tech</span>
+        <div class="tier-icon-wrap tw-tech"><i class="fa fa-microchip"></i></div>
+        <div class="tier-name">Tech Partner</div>
+        <div class="tier-sub">Integración técnica y desarrollo conjunto</div>
+        <div class="tier-features">
+          <div class="tf-item"><i class="fa fa-check"></i>API & integración técnica</div>
+          <div class="tf-item"><i class="fa fa-check"></i>Sandbox de desarrollo</div>
+          <div class="tf-item"><i class="fa fa-check"></i>Early access a APIs</div>
+          <div class="tf-item"><i class="fa fa-times" style="color:var(--gray2);"></i>Soporte comercial</div>
+          <div class="tf-item"><i class="fa fa-times" style="color:var(--gray2);"></i>Revenue sharing</div>
+        </div>
+        <div class="tier-partners">
+          <span class="tp-chip">Raspberry Pi</span>
+          <span class="tp-chip">AWS</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ BENTO SOCIOS ═══════════════════════════════════════════ -->
+<section id="socios">
+  <div class="container">
+    <div class="section-label-row reveal">
+      <div class="section-label">Nuestro <span>Ecosistema</span></div>
+      <a href="#cta-final" class="btn btn-ghost btn-sm">Unirte <i class="fa fa-arrow-right"></i></a>
+    </div>
+
+    <div class="socios-bento">
+
+      <!-- MIKROTIK — XL -->
+      <div class="socio-card sc-xl sc-blue reveal" style="transition-delay:.0s;">
+        <span class="socio-lvl lvl-1">PLATINUM</span>
+        <div class="socio-deco-num">01</div>
+        <div class="socio-icon-lg" style="color:#60a5fa;"><i class="fa fa-network-wired"></i></div>
+        <div class="socio-name-lg">MikroTik</div>
+        <span class="socio-tier">Platinum Partner · Desde 2025</span>
+        <p class="socio-desc">Proveedor líder en infraestructura de red. Juntos ofrecemos soluciones RouterOS de clase enterprise para entornos de alta disponibilidad.</p>
+        <div class="socio-tags">
+          <span class="st">RouterOS</span><span class="st">SwOS</span><span class="st">MPLS</span><span class="st">BGP</span>
+        </div>
+        <div class="socio-since"><i class="fa fa-clock"></i> Partner desde Ene 2025 · 12 proyectos conjuntos</div>
+      </div>
+
+      <!-- AWS — LG -->
+      <div class="socio-card sc-lg sc-orange reveal" style="transition-delay:.06s;">
+        <span class="socio-lvl lvl-2">TECH</span>
+        <div class="socio-deco-num">02</div>
+        <div class="socio-icon-sm" style="color:#fb923c;"><i class="fab fa-aws"></i></div>
+        <div class="socio-name-lg">Amazon Web Services</div>
+        <span class="socio-tier">Tech Partner · Cloud</span>
+        <p class="socio-desc">Arquitecturas cloud de alta disponibilidad y migración empresarial en AWS con soporte certificado.</p>
+        <div class="socio-tags"><span class="st">EC2</span><span class="st">S3</span><span class="st">Lambda</span></div>
+        <div class="socio-since"><i class="fa fa-clock"></i> Desde 2026</div>
+      </div>
+
+      <!-- RASPBERRY PI — MD -->
+      <div class="socio-card sc-md sc-purple reveal" style="transition-delay:.1s;">
+        <span class="socio-lvl lvl-2">TECH</span>
+        <div class="socio-deco-num">03</div>
+        <div class="socio-icon-sm" style="color:#c084fc;"><i class="fa fa-server"></i></div>
+        <div class="socio-name-lg">Raspberry Pi</div>
+        <span class="socio-tier">Design Partner · Edge</span>
+        <p class="socio-desc">Clusters de edge computing con Raspberry Pi para K3s y Kubernetes de bajo costo.</p>
+        <div class="socio-tags"><span class="st">K3s</span><span class="st">Docker</span><span class="st">HA</span></div>
+        <div class="socio-since"><i class="fa fa-clock"></i> Desde 2026</div>
+      </div>
+
+      <!-- CISCO — STD -->
+      <div class="socio-card sc-std sc-blue reveal" style="transition-delay:.14s;">
+        <span class="socio-lvl lvl-2">GOLD</span>
+        <div class="socio-deco-num">04</div>
+        <div class="socio-icon-sm" style="color:#60a5fa;"><i class="fa fa-shield-alt"></i></div>
+        <div class="socio-name-lg">Cisco</div>
+        <span class="socio-tier">Gold Partner · Networking</span>
+        <p class="socio-desc">Soluciones Cisco para entornos enterprise con seguridad de red de nivel militar.</p>
+        <div class="socio-tags"><span class="st">ASA</span><span class="st">Meraki</span><span class="st">Umbrella</span></div>
+        <div class="socio-since"><i class="fa fa-clock"></i> Desde 2025</div>
+      </div>
+
+      <!-- NATION II — WIDE -->
+      <div class="socio-card sc-wide sc-cyan reveal" style="transition-delay:.18s;">
+        <span class="socio-lvl lvl-1">PLATINUM</span>
+        <div class="socio-deco-num">05</div>
+        <div class="socio-icon-sm" style="color:#38bdf8;"><i class="fa fa-globe"></i></div>
+        <div class="socio-name-lg">Nation II</div>
+        <span class="socio-tier">Strategic Partner · ISP Infrastructure</span>
+        <p class="socio-desc">Alianza estratégica con Nation II para implementar infraestructura ISP de alta densidad en Centroamérica. Proyectos conjuntos en fibra óptica y redes de distribución.</p>
+        <div class="socio-tags"><span class="st">Fibra</span><span class="st">GPON</span><span class="st">ISP</span><span class="st">Backhaul</span></div>
+        <div class="socio-since"><i class="fa fa-clock"></i> Desde 2027 · Alianza en expansión</div>
+      </div>
+
+      <!-- DELL — STD -->
+      <div class="socio-card sc-std sc-gray reveal" style="transition-delay:.22s;">
+        <span class="socio-lvl lvl-2">GOLD</span>
+        <div class="socio-deco-num">06</div>
+        <div class="socio-icon-sm" style="color:#9ca3af;"><i class="fa fa-hdd"></i></div>
+        <div class="socio-name-lg">Dell Technologies</div>
+        <span class="socio-tier">Titanium Partner · Hardware</span>
+        <p class="socio-desc">Servidores PowerEdge y soluciones de almacenamiento enterprise con soporte certificado.</p>
+        <div class="socio-tags"><span class="st">PowerEdge</span><span class="st">EqualLogic</span></div>
+        <div class="socio-since"><i class="fa fa-clock"></i> Desde 2025</div>
+      </div>
+
+      <!-- RED HAT — SM -->
+      <div class="socio-card sc-sm sc-orange reveal" style="transition-delay:.26s;">
+        <div class="socio-icon-sm" style="color:#fb923c;display:inline-block;margin-right:8px;"><i class="fab fa-redhat"></i></div>
+        <span class="socio-name-sm" style="display:inline;">Red Hat</span>
+        <span class="socio-tier" style="display:block;"> Premier · Linux</span>
+      </div>
+
+      <!-- AZURE — SM -->
+      <div class="socio-card sc-sm sc-blue reveal" style="transition-delay:.28s;">
+        <div class="socio-icon-sm" style="color:#60a5fa;display:inline-block;margin-right:8px;"><i class="fab fa-microsoft"></i></div>
+        <span class="socio-name-sm" style="display:inline;">Azure</span>
+        <span class="socio-tier" style="display:block;"> Cloud Partner</span>
+      </div>
+
+      <!-- GCP — SM -->
+      <div class="socio-card sc-sm sc-green reveal" style="transition-delay:.3s;">
+        <div class="socio-icon-sm" style="color:#4ade80;display:inline-block;margin-right:8px;"><i class="fab fa-google"></i></div>
+        <span class="socio-name-sm" style="display:inline;">Google Cloud</span>
+        <span class="socio-tier" style="display:block;"> Cloud · GCP</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ STATS BAR ══════════════════════════════════════════════ -->
+<div id="stats-bar">
+  <div class="container">
+    <div class="stats-inner">
+      <div class="stat-item reveal">
+        <div class="stat-num" data-target="25">0+</div>
+        <div class="stat-label">Socios Activos</div>
+      </div>
+      <div class="stat-item reveal" style="transition-delay:.08s;">
+        <div class="stat-num" data-target="15">0</div>
+        <div class="stat-label">Países Cubiertos</div>
+      </div>
+      <div class="stat-item reveal" style="transition-delay:.16s;">
+        <div class="stat-num" data-target="3">0</div>
+        <div class="stat-label">Continentes</div>
+      </div>
+      <div class="stat-item reveal" style="transition-delay:.24s;">
+        <div class="stat-num">48h</div>
+        <div class="stat-label">Aprobación Partnership</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FILOSOFÍA + CEO ════════════════════════════════════════ -->
+<section id="filosofia">
+  <div class="container">
+    <div class="filosofia-grid">
+
+      <div class="filosofia-visual reveal-left">
+        <!-- Floating metrics -->
+        <div class="floating-metric fm-1">
+          <div class="fm-num">20<span>+</span></div>
+          <div class="fm-label">Años en IT</div>
+        </div>
+        <div class="floating-metric fm-2">
+          <div class="fm-num">99<span>%</span></div>
+          <div class="fm-label">Uptime garantizado</div>
+        </div>
+        <div class="ceo-card">
+          <div class="ceo-backdrop">
+            <div class="bokeh b1"></div>
+            <div class="bokeh b2"></div>
+            <div class="bokeh b3"></div>
+            <div style="width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;">
+              <div class="ceo-avatar">JS</div>
+            </div>
+            <div class="ceo-info-glass">
+              <div class="ceo-name">Joseph Sanchez</div>
+              <div class="ceo-title"><i class="fa fa-circle" style="font-size:8px;color:var(--green);margin-right:6px;"></i>Fundador &amp; CEO · InfiniHon</div>
+              <div class="ceo-badges">
+                <span class="ceo-badge">20+ años IT</span>
+                <span class="ceo-badge">MikroTik Cert.</span>
+                <span class="ceo-badge">AWS Solutions</span>
+                <span class="ceo-badge">DevOps Expert</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal-right">
+        <div class="section-label" style="margin-bottom:12px;">// <span>Nuestra Filosofía</span></div>
+        <h2 class="filosofia-title">
+          Construimos más que<br>infraestructura
+        </h2>
+        <div class="filosofia-pillars">
+          <div class="pillar">
+            <div class="pillar-icon pi-blue"><i class="fa fa-eye"></i></div>
+            <div>
+              <div class="pillar-title">Transparencia Absoluta</div>
+              <div class="pillar-text">Cada alianza se construye sobre datos reales, expectativas claras y comunicación honesta en todo momento.</div>
+            </div>
+          </div>
+          <div class="pillar">
+            <div class="pillar-icon pi-cyan"><i class="fa fa-bolt"></i></div>
+            <div>
+              <div class="pillar-title">Innovación Continua</div>
+              <div class="pillar-text">Buscamos constantemente nuevas tecnologías y metodologías para mantenernos en la vanguardia global.</div>
+            </div>
+          </div>
+          <div class="pillar">
+            <div class="pillar-icon pi-purple"><i class="fa fa-link"></i></div>
+            <div>
+              <div class="pillar-title">Compromiso Inquebrantable</div>
+              <div class="pillar-text">No buscamos socios comerciales: buscamos visionarios que compartan nuestra pasión por el futuro tecnológico.</div>
+            </div>
+          </div>
+        </div>
+        <blockquote class="filosofia-quote">
+          "El verdadero valor de una alianza se mide no solo en contratos firmados, sino en los problemas que resolvemos juntos para nuestros clientes."
+          <div style="margin-top:12px;font-size:12px;font-weight:700;color:var(--white);font-style:normal;">— Joseph Sanchez, CEO InfiniHon</div>
+        </blockquote>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ BENEFITS ═══════════════════════════════════════════════ -->
+<section id="benefits">
+  <div class="container">
+    <div class="section-label-row reveal">
+      <div>
+        <div class="section-label">¿Por qué <span>Elegirnos?</span></div>
+        <p style="font-size:14px;color:var(--gray);margin-top:8px;max-width:400px;">Beneficios diseñados para potenciar tu negocio desde el primer día.</p>
+      </div>
+    </div>
+
+    <div class="benefits-grid">
+      <div class="benefit-card reveal">
+        <div class="bc-num">01</div>
+        <div class="bc-icon" style="background:rgba(37,99,235,.12);border:1px solid rgba(37,99,235,.2);color:#60a5fa;"><i class="fa fa-rocket"></i></div>
+        <div class="bc-title">Acceso Prioritario</div>
+        <p class="bc-text">Sé el primero en implementar nuevas tecnologías y soluciones antes de su lanzamiento al mercado general.</p>
+        <ul class="bc-list">
+          <li><i class="fa fa-check-circle"></i>Beta exclusiva de productos</li>
+          <li><i class="fa fa-check-circle"></i>Roadmap compartido</li>
+          <li><i class="fa fa-check-circle"></i>Pruebas de concepto conjuntas</li>
+        </ul>
+      </div>
+      <div class="benefit-card reveal" style="transition-delay:.1s;">
+        <div class="bc-num">02</div>
+        <div class="bc-icon" style="background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.2);color:#38bdf8;"><i class="fa fa-graduation-cap"></i></div>
+        <div class="bc-title">Formación de Élite</div>
+        <p class="bc-text">Programas de capacitación técnica avanzada y certificaciones exclusivas para elevar las capacidades de tu equipo.</p>
+        <ul class="bc-list">
+          <li><i class="fa fa-check-circle"></i>Certificaciones conjuntas</li>
+          <li><i class="fa fa-check-circle"></i>Workshops presenciales</li>
+          <li><i class="fa fa-check-circle"></i>Laboratorios virtuales</li>
+        </ul>
+      </div>
+      <div class="benefit-card reveal" style="transition-delay:.2s;">
+        <div class="bc-num">03</div>
+        <div class="bc-icon" style="background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.2);color:#4ade80;"><i class="fa fa-headset"></i></div>
+        <div class="bc-title">Soporte Dedicado 24/7</div>
+        <p class="bc-text">Respuesta garantizada en menos de 15 minutos para incidencias críticas con equipo de atención exclusivo para socios.</p>
+        <ul class="bc-list">
+          <li><i class="fa fa-check-circle"></i>Canal Slack exclusivo</li>
+          <li><i class="fa fa-check-circle"></i>Escalado directo con ingenieros</li>
+          <li><i class="fa fa-check-circle"></i>SLA garantizado por contrato</li>
+        </ul>
+      </div>
+      <div class="benefit-card reveal" style="transition-delay:.0s;">
+        <div class="bc-num">04</div>
+        <div class="bc-icon" style="background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.2);color:#c084fc;"><i class="fa fa-chart-line"></i></div>
+        <div class="bc-title">Revenue Sharing</div>
+        <p class="bc-text">Modelo de ingresos compartidos que incentiva el crecimiento mutuo y la generación de nuevas oportunidades de negocio.</p>
+        <ul class="bc-list">
+          <li><i class="fa fa-check-circle"></i>Márgenes preferenciales</li>
+          <li><i class="fa fa-check-circle"></i>Incentivos por volumen</li>
+          <li><i class="fa fa-check-circle"></i>Bonos de desempeño anual</li>
+        </ul>
+      </div>
+      <div class="benefit-card reveal" style="transition-delay:.1s;">
+        <div class="bc-num">05</div>
+        <div class="bc-icon" style="background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.2);color:#fb923c;"><i class="fa fa-bullhorn"></i></div>
+        <div class="bc-title">Co-Marketing Global</div>
+        <p class="bc-text">Presencia conjunta en eventos, publicaciones y campañas digitales para amplificar el alcance de ambas marcas.</p>
+        <ul class="bc-list">
+          <li><i class="fa fa-check-circle"></i>Case studies conjuntos</li>
+          <li><i class="fa fa-check-circle"></i>Eventos y conferencias</li>
+          <li><i class="fa fa-check-circle"></i>Presencia en ferias IT</li>
+        </ul>
+      </div>
+      <div class="benefit-card reveal" style="transition-delay:.2s;">
+        <div class="bc-num">06</div>
+        <div class="bc-icon" style="background:rgba(37,99,235,.12);border:1px solid rgba(37,99,235,.2);color:#60a5fa;"><i class="fa fa-users"></i></div>
+        <div class="bc-title">Red Global de Partners</div>
+        <p class="bc-text">Acceso a toda nuestra red de socios para generar oportunidades de negocio cruzadas y proyectos multinacionales.</p>
+        <ul class="bc-list">
+          <li><i class="fa fa-check-circle"></i>Directorio exclusivo de socios</li>
+          <li><i class="fa fa-check-circle"></i>Matchmaking de proyectos</li>
+          <li><i class="fa fa-check-circle"></i>Cumbres anuales de partners</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PROCESO TIMELINE ════════════════════════════════════════ -->
+<section id="proceso">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:56px;" class="reveal">
+      <div class="section-label" style="justify-content:center;display:flex;">Proceso de <span style="color:var(--blue);margin-left:8px;">Onboarding</span></div>
+      <p style="font-size:14px;color:var(--gray);margin-top:12px;">Convertirse en socio de InfiniHon es sencillo, rápido y transparente.</p>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-item reveal">
+        <div class="tl-content">
+          <div class="tl-num">PASO 01</div>
+          <div class="tl-title">Solicitud Inicial</div>
+          <p class="tl-text">Completa el formulario de interés con información sobre tu empresa, capacidades técnicas y áreas de colaboración deseadas.</p>
+          <div class="tl-eta"><i class="fa fa-clock"></i> 5 minutos</div>
+        </div>
+        <div class="tl-step">01</div>
+        <div class="tl-step-ghost"></div>
+      </div>
+
+      <div class="tl-item reveal" style="transition-delay:.1s;">
+        <div class="tl-step-ghost"></div>
+        <div class="tl-step">02</div>
+        <div class="tl-content">
+          <div class="tl-num">PASO 02</div>
+          <div class="tl-title">Evaluación Técnica</div>
+          <p class="tl-text">Nuestro equipo evalúa el fit estratégico y técnico. Analizamos capacidades, mercado objetivo y potencial de colaboración mutua.</p>
+          <div class="tl-eta"><i class="fa fa-clock"></i> 24-48 horas</div>
+        </div>
+      </div>
+
+      <div class="tl-item reveal" style="transition-delay:.2s;">
+        <div class="tl-content">
+          <div class="tl-num">PASO 03</div>
+          <div class="tl-title">Reunión Estratégica</div>
+          <p class="tl-text">Sesión de descubrimiento virtual o presencial con nuestro equipo de alianzas para definir objetivos, KPIs y modelo de colaboración.</p>
+          <div class="tl-eta"><i class="fa fa-clock"></i> 1-2 días</div>
+        </div>
+        <div class="tl-step">03</div>
+        <div class="tl-step-ghost"></div>
+      </div>
+
+      <div class="tl-item reveal" style="transition-delay:.3s;">
+        <div class="tl-step-ghost"></div>
+        <div class="tl-step">04</div>
+        <div class="tl-content">
+          <div class="tl-num">PASO 04</div>
+          <div class="tl-title">Firma de Acuerdo</div>
+          <p class="tl-text">Formalización del partnership con contrato claro, niveles de servicio, beneficios acordados y plan de trabajo conjunto.</p>
+          <div class="tl-eta"><i class="fa fa-clock"></i> 1 semana</div>
+        </div>
+      </div>
+
+      <div class="tl-item reveal" style="transition-delay:.4s;">
+        <div class="tl-content">
+          <div class="tl-num">PASO 05</div>
+          <div class="tl-title">¡Bienvenido al Ecosistema!</div>
+          <p class="tl-text">Onboarding completo: acceso al portal de partners, asignación de account manager y primer proyecto conjunto en marcha.</p>
+          <div class="tl-eta"><i class="fa fa-star" style="color:var(--green);"></i> ¡Activo!</div>
+        </div>
+        <div class="tl-step" style="background:var(--green);box-shadow:0 0 20px rgba(34,197,94,.4);">✓</div>
+        <div class="tl-step-ghost"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TESTIMONIO ═════════════════════════════════════════════ -->
+<div id="testimony" class="reveal">
+  <div>
+    <div class="big-quote">"</div>
+    <p class="testimony-text">Formar parte del ecosistema InfiniHon ha sido un catalizador para nuestro negocio. El nivel técnico del equipo y la transparencia en la comunicación son simplemente excepcionales. En 6 meses duplicamos nuestros proyectos conjuntos."</p>
+    <div class="testimony-author">
+      <div class="t-av"><i class="fas fa-user-tie"></i></div>
+      <div>
+        <div class="t-name">Miguel Arturo Reyes</div>
+        <div class="t-role">CTO · TechNova Centroamérica</div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--border);">
+      <div style="font-size:15px;font-weight:700;color:var(--gray2);display:flex;align-items:center;gap:6px;"><i class="fa fa-network-wired" style="color:var(--blue);"></i>MikroTik</div>
+      <div style="font-size:15px;font-weight:700;color:var(--gray2);display:flex;align-items:center;gap:6px;"><i class="fab fa-aws" style="color:var(--blue);"></i>AWS</div>
+      <div style="font-size:15px;font-weight:700;color:var(--gray2);display:flex;align-items:center;gap:6px;"><i class="fab fa-docker" style="color:var(--blue);"></i>Docker</div>
+    </div>
+    <p style="font-size:13px;color:var(--gray);line-height:1.8;">Nuestros socios estratégicos respaldan cada proyecto con tecnología certificada, soporte de nivel enterprise y décadas de experiencia combinada en infraestructura IT global.</p>
+    <div style="display:flex;gap:24px;margin-top:24px;flex-wrap:wrap;">
+      <div><div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--white);">25+</div><div style="font-size:11px;color:var(--gray);">Socios Activos</div></div>
+      <div><div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--white);">48h</div><div style="font-size:11px;color:var(--gray);">Tiempo de Aprobación</div></div>
+      <div><div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--white);">100%</div><div style="font-size:11px;color:var(--gray);">Retención de Socios</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CTA FINAL ══════════════════════════════════════════════ -->
+<section id="cta-final">
+  <div class="cta-orb"></div>
+  <div class="container">
+    <div class="cta-tag reveal"><i class="fa fa-handshake" style="color:var(--blue);"></i> Únete al Ecosistema</div>
+    <h2 class="cta-title reveal" style="transition-delay:.08s;">
+      Forma parte de<br><span>nuestra red global</span>
+    </h2>
+    <p class="cta-sub reveal" style="transition-delay:.16s;">
+      Únete a las empresas líderes que ya confían en InfiniHon para potenciar su infraestructura. Proceso de aprobación en menos de 48 horas.
+    </p>
+    <div class="cta-btns reveal" style="transition-delay:.24s;">
+      <button class="btn-magnetic" id="magneticBtn">
+        <i class="fa fa-handshake"></i> &nbsp; Convertirse en Socio Estratégico &nbsp; <i class="fa fa-arrow-right"></i>
+      </button>
+      <a href="mailto:partners@infinihon.com" class="btn btn-ghost btn-sm"><i class="fa fa-envelope"></i> partners@infinihon.com</a>
+    </div>
+    <p class="cta-note reveal" style="transition-delay:.32s;">
+      <i class="fa fa-check-circle"></i> Sin compromisos iniciales &nbsp;·&nbsp;
+      <i class="fa fa-check-circle"></i> Aprobación en 48h &nbsp;·&nbsp;
+      <i class="fa fa-check-circle"></i> Soporte durante todo el proceso
+    </p>
+  </div>
+</section>
+
+<!-- ══ FOOTER (idéntico cadena de diseño) ════════════════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">InfiniHon</div>
+        <p class="footer-desc">Infraestructura IT de grado industrial para empresas modernas. Soluciones robustas, escalables y seguras.</p>
+        <div class="footer-social">
+          <a href="#" class="fs-btn"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="fs-btn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" class="fs-btn"><i class="fab fa-github"></i></a>
+          <a href="#" class="fs-btn"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Alianzas</h5>
+        <ul>
+          <li><a href="#">MikroTik</a></li>
+          <li><a href="#">Raspberry Pi</a></li>
+          <li><a href="#">Amazon AWS</a></li>
+          <li><a href="#">Cisco Systems</a></li>
+          <li><a href="#">Dell Technologies</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Compañía</h5>
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="servicios.html">Servicios</a></li>
+          <li><a href="tienda.html">Tienda</a></li>
+          <li><a href="index.html#members">Equipo</a></li>
+          <li><a href="#cta-final">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Legal</h5>
+        <ul>
+          <li><a href="#">Política de Privacidad</a></li>
+          <li><a href="#">Términos de Servicio</a></li>
+          <li><a href="#">Portal de Partners</a></li>
+          <li><a href="#">Documentación</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 InfiniHon Studio. Todos los derechos reservados.</p>
+      <div class="footer-links">
+        <a href="#">Privacidad</a>
+        <a href="#">Términos</a>
+        <a href="#">Sitemap</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ══ SCRIPTS ════════════════════════════════════════════════ -->
+<script>
+(function(){
+
+/* ─── 1. CURSOR PERSONALIZADO ───────────────────────────────── */
+const cur = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+const aura = document.getElementById('cursor-aura');
+const isTouch = !window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+
+if(isTouch){
+  [cur,ring,aura].forEach(el=>el&&(el.style.display='none'));
+  document.body.style.cursor='auto';
+  document.querySelectorAll('button,a').forEach(el=>el.style.cursor='pointer');
+} else {
+  let mx=0,my=0,ax=0,ay=0;
+  document.addEventListener('mousemove',e=>{
+    mx=e.clientX; my=e.clientY;
+    cur.style.left=mx+'px'; cur.style.top=my+'px';
+    aura.style.left=mx+'px'; aura.style.top=my+'px';
+  });
+  // Ring with slight lag
+  function lerpRing(){
+    ax+=(mx-ax)*.12; ay+=(my-ay)*.12;
+    ring.style.left=ax+'px'; ring.style.top=ay+'px';
+    requestAnimationFrame(lerpRing);
+  }
+  lerpRing();
+
+  document.querySelectorAll('a,button,.tier-card,.socio-card,.benefit-card,.pillar,.tl-content').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{
+      cur.style.width='20px'; cur.style.height='20px';
+      cur.style.background='rgba(37,99,235,.5)';
+      ring.style.width='60px'; ring.style.height='60px';
+      ring.style.borderColor='rgba(37,99,235,.9)';
+    });
+    el.addEventListener('mouseleave',()=>{
+      cur.style.width='12px'; cur.style.height='12px';
+      cur.style.background='var(--blue)';
+      ring.style.width='36px'; ring.style.height='36px';
+      ring.style.borderColor='rgba(37,99,235,.5)';
+    });
+  });
+
+  // Click ripple
+  document.addEventListener('mousedown',e=>{
+    const r=document.createElement('div');
+    r.style.cssText=`position:fixed;left:${e.clientX}px;top:${e.clientY}px;width:10px;height:10px;border-radius:50%;background:rgba(37,99,235,.6);transform:translate(-50%,-50%);pointer-events:none;z-index:9999;animation:rippleOut .5s ease-out forwards;`;
+    document.body.appendChild(r);
+    setTimeout(()=>r.remove(),500);
+  });
+}
+
+/* ─── CSS for ripple ────────────────────────────────────────── */
+const styleEl=document.createElement('style');
+styleEl.textContent=`@keyframes rippleOut{to{transform:translate(-50%,-50%) scale(5);opacity:0;}}`;
+document.head.appendChild(styleEl);
+
+/* ─── 2. CANVAS PARTICLES ───────────────────────────────────── */
+const canvas=document.getElementById('particle-canvas');
+const ctx=canvas.getContext('2d');
+let W,H,particles=[];
+
+function resize(){
+  W=canvas.width=window.innerWidth;
+  H=canvas.height=window.innerHeight;
+}
+resize();
+window.addEventListener('resize',resize);
+
+class Particle{
+  constructor(){this.reset();}
+  reset(){
+    this.x=Math.random()*W;
+    this.y=Math.random()*H;
+    this.r=Math.random()*1.5+.3;
+    this.vx=(Math.random()-.5)*.3;
+    this.vy=(Math.random()-.5)*.3;
+    this.alpha=Math.random()*.4+.1;
+  }
+  update(){
+    this.x+=this.vx; this.y+=this.vy;
+    if(this.x<0||this.x>W||this.y<0||this.y>H)this.reset();
+  }
+  draw(){
+    ctx.beginPath();
+    ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(37,99,235,${this.alpha})`;
+    ctx.fill();
+  }
+}
+
+for(let i=0;i<80;i++)particles.push(new Particle());
+
+function animateParticles(){
+  ctx.clearRect(0,0,W,H);
+  // Draw connections
+  for(let i=0;i<particles.length;i++){
+    for(let j=i+1;j<particles.length;j++){
+      const dx=particles[i].x-particles[j].x;
+      const dy=particles[i].y-particles[j].y;
+      const dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<120){
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x,particles[i].y);
+        ctx.lineTo(particles[j].x,particles[j].y);
+        ctx.strokeStyle=`rgba(37,99,235,${.08*(1-dist/120)})`;
+        ctx.lineWidth=.5;
+        ctx.stroke();
+      }
+    }
+    particles[i].update();
+    particles[i].draw();
+  }
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+/* ─── 3. SCROLL PROGRESS ────────────────────────────────────── */
+window.addEventListener('scroll',()=>{
+  const p=(window.scrollY/(document.documentElement.scrollHeight-innerHeight))*100;
+  document.getElementById('progress-fill').style.width=p+'%';
+});
+
+/* ─── 4. REVEAL ON SCROLL ───────────────────────────────────── */
+const reveals=document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting)setTimeout(()=>e.target.classList.add('in'),i*55);
+  });
+},{threshold:0.07});
+reveals.forEach(el=>obs.observe(el));
+
+/* ─── 5. MOBILE MENU ────────────────────────────────────────── */
+function toggleMenu(){
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+window.toggleMenu=toggleMenu;
+document.addEventListener('click',e=>{
+  const m=document.getElementById('mobileMenu');
+  const h=document.getElementById('ham');
+  if(m.classList.contains('open')&&!m.contains(e.target)&&h&&!h.contains(e.target))
+    m.classList.remove('open');
+});
+
+/* ─── 6. NAV ACTIVE ON SCROLL ───────────────────────────────── */
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY+80;
+  document.querySelectorAll('section[id]').forEach(sec=>{
+    const link=document.querySelector(`.nav-links a[href="#${sec.id}"]`);
+    if(link){const t=sec.offsetTop,h=sec.offsetHeight;link.classList.toggle('active',y>=t&&y<t+h);}
+  });
+});
+
+/* ─── 7. COUNTER ANIMATION ──────────────────────────────────── */
+function animateCounters(){
+  document.querySelectorAll('.stat-num[data-target]').forEach(el=>{
+    const t=parseInt(el.dataset.target);
+    let c=0;const inc=Math.ceil(t/50);
+    const suf=el.textContent.replace(/\d+/,'');
+    const timer=setInterval(()=>{
+      c=Math.min(c+inc,t);
+      el.textContent=c+suf;
+      if(c>=t)clearInterval(timer);
+    },25);
+  });
+}
+const statsObs=new IntersectionObserver(e=>{
+  e.forEach(en=>{if(en.isIntersecting){animateCounters();statsObs.disconnect();}});
+},{threshold:.5});
+const sb=document.getElementById('stats-bar');
+if(sb)statsObs.observe(sb);
+
+/* ─── 8. MAGNETIC BUTTON ────────────────────────────────────── */
+const mb=document.getElementById('magneticBtn');
+if(mb){
+  mb.addEventListener('mousemove',e=>{
+    const r=mb.getBoundingClientRect();
+    const x=(e.clientX-r.left)-r.width/2;
+    const y=(e.clientY-r.top)-r.height/2;
+    mb.style.transform=`translate(${x*.2}px,${y*.2}px) translateY(-2px)`;
+  });
+  mb.addEventListener('mouseleave',()=>{mb.style.transform='';});
+  mb.addEventListener('click',()=>{
+    document.querySelector('#cta-final input')?.focus();
+    window.location.href='mailto:partners@infinihon.com';
+  });
+}
+
+/* ─── 9. TIER CARD 3D TILT ──────────────────────────────────── */
+document.querySelectorAll('.tier-card,.benefit-card,.socio-card').forEach(card=>{
+  card.addEventListener('mousemove',e=>{
+    const r=card.getBoundingClientRect();
+    const x=e.clientX-r.left, y=e.clientY-r.top;
+    const cx=r.width/2, cy=r.height/2;
+    const rx=((y-cy)/cy)*-6;
+    const ry=((x-cx)/cx)*6;
+    card.style.transform=`perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-4px) scale(1.01)`;
+  });
+  card.addEventListener('mouseleave',()=>{
+    card.style.transform='';
+  });
+});
+
+/* ─── 10. SCROLL-LINKED HERO ORB PARALLAX ───────────────────── */
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY;
+  const orbScene=document.querySelector('.orbital-scene');
+  if(orbScene)orbScene.style.transform=`translateY(${y*.08}px)`;
+});
+
+})();
+</script>
+</body>
+</html>
