@@ -1,811 +1,1454 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InfiniHon - Centro de Soporte Técnico</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>
-        * {
-            font-family: 'Inter', sans-serif;
-        }
-        
-        .font-mono-custom {
-            font-family: 'JetBrains Mono', monospace;
-        }
-        
-        body {
-            background-color: #020617;
-            background-image: radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.08) 0%, transparent 40%),
-                              radial-gradient(circle at 80% 70%, rgba(6, 182, 212, 0.08) 0%, transparent 40%);
-            min-height: 100vh;
-        }
-        
-        /* Glassmorphism */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(59, 130, 246, 0.15);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-        
-        .glass-card {
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(59, 130, 246, 0.1);
-            transition: all 0.3s ease;
-        }
-        
-        .glass-card:hover {
-            border-color: rgba(59, 130, 246, 0.3);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.1);
-        }
-        
-        /* Header */
-        .main-header {
-            background: rgba(2, 6, 23, 0.8);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(59, 130, 246, 0.15);
-        }
-        
-        /* Tarjetas de contacto */
-        .contact-card {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1.5rem;
-            border-radius: 1.5rem;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: 1px solid rgba(59, 130, 246, 0.1);
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(8px);
-        }
-        
-        .contact-card:hover {
-            border-color: rgba(59, 130, 246, 0.4);
-            background: rgba(59, 130, 246, 0.05);
-            transform: translateY(-2px);
-        }
-        
-        .contact-icon {
-            width: 4rem;
-            height: 4rem;
-            border-radius: 1.2rem;
-            background: rgba(59, 130, 246, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            transition: all 0.3s ease;
-        }
-        
-        .contact-card:hover .contact-icon {
-            background: rgba(59, 130, 246, 0.2);
-            border-color: rgba(59, 130, 246, 0.4);
-            transform: scale(1.05);
-        }
-        
-        /* Artículos de ayuda */
-        .help-article {
-            padding: 1rem;
-            border-radius: 1rem;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: 1px solid transparent;
-        }
-        
-        .help-article:hover {
-            background: rgba(59, 130, 246, 0.05);
-            border-color: rgba(59, 130, 246, 0.2);
-        }
-        
-        /* Badges */
-        .badge {
-            padding: 0.25rem 0.75rem;
-            border-radius: 2rem;
-            font-size: 0.7rem;
-            font-weight: 500;
-            font-family: 'JetBrains Mono', monospace;
-        }
-        
-        .badge-blue {
-            background: rgba(59, 130, 246, 0.1);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            color: #60a5fa;
-        }
-        
-        .badge-green {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            color: #10b981;
-        }
-        
-        .badge-purple {
-            background: rgba(168, 85, 247, 0.1);
-            border: 1px solid rgba(168, 85, 247, 0.3);
-            color: #a855f7;
-        }
-        
-        .badge-orange {
-            background: rgba(245, 158, 11, 0.1);
-            border: 1px solid rgba(245, 158, 11, 0.3);
-            color: #f59e0b;
-        }
-        
-        /* Estado en vivo */
-        .live-indicator {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            border-radius: 2rem;
-        }
-        
-        .live-dot {
-            width: 0.6rem;
-            height: 0.6rem;
-            background: #10b981;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
-        }
-        
-        /* Inputs */
-        .support-input {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            border-radius: 1rem;
-            padding: 0.75rem 1rem;
-            color: white;
-            width: 100%;
-            transition: all 0.3s ease;
-        }
-        
-        .support-input:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-        }
-        
-        .support-input::placeholder {
-            color: rgba(148, 163, 184, 0.3);
-        }
-        
-        /* Botones */
-        .btn-primary {
-            background: linear-gradient(135deg, #1e40af, #3b82f6);
-            transition: all 0.3s ease;
-        }
-        
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #1e3a8a, #2563eb);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-        
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            transition: all 0.3s ease;
-        }
-        
-        .btn-secondary:hover {
-            background: rgba(59, 130, 246, 0.1);
-            border-color: rgba(59, 130, 246, 0.6);
-        }
-        
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.02);
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: rgba(59, 130, 246, 0.3);
-            border-radius: 4px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(59, 130, 246, 0.5);
-        }
-        
-        /* Animaciones */
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .animate-card {
-            animation: slideIn 0.5s ease forwards;
-            opacity: 0;
-        }
-        
-        .delay-1 { animation-delay: 0.1s; }
-        .delay-2 { animation-delay: 0.2s; }
-        .delay-3 { animation-delay: 0.3s; }
-        .delay-4 { animation-delay: 0.4s; }
-        .delay-5 { animation-delay: 0.5s; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InfiniHon — Centro de Soporte Técnico</title>
+
+<!-- Mismas fuentes que index.html -->
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+/* ─── RESET & TOKENS (IDÉNTICOS A INDEX.HTML) ───────────────────────── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:       #050508;
+  --bg2:      #08080f;
+  --bg3:      #0d0d18;
+  --card:     #0f0f1a;
+  --card2:    #12121f;
+  --border:   rgba(255,255,255,0.07);
+  --border2:  rgba(255,255,255,0.12);
+  --blue:     #2563eb;
+  --blue2:    #1d4ed8;
+  --blue-glow:rgba(37,99,235,0.35);
+  --cyan:     #38bdf8;
+  --white:    #ffffff;
+  --gray:     #6b7280;
+  --gray2:    #9ca3af;
+  --text:     #d1d5db;
+  --green:    #22c55e;
+  --radius:   10px;
+  --radius-lg:18px;
+}
+html{scroll-behavior:smooth;font-size:16px;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);color:var(--text);
+  overflow-x:hidden;line-height:1.6;
+}
+a{text-decoration:none;color:inherit;}
+ul{list-style:none;}
+img{max-width:100%;display:block;}
+button{font-family:inherit;cursor:pointer;}
+.container{max-width:1200px;margin:0 auto;padding:0 clamp(16px,4vw,40px);}
+
+/* ─── SCROLLBAR ─────────────────────────────────────── */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--blue);border-radius:2px;}
+
+/* ─── PROGRESS BAR ──────────────────────────────────── */
+#progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:999;background:transparent;}
+#progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));width:0;transition:width .1s linear;}
+
+/* ─── BUTTONS ───────────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:40px;font-size:13px;font-weight:600;border:none;transition:all .25s;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;}
+.btn-blue{background:var(--blue);color:#fff;}
+.btn-blue:hover{background:var(--blue2);transform:translateY(-1px);box-shadow:0 8px 28px var(--blue-glow);}
+.btn-ghost{background:rgba(255,255,255,0.06);color:var(--white);border:1px solid var(--border2);}
+.btn-ghost:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.2);}
+.btn-sm{padding:8px 18px;font-size:12px;}
+.btn-outline{background:transparent;color:var(--white);border:1px solid var(--border2);}
+.btn-outline:hover{background:rgba(255,255,255,0.05);}
+
+/* ─── NAV ───────────────────────────────────────────── */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:0 clamp(16px,4vw,40px);
+  background:rgba(5,5,8,0.85);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+nav{
+  max-width:1200px;margin:0 auto;
+  display:flex;align-items:center;
+  height:64px;gap:0;
+}
+.nav-logo{
+  font-family:'Syne',sans-serif;
+  font-size:18px;font-weight:800;
+  color:var(--white);letter-spacing:-.5px;
+  margin-right:auto;
+}
+.nav-logo span{color:var(--blue);}
+.nav-links{
+  display:flex;align-items:center;gap:4px;
+  margin:0 32px;
+}
+.nav-links a{
+  font-size:13px;font-weight:500;color:var(--gray2);
+  padding:6px 12px;border-radius:6px;
+  transition:color .2s;
+}
+.nav-links a:hover,.nav-links a.active{color:var(--white);}
+.nav-right{display:flex;align-items:center;gap:10px;}
+
+/* Selector de idioma */
+.lang-selector{
+  position:relative;
+  display:flex;align-items:center;gap:4px;
+  padding:6px 12px;border-radius:6px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border2);
+  cursor:pointer;transition:all .2s;
+}
+.lang-selector:hover{background:rgba(255,255,255,0.08);}
+.lang-current{
+  display:flex;align-items:center;gap:6px;
+  font-size:12px;font-weight:500;color:var(--gray2);
+}
+.lang-current i{font-size:14px;}
+.lang-dropdown{
+  position:absolute;top:100%;right:0;margin-top:8px;
+  background:var(--card2);border:1px solid var(--border2);
+  border-radius:8px;overflow:hidden;z-index:50;
+  display:none;flex-direction:column;min-width:120px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.4);
+}
+.lang-selector.open .lang-dropdown{display:flex;}
+.lang-option{
+  display:flex;align-items:center;gap:8px;
+  padding:10px 14px;font-size:12px;color:var(--gray2);
+  cursor:pointer;transition:background .2s;
+}
+.lang-option:hover{background:rgba(255,255,255,0.05);color:var(--white);}
+.lang-option.active{color:var(--blue);background:rgba(37,99,235,0.1);}
+.lang-flag{font-size:16px;}
+
+.hamburger{
+  display:none;flex-direction:column;gap:5px;
+  background:none;border:none;cursor:pointer;padding:4px;
+}
+.hamburger span{width:22px;height:2px;background:var(--white);transition:all .3s;}
+.mobile-menu{
+  display:none;position:fixed;top:64px;left:0;right:0;
+  background:rgba(5,5,8,0.98);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:20px clamp(16px,4vw,40px) 28px;
+  flex-direction:column;gap:4px;z-index:99;
+}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{
+  font-size:15px;font-weight:500;color:var(--gray2);
+  padding:10px 14px;border-radius:8px;
+  transition:all .2s;
+}
+.mobile-menu a:hover{color:var(--white);background:rgba(255,255,255,0.05);}
+.mobile-menu .divider{height:1px;background:var(--border);margin:8px 0;}
+
+/* ─── HERO SOPORTE ───────────────────────────────────── */
+#hero-support{
+  min-height:80vh;
+  display:flex;align-items:center;
+  position:relative;overflow:hidden;
+  padding:100px 0 80px;
+  text-align:center;
+}
+.hero-orb{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:min(700px,110vw);height:min(700px,110vw);
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(37,99,235,.18) 0%,rgba(37,99,235,.06) 35%,transparent 70%);
+  pointer-events:none;
+  animation:orbPulse 6s ease-in-out infinite;
+}
+@keyframes orbPulse{0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-50%,-50%) scale(1.08);}}
+.hero-grid-bg{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse at center,black 30%,transparent 75%);
+  pointer-events:none;
+}
+.support-inner{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;
+  gap:0;max-width:700px;margin:0 auto;
+}
+.support-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(34,197,94,0.12);
+  border:1px solid rgba(34,197,94,0.25);
+  border-radius:40px;padding:6px 16px;
+  font-size:12px;color:var(--gray2);margin-bottom:28px;
+}
+.support-badge .dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--green);animation:blink 2s infinite;
+}
+.support-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(32px,6vw,48px);
+  font-weight:800;line-height:1.1;
+  color:var(--white);letter-spacing:-2px;
+  margin-bottom:16px;
+}
+.support-title span{
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.support-desc{
+  font-size:clamp(14px,2vw,16px);
+  color:var(--gray);line-height:1.7;
+  margin-bottom:32px;
+}
+.support-search{
+  width:100%;max-width:480px;
+  display:flex;align-items:center;
+  background:var(--card);
+  border:1px solid var(--border2);
+  border-radius:40px;
+  overflow:hidden;
+  transition:all .25s;
+}
+.support-search:focus-within{
+  border-color:rgba(37,99,235,.5);
+  box-shadow:0 0 0 3px rgba(37,99,235,.12);
+}
+.support-search input{
+  flex:1;background:none;border:none;outline:none;
+  color:var(--white);font-size:14px;padding:12px 20px;
+  font-family:'DM Sans',sans-serif;
+}
+.support-search input::placeholder{color:var(--gray);}
+.support-search button{
+  background:none;border:none;
+  padding:12px 20px;color:var(--gray);
+  transition:color .2s;
+}
+.support-search button:hover{color:var(--cyan);}
+
+/* ─── CONTACT CARDS ─────────────────────────────────── */
+#contact{padding:80px 0;}
+.contact-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:16px;
+}
+.contact-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:clamp(20px,3vw,28px);
+  display:flex;flex-direction:column;align-items:center;
+  text-align:center;gap:16px;
+  transition:all .3s;cursor:pointer;
+}
+.contact-card:hover{
+  border-color:rgba(37,99,235,.3);
+  transform:translateY(-3px);
+  box-shadow:0 12px 36px rgba(0,0,0,.3);
+}
+.contact-icon{
+  width:56px;height:56px;border-radius:16px;
+  background:rgba(37,99,235,0.12);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;color:var(--blue);
+  transition:all .3s;
+}
+.contact-card:hover .contact-icon{
+  background:var(--blue);color:#fff;
+  transform:scale(1.05);
+}
+.contact-title{
+  font-family:'Syne',sans-serif;
+  font-size:16px;font-weight:700;color:var(--white);
+}
+.contact-desc{font-size:13px;color:var(--gray);line-height:1.6;}
+.contact-meta{
+  display:flex;align-items:center;gap:6px;
+  font-size:11px;color:var(--gray2);
+}
+.contact-meta .dot{
+  width:5px;height:5px;border-radius:50%;
+  background:var(--green);animation:blink 2s infinite;
+}
+
+/* ─── SYSTEM STATUS ─────────────────────────────────── */
+#status{padding:0 0 80px;}
+.status-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:clamp(24px,3vw,32px);
+}
+.status-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:24px;padding-bottom:16px;
+  border-bottom:1px solid var(--border);
+}
+.status-title{
+  font-family:'Syne',sans-serif;
+  font-size:18px;font-weight:700;color:var(--white);
+  display:flex;align-items:center;gap:8px;
+}
+.status-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(34,197,94,0.12);
+  border:1px solid rgba(34,197,94,0.25);
+  border-radius:20px;padding:4px 12px;
+  font-size:11px;color:var(--green);font-weight:600;
+}
+.status-list{display:flex;flex-direction:column;gap:12px;}
+.status-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 0;border-bottom:1px solid var(--border);
+}
+.status-item:last-child{border-bottom:none;}
+.status-name{font-size:13px;color:var(--text);}
+.status-value{
+  display:flex;align-items:center;gap:6px;
+  font-size:12px;font-weight:500;
+}
+.status-value.ok{color:var(--green);}
+.status-value.warn{color:var(--amber);}
+.status-value.error{color:var(--red);}
+.status-dot{
+  width:8px;height:8px;border-radius:50%;
+  animation:blink 2s infinite;
+}
+.status-value.ok .status-dot{background:var(--green);}
+.status-value.warn .status-dot{background:var(--amber);}
+.status-value.error .status-dot{background:var(--red);}
+
+/* ─── FAQ (REUSING INDEX COMPONENT) ────────────────── */
+#faq{padding:80px 0;}
+.faq-header{margin-bottom:clamp(32px,4vw,56px);text-align:center;}
+.faq-list{
+  display:flex;flex-direction:column;gap:0;
+  border:1px solid var(--border);border-radius:var(--radius-lg);
+  overflow:hidden;background:var(--card);
+}
+.faq-item{border-bottom:1px solid var(--border);}
+.faq-item:last-child{border-bottom:none;}
+.faq-q{
+  padding:clamp(18px,2.5vw,26px);
+  display:flex;justify-content:space-between;align-items:center;
+  cursor:pointer;gap:16px;transition:background .2s;
+}
+.faq-q:hover{background:rgba(255,255,255,.02);}
+.faq-q-text{font-size:clamp(14px,1.8vw,16px);font-weight:600;color:var(--white);}
+.faq-toggle{
+  width:28px;height:28px;border-radius:50%;flex-shrink:0;
+  background:rgba(255,255,255,.05);border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;color:var(--gray2);transition:all .3s;
+}
+.faq-item.open .faq-toggle{
+  background:var(--blue);color:#fff;border-color:var(--blue);
+  transform:rotate(45deg);
+}
+.faq-a{
+  font-size:14px;color:var(--gray);line-height:1.8;
+  max-height:0;overflow:hidden;
+  transition:max-height .4s ease,padding .4s ease;
+  padding:0 clamp(18px,2.5vw,26px);
+}
+.faq-item.open .faq-a{max-height:300px;padding-bottom:clamp(18px,2.5vw,26px);}
+.faq-item.active-highlight{
+  background:rgba(37,99,235,.06);border-color:rgba(37,99,235,.2);
+}
+.faq-item.active-highlight .faq-q-text{color:var(--blue);}
+
+/* ─── TICKET FORM ───────────────────────────────────── */
+#ticket{padding:0 0 80px;}
+.ticket-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:clamp(24px,3vw,40px);
+  max-width:700px;margin:0 auto;
+}
+.ticket-title{
+  font-family:'Syne',sans-serif;
+  font-size:20px;font-weight:700;color:var(--white);
+  margin-bottom:24px;text-align:center;
+}
+.form-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;
+}
+.form-group{display:flex;flex-direction:column;gap:6px;}
+.form-group.full{grid-column:1/-1;}
+.form-label{
+  font-size:12px;font-weight:500;color:var(--gray2);
+}
+.form-input,.form-select,.form-textarea{
+  background:var(--bg3);border:1px solid var(--border2);
+  color:var(--white);font-size:13px;padding:10px 14px;
+  border-radius:8px;outline:none;font-family:'DM Sans',sans-serif;
+  transition:border-color .2s;
+}
+.form-input:focus,.form-select:focus,.form-textarea:focus{
+  border-color:rgba(37,99,235,.5);
+}
+.form-textarea{min-height:120px;resize:vertical;}
+.form-actions{
+  display:flex;gap:12px;justify-content:center;margin-top:24px;
+}
+
+/* ─── KNOWLEDGE BASE ───────────────────────────────── */
+#kb{padding:80px 0;}
+.kb-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:16px;
+}
+.kb-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:20px;
+  display:flex;flex-direction:column;gap:12px;
+  transition:all .3s;cursor:pointer;
+}
+.kb-card:hover{
+  border-color:rgba(37,99,235,.3);
+  transform:translateY(-3px);
+}
+.kb-icon{
+  width:40px;height:40px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;color:var(--blue);
+  background:rgba(37,99,235,0.12);
+}
+.kb-title{
+  font-family:'Syne',sans-serif;
+  font-size:14px;font-weight:700;color:var(--white);
+}
+.kb-desc{font-size:12px;color:var(--gray);line-height:1.6;}
+.kb-count{
+  font-size:11px;color:var(--gray2);
+  font-family:'DM Sans',sans-serif;
+}
+
+/* ─── CTA FINAL ─────────────────────────────────────── */
+#cta-support{
+  padding:100px clamp(16px,4vw,40px);
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.cta-orb{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(37,99,235,.15) 0%,transparent 65%);
+  pointer-events:none;
+}
+.cta-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(32px,6vw,56px);font-weight:800;
+  color:var(--white);letter-spacing:-2px;
+  line-height:1;margin-bottom:20px;position:relative;z-index:1;
+}
+.cta-title span{
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.cta-sub{font-size:clamp(14px,2vw,16px);color:var(--gray);margin-bottom:36px;position:relative;z-index:1;}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1;}
+
+/* ─── FOOTER (IDÉNTICO A INDEX) ─────────────────────── */
+footer{
+  border-top:1px solid var(--border);
+  padding:clamp(40px,6vw,80px) 0 0;
+}
+.footer-top{
+  display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;
+  gap:clamp(24px,4vw,60px);margin-bottom:clamp(40px,5vw,60px);
+}
+.footer-logo{
+  font-family:'Syne',sans-serif;
+  font-size:20px;font-weight:800;color:var(--white);
+  margin-bottom:14px;
+}
+.footer-desc{font-size:13px;color:var(--gray);line-height:1.8;max-width:260px;margin-bottom:20px;}
+.footer-social{display:flex;gap:8px;}
+.fs-btn{
+  width:34px;height:34px;border-radius:8px;
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;color:var(--gray);
+  transition:all .2s;
+}
+.fs-btn:hover{background:var(--blue);color:#fff;border-color:var(--blue);}
+.footer-col h5{
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
+  color:var(--white);margin-bottom:16px;letter-spacing:.3px;
+}
+.footer-col ul{display:flex;flex-direction:column;gap:10px;}
+.footer-col ul li a{font-size:13px;color:var(--gray);transition:color .2s;}
+.footer-col ul li a:hover{color:var(--blue);}
+.footer-bottom{
+  border-top:1px solid var(--border);
+  padding:clamp(16px,2vw,24px) 0;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:12px;
+}
+.footer-bottom p,.footer-bottom a{font-size:12px;color:var(--gray);}
+.footer-bottom a:hover{color:var(--white);}
+.footer-links{display:flex;gap:20px;}
+
+/* ─── NOTIFICACIONES PUSH ───────────────────────────── */
+#notifications{
+  position:fixed;bottom:24px;right:24px;z-index:600;
+  display:flex;flex-direction:column;gap:12px;
+  pointer-events:none;
+}
+.notification{
+  background:var(--card2);
+  border:1px solid var(--border2);
+  border-radius:var(--radius-lg);
+  padding:16px;
+  display:flex;align-items:flex-start;gap:12px;
+  max-width:320px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.4);
+  pointer-events:auto;
+  transform:translateX(120%);
+  transition:transform .4s cubic-bezier(.22,1,.36,1);
+  animation:slideIn .4s ease forwards;
+}
+.notification.show{transform:translateX(0);}
+@keyframes slideIn{
+  from{transform:translateX(120%);}
+  to{transform:translateX(0);}
+}
+.notification-icon{
+  width:36px;height:36px;border-radius:10px;
+  background:rgba(37,99,235,0.12);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;color:var(--blue);flex-shrink:0;
+}
+.notification-content{flex:1;min-width:0;}
+.notification-title{
+  font-size:13px;font-weight:600;color:var(--white);
+  margin-bottom:4px;
+}
+.notification-desc{
+  font-size:12px;color:var(--gray);line-height:1.5;
+  margin-bottom:8px;
+}
+.notification-actions{
+  display:flex;gap:8px;
+}
+.notification-btn{
+  font-size:11px;font-weight:500;padding:6px 12px;
+  border-radius:6px;border:none;cursor:pointer;
+  transition:all .2s;font-family:'DM Sans',sans-serif;
+}
+.notification-btn.primary{
+  background:var(--blue);color:#fff;
+}
+.notification-btn.primary:hover{
+  background:var(--blue2);
+}
+.notification-btn.ghost{
+  background:transparent;color:var(--gray2);
+  border:1px solid var(--border2);
+}
+.notification-btn.ghost:hover{
+  background:rgba(255,255,255,0.05);color:var(--white);
+}
+.notification-close{
+  background:none;border:none;color:var(--gray);
+  font-size:14px;cursor:pointer;padding:4px;
+  transition:color .2s;flex-shrink:0;
+}
+.notification-close:hover{color:var(--white);}
+
+/* ─── CHATBOT FLOTANTE ──────────────────────────────── */
+.chatbot-toggle{
+  position:fixed;bottom:24px;right:24px;z-index:500;
+  width:56px;height:56px;border-radius:50%;
+  background:var(--blue);color:#fff;
+  border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;
+  box-shadow:0 8px 32px rgba(37,99,235,0.4);
+  transition:all .3s;
+  animation:chatPulse 2s ease-in-out infinite;
+}
+.chatbot-toggle:hover{
+  transform:scale(1.08);
+  box-shadow:0 12px 40px rgba(37,99,235,0.6);
+}
+@keyframes chatPulse{
+  0%,100%{box-shadow:0 8px 32px rgba(37,99,235,0.4);}
+  50%{box-shadow:0 8px 48px rgba(37,99,235,0.7);}
+}
+.chatbot-toggle .badge{
+  position:absolute;top:-4px;right:-4px;
+  background:var(--green);color:#fff;
+  font-size:10px;font-weight:700;
+  width:20px;height:20px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  border:2px solid var(--bg);
+}
+
+/* Chat modal (reutiliza estilos de QV del index) */
+.qv-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:400;
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+  backdrop-filter:blur(8px);
+}
+.qv-overlay.open{opacity:1;pointer-events:auto;}
+.qv-modal{
+  background:var(--card2);border:1px solid var(--border2);
+  border-radius:var(--radius-lg);width:100%;max-width:480px;
+  max-height:90vh;overflow:hidden;
+  transform:translateY(20px) scale(.97);
+  transition:transform .35s cubic-bezier(.22,1,.36,1);
+  display:flex;flex-direction:column;
+}
+.qv-overlay.open .qv-modal{transform:translateY(0) scale(1);}
+.qv-top{
+  padding:16px 20px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+}
+.qv-title{
+  display:flex;align-items:center;gap:12px;
+}
+.qv-avatar{
+  width:40px;height:40px;border-radius:12px;
+  background:var(--blue);display:flex;align-items:center;justify-content:center;
+  color:#fff;font-weight:700;font-size:14px;
+}
+.qv-info .name{
+  font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--white);
+}
+.qv-info .status{
+  font-size:11px;color:var(--green);display:flex;align-items:center;gap:4px;
+}
+.qv-close{
+  width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.06);
+  border:1px solid var(--border);color:var(--gray);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .2s;flex-shrink:0;
+}
+.qv-close:hover{color:var(--white);}
+.qv-body{
+  flex:1;overflow-y:auto;padding:20px;
+  display:flex;flex-direction:column;gap:16px;
+}
+.chat-message{
+  display:flex;gap:10px;max-width:85%;
+}
+.chat-message.agent{flex-direction:row;}
+.chat-message.user{flex-direction:row-reverse;margin-left:auto;}
+.chat-avatar{
+  width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:12px;font-weight:700;flex-shrink:0;
+}
+.chat-message.agent .chat-avatar{background:var(--blue);}
+.chat-message.user .chat-avatar{background:var(--purple);}
+.chat-bubble{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:12px;padding:10px 14px;
+}
+.chat-message.user .chat-bubble{
+  background:rgba(37,99,235,0.15);border-color:rgba(37,99,235,0.3);
+}
+.chat-text{font-size:13px;color:var(--white);line-height:1.5;}
+.chat-time{font-size:10px;color:var(--gray);margin-top:4px;}
+.chat-typing{
+  display:flex;align-items:center;gap:6px;font-size:11px;color:var(--gray);
+}
+.qv-footer{
+  padding:16px 20px;border-top:1px solid var(--border);
+  display:flex;gap:10px;flex-shrink:0;
+}
+.qv-input{
+  flex:1;background:var(--bg3);border:1px solid var(--border2);
+  border-radius:20px;padding:10px 16px;color:var(--white);
+  font-size:13px;outline:none;font-family:'DM Sans',sans-serif;
+}
+.qv-input:focus{border-color:rgba(37,99,235,.5);}
+.qv-send{
+  width:40px;height:40px;border-radius:50%;
+  background:var(--blue);color:#fff;border:none;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .2s;
+}
+.qv-send:hover{background:var(--blue2);transform:scale(1.05);}
+
+/* ─── REVEAL ANIMATIONS ─────────────────────────────── */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.in{opacity:1;transform:translateY(0);}
+.reveal-left{opacity:0;transform:translateX(-24px);transition:opacity .65s ease,transform .65s ease;}
+.reveal-left.in{opacity:1;transform:translateX(0);}
+.reveal-right{opacity:0;transform:translateX(24px);transition:opacity .65s ease,transform .65s ease;}
+.reveal-right.in{opacity:1;transform:translateX(0);}
+
+/* ─── RESPONSIVE ───────────────────────────────────── */
+@media(max-width:1024px){
+  .form-grid{grid-template-columns:1fr;}
+  .footer-top{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:768px){
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+  .support-search{max-width:100%;}
+  .contact-grid{grid-template-columns:1fr 1fr;}
+  .footer-top{grid-template-columns:1fr;}
+  .footer-bottom{flex-direction:column;text-align:center;}
+  .lang-selector{padding:6px 10px;}
+  .lang-dropdown{right:-10px;}
+}
+@media(max-width:540px){
+  .contact-grid{grid-template-columns:1fr;}
+  .form-actions{flex-direction:column;}
+  .cta-btns{flex-direction:column;align-items:center;}
+  .chatbot-toggle{width:52px;height:52px;font-size:18px;}
+  #notifications{bottom:80px;right:16px;}
+}
+</style>
+
+<!-- ══ FIRST VISIT DETECTION ═══════════════════════════════ -->
+<script>
+(function(){
+    const INTRO_KEY = 'infinihon_intro_seen';
+    const INTRO_PAGE = 'start.html';
+    if(localStorage.getItem(INTRO_KEY)) return;
+    if(window.location.pathname.includes(INTRO_PAGE)) return;
+    localStorage.setItem(INTRO_KEY, 'true');
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    window.location.replace(INTRO_PAGE + '?return=' + encodeURIComponent(currentPage));
+})();
+</script>
 </head>
 <body>
 
-<!-- Header completo con logo y navegación -->
-<header class="main-header sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-20">
-            <!-- Logo y nombre -->
-            <div class="flex items-center gap-3">
-                <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
-                    <span class="text-black font-bold text-2xl">I</span>
-                </div>
-                <div>
-                    <span class="text-white font-light text-2xl tracking-tight">INFINI<span class="font-bold text-blue-400">HON</span></span>
-                    <span class="text-xs text-gray-400 font-mono block">Soporte Técnico</span>
-                </div>
-            </div>
-            
-            <!-- Navegación -->
-            <nav class="hidden md:flex items-center space-x-8">
-                <a href="#" class="text-gray-300 hover:text-white transition-colors text-sm font-light">INICIO</a>
-                <a href="#" class="text-white transition-colors text-sm font-medium border-b-2 border-blue-400 pb-1">SOPORTE</a>
-                <a href="#" class="text-gray-300 hover:text-white transition-colors text-sm font-light">DOCUMENTACIÓN</a>
-                <a href="#" class="text-gray-300 hover:text-white transition-colors text-sm font-light">FORO</a>
-                <a href="#" class="text-gray-300 hover:text-white transition-colors text-sm font-light">CONTACTO</a>
-            </nav>
-            
-            <!-- Acciones -->
-            <div class="flex items-center gap-4">
-                <div class="live-indicator">
-                    <span class="live-dot"></span>
-                    <span class="text-green-400 text-sm font-mono hidden sm:block">5 AGENTES ONLINE</span>
-                </div>
-                
-                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
-                    <span class="text-white font-medium">SU</span>
-                </div>
-            </div>
+<!-- PROGRESS BAR -->
+<div id="progress"><div id="progress-fill"></div></div>
+
+<!-- NOTIFICACIONES PUSH -->
+<div id="notifications"></div>
+
+<!-- CHATBOT FLOTANTE -->
+<button class="chatbot-toggle" id="chatbotToggle" onclick="openChat()">
+  <i class="fa fa-comments"></i>
+  <span class="badge">3</span>
+</button>
+
+<!-- ══ NAV ══════════════════════════════════════════════════ -->
+<header>
+  <nav>
+    <a href="index.html" class="nav-logo">Infini<span>Hon</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#works">Works</a></li>
+      <li><a href="servicios.html">Servicios</a></li>
+      <li><a href="tienda.html">Tienda</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#cta-support" class="active">Soporte</a></li>
+    </ul>
+    <div class="nav-right">
+      <!-- Selector de idioma -->
+      <div class="lang-selector" id="langSelector">
+        <div class="lang-current">
+          <i class="fa fa-globe"></i>
+          <span id="currentLang">ES</span>
+          <i class="fa fa-chevron-down" style="font-size:10px;"></i>
         </div>
+        <div class="lang-dropdown">
+          <div class="lang-option active" data-lang="es" onclick="setLanguage('es')">
+            <span class="lang-flag">🇪🇸</span>
+            <span>Español</span>
+          </div>
+          <div class="lang-option" data-lang="en" onclick="setLanguage('en')">
+            <span class="lang-flag">🇬🇧</span>
+            <span>English</span>
+          </div>
+        </div>
+      </div>
+      
+      <a href="tienda.html" class="btn btn-blue btn-sm">Tienda</a>
+      <button class="hamburger" id="ham" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
     </div>
+  </nav>
 </header>
 
-<!-- Contenido principal -->
-<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    
-    <!-- Hero de soporte -->
-    <div class="glass-panel rounded-3xl p-8 mb-8 animate-card">
-        <div class="flex flex-col md:flex-row justify-between items-center gap-6">
-            <div>
-                <h1 class="text-3xl lg:text-4xl font-light text-white mb-2">
-                    Centro de Soporte Técnico
-                </h1>
-                <p class="text-gray-400 text-sm max-w-2xl">
-                    Estamos aquí para ayudarte 24/7. Consulta nuestra base de conocimiento, abre un ticket o contacta directamente con nuestro equipo de expertos.
-                </p>
-            </div>
-            
-            <!-- Buscador -->
-            <div class="w-full md:w-96">
-                <div class="relative">
-                    <input type="text" placeholder="Buscar en la base de conocimiento..." class="support-input pl-12 pr-4 py-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" class="absolute left-4 top-1/2 transform -translate-y-1/2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                </div>
-                <p class="text-xs text-gray-500 mt-2 font-mono">Ej: "configuración MikroTik", "Raspberry Pi cluster", "Nation II servidores"</p>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Grid principal de contacto -->
-    <div class="grid lg:grid-cols-3 gap-8 mb-8">
-        
-        <!-- Columna izquierda - Contacto directo -->
-        <div class="lg:col-span-2 space-y-6">
-            
-            <!-- Título de sección -->
-            <div class="flex items-center gap-3">
-                <div class="w-1 h-6 bg-blue-400 rounded-full"></div>
-                <h2 class="text-white text-xl font-light">Contacto Directo</h2>
-                <span class="badge badge-blue">RESPUESTA INMEDIATA</span>
-            </div>
-            
-            <!-- Grid de contactos -->
-            <div class="grid md:grid-cols-2 gap-4">
-                
-                <!-- Teléfono -->
-                <div class="contact-card animate-card delay-1" onclick="window.location.href='tel:+34931234567'">
-                    <div class="contact-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
-                    </div>
-                    <div class="flex-1">
-                        <p class="text-xs text-gray-400 font-mono mb-1">TELÉFONO 24/7</p>
-                        <p class="text-2xl text-white font-light tracking-tight">+34 93 123 45 67</p>
-                        <div class="flex items-center gap-2 mt-2">
-                            <span class="badge badge-green">Emergencias</span>
-                            <span class="text-xs text-gray-400">Llamada gratuita</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- WhatsApp -->
-                <div class="contact-card animate-card delay-1" onclick="window.location.href='https://wa.me/34612345678'">
-                    <div class="contact-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                    </div>
-                    <div class="flex-1">
-                        <p class="text-xs text-gray-400 font-mono mb-1">WHATSAPP</p>
-                        <p class="text-2xl text-white font-light tracking-tight">+34 612 345 678</p>
-                        <div class="flex items-center gap-2 mt-2">
-                            <span class="badge badge-green">● Online</span>
-                            <span class="text-xs text-gray-400">Respuesta inmediata</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Email -->
-                <div class="contact-card animate-card delay-2" onclick="window.location.href='mailto:soporte@infinihon.com'">
-                    <div class="contact-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5"><circle cx="12" cy="12" r="4"></circle><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"></path></svg>
-                    </div>
-                    <div class="flex-1">
-                        <p class="text-xs text-gray-400 font-mono mb-1">EMAIL</p>
-                        <p class="text-xl text-white font-light">soporte@infinihon.com</p>
-                        <div class="flex items-center gap-2 mt-2">
-                            <span class="badge badge-blue">Respuesta < 2h</span>
-                            <span class="text-xs text-gray-400">SLA garantizado</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Chat en vivo -->
-                <div class="contact-card animate-card delay-2" onclick="openChat()">
-                    <div class="contact-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-                    </div>
-                    <div class="flex-1">
-                        <p class="text-xs text-gray-400 font-mono mb-1">CHAT EN VIVO</p>
-                        <p class="text-xl text-white font-light">Iniciar conversación</p>
-                        <div class="flex items-center gap-2 mt-2">
-                            <span class="live-dot"></span>
-                            <span class="text-xs text-green-400">3 agentes disponibles</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Horarios detallados -->
-            <div class="glass-card rounded-2xl p-6 animate-card delay-3">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-white font-light flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                        Horarios de atención
-                    </h3>
-                    <span class="badge badge-green">SOPORTE 24/7 PARA ENTERPRISE</span>
-                </div>
-                
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="space-y-3">
-                        <div class="flex justify-between py-2 border-b border-white/5">
-                            <span class="text-gray-400">Lunes a Viernes</span>
-                            <span class="text-white">24 horas</span>
-                        </div>
-                        <div class="flex justify-between py-2 border-b border-white/5">
-                            <span class="text-gray-400">Sábados</span>
-                            <span class="text-white">8:00 - 20:00</span>
-                        </div>
-                        <div class="flex justify-between py-2 border-b border-white/5">
-                            <span class="text-gray-400">Domingos</span>
-                            <span class="text-white">10:00 - 18:00</span>
-                        </div>
-                    </div>
-                    
-                    <div class="space-y-3">
-                        <div class="flex justify-between py-2 border-b border-white/5">
-                            <span class="text-gray-400">Festivos nacionales</span>
-                            <span class="text-white">10:00 - 16:00</span>
-                        </div>
-                        <div class="flex justify-between py-2 border-b border-white/5">
-                            <span class="text-gray-400">Emergencias</span>
-                            <span class="text-green-400">24/7</span>
-                        </div>
-                        <div class="flex justify-between py-2">
-                            <span class="text-gray-400">SLA Enterprise</span>
-                            <span class="text-blue-400">15 minutos</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Columna derecha - Tickets recientes y estadísticas -->
-        <div class="space-y-6">
-            
-            <!-- Estado del sistema -->
-            <div class="glass-card rounded-2xl p-6 animate-card delay-3">
-                <h3 class="text-white font-light mb-4 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                    Estado del sistema
-                </h3>
-                
-                <div class="space-y-3">
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-400 text-sm">API Principal</span>
-                        <span class="text-green-400 text-sm flex items-center gap-1">
-                            <span class="live-dot"></span> Operacional
-                        </span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-400 text-sm">Panel de control</span>
-                        <span class="text-green-400 text-sm flex items-center gap-1">
-                            <span class="live-dot"></span> Operacional
-                        </span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-400 text-sm">Servidores MikroTik</span>
-                        <span class="text-green-400 text-sm flex items-center gap-1">
-                            <span class="live-dot"></span> Operacional
-                        </span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-400 text-sm">Base de datos</span>
-                        <span class="text-yellow-400 text-sm">Mantenimiento (2h)</span>
-                    </div>
-                </div>
-                
-                <div class="mt-4 pt-4 border-t border-white/5">
-                    <div class="flex justify-between text-xs text-gray-400">
-                        <span>Última actualización: 10:32</span>
-                        <span class="text-blue-400">Ver todos</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Tickets recientes -->
-            <div class="glass-card rounded-2xl p-6 animate-card delay-4">
-                <h3 class="text-white font-light mb-4 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                    Tickets recientes
-                </h3>
-                
-                <div class="space-y-3">
-                    <div class="flex items-center justify-between p-2 hover:bg-white/5 rounded-lg transition">
-                        <div>
-                            <p class="text-white text-sm">#TKT-2024-2341</p>
-                            <p class="text-gray-400 text-xs">Configuración VPN</p>
-                        </div>
-                        <span class="badge badge-blue">En proceso</span>
-                    </div>
-                    
-                    <div class="flex items-center justify-between p-2 hover:bg-white/5 rounded-lg transition">
-                        <div>
-                            <p class="text-white text-sm">#TKT-2024-2340</p>
-                            <p class="text-gray-400 text-xs">Router no responde</p>
-                        </div>
-                        <span class="badge badge-green">Resuelto</span>
-                    </div>
-                    
-                    <div class="flex items-center justify-between p-2 hover:bg-white/5 rounded-lg transition">
-                        <div>
-                            <p class="text-white text-sm">#TKT-2024-2339</p>
-                            <p class="text-gray-400 text-xs">Actualización firmware</p>
-                        </div>
-                        <span class="badge badge-purple">Pendiente</span>
-                    </div>
-                    
-                    <div class="flex items-center justify-between p-2 hover:bg-white/5 rounded-lg transition">
-                        <div>
-                            <p class="text-white text-sm">#TKT-2024-2338</p>
-                            <p class="text-gray-400 text-xs">Cluster Raspberry</p>
-                        </div>
-                        <span class="badge badge-orange">Urgente</span>
-                    </div>
-                </div>
-                
-                <button class="btn-secondary w-full mt-4 py-2 rounded-xl text-sm text-gray-300">
-                    Ver todos los tickets
-                </button>
-            </div>
-            
-            <!-- Métricas de soporte -->
-            <div class="glass-card rounded-2xl p-6 animate-card delay-5">
-                <h3 class="text-white font-light mb-4">Métricas de soporte</h3>
-                
-                <div class="space-y-4">
-                    <div>
-                        <div class="flex justify-between text-sm mb-1">
-                            <span class="text-gray-400">Tiempo de respuesta</span>
-                            <span class="text-white font-mono">2.5 minutos</span>
-                        </div>
-                        <div class="h-2 bg-white/5 rounded-full overflow-hidden">
-                            <div class="h-full w-3/4 bg-green-400 rounded-full"></div>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <div class="flex justify-between text-sm mb-1">
-                            <span class="text-gray-400">Satisfacción</span>
-                            <span class="text-white font-mono">98.5%</span>
-                        </div>
-                        <div class="h-2 bg-white/5 rounded-full overflow-hidden">
-                            <div class="h-full w-[98%] bg-blue-400 rounded-full"></div>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <div class="flex justify-between text-sm mb-1">
-                            <span class="text-gray-400">Resolución primera llamada</span>
-                            <span class="text-white font-mono">87%</span>
-                        </div>
-                        <div class="h-2 bg-white/5 rounded-full overflow-hidden">
-                            <div class="h-full w-[87%] bg-purple-400 rounded-full"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="pt-2">
-                        <div class="flex justify-between text-xs text-gray-400">
-                            <span>Tickets abiertos: 23</span>
-                            <span>Resueltos hoy: 45</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Base de conocimiento -->
-    <div class="glass-panel rounded-3xl p-8 mb-8 animate-card">
-        <div class="flex items-center justify-between mb-6">
-            <div class="flex items-center gap-3">
-                <div class="w-1 h-8 bg-blue-400 rounded-full"></div>
-                <h2 class="text-white text-xl font-light">Base de conocimiento</h2>
-            </div>
-            <span class="badge badge-blue">248 artículos</span>
-        </div>
-        
-        <div class="grid md:grid-cols-4 gap-4">
-            <div class="help-article">
-                <div class="flex items-center gap-2 mb-2">
-                    <div class="w-6 h-6 rounded bg-blue-500/20 flex items-center justify-center">
-                        <span class="text-blue-400 text-xs">MT</span>
-                    </div>
-                    <span class="text-white text-sm">MikroTik</span>
-                </div>
-                <p class="text-gray-400 text-xs mb-2">Configuración básica de RouterOS, VPN, Firewall</p>
-                <span class="text-xs text-blue-400">45 artículos →</span>
-            </div>
-            
-            <div class="help-article">
-                <div class="flex items-center gap-2 mb-2">
-                    <div class="w-6 h-6 rounded bg-purple-500/20 flex items-center justify-center">
-                        <span class="text-purple-400 text-xs">RP</span>
-                    </div>
-                    <span class="text-white text-sm">Raspberry Pi</span>
-                </div>
-                <p class="text-gray-400 text-xs mb-2">Clusters, Kubernetes, automatización, GPIO</p>
-                <span class="text-xs text-purple-400">67 artículos →</span>
-            </div>
-            
-            <div class="help-article">
-                <div class="flex items-center gap-2 mb-2">
-                    <div class="w-6 h-6 rounded bg-cyan-500/20 flex items-center justify-center">
-                        <span class="text-cyan-400 text-xs">N2</span>
-                    </div>
-                    <span class="text-white text-sm">Nation II</span>
-                </div>
-                <p class="text-gray-400 text-xs mb-2">Servidores, almacenamiento, alta disponibilidad</p>
-                <span class="text-xs text-cyan-400">89 artículos →</span>
-            </div>
-            
-            <div class="help-article">
-                <div class="flex items-center gap-2 mb-2">
-                    <div class="w-6 h-6 rounded bg-green-500/20 flex items-center justify-center">
-                        <span class="text-green-400 text-xs">SE</span>
-                    </div>
-                    <span class="text-white text-sm">Seguridad</span>
-                </div>
-                <p class="text-gray-400 text-xs mb-2">Hardening, auditorías, certificados SSL</p>
-                <span class="text-xs text-green-400">47 artículos →</span>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Formulario de ticket avanzado -->
-    <div class="glass-panel rounded-3xl p-8 animate-card">
-        <div class="flex items-center gap-3 mb-6">
-            <div class="w-1 h-8 bg-blue-400 rounded-full"></div>
-            <h2 class="text-white text-xl font-light">Abrir nuevo ticket</h2>
-            <span class="badge badge-green">SOPORTE PRIORITARIO</span>
-        </div>
-        
-        <div class="grid md:grid-cols-2 gap-6">
-            <div class="space-y-4">
-                <input type="text" placeholder="Nombre completo" class="support-input">
-                <input type="email" placeholder="Email corporativo" class="support-input">
-                <input type="text" placeholder="Empresa" class="support-input">
-                
-                <select class="support-input">
-                    <option class="bg-gray-900">Seleccionar producto</option>
-                    <option class="bg-gray-900">MikroTik Router</option>
-                    <option class="bg-gray-900">Raspberry Pi</option>
-                    <option class="bg-gray-900">Nation II Server</option>
-                    <option class="bg-gray-900">Accesorios</option>
-                </select>
-            </div>
-            
-            <div class="space-y-4">
-                <select class="support-input">
-                    <option class="bg-gray-900">Prioridad</option>
-                    <option class="bg-gray-900">Baja</option>
-                    <option class="bg-gray-900">Normal</option>
-                    <option class="bg-gray-900">Alta</option>
-                    <option class="bg-gray-900">Urgente</option>
-                </select>
-                
-                <input type="text" placeholder="Asunto" class="support-input">
-                <textarea rows="4" placeholder="Describe tu problema en detalle..." class="support-input"></textarea>
-            </div>
-            
-            <div class="md:col-span-2 flex justify-end gap-4">
-                <button class="btn-secondary px-6 py-3 rounded-xl text-gray-300">
-                    Cancelar
-                </button>
-                <button class="btn-primary px-8 py-3 rounded-xl text-white">
-                    Enviar ticket
-                </button>
-            </div>
-        </div>
-        
-        <p class="text-xs text-gray-400 mt-4 font-mono">
-            Tiempo estimado de respuesta: <span class="text-green-400">< 30 minutos para tickets prioritarios</span>
-        </p>
-    </div>
-</main>
-
-<!-- Footer -->
-<footer class="border-t border-white/5 bg-[#020617]/50 backdrop-blur-sm mt-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="flex items-center gap-4">
-                <div class="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
-                    <span class="text-black font-bold text-sm">I</span>
-                </div>
-                <span class="text-gray-400 text-xs font-mono">© 2024 INFINIHON · SOPORTE TÉCNICO</span>
-            </div>
-            
-            <div class="flex gap-8">
-                <a href="#" class="text-gray-400 hover:text-white text-xs font-mono transition-colors">TÉRMINOS</a>
-                <a href="#" class="text-gray-400 hover:text-white text-xs font-mono transition-colors">PRIVACIDAD</a>
-                <a href="#" class="text-gray-400 hover:text-white text-xs font-mono transition-colors">COOKIES</a>
-                <a href="#" class="text-gray-400 hover:text-white text-xs font-mono transition-colors">LEGAL</a>
-            </div>
-            
-            <div class="flex items-center gap-3">
-                <span class="text-xs text-gray-500">ID: SOP-2024-03-05</span>
-                <span class="text-xs text-green-400">● Sistema operacional</span>
-            </div>
-        </div>
-    </div>
-</footer>
-
-<!-- Modal de chat -->
-<div id="chatModal" class="fixed inset-0 flex items-end justify-end z-50 hidden p-6">
-    <div class="glass-panel rounded-2xl w-96 overflow-hidden border border-blue-500/30">
-        <div class="p-4 border-b border-white/5 flex justify-between items-center bg-gradient-to-r from-blue-600/20 to-cyan-600/20">
-            <div class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
-                    <span class="text-black font-bold text-sm">I</span>
-                </div>
-                <div>
-                    <span class="text-white text-sm font-medium">Soporte InfiniHon</span>
-                    <div class="flex items-center gap-1 mt-1">
-                        <span class="live-dot"></span>
-                        <span class="text-xs text-green-400">Online</span>
-                    </div>
-                </div>
-            </div>
-            <button onclick="closeChat()" class="text-gray-400 hover:text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-            </button>
-        </div>
-        
-        <div class="p-4 h-80 overflow-y-auto bg-white/2">
-            <!-- Mensaje del agente -->
-            <div class="flex gap-2 mb-4">
-                <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-xs text-blue-400">CA</div>
-                <div class="glass-card rounded-2xl p-3 max-w-[80%]">
-                    <p class="text-white text-xs">Hola, soy Carlos del equipo de soporte. ¿En qué puedo ayudarte hoy?</p>
-                    <p class="text-gray-400 text-xs mt-1">10:32</p>
-                </div>
-            </div>
-            
-            <!-- Mensaje del usuario -->
-            <div class="flex gap-2 mb-4 justify-end">
-                <div class="glass-card rounded-2xl p-3 max-w-[80%] bg-blue-500/10">
-                    <p class="text-white text-xs">Tengo un problema con mi router MikroTik, no consigo configurar la VPN</p>
-                    <p class="text-gray-400 text-xs mt-1">10:33</p>
-                </div>
-                <div class="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center text-xs text-purple-400">TU</div>
-            </div>
-            
-            <!-- Respuesta del agente -->
-            <div class="flex gap-2 mb-4">
-                <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-xs text-blue-400">CA</div>
-                <div class="glass-card rounded-2xl p-3 max-w-[80%]">
-                    <p class="text-white text-xs">Entiendo. ¿Podrías decirme qué modelo de router tienes y qué versión de RouterOS estás usando?</p>
-                    <p class="text-gray-400 text-xs mt-1">10:34</p>
-                </div>
-            </div>
-            
-            <!-- Indicador de escritura -->
-            <div class="flex items-center gap-2 text-gray-400 text-xs">
-                <span class="live-dot"></span>
-                <span>Carlos está escribiendo...</span>
-            </div>
-        </div>
-        
-        <div class="p-4 border-t border-white/5">
-            <div class="flex gap-2">
-                <input type="text" placeholder="Escribe tu mensaje..." class="flex-1 bg-white/5 border border-white/10 rounded-full px-4 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-blue-500">
-                <button class="w-10 h-10 rounded-full btn-primary flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                </button>
-            </div>
-            <p class="text-xs text-gray-500 mt-2 font-mono">Tiempo de respuesta estimado: < 2 minutos</p>
-        </div>
-    </div>
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="toggleMenu()">Home</a>
+  <a href="index.html#works" onclick="toggleMenu()">Works</a>
+  <a href="servicios.html" onclick="toggleMenu()">Servicios</a>
+  <a href="tienda.html" onclick="toggleMenu()">Tienda</a>
+  <a href="#faq" onclick="toggleMenu()">FAQ</a>
+  <a href="#cta-support" onclick="toggleMenu()" style="color:var(--white);">Soporte</a>
+  <div class="divider"></div>
+  <a href="#cta-support" onclick="toggleMenu()">Contacto</a>
 </div>
 
-<!-- Script -->
+<!-- ══ HERO SOPORTE ══════════════════════════════════════════════════ -->
+<section id="hero-support">
+  <div class="hero-orb"></div>
+  <div class="hero-grid-bg"></div>
+  
+  <div class="container">
+    <div class="support-inner">
+      
+      <!-- Badge de estado -->
+      <div class="support-badge reveal">
+        <span class="dot"></span>
+        Soporte técnico 24/7 disponible
+      </div>
+      
+      <!-- Título -->
+      <h1 class="support-title reveal" style="transition-delay:.05s;">
+        Centro de <span>Soporte</span> Técnico
+      </h1>
+      
+      <!-- Descripción -->
+      <p class="support-desc reveal" style="transition-delay:.1s;">
+        Estamos aquí para ayudarte. Consulta nuestra base de conocimiento, 
+        abre un ticket o contacta directamente con nuestro equipo de expertos.
+      </p>
+      
+      <!-- Buscador -->
+      <div class="support-search reveal" style="transition-delay:.15s;">
+        <input type="text" placeholder="Buscar en la base de conocimiento...">
+        <button><i class="fa fa-search"></i></button>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTACTO DIRECTO ═══════════════════════════════════════════════ -->
+<section id="contact">
+  <div class="container">
+    <div class="section-label-row reveal" style="margin-bottom:40px;">
+      <div class="section-label">Contacto <span>Directo</span></div>
+    </div>
+    
+    <div class="contact-grid">
+      <!-- Teléfono -->
+      <div class="contact-card reveal" onclick="window.location.href='tel:+50400000000'">
+        <div class="contact-icon"><i class="fa fa-phone"></i></div>
+        <div class="contact-title">Teléfono 24/7</div>
+        <div class="contact-desc">+504 0000-0000</div>
+        <div class="contact-meta">
+          <span class="dot"></span>
+          <span>Llamada gratuita</span>
+        </div>
+      </div>
+      
+      <!-- WhatsApp -->
+      <div class="contact-card reveal" style="transition-delay:.1s;" onclick="window.location.href='https://wa.me/50400000000'">
+        <div class="contact-icon"><i class="fab fa-whatsapp"></i></div>
+        <div class="contact-title">WhatsApp</div>
+        <div class="contact-desc">Respuesta inmediata</div>
+        <div class="contact-meta">
+          <span class="dot"></span>
+          <span>Online ahora</span>
+        </div>
+      </div>
+      
+      <!-- Email -->
+      <div class="contact-card reveal" style="transition-delay:.2s;" onclick="window.location.href='mailto:soporte@infinihon.com'">
+        <div class="contact-icon"><i class="fa fa-envelope"></i></div>
+        <div class="contact-title">Email</div>
+        <div class="contact-desc">soporte@infinihon.com</div>
+        <div class="contact-meta">
+          <span>Respuesta &lt; 2h</span>
+        </div>
+      </div>
+      
+      <!-- Chat en vivo -->
+      <div class="contact-card reveal" style="transition-delay:.3s;" onclick="openChat()">
+        <div class="contact-icon"><i class="fa fa-comments"></i></div>
+        <div class="contact-title">Chat en Vivo</div>
+        <div class="contact-desc">Iniciar conversación</div>
+        <div class="contact-meta">
+          <span class="dot"></span>
+          <span>3 agentes disponibles</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ESTADO DEL SISTEMA ═══════════════════════════════════════════ -->
+<section id="status">
+  <div class="container">
+    <div class="status-card reveal">
+      <div class="status-header">
+        <div class="status-title">
+          <i class="fa fa-server"></i>
+          Estado del Sistema
+        </div>
+        <div class="status-badge">
+          <span class="dot"></span>
+          Todos los sistemas operativos
+        </div>
+      </div>
+      
+      <div class="status-list">
+        <div class="status-item">
+          <span class="status-name">API Principal</span>
+          <span class="status-value ok"><span class="status-dot"></span> Operacional</span>
+        </div>
+        <div class="status-item">
+          <span class="status-name">Panel de Control</span>
+          <span class="status-value ok"><span class="status-dot"></span> Operacional</span>
+        </div>
+        <div class="status-item">
+          <span class="status-name">Servidores MikroTik</span>
+          <span class="status-value ok"><span class="status-dot"></span> Operacional</span>
+        </div>
+        <div class="status-item">
+          <span class="status-name">Base de Datos</span>
+          <span class="status-value warn"><span class="status-dot"></span> Mantenimiento programado</span>
+        </div>
+      </div>
+      
+      <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border);font-size:11px;color:var(--gray);">
+        Última actualización: <span style="color:var(--white);">Hoy, 10:32</span>
+        <a href="#" style="color:var(--blue);margin-left:12px;">Ver historial →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FAQ (COMPONENTE REUTILIZADO) ═════════════════════════════════ -->
+<section id="faq">
+  <div class="container">
+    <div class="faq-header reveal">
+      <div class="section-label" style="margin-bottom:10px;">Preguntas <span>Frecuentes</span></div>
+      <p style="font-size:14px;color:var(--gray);max-width:480px;margin:0 auto;">
+        Respuestas a las consultas más comunes. ¿No encuentras lo que buscas? 
+        <a href="#cta-support" style="color:var(--blue);">Abre un ticket.</a>
+      </p>
+    </div>
+    
+    <div class="faq-list" id="faqList">
+      <div class="faq-item open active-highlight">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">¿Cómo configuro mi router MikroTik?</span>
+          <div class="faq-toggle"><i class="fa fa-plus"></i></div>
+        </div>
+        <div class="faq-a">
+          Consulta nuestra guía paso a paso en la base de conocimiento. 
+          También puedes agendar una sesión de configuración remota con nuestro equipo técnico.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">¿Cuál es el tiempo de respuesta para tickets?</span>
+          <div class="faq-toggle"><i class="fa fa-plus"></i></div>
+        </div>
+        <div class="faq-a">
+          Tickets prioritarios: &lt;30 minutos. Tickets normales: &lt;2 horas. 
+          Todos los tickets reciben seguimiento hasta su resolución completa.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">¿Ofrecen soporte para Raspberry Pi clusters?</span>
+          <div class="faq-toggle"><i class="fa fa-plus"></i></div>
+        </div>
+        <div class="faq-a">
+          Sí, nuestro equipo especializado en SBCs ofrece soporte para configuración 
+          de clusters, Kubernetes, automatización y optimización de rendimiento.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <span class="faq-q-text">¿Cómo solicito una actualización de firmware?</span>
+          <div class="faq-toggle"><i class="fa fa-plus"></i></div>
+        </div>
+        <div class="faq-a">
+          Abre un ticket indicando el modelo de tu dispositivo y la versión actual. 
+          Nuestro equipo te proporcionará el firmware adecuado y guías de actualización seguras.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FORMULARIO DE TICKET ══════════════════════════════════════════ -->
+<section id="ticket">
+  <div class="container">
+    <div class="ticket-card reveal">
+      <div class="ticket-title">Abrir Nuevo Ticket</div>
+      
+      <form onsubmit="event.preventDefault(); submitTicket();">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Nombre completo</label>
+            <input type="text" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email corporativo</label>
+            <input type="email" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Empresa</label>
+            <input type="text" class="form-input">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Producto</label>
+            <select class="form-select">
+              <option>Seleccionar producto</option>
+              <option>MikroTik Router</option>
+              <option>Raspberry Pi</option>
+              <option>Nation II Server</option>
+              <option>Accesorios</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Prioridad</label>
+            <select class="form-select">
+              <option>Normal</option>
+              <option>Alta</option>
+              <option>Urgente</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Asunto</label>
+            <input type="text" class="form-input" required>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Descripción del problema</label>
+            <textarea class="form-textarea" required></textarea>
+          </div>
+        </div>
+        
+        <div class="form-actions">
+          <button type="button" class="btn btn-ghost" onclick="this.form.reset()">Cancelar</button>
+          <button type="submit" class="btn btn-blue">Enviar Ticket</button>
+        </div>
+      </form>
+      
+      <p style="text-align:center;font-size:11px;color:var(--gray);margin-top:20px;font-family:'DM Sans',sans-serif;">
+        Tiempo estimado de respuesta: <span style="color:var(--green);">&lt; 30 minutos para tickets prioritarios</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ BASE DE CONOCIMIENTO ═════════════════════════════════════════ -->
+<section id="kb">
+  <div class="container">
+    <div class="section-label-row reveal" style="margin-bottom:40px;">
+      <div class="section-label">Base de <span>Conocimiento</span></div>
+      <a href="#" class="btn btn-ghost btn-sm">Ver todos los artículos <i class="fa fa-arrow-right"></i></a>
+    </div>
+    
+    <div class="kb-grid">
+      <div class="kb-card reveal">
+        <div class="kb-icon"><i class="fa fa-wifi"></i></div>
+        <div class="kb-title">MikroTik RouterOS</div>
+        <div class="kb-desc">Configuración básica, VPN, Firewall, QoS</div>
+        <div class="kb-count">45 artículos</div>
+      </div>
+      <div class="kb-card reveal" style="transition-delay:.1s;">
+        <div class="kb-icon"><i class="fa fa-microchip"></i></div>
+        <div class="kb-title">Raspberry Pi</div>
+        <div class="kb-desc">Clusters, Kubernetes, automatización, GPIO</div>
+        <div class="kb-count">67 artículos</div>
+      </div>
+      <div class="kb-card reveal" style="transition-delay:.2s;">
+        <div class="kb-icon"><i class="fa fa-server"></i></div>
+        <div class="kb-title">Nation II Servers</div>
+        <div class="kb-desc">Alta disponibilidad, almacenamiento, backup</div>
+        <div class="kb-count">89 artículos</div>
+      </div>
+      <div class="kb-card reveal" style="transition-delay:.3s;">
+        <div class="kb-icon"><i class="fa fa-shield-alt"></i></div>
+        <div class="kb-title">Seguridad IT</div>
+        <div class="kb-desc">Hardening, auditorías, certificados SSL</div>
+        <div class="kb-count">47 artículos</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA FINAL ════════════════════════════════════════════════ -->
+<section id="cta-support">
+  <div class="cta-orb"></div>
+  <div class="container">
+    <h2 class="cta-title reveal">
+      ¿Necesitas ayuda <span>inmediata?</span>
+    </h2>
+    <p class="cta-sub reveal" style="transition-delay:.1s;">
+      Nuestro equipo de expertos está listo para resolver tu problema técnico.
+    </p>
+    <div class="cta-btns reveal" style="transition-delay:.2s;">
+      <a href="mailto:soporte@infinihon.com" class="btn btn-blue"><i class="fa fa-envelope"></i> soporte@infinihon.com</a>
+      <a href="#ticket" class="btn btn-ghost">Abrir Ticket</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ═══════════════════════════════════════════════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">Infini<span>Hon</span></div>
+        <p class="footer-desc">Infraestructura IT de grado industrial. Hardware especializado, soporte experto y precios competitivos.</p>
+        <div class="footer-social">
+          <a href="#" class="fs-btn"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="fs-btn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" class="fs-btn"><i class="fab fa-github"></i></a>
+          <a href="#" class="fs-btn"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Servicios</h5>
+        <ul>
+          <li><a href="servicios.html">Branding & Identity</a></li>
+          <li><a href="servicios.html">UI / UX Design</a></li>
+          <li><a href="servicios.html">Development</a></li>
+          <li><a href="servicios.html">Growth Strategy</a></li>
+          <li><a href="servicios.html">QA & Consulting</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Soporte</h5>
+        <ul>
+          <li><a href="#contact">Contacto Directo</a></li>
+          <li><a href="#status">Estado del Sistema</a></li>
+          <li><a href="#faq">Preguntas Frecuentes</a></li>
+          <li><a href="#kb">Base de Conocimiento</a></li>
+          <li><a href="#ticket">Abrir Ticket</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Legal</h5>
+        <ul>
+          <li><a href="#">Política de Privacidad</a></li>
+          <li><a href="#">Términos de Servicio</a></li>
+          <li><a href="#">Política de Cookies</a></li>
+          <li><a href="#">Accesibilidad</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 InfiniHon Studio. Todos los derechos reservados. 🇭🇳</p>
+      <div class="footer-links">
+        <a href="#">Privacidad</a>
+        <a href="#">Términos</a>
+        <a href="#">Mapa del Sitio</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ══ CHAT MODAL ═══════════════════════════════════════════════════ -->
+<div class="qv-overlay" id="chatModal">
+  <div class="qv-modal">
+    <div class="qv-top">
+      <div class="qv-title">
+        <div class="qv-avatar">IH</div>
+        <div class="qv-info">
+          <div class="name">Soporte InfiniHon</div>
+          <div class="status"><span class="dot"></span> Online</div>
+        </div>
+      </div>
+      <button class="qv-close" onclick="closeChat()"><i class="fa fa-times"></i></button>
+    </div>
+    <div class="qv-body" id="chatBody">
+      <!-- Mensaje del agente -->
+      <div class="chat-message agent">
+        <div class="chat-avatar">CA</div>
+        <div>
+          <div class="chat-bubble">
+            <div class="chat-text">Hola, soy Carlos del equipo de soporte. ¿En qué puedo ayudarte hoy?</div>
+            <div class="chat-time">10:32</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Mensaje del usuario -->
+      <div class="chat-message user">
+        <div class="chat-avatar">TU</div>
+        <div>
+          <div class="chat-bubble">
+            <div class="chat-text">Tengo un problema con mi router MikroTik, no consigo configurar la VPN</div>
+            <div class="chat-time">10:33</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Respuesta del agente -->
+      <div class="chat-message agent">
+        <div class="chat-avatar">CA</div>
+        <div>
+          <div class="chat-bubble">
+            <div class="chat-text">Entiendo. ¿Podrías decirme qué modelo de router tienes y qué versión de RouterOS estás usando?</div>
+            <div class="chat-time">10:34</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Indicador de escritura -->
+      <div class="chat-typing">
+        <span class="dot"></span>
+        <span>Carlos está escribiendo...</span>
+      </div>
+    </div>
+    <div class="qv-footer">
+      <input type="text" class="qv-input" id="chatInput" placeholder="Escribe tu mensaje...">
+      <button class="qv-send" onclick="sendChatMessage()"><i class="fa fa-paper-plane"></i></button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SCRIPTS ══════════════════════════════════════════════════ -->
 <script>
-    function openChat() {
-        document.getElementById('chatModal').classList.remove('hidden');
+// ── Scroll Progress ──────────────────────────────────────
+window.addEventListener('scroll',()=>{
+  const p=(window.scrollY/(document.documentElement.scrollHeight-innerHeight))*100;
+  document.getElementById('progress-fill').style.width=p+'%';
+});
+
+// ── Reveal Animations ───────────────────────────────────
+const reveals=document.querySelectorAll('.reveal,.reveal-left,.reveal-right');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting)setTimeout(()=>e.target.classList.add('in'),i*60);
+  });
+},{threshold:0.08});
+reveals.forEach(el=>obs.observe(el));
+
+// ── Mobile Menu ──────────────────────────────────────────
+function toggleMenu(){
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+document.addEventListener('click',e=>{
+  const m=document.getElementById('mobileMenu');
+  const h=document.getElementById('ham');
+  if(m.classList.contains('open')&&!m.contains(e.target)&&!h.contains(e.target)){
+    m.classList.remove('open');
+  }
+});
+
+// ── FAQ Accordion ────────────────────────────────────────
+function toggleFaq(btn){
+  const item=btn.closest('.faq-item');
+  const isOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>{
+    i.classList.remove('open','active-highlight');
+  });
+  if(!isOpen){
+    item.classList.add('open','active-highlight');
+  }
+}
+
+// ── Selector de Idioma ─────────────────────────────────
+const langSelector = document.getElementById('langSelector');
+langSelector.addEventListener('click', (e) => {
+  e.stopPropagation();
+  langSelector.classList.toggle('open');
+});
+document.addEventListener('click', () => {
+  langSelector.classList.remove('open');
+});
+
+function setLanguage(lang) {
+  document.querySelectorAll('.lang-option').forEach(opt => opt.classList.remove('active'));
+  document.querySelector(`.lang-option[data-lang="${lang}"]`).classList.add('active');
+  document.getElementById('currentLang').textContent = lang.toUpperCase();
+  langSelector.classList.remove('open');
+  
+  // Aquí podrías cargar traducciones dinámicas
+  if(lang === 'en') {
+    document.querySelector('.support-title').innerHTML = 'Technical <span>Support</span> Center';
+    document.querySelector('.support-desc').textContent = 'We\'re here to help. Browse our knowledge base, open a ticket, or contact our expert team directly.';
+    document.querySelector('.support-search input').placeholder = 'Search the knowledge base...';
+  } else {
+    document.querySelector('.support-title').innerHTML = 'Centro de <span>Soporte</span> Técnico';
+    document.querySelector('.support-desc').textContent = 'Estamos aquí para ayudarte. Consulta nuestra base de conocimiento, abre un ticket o contacta directamente con nuestro equipo de expertos.';
+    document.querySelector('.support-search input').placeholder = 'Buscar en la base de conocimiento...';
+  }
+}
+
+// ── Chatbot ────────────────────────────────────────────
+function openChat() {
+  document.getElementById('chatModal').classList.add('open');
+  document.getElementById('chatbotToggle').style.display = 'none';
+  document.getElementById('chatInput').focus();
+}
+function closeChat() {
+  document.getElementById('chatModal').classList.remove('open');
+  // Mostrar badge si hay mensajes no leídos
+  setTimeout(() => {
+    document.getElementById('chatbotToggle').style.display = 'flex';
+  }, 300);
+}
+document.getElementById('chatModal')?.addEventListener('click', e => {
+  if(e.target === e.currentTarget) closeChat();
+});
+
+// Enviar mensaje de chat
+function sendChatMessage() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if(!text) return;
+  
+  const chatBody = document.getElementById('chatBody');
+  
+  // Agregar mensaje del usuario
+  const userMsg = document.createElement('div');
+  userMsg.className = 'chat-message user';
+  userMsg.innerHTML = `
+    <div class="chat-avatar">TU</div>
+    <div>
+      <div class="chat-bubble">
+        <div class="chat-text">${text}</div>
+        <div class="chat-time">${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</div>
+      </div>
+    </div>
+  `;
+  chatBody.appendChild(userMsg);
+  input.value = '';
+  chatBody.scrollTop = chatBody.scrollHeight;
+  
+  // Simular respuesta del agente después de 1.5s
+  setTimeout(() => {
+    // Remover indicador de escritura si existe
+    const typing = chatBody.querySelector('.chat-typing');
+    if(typing) typing.remove();
+    
+    const agentMsg = document.createElement('div');
+    agentMsg.className = 'chat-message agent';
+    agentMsg.innerHTML = `
+      <div class="chat-avatar">CA</div>
+      <div>
+        <div class="chat-bubble">
+          <div class="chat-text">Gracias por la información. Estoy revisando tu caso y te contactaré en breve con una solución. ¿Hay algo más en lo que pueda ayudarte?</div>
+          <div class="chat-time">${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</div>
+        </div>
+      </div>
+    `;
+    chatBody.appendChild(agentMsg);
+    chatBody.scrollTop = chatBody.scrollHeight;
+    
+    // Mostrar notificación push simulada
+    showNotification('Ticket #TKT-2024-2342', 'Tu consulta ha sido recibida. Un agente te contactará en menos de 30 minutos.', 'ticket');
+  }, 1500);
+}
+
+// Enter para enviar mensaje
+document.getElementById('chatInput')?.addEventListener('keydown', e => {
+  if(e.key === 'Enter') sendChatMessage();
+});
+
+// ── Notificaciones Push ────────────────────────────────
+function showNotification(title, description, type = 'info') {
+  const container = document.getElementById('notifications');
+  const iconMap = {
+    ticket: 'fa-ticket-alt',
+    update: 'fa-sync-alt',
+    alert: 'fa-exclamation-triangle',
+    success: 'fa-check-circle'
+  };
+  
+  const notif = document.createElement('div');
+  notif.className = 'notification';
+  notif.innerHTML = `
+    <div class="notification-icon">
+      <i class="fa ${iconMap[type] || 'fa-bell'}"></i>
+    </div>
+    <div class="notification-content">
+      <div class="notification-title">${title}</div>
+      <div class="notification-desc">${description}</div>
+      <div class="notification-actions">
+        <button class="notification-btn primary" onclick="viewTicket()">Ver</button>
+        <button class="notification-btn ghost" onclick="dismissNotification(this)">Cerrar</button>
+      </div>
+    </div>
+    <button class="notification-close" onclick="dismissNotification(this.parentElement.parentElement)">
+      <i class="fa fa-times"></i>
+    </button>
+  `;
+  
+  container.appendChild(notif);
+  
+  // Auto-dismiss después de 8 segundos
+  setTimeout(() => {
+    if(notif.parentElement) dismissNotification(notif);
+  }, 8000);
+}
+
+function dismissNotification(el) {
+  el.style.transform = 'translateX(120%)';
+  setTimeout(() => el.remove(), 400);
+}
+
+function viewTicket() {
+  // Aquí iría la lógica para abrir el ticket específico
+  showNotification('Ticket abierto', 'Redirigiendo a tu panel de tickets...', 'success');
+  setTimeout(() => {
+    window.location.hash = '#ticket';
+  }, 1500);
+}
+
+// Simular notificación de ejemplo al cargar (para demo)
+setTimeout(() => {
+  showNotification('Actualización de sistema', 'Mantenimiento programado para hoy a las 22:00. Duración estimada: 2 horas.', 'update');
+}, 3000);
+
+// ── Ticket Submission ──────────────────────────────────
+function submitTicket(){
+  const btn = event.target.closest('button[type="submit"]');
+  const orig = btn.textContent;
+  btn.textContent = '✓ Ticket enviado';
+  btn.style.background = '#22c55e';
+  
+  // Mostrar notificación
+  showNotification('Ticket #TKT-2024-2343', 'Tu ticket ha sido creado exitosamente. Recibirás una respuesta en menos de 30 minutos.', 'ticket');
+  
+  setTimeout(() => {
+    btn.textContent = orig;
+    btn.style.background = '';
+    document.querySelector('#ticket form').reset();
+  }, 2000);
+}
+
+// ── Nav Active State ───────────────────────────────────
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY+80;
+  document.querySelectorAll('section[id]').forEach(sec=>{
+    const link=document.querySelector(`.nav-links a[href="#${sec.id}"]`);
+    if(link){
+      const top=sec.offsetTop,h=sec.offsetHeight;
+      link.classList.toggle('active',y>=top&&y<top+h);
     }
-    
-    function closeChat() {
-        document.getElementById('chatModal').classList.add('hidden');
-    }
-    
-    // Cerrar modal con Escape
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeChat();
-        }
-    });
-    
-    // Simular llamada
-    function makeCall() {
-        alert('Llamando al +34 93 123 45 67');
-    }
-    
-    // Smooth scroll
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
-            });
-        });
-    });
+  });
+});
+
+// ── Keyboard Shortcuts ─────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeChat();
+    langSelector.classList.remove('open');
+  }
+});
 </script>
 </body>
 </html>
