@@ -1,89 +1,66 @@
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import productosRouter from './routes/productos.js';
-import pedidosRouter from './routes/pedidos.js';
-import usuariosRouter from './routes/usuarios.js';
-import { closeDatabase } from './config/database.js';
+const http = require('http');
+const fs = require('fs');
+const path = require('path');
+const url = require('url');
 
-dotenv.config();
+// Importar rutas de API
+const productosRouter = require('./routes/productos');
+const pedidosRouter = require('./routes/pedidos');
+const usuariosRouter = require('./routes/usuarios');
 
-const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+const server = http.createServer(async (req, res) => {
+  const parsedUrl = url.parse(req.url, true);
+  let pathname = parsedUrl.pathname;
 
-// Logger de requests
-app.use((req, res, next) => {
-    console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
-    next();
+  // 1. Manejo de APIs
+  if (pathname.startsWith('/api/productos')) return productosRouter(req, res, parsedUrl);
+  if (pathname.startsWith('/api/pedidos')) return pedidosRouter(req, res, parsedUrl);
+  if (pathname.startsWith('/api/usuarios')) return usuariosRouter(req, res, parsedUrl);
+
+  // 2. Manejo de Archivos Estáticos con URLs Limpias
+  if (pathname === '/') pathname = '/index.html';
+  
+  // Si no tiene extensión, intentar agregar .html
+  if (!path.extname(pathname) && !pathname.startsWith('/assets')) {
+    const testPath = path.join(process.cwd(), pathname + '.html');
+    if (fs.existsSync(testPath)) {
+      pathname += '.html';
+    }
+  }
+
+  const filePath = path.join(process.cwd(), pathname);
+  const extname = path.extname(filePath);
+  
+  let contentType = 'text/html';
+  if (extname === '.js') contentType = 'text/javascript';
+  else if (extname === '.css') contentType = 'text/css';
+  else if (extname === '.png') contentType = 'image/png';
+  else if (extname === '.jpg' || extname === '.jpeg') contentType = 'image/jpeg';
+  else if (extname === '.svg') contentType = 'image/svg+xml';
+  else if (extname === '.json') contentType = 'application/json';
+
+  fs.readFile(filePath, (err, content) => {
+    if (err) {
+      if (err.code === 'ENOENT') {
+        // Fallback a 404.html
+        fs.readFile(path.join(process.cwd(), '404.html'), (e, c404) => {
+          res.writeHead(404, { 'Content-Type': 'text/html' });
+          res.end(c404 || 'Not Found', 'utf-8');
+        });
+      } else {
+        res.writeHead(500);
+        res.end('Server Error');
+      }
+    } else {
+      res.writeHead(200, { 'Content-Type': contentType });
+      res.end(content, 'utf-8');
+    }
+  });
 });
 
-// Rutas de la API
-app.use('/api/productos', productosRouter);
-app.use('/api/pedidos', pedidosRouter);
-app.use('/api/usuarios', usuariosRouter);
-
-// Ruta de salud
-app.get('/api/health', (req, res) => {
-    res.json({
-        success: true,
-        message: 'API funcionando correctamente',
-        timestamp: new Date().toISOString()
-    });
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+  console.log(`Clean URLs enabled: /tienda serves tienda.html`);
 });
-
-// Ruta principal
-app.get('/', (req, res) => {
-    res.json({
-        name: 'InfiniHon API',
-        version: '1.0.0',
-        endpoints: {
-            productos: '/api/productos',
-            pedidos: '/api/pedidos',
-            usuarios: '/api/usuarios',
-            health: '/api/health'
-        }
-    });
-});
-
-// Manejo de errores 404
-app.use((req, res) => {
-    res.status(404).json({
-        success: false,
-        error: 'Endpoint no encontrado'
-    });
-});
-
-// Manejo global de errores
-app.use((err, req, res, next) => {
-    console.error('Error:', err);
-    res.status(500).json({
-        success: false,
-        error: 'Error interno del servidor'
-    });
-});
-
-// Cierre graceful
-process.on('SIGINT', async () => {
-    console.log('\n🛑 Cerrando servidor...');
-    await closeDatabase();
-    process.exit(0);
-});
-
-// Iniciar servidor
-app.listen(PORT, () => {
-    console.log(`
-╔════════════════════════════════════════╗
-║     🚀 InfiniHon API Server            ║
-║     Puerto: ${PORT}                      ║
-║     Entorno: ${process.env.NODE_ENV || 'development'}          ║
-║     Estado: ✅ Activo                   ║
-╚════════════════════════════════════════╝
-    `);
-});
-
-export default app;
