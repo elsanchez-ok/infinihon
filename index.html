@@ -726,6 +726,29 @@ footer{
   .pricing-table>*{min-width:560px;}
 }
 </style>
+
+
+<!-- ══ FIRST VISIT DETECTION — COPIAR EN TODAS LAS PÁGINAS PRINCIPALES ═════ -->
+<script>
+(function(){
+    const INTRO_KEY = 'infinihon_intro_seen';
+    const INTRO_PAGE = 'start.html';
+    
+    // Si el usuario YA vio el intro, no hacer nada
+    if(localStorage.getItem(INTRO_KEY)) return;
+    
+    // Si estamos YA en el intro, no redirigir (evita bucles)
+    if(window.location.pathname.includes(INTRO_PAGE)) return;
+    
+    // Marcar como visto
+    localStorage.setItem(INTRO_KEY, 'true');
+    
+    // Redirigir al intro, pasando la página actual como "return"
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    window.location.replace(INTRO_PAGE + '?return=' + encodeURIComponent(currentPage));
+})();
+</script>
+  
 </head>
 <body>
 
