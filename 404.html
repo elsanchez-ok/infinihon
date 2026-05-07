@@ -1,662 +1,612 @@
 <!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
+<html lang="es">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 • Página no encontrada | InfiniHon</title>
 
+<!-- Mismas fuentes que index.html -->
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
+<style>
+/* ─── RESET & TOKENS (IDÉNTICOS A INDEX.HTML) ───────────────────────── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:       #050508;
+  --bg2:      #08080f;
+  --bg3:      #0d0d18;
+  --card:     #0f0f1a;
+  --card2:    #12121f;
+  --border:   rgba(255,255,255,0.07);
+  --border2:  rgba(255,255,255,0.12);
+  --blue:     #2563eb;
+  --blue2:    #1d4ed8;
+  --blue-glow:rgba(37,99,235,0.35);
+  --cyan:     #38bdf8;
+  --white:    #ffffff;
+  --gray:     #6b7280;
+  --gray2:    #9ca3af;
+  --text:     #d1d5db;
+  --green:    #22c55e;
+  --radius:   10px;
+  --radius-lg:18px;
+}
+html{scroll-behavior:smooth;font-size:16px;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);color:var(--text);
+  overflow-x:hidden;line-height:1.6;
+  min-height:100vh;
+}
+a{text-decoration:none;color:inherit;}
+ul{list-style:none;}
+img{max-width:100%;display:block;}
+button{font-family:inherit;cursor:pointer;}
+.container{max-width:1200px;margin:0 auto;padding:0 clamp(16px,4vw,40px);}
 
-    
-<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
+/* ─── SCROLLBAR ─────────────────────────────────────── */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--blue);border-radius:2px;}
 
+/* ─── PROGRESS BAR ──────────────────────────────────── */
+#progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:999;background:transparent;}
+#progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));width:0;transition:width .1s linear;}
 
+/* ─── BUTTONS ───────────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:40px;font-size:13px;font-weight:600;border:none;transition:all .25s;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;}
+.btn-blue{background:var(--blue);color:#fff;}
+.btn-blue:hover{background:var(--blue2);transform:translateY(-1px);box-shadow:0 8px 28px var(--blue-glow);}
+.btn-ghost{background:rgba(255,255,255,0.06);color:var(--white);border:1px solid var(--border2);}
+.btn-ghost:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.2);}
+.btn-sm{padding:8px 18px;font-size:12px;}
+.btn-outline{background:transparent;color:var(--white);border:1px solid var(--border2);}
+.btn-outline:hover{background:rgba(255,255,255,0.05);}
 
+/* ─── NAV ───────────────────────────────────────────── */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:0 clamp(16px,4vw,40px);
+  background:rgba(5,5,8,0.85);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+nav{
+  max-width:1200px;margin:0 auto;
+  display:flex;align-items:center;
+  height:64px;gap:0;
+}
+.nav-logo{
+  font-family:'Syne',sans-serif;
+  font-size:18px;font-weight:800;
+  color:var(--white);letter-spacing:-.5px;
+  margin-right:auto;
+}
+.nav-logo span{color:var(--blue);}
+.nav-links{
+  display:flex;align-items:center;gap:4px;
+  margin:0 32px;
+}
+.nav-links a{
+  font-size:13px;font-weight:500;color:var(--gray2);
+  padding:6px 12px;border-radius:6px;
+  transition:color .2s;
+}
+.nav-links a:hover,.nav-links a.active{color:var(--white);}
+.nav-right{display:flex;align-items:center;gap:10px;}
+.hamburger{
+  display:none;flex-direction:column;gap:5px;
+  background:none;border:none;cursor:pointer;padding:4px;
+}
+.hamburger span{width:22px;height:2px;background:var(--white);transition:all .3s;}
+.mobile-menu{
+  display:none;position:fixed;top:64px;left:0;right:0;
+  background:rgba(5,5,8,0.98);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:20px clamp(16px,4vw,40px) 28px;
+  flex-direction:column;gap:4px;z-index:99;
+}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{
+  font-size:15px;font-weight:500;color:var(--gray2);
+  padding:10px 14px;border-radius:8px;
+  transition:all .2s;
+}
+.mobile-menu a:hover{color:var(--white);background:rgba(255,255,255,0.05);}
+.mobile-menu .divider{height:1px;background:var(--border);margin:8px 0;}
 
-
-
-
-    
-    
-<meta name="view-transition" content="same-origin">    
-
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    
-
-<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-
-
-    
-    
-<meta property="og:title" content="404 • Página no encontrada | InfiniHon">
-
-<meta property="og:description" content="Uuppss!! Fallo en la Matrix?">
-
-<meta property="og:image" content="https://infinihon.vercel.app/banner-redes.jpg">
-
-<meta property="og:url" content="https://infinihon.vercel.app/404">
-
-<meta property="og:type" content="website">
-
-<meta name="twitter:card" content="summary_large_image">
-
-    
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 • Página no encontrada | InfiniHon</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <style>
-        :root { 
-            --bg-deep: #020617; 
-            --accent: #3b82f6;
-            --accent-secondary: #06b6d4;
-        }
-        
-        * {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            cursor: none !important;
-        }
-
-        .font-mono, .font-mono-custom {
-            font-family: 'JetBrains Mono', monospace !important;
-        }
-        
-        body {
-            background-color: var(--bg-deep);
-            color: #f8fafc;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* Cursor Personalizado Avanzado */
-        #custom-cursor {
-            width: 28px; 
-            height: 28px; 
-            border: 2px solid rgba(255, 255, 255, 0.9);
-            border-radius: 50%;
-            position: fixed; 
-            pointer-events: none; 
-            z-index: 9999;
-            transition: transform 0.25s cubic-bezier(0.23, 1, 0.32, 1), border-color 0.3s ease, width 0.2s, height 0.2s;
-            mix-blend-mode: difference;
-            transform: translate(-50%, -50%);
-            will-change: left, top;
-        }
-        
-        #cursor-dot {
-            position: absolute;
-            top: 50%; 
-            left: 50%;
-            width: 6px; 
-            height: 6px;
-            background: white;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: background-color 0.3s ease;
-        }
-
-        #cursor-aura {
-            width: 500px; 
-            height: 500px;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
-            position: fixed; 
-            pointer-events: none; 
-            z-index: 9998;
-            border-radius: 50%;
-            transform: translate(-50%, -50%); 
-            transition: opacity 0.5s ease, background 0.3s ease;
-            will-change: left, top;
-        }
-
-        /* Efecto Ping al hacer clic */
-        .ping-effect {
-            position: fixed; 
-            width: 24px; 
-            height: 24px;
-            border: 2px solid rgba(59, 130, 246, 0.8);
-            border-radius: 50%; 
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-            animation: ping-anim 0.6s ease-out forwards;
-            z-index: 10000;
-        }
-        
-        @keyframes ping-anim {
-            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(4.5); opacity: 0; }
-        }
-
-        /* Fondo mesh animado */
-        .mesh-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            z-index: -1;
-            background:
-                radial-gradient(circle at 20% 40%, rgba(37, 99, 235, 0.12), transparent 45%),
-                radial-gradient(circle at 80% 30%, rgba(6, 182, 212, 0.12), transparent 45%),
-                radial-gradient(circle at 40% 70%, rgba(59, 130, 246, 0.08), transparent 50%),
-                radial-gradient(circle at 70% 80%, rgba(168, 85, 247, 0.06), transparent 55%);
-            animation: meshMove 20s ease-in-out infinite alternate;
-        }
-
-        @keyframes meshMove {
-            0% { transform: scale(1) translate(0, 0); }
-            33% { transform: scale(1.1) translate(-1%, 2%); }
-            66% { transform: scale(1.15) translate(2%, -1%); }
-            100% { transform: scale(1.05) translate(1%, 1%); }
-        }
-
-        /* Glassmorphism */
-        .glass {
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
-        }
-        
-        .glass-card {
-            background: rgba(10, 15, 31, 0.4);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(59, 130, 246, 0.15);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-        
-        .glass-card:hover {
-            border-color: rgba(59, 130, 246, 0.4);
-            box-shadow: 0 12px 40px rgba(59, 130, 246, 0.2);
-        }
-
-        /* Animación Glitch para el 404 */
-        .glitch {
-            font-size: 12rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            position: relative;
-            text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75),
-                        -0.025em -0.05em 0 rgba(0, 255, 0, 0.75),
-                        0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
-            animation: glitch 500ms infinite;
-        }
-
-        .glitch span {
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        .glitch span:first-child {
-            animation: glitch 650ms infinite;
-            clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
-            transform: translate(-0.025em, -0.0125em);
-            opacity: 0.8;
-        }
-
-        .glitch span:last-child {
-            animation: glitch 375ms infinite;
-            clip-path: polygon(0 80%, 100% 20%, 100% 100%, 0 100%);
-            transform: translate(0.0125em, 0.025em);
-            opacity: 0.8;
-        }
-
-        @keyframes glitch {
-            0% { text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75), -0.05em -0.025em 0 rgba(0, 255, 0, 0.75), -0.025em 0.05em 0 rgba(0, 0, 255, 0.75); }
-            14% { text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75), -0.05em -0.025em 0 rgba(0, 255, 0, 0.75), -0.025em 0.05em 0 rgba(0, 0, 255, 0.75); }
-            15% { text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75), 0.025em 0.025em 0 rgba(0, 255, 0, 0.75), -0.05em -0.05em 0 rgba(0, 0, 255, 0.75); }
-            49% { text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75), 0.025em 0.025em 0 rgba(0, 255, 0, 0.75), -0.05em -0.05em 0 rgba(0, 0, 255, 0.75); }
-            50% { text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75), 0.05em 0 0 rgba(0, 255, 0, 0.75), 0 -0.05em 0 rgba(0, 0, 255, 0.75); }
-            99% { text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75), 0.05em 0 0 rgba(0, 255, 0, 0.75), 0 -0.05em 0 rgba(0, 0, 255, 0.75); }
-            100% { text-shadow: -0.025em 0 0 rgba(255, 0, 0, 0.75), -0.025em -0.025em 0 rgba(0, 255, 0, 0.75), -0.025em -0.05em 0 rgba(0, 0, 255, 0.75); }
-        }
-
-        /* Animación de entrada */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .animate-in {
-            animation: fadeInUp 0.7s ease-out forwards;
-        }
-
-        .delay-1 { animation-delay: 0.1s; }
-        .delay-2 { animation-delay: 0.3s; }
-        .delay-3 { animation-delay: 0.5s; }
-
-        /* Efecto scanline */
-        .scanline {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.02) 50%);
-            background-size: 100% 4px;
-            pointer-events: none;
-            z-index: 9997;
-            opacity: 0.3;
-            animation: scanlines 8s linear infinite;
-        }
-
-        @keyframes scanlines {
-            0% { background-position: 0 0; }
-            100% { background-position: 0 100%; }
-        }
-
-        /* Terminal prompt animado */
-        .terminal-cursor {
-            display: inline-block;
-            width: 10px;
-            height: 20px;
-            background: #3b82f6;
-            animation: blink 1s step-end infinite;
-            vertical-align: middle;
-            margin-left: 4px;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-
-        /* Botones interactivos */
-        .btn-primary {
-            background: linear-gradient(135deg, #3b82f6, #06b6d4);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 20px 40px -10px rgba(59, 130, 246, 0.4);
-            border-color: rgba(59, 130, 246, 0.6);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-3px);
-        }
-
-
-
-
-/* Modificar la barra de desplazamiento */
-::-webkit-scrollbar {
-    width: 10px; /* Ancho de la barra */
+/* ─── HERO 404 ───────────────────────────────────────── */
+#hero-404{
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+  padding:100px 0 80px;
+  text-align:center;
 }
 
-/* El fondo de la barra */
-::-webkit-scrollbar-track {
-    background: #020617; /* El mismo azul ultra-oscuro de tu fondo */
+/* Orb de fondo (igual que index) */
+.hero-orb{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:min(700px,110vw);height:min(700px,110vw);
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(37,99,235,.18) 0%,rgba(37,99,235,.06) 35%,transparent 70%);
+  pointer-events:none;
+  animation:orbPulse 6s ease-in-out infinite;
+}
+@keyframes orbPulse{0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-50%,-50%) scale(1.08);}}
+
+/* Grid de fondo */
+.hero-grid-bg{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse at center,black 30%,transparent 75%);
+  pointer-events:none;
 }
 
-/* El "pulgar" (la parte que se mueve) */
-::-webkit-scrollbar-thumb {
-    background: #1e293b; 
-    border-radius: 5px;
-    border: 2px solid #020617; /* Crea un efecto de espacio alrededor */
+/* Contenido 404 */
+.error-inner{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;
+  gap:0;max-width:700px;
 }
 
-/* Cuando pasas el mouse por encima de la barra */
-::-webkit-scrollbar-thumb:hover {
-    background: #3b82f6; /* Tu color azul acento */
-    box-shadow: 0 0 10px #3b82f6;
+/* Badge de estado */
+.error-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(239,68,68,0.12);
+  border:1px solid rgba(239,68,68,0.25);
+  border-radius:40px;padding:6px 16px;
+  font-size:12px;color:var(--gray2);margin-bottom:28px;
+}
+.error-badge .dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--red);animation:blink 2s infinite;
 }
 
-
-
-
-
-/* Configuración básica de la transición suave */
-::view-transition-old(root) {
-    animation: fade-out 0.3s ease-out both;
+/* Código 404 con efecto glitch sutil */
+.error-code{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(80px,18vw,180px);
+  font-weight:800;line-height:0.85;
+  color:var(--white);letter-spacing:-8px;
+  margin-bottom:8px;position:relative;
 }
-::view-transition-new(root) {
-    animation: fade-in 0.3s ease-in both;
+.error-code::before{
+  content:'404';
+  position:absolute;top:0;left:0;
+  color:rgba(239,68,68,0.4);
+  animation:glitchShift 3s infinite;
+  clip-path:polygon(0 0,100% 0,100% 45%,0 45%);
+}
+.error-code::after{
+  content:'404';
+  position:absolute;top:0;left:0;
+  color:rgba(56,189,248,0.4);
+  animation:glitchShift 2.5s infinite reverse;
+  clip-path:polygon(0 55%,100% 20%,100% 100%,0 100%);
+}
+@keyframes glitchShift{
+  0%,100%{transform:translate(0);}
+  20%{transform:translate(-2px,2px);}
+  40%{transform:translate(2px,-2px);}
+  60%{transform:translate(-1px,1px);}
+  80%{transform:translate(1px,-1px);}
 }
 
-@keyframes fade-out {
-    to { opacity: 0; transform: scale(0.98); }
+/* Orb icono decorativo */
+.error-orb-icon{
+  width:clamp(60px,10vw,100px);
+  height:clamp(60px,10vw,100px);
+  border-radius:50%;
+  background:linear-gradient(135deg,#1d3a8a,var(--blue),#60a5fa);
+  display:flex;align-items:center;justify-content:center;
+  font-size:clamp(24px,4vw,40px);color:#fff;
+  margin:0 auto 24px;
+  box-shadow:0 0 40px rgba(37,99,235,.4),0 0 80px rgba(37,99,235,.15);
+  animation:orbSpin 8s linear infinite;
 }
-@keyframes fade-in {
-    from { opacity: 0; transform: scale(1.02); }
+@keyframes orbSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+
+/* Título */
+.error-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(24px,4vw,36px);
+  font-weight:700;color:var(--white);
+  letter-spacing:-1px;margin-bottom:16px;
+}
+.error-title span{
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
 }
 
+/* Descripción */
+.error-desc{
+  font-size:clamp(14px,2vw,16px);
+  color:var(--gray);line-height:1.7;
+  margin-bottom:32px;max-width:480px;
+}
 
+/* Terminal-style message */
+.terminal-box{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:clamp(16px,3vw,24px);
+  margin-bottom:32px;width:100%;max-width:520px;
+  text-align:left;font-family:'DM Sans',sans-serif;
+}
+.terminal-header{
+  display:flex;align-items:center;gap:8px;
+  padding-bottom:12px;margin-bottom:12px;
+  border-bottom:1px solid var(--border);
+  font-size:11px;color:var(--gray);
+}
+.terminal-header .dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--red);animation:blink 2s infinite;
+}
+.terminal-line{
+  font-size:12px;color:var(--gray2);
+  margin-bottom:8px;font-family:'DM Sans',sans-serif;
+}
+.terminal-line .cmd{color:var(--blue);}
+.terminal-line .path{color:var(--cyan);}
+.terminal-line .error{color:var(--red);}
+.terminal-cursor{
+  display:inline-block;width:8px;height:16px;
+  background:var(--blue);margin-left:4px;
+  animation:blink 1s step-end infinite;vertical-align:middle;
+}
 
+/* Botones de acción */
+.error-cta{
+  display:flex;gap:12px;flex-wrap:wrap;
+  justify-content:center;margin-bottom:40px;
+}
 
-        
-        
-    </style>
+/* Stats decorativas */
+.error-stats{
+  display:flex;align-items:center;gap:clamp(16px,4vw,32px);
+  flex-wrap:wrap;justify-content:center;
+}
+.error-stat .n{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(20px,3vw,28px);font-weight:800;color:var(--white);
+}
+.error-stat .l{font-size:11px;color:var(--gray);margin-top:2px;}
+.error-divider{width:1px;height:32px;background:var(--border2);}
+
+/* Enlaces rápidos */
+.quick-links{
+  margin-top:48px;padding-top:32px;
+  border-top:1px solid var(--border);
+  width:100%;max-width:520px;
+}
+.quick-links-label{
+  font-size:10px;font-weight:600;letter-spacing:2px;
+  text-transform:uppercase;color:var(--gray);
+  margin-bottom:16px;font-family:'DM Sans',sans-serif;
+}
+.quick-links-grid{
+  display:flex;flex-wrap:wrap;gap:12px;justify-content:center;
+}
+.quick-link{
+  font-size:12px;color:var(--gray2);
+  padding:6px 12px;border-radius:6px;
+  transition:all .2s;display:flex;align-items:center;gap:6px;
+}
+.quick-link:hover{color:var(--white);background:rgba(255,255,255,0.05);}
+.quick-link i{font-size:11px;color:var(--blue);}
+
+/* ─── FOOTER (IDÉNTICO A INDEX) ─────────────────────── */
+footer{
+  border-top:1px solid var(--border);
+  padding:clamp(40px,6vw,80px) 0 0;
+}
+.footer-top{
+  display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;
+  gap:clamp(24px,4vw,60px);margin-bottom:clamp(40px,5vw,60px);
+}
+.footer-logo{
+  font-family:'Syne',sans-serif;
+  font-size:20px;font-weight:800;color:var(--white);
+  margin-bottom:14px;
+}
+.footer-desc{font-size:13px;color:var(--gray);line-height:1.8;max-width:260px;margin-bottom:20px;}
+.footer-social{display:flex;gap:8px;}
+.fs-btn{
+  width:34px;height:34px;border-radius:8px;
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;color:var(--gray);
+  transition:all .2s;
+}
+.fs-btn:hover{background:var(--blue);color:#fff;border-color:var(--blue);}
+.footer-col h5{
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
+  color:var(--white);margin-bottom:16px;letter-spacing:.3px;
+}
+.footer-col ul{display:flex;flex-direction:column;gap:10px;}
+.footer-col ul li a{font-size:13px;color:var(--gray);transition:color .2s;}
+.footer-col ul li a:hover{color:var(--blue);}
+.footer-bottom{
+  border-top:1px solid var(--border);
+  padding:clamp(16px,2vw,24px) 0;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:12px;
+}
+.footer-bottom p,.footer-bottom a{font-size:12px;color:var(--gray);}
+.footer-bottom a:hover{color:var(--white);}
+.footer-links{display:flex;gap:20px;}
+
+/* ─── REVEAL ANIMATIONS ─────────────────────────────── */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.in{opacity:1;transform:translateY(0);}
+
+/* ─── RESPONSIVE ───────────────────────────────────── */
+@media(max-width:768px){
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+  .error-stats{flex-direction:column;gap:12px;}
+  .error-divider{display:none;}
+  .footer-top{grid-template-columns:1fr;}
+  .footer-bottom{flex-direction:column;text-align:center;}
+}
+@media(max-width:540px){
+  .error-cta{flex-direction:column;align-items:center;}
+  .quick-links-grid{flex-direction:column;align-items:center;}
+}
+</style>
+
+<!-- ══ FIRST VISIT DETECTION ═══════════════════════════════ -->
+<script>
+(function(){
+    const INTRO_KEY = 'infinihon_intro_seen';
+    const INTRO_PAGE = 'start.html';
+    if(localStorage.getItem(INTRO_KEY)) return;
+    if(window.location.pathname.includes(INTRO_PAGE)) return;
+    localStorage.setItem(INTRO_KEY, 'true');
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    window.location.replace(INTRO_PAGE + '?return=' + encodeURIComponent(currentPage));
+})();
+</script>
 </head>
-<body class="selection:bg-blue-500/30 relative">
+<body>
 
-<!-- Cursor personalizado -->
-<div id="custom-cursor"><span id="cursor-dot"></span></div>
-<div id="cursor-aura"></div>
+<!-- PROGRESS BAR -->
+<div id="progress"><div id="progress-fill"></div></div>
 
-<!-- Scanline effect -->
-<div class="scanline"></div>
-
-<!-- Fondo mesh -->
-<div class="mesh-bg"></div>
-
-<!-- Navegación minimalista -->
-<nav class="sticky top-0 z-40 glass border-b border-white/5">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex justify-between items-center">
-        <a href="index.html" class="flex items-center space-x-3 interactive tilt-card">
-            <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
-                <i data-lucide="cpu" class="text-black w-6 h-6"></i>
-            </div>
-            <span class="text-white font-bold text-xl tracking-tight">
-                Infini<span class="text-blue-400">Hon</span>
-            </span>
-        </a>
-        
-        <div class="hidden md:flex items-center space-x-8 text-sm font-semibold">
-            <a href="index.html" class="interactive text-gray-300 hover:text-white transition-colors">Inicio</a>
-            <a href="servicios.html" class="interactive text-gray-300 hover:text-white transition-colors">Servicios</a>
-            <a href="tienda.html" class="interactive text-gray-300 hover:text-white transition-colors">Tienda</a>
-            <a href="alianzas.html" class="interactive text-gray-300 hover:text-white transition-colors">Alianzas</a>
-        </div>
-        
-        <a href="contacto.html" class="interactive bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 px-4 py-2 rounded-lg text-sm font-medium border border-blue-500/30 transition-all">
-            Soporte
-        </a>
+<!-- ══ NAV ══════════════════════════════════════════════════ -->
+<header>
+  <nav>
+    <a href="index.html" class="nav-logo">Infini<span>Hon</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#works">Works</a></li>
+      <li><a href="servicios.html">Servicios</a></li>
+      <li><a href="index.html#pricing">Pricing</a></li>
+      <li><a href="index.html#members">Team</a></li>
+      <li><a href="index.html#press">Press</a></li>
+      <li><a href="index.html#cta-final">Contacto</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="tienda.html" class="btn btn-blue btn-sm">Tienda</a>
+      <button class="hamburger" id="ham" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
     </div>
-</nav>
+  </nav>
+</header>
 
-<!-- Contenido principal 404 -->
-<main class="relative z-10 min-h-[calc(100vh-200px)] flex items-center justify-center px-4 py-16">
-    <div class="max-w-4xl mx-auto text-center">
-        
-        <!-- Código de error con glitch -->
-        <div class="relative mb-8 animate-in">
-            <div class="glitch text-white font-mono-custom">
-                404
-                <span aria-hidden="true" class="font-mono-custom">404</span>
-                <span aria-hidden="true" class="font-mono-custom">404</span>
-            </div>
-            <div class="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent"></div>
-        </div>
-        
-        <!-- Terminal style message -->
-        <div class="glass-card rounded-3xl p-8 mb-10 max-w-2xl mx-auto animate-in delay-1">
-            <div class="flex items-center gap-2 mb-4 text-gray-400 border-b border-white/10 pb-3">
-                <i data-lucide="terminal" class="w-5 h-5 text-blue-400"></i>
-                <span class="font-mono-custom text-sm">infiniHon@enterprise:~$</span>
-                <span class="text-red-400 font-mono-custom text-sm ml-auto">ERROR</span>
-            </div>
-            
-            <p class="font-mono-custom text-gray-300 text-left mb-4">
-                <span class="text-blue-400">></span> Accediendo a ruta: <span class="text-yellow-400" id="current-path">/pagina-no-encontrada</span>
-            </p>
-            <p class="font-mono-custom text-gray-300 text-left mb-4">
-                <span class="text-red-400">✗</span> <span class="text-red-300">Error 404:</span> El recurso solicitado no existe en este servidor.
-            </p>
-            <p class="font-mono-custom text-gray-300 text-left">
-                <span class="text-blue-400">></span> Código de estado: <span class="text-orange-400">HTTP/1.1 404 Not Found</span>
-            </p>
-            
-            <div class="flex items-center gap-2 mt-4 text-gray-500">
-                <span class="font-mono-custom">infiniHon@enterprise:~$</span>
-                <span class="font-mono-custom">_</span>
-                <span class="terminal-cursor"></span>
-            </div>
-        </div>
-
-
-
-
-
-<div style="max-width: 600px; margin: 20px auto; text-align: center;">
-    
-    <h3 style="color: #3b82f6; font-family: monospace;">Vista Interactiva 360°</h3>
-
-    <model-viewer 
-        src="server rack.glb" 
-        alt="Modelo 3D de InfiniHon"
-        auto-rotate 
-        camera-controls 
-        style="width: 100%; height: 400px; background-color: #0f172a; border-radius: 8px; border: 1px solid #3b82f6;">
-    </model-viewer>
-
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="toggleMenu()">Home</a>
+  <a href="index.html#works" onclick="toggleMenu()">Works</a>
+  <a href="servicios.html" onclick="toggleMenu()">Servicios</a>
+  <a href="index.html#pricing" onclick="toggleMenu()">Pricing</a>
+  <a href="index.html#members" onclick="toggleMenu()">Team</a>
+  <a href="index.html#press" onclick="toggleMenu()">Press</a>
+  <div class="divider"></div>
+  <a href="index.html#cta-final" onclick="toggleMenu()">Contacto</a>
 </div>
 
-
-
-
-
-        
-        <!-- Mensaje principal -->
-        <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-4 animate-in delay-1 tracking-tight">
-            Parece que esta <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">página</span> se ha desconectado
-        </h1>
-        
-        <p class="text-gray-400 text-lg max-w-xl mx-auto mb-10 animate-in delay-2 leading-relaxed">
-            La ruta que estás buscando no existe o ha sido movida a otra ubicación. 
-            Nuestros ingenieros han sido notificados del fallo en la matriz.
-        </p>
-        
-        <!-- Botones de acción -->
-        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-in delay-3">
-            <a href="index.html" class="btn-primary interactive px-8 py-4 rounded-xl text-white font-bold flex items-center gap-3 text-lg">
-                <i data-lucide="home" class="w-5 h-5"></i>
-                Volver al Inicio
-            </a>
-            <a href="tienda.html" class="btn-secondary interactive px-8 py-4 rounded-xl text-white font-bold flex items-center gap-3 text-lg">
-                <i data-lucide="shopping-bag" class="w-5 h-5"></i>
-                Explorar Tienda
-            </a>
-            <button onclick="window.history.back()" class="btn-secondary interactive px-8 py-4 rounded-xl text-white font-bold flex items-center gap-3 text-lg">
-                <i data-lucide="arrow-left" class="w-5 h-5"></i>
-                Página Anterior
-            </button>
+<!-- ══ HERO 404 ══════════════════════════════════════════════════ -->
+<section id="hero-404">
+  <div class="hero-orb"></div>
+  <div class="hero-grid-bg"></div>
+  
+  <div class="container">
+    <div class="error-inner">
+      
+      <!-- Badge de error -->
+      <div class="error-badge reveal">
+        <span class="dot"></span>
+        Error 404 • Recurso no encontrado
+      </div>
+      
+      <!-- Código 404 glitch -->
+      <div class="error-code reveal" style="transition-delay:.05s;">404</div>
+      
+      <!-- Orb decorativo -->
+      <div class="error-orb-icon reveal" style="transition-delay:.1s;">
+        <i class="fa fa-exclamation-triangle"></i>
+      </div>
+      
+      <!-- Título -->
+      <h1 class="error-title reveal" style="transition-delay:.15s;">
+        Parece que esta <span>página</span> se ha desconectado
+      </h1>
+      
+      <!-- Descripción -->
+      <p class="error-desc reveal" style="transition-delay:.2s;">
+        La ruta que estás buscando no existe o ha sido movida. 
+        Nuestros ingenieros han sido notificados del fallo en la matriz.
+      </p>
+      
+      <!-- Terminal message -->
+      <div class="terminal-box reveal" style="transition-delay:.25s;">
+        <div class="terminal-header">
+          <span class="dot"></span>
+          <span>infinihon@enterprise:~$</span>
+          <span style="margin-left:auto;color:var(--red);">ERROR</span>
         </div>
-        
-        <!-- Enlaces rápidos -->
-        <div class="mt-16 pt-8 border-t border-white/10 animate-in delay-3">
-            <p class="text-gray-500 text-sm font-mono-custom mb-6 tracking-wider">// ENLACES RÁPIDOS</p>
-            <div class="flex flex-wrap justify-center gap-6 md:gap-10">
-                <a href="servicios.html" class="interactive text-gray-400 hover:text-blue-400 transition-colors text-sm flex items-center gap-2">
-                    <i data-lucide="network" class="w-4 h-4"></i>
-                    Servicios IT
-                </a>
-                <a href="tienda.html" class="interactive text-gray-400 hover:text-blue-400 transition-colors text-sm flex items-center gap-2">
-                    <i data-lucide="cpu" class="w-4 h-4"></i>
-                    Hardware
-                </a>
-                <a href="alianzas.html" class="interactive text-gray-400 hover:text-blue-400 transition-colors text-sm flex items-center gap-2">
-                    <i data-lucide="handshake" class="w-4 h-4"></i>
-                    Alianzas
-                </a>
-                <a href="soporte.html" class="interactive text-gray-400 hover:text-blue-400 transition-colors text-sm flex items-center gap-2">
-                    <i data-lucide="headset" class="w-4 h-4"></i>
-                    Soporte Técnico
-                </a>
-                <a href="contacto.html" class="interactive text-gray-400 hover:text-blue-400 transition-colors text-sm flex items-center gap-2">
-                    <i data-lucide="mail" class="w-4 h-4"></i>
-                    Contacto
-                </a>
-            </div>
+        <div class="terminal-line"><span class="cmd">></span> Ruta: <span class="path" id="currentPath">/pagina-no-encontrada</span></div>
+        <div class="terminal-line"><span class="error">✗</span> <span class="error">404 Not Found</span></div>
+        <div class="terminal-line"><span class="cmd">></span> Estado: <span class="path">HTTP/1.1 404</span></div>
+        <div class="terminal-line" style="margin-top:12px;">
+          <span class="cmd">infinihon@enterprise:~$</span>
+          <span class="terminal-cursor"></span>
         </div>
-        
-        <!-- Easter egg: coordenadas -->
-        <div class="mt-12 text-gray-600 text-xs font-mono-custom opacity-40">
-            <span>NODO: 0x7F.0x00.0x00.0x01 | LAT: 14.0723° N | LONG: 87.1921° W</span>
+      </div>
+      
+      <!-- Botones de acción -->
+      <div class="error-cta reveal" style="transition-delay:.3s;">
+        <a href="index.html" class="btn btn-blue">
+          <i class="fa fa-home"></i> Volver al Inicio
+        </a>
+        <a href="tienda.html" class="btn btn-ghost">
+          <i class="fa fa-store"></i> Explorar Tienda
+        </a>
+        <button class="btn btn-outline" onclick="window.history.back()">
+          <i class="fa fa-arrow-left"></i> Página Anterior
+        </button>
+      </div>
+      
+      <!-- Stats decorativas -->
+      <div class="error-stats reveal" style="transition-delay:.35s;">
+        <div class="error-stat"><div class="n">99.9%</div><div class="l">Uptime</div></div>
+        <div class="error-divider"></div>
+        <div class="error-stat"><div class="n">24/7</div><div class="l">Soporte</div></div>
+        <div class="error-divider"></div>
+        <div class="error-stat"><div class="n">0.2s</div><div class="l">Respuesta</div></div>
+      </div>
+      
+      <!-- Enlaces rápidos -->
+      <div class="quick-links reveal" style="transition-delay:.4s;">
+        <div class="quick-links-label">// Enlaces Rápidos</div>
+        <div class="quick-links-grid">
+          <a href="servicios.html" class="quick-link"><i class="fa fa-server"></i> Servicios IT</a>
+          <a href="tienda.html" class="quick-link"><i class="fa fa-microchip"></i> Hardware</a>
+          <a href="index.html#members" class="quick-link"><i class="fa fa-users"></i> Equipo</a>
+          <a href="index.html#cta-final" class="quick-link"><i class="fa fa-envelope"></i> Contacto</a>
+          <a href="index.html#faq" class="quick-link"><i class="fa fa-question-circle"></i> Ayuda</a>
         </div>
+      </div>
+      
     </div>
-</main>
+  </div>
+</section>
 
-<!-- Footer minimalista -->
-<footer class="relative z-10 border-t border-white/5 glass py-6">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p class="text-gray-500 text-xs font-mono-custom">
-                © 2025 InfiniHon • Código de error: 0x194
-            </p>
-            <div class="flex gap-6">
-                <a href="#" class="text-gray-500 hover:text-gray-400 text-xs font-mono-custom interactive">PRIVACIDAD</a>
-                <a href="#" class="text-gray-500 hover:text-gray-400 text-xs font-mono-custom interactive">TÉRMINOS</a>
-                <a href="#" class="text-gray-500 hover:text-gray-400 text-xs font-mono-custom interactive">STATUS</a>
-            </div>
+<!-- ══ FOOTER ═══════════════════════════════════════════════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">Infini<span>Hon</span></div>
+        <p class="footer-desc">Infraestructura IT de grado industrial. Hardware especializado, soporte experto y precios competitivos.</p>
+        <div class="footer-social">
+          <a href="#" class="fs-btn"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="fs-btn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" class="fs-btn"><i class="fab fa-github"></i></a>
+          <a href="#" class="fs-btn"><i class="fab fa-instagram"></i></a>
         </div>
+      </div>
+      <div class="footer-col">
+        <h5>Servicios</h5>
+        <ul>
+          <li><a href="servicios.html">Branding & Identity</a></li>
+          <li><a href="servicios.html">UI / UX Design</a></li>
+          <li><a href="servicios.html">Development</a></li>
+          <li><a href="servicios.html">Growth Strategy</a></li>
+          <li><a href="servicios.html">QA & Consulting</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Compañía</h5>
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="index.html#works">Nuestro Trabajo</a></li>
+          <li><a href="index.html#members">Equipo</a></li>
+          <li><a href="index.html#press">Blog</a></li>
+          <li><a href="index.html#cta-final">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Legal</h5>
+        <ul>
+          <li><a href="#">Política de Privacidad</a></li>
+          <li><a href="#">Términos de Servicio</a></li>
+          <li><a href="#">Política de Cookies</a></li>
+          <li><a href="#">Accesibilidad</a></li>
+        </ul>
+      </div>
     </div>
+    <div class="footer-bottom">
+      <p>© 2025 InfiniHon Studio. Todos los derechos reservados. 🇭🇳</p>
+      <div class="footer-links">
+        <a href="#">Privacidad</a>
+        <a href="#">Términos</a>
+        <a href="#">Mapa del Sitio</a>
+      </div>
+    </div>
+  </div>
 </footer>
 
+<!-- ══ SCRIPTS ══════════════════════════════════════════════════ -->
 <script>
-    // ===========================================
-    // INICIALIZACIÓN DE LUCIDE
-    // ===========================================
-    lucide.createIcons();
-    
-    // ===========================================
-    // MOSTRAR RUTA ACTUAL
-    // ===========================================
-    const pathElement = document.getElementById('current-path');
-    if (pathElement) {
-        const currentPath = window.location.pathname || '/pagina-no-encontrada';
-        pathElement.textContent = currentPath;
+// ── Mostrar ruta actual en terminal ─────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  const pathEl = document.getElementById('currentPath');
+  if(pathEl) {
+    const path = window.location.pathname || '/pagina-no-encontrada';
+    pathEl.textContent = path;
+  }
+});
+
+// ── Scroll Progress ──────────────────────────────────────
+window.addEventListener('scroll', () => {
+  const p = (window.scrollY / (document.documentElement.scrollHeight - innerHeight)) * 100;
+  document.getElementById('progress-fill').style.width = p + '%';
+});
+
+// ── Reveal Animations ───────────────────────────────────
+const reveals = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if(e.isIntersecting) setTimeout(() => e.target.classList.add('in'), i * 60);
+  });
+}, { threshold: 0.08 });
+reveals.forEach(el => obs.observe(el));
+
+// ── Mobile Menu ─────────────────────────────────────────
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+document.addEventListener('click', e => {
+  const m = document.getElementById('mobileMenu');
+  const h = document.getElementById('ham');
+  if(m.classList.contains('open') && !m.contains(e.target) && !h.contains(e.target)) {
+    m.classList.remove('open');
+  }
+});
+
+// ── Nav Active State ────────────────────────────────────
+window.addEventListener('scroll', () => {
+  const y = window.scrollY + 80;
+  document.querySelectorAll('section[id]').forEach(sec => {
+    const link = document.querySelector(`.nav-links a[href="#${sec.id}"]`);
+    if(link) {
+      const top = sec.offsetTop, h = sec.offsetHeight;
+      link.classList.toggle('active', y >= top && y < top + h);
     }
-
-    // ===========================================
-    // CURSOR Y EFECTOS 3D
-    // ===========================================
-    const cursor = document.getElementById('custom-cursor');
-    const cursorDot = document.getElementById('cursor-dot');
-    const aura = document.getElementById('cursor-aura');
-    
-    const isTouch = !window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-    if (isTouch) {
-        if(cursor) cursor.style.display = 'none';
-        if(aura) aura.style.display = 'none';
-        document.body.style.cursor = 'auto';
-    } else {
-        document.addEventListener('mousemove', (e) => {
-            if(!cursor || !aura) return;
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-            aura.style.left = e.clientX + 'px';
-            aura.style.top = e.clientY + 'px';
-        });
-
-        document.addEventListener('mousedown', (e) => {
-            const ping = document.createElement('div');
-            ping.className = 'ping-effect';
-            ping.style.left = e.clientX + 'px';
-            ping.style.top = e.clientY + 'px';
-            document.body.appendChild(ping);
-            setTimeout(() => ping.remove(), 600);
-        });
-
-        document.addEventListener('mouseover', (e) => {
-            const el = e.target.closest('button, a, .interactive');
-            if (el) {
-                cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
-                cursor.style.width = '34px';
-                cursor.style.height = '34px';
-                
-                let theme = '#60a5fa';
-                cursor.style.borderColor = theme;
-                cursorDot.style.backgroundColor = theme;
-                aura.style.background = `radial-gradient(circle, ${theme}33 0%, transparent 70%)`;
-                cursor.style.mixBlendMode = 'normal';
-            }
-        });
-        
-        document.addEventListener('mouseout', (e) => {
-            const el = e.target.closest('button, a, .interactive');
-            if (el) {
-                cursor.style.transform = 'translate(-50%, -50%) scale(1)';
-                cursor.style.width = '28px';
-                cursor.style.height = '28px';
-                cursor.style.borderColor = 'rgba(255, 255, 255, 0.9)';
-                cursorDot.style.backgroundColor = 'white';
-                cursor.style.mixBlendMode = 'difference';
-                aura.style.background = 'radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%)';
-            }
-        });
-
-        document.addEventListener('mousemove', (e) => {
-            const card = e.target.closest('.tilt-card');
-            if(card) {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                const rotateX = ((y - centerY) / centerY) * -6;
-                const rotateY = ((x - centerX) / centerX) * 6;
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-            }
-        });
-        
-        document.addEventListener('mouseout', (e) => {
-            const card = e.target.closest('.tilt-card');
-            if(card) card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-        });
-    }
-    
-    // ===========================================
-    // CONSOLA OCULTA (Easter egg)
-    // ===========================================
-    console.log('%c🚀 INFINIHON ENTERPRISE', 'font-size: 16px; font-weight: bold; color: #3b82f6;');
-    console.log('%c404 • Recurso no encontrado', 'font-size: 12px; color: #ef4444;');
-    console.log('%c¿Eres desarrollador? Únete a nuestro equipo: careers@infinihon.com', 'font-size: 11px; color: #6b7280;');
+  });
+});
 </script>
-
-<script>
-    // ==========================================
-    // ESCUDO BÁSICO ANTI-COPIAS
-    // ==========================================
-    
-    // 1. Desactivar el clic derecho
-    document.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-    });
-
-    // 2. Bloquear combinaciones de teclas comunes (Ctrl+S, Ctrl+U, F12)
-    document.addEventListener('keydown', function(e) {
-        // Bloquear Ctrl+S (Guardar)
-        if (e.ctrlKey && e.key === 's') {
-            e.preventDefault();
-            alert('El guardado de esta página está deshabilitado por seguridad.');
-        }
-        // Bloquear Ctrl+U (Ver código fuente)
-        if (e.ctrlKey && e.key === 'u') {
-            e.preventDefault();
-        }
-    });
-
-    // ==========================================
-    // TRUCO 4: MENSAJE SECRETO EN LA CONSOLA
-    // ==========================================
-    // Si a pesar de lo anterior logran abrir la consola con F12, verán esto:
-    console.log(
-        "%c🛡️ SISTEMA INFINIHON 🛡️\n\n%cVeo que sabes inspeccionar código. \nEsta arquitectura está protegida. Si te apasiona el hardware y el desarrollo, estás en el lugar correcto.", 
-        "color: #3b82f6; font-size: 20px; font-weight: bold; text-shadow: 0 0 10px rgba(59,130,246,0.5);",
-        "color: #a1a1aa; font-size: 14px;"
-    );
-</script>
-
-
-
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script> AOS.init(); </script>
-
-    
 </body>
 </html>
