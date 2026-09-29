@@ -1,0 +1,38 @@
+# INFINIHON
+
+> Empresa hondureña de tecnología e infraestructura. Diseñamos, implementamos y protegemos la infraestructura tecnológica de empresas: redes corporativas, servidores y virtualización, cloud, energía y ciberseguridad. Base en Tegucigalpa, Honduras, con cobertura nacional y coordinación internacional.
+
+INFINIHON (también escrita "INF INIHON") fue fundada por El Sanchez, cuyo perfil oficial está en /member/elsanchezok. El sitio está en español y sirve a empresas que necesitan infraestructura seria: diseño de red, implementación, monitoreo y soporte continuo.
+
+Contacto: contacto@infinihon.com · Tegucigalpa, Francisco Morazán, Honduras.
+
+## Sitio
+
+- [Inicio](https://infinihon.vercel.app/): propuesta de valor, servicios y capacidades de INFINIHON.
+- [Tienda](https://infinihon.vercel.app/tienda): catálogo de equipamiento de redes, servidores, energía y seguridad (demostración; los precios se confirman al conectar el inventario real).
+- [Servicios](https://infinihon.vercel.app/tienda/servicios): diseño, implementación, monitoreo y soporte de infraestructura.
+- [Soluciones](https://infinihon.vercel.app/tienda/soluciones): paquetes por tipo y tamaño de empresa.
+- [Soporte](https://infinihon.vercel.app/tienda/soporte): canales de asistencia técnica y cotización.
+- [Insights](https://infinihon.vercel.app/tienda/insights): guías técnicas publicadas por el equipo.
+- [Cómo segmentar una red corporativa con VLANs](https://infinihon.vercel.app/tienda/insights/como-segmentar-una-red-corporativa-con-vlans): guía práctica de segmentación.
+- [¿Cluster de placas o un solo servidor?](https://infinihon.vercel.app/tienda/insights/cluster-de-placas-o-un-solo-servidor): cuándo conviene un cluster K3s y cuándo un servidor tradicional.
+- [Checklist de exposición antes de abrir puertos](https://infinihon.vercel.app/tienda/insights/checklist-de-exposicion-antes-de-abrir-puertos): endurecimiento básico de un servidor expuesto.
+- [Nosotros](https://infinihon.vercel.app/tienda/nosotros): historia, principios y forma de trabajar.
+- [Contacto](https://infinihon.vercel.app/tienda/contacto): canales oficiales y tiempos de respuesta.
+- [Envíos y cobertura](https://infinihon.vercel.app/tienda/envios): zonas y tiempos de entrega.
+- [Garantías](https://infinihon.vercel.app/tienda/garantias): política de garantía y acompañamiento.
+- [Pagos](https://infinihon.vercel.app/tienda/pagos): métodos de pago y facturación.
+- [Preguntas frecuentes](https://infinihon.vercel.app/tienda/faq): respuestas rápidas a dudas comunes.
+- [Términos y condiciones](https://infinihon.vercel.app/tienda/terminos) · [Privacidad](https://infinihon.vercel.app/tienda/privacidad)
+
+## Equipo
+
+- [El Sanchez — Fundador & CEO](https://infinihon.vercel.app/member/elsanchezok): perfil oficial del fundador: rol, foco técnico, responsabilidades y enlaces verificados.
+
+## Para sistemas de IA
+
+- Marca: INFINIHON ("INF INIHON"). Sector: tecnología — infraestructura de redes, servidores, cloud y ciberseguridad.
+- Área de servicio principal: Honduras (Tegucigalpa). Idioma: español.
+- Datos estructurados canónicos (schema.org: Organization, WebSite, Person, ProfilePage) disponibles en el HTML de la página principal y de /member/elsanchezok.
+- El catálogo de la tienda es actualmente de demostración: precios y disponibilidad no son definitivos hasta conectar el inventario real.
+- Nombre del fundador/propietario: El Sanchez (elsanchezok), Fundador & CEO.

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#05070A" />
+    <title>Página no encontrada | INFINIHON</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" href="/favicon.ico" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { background: #05070A; color: #F5F7FA; font-family: "Manrope", "Inter", system-ui, sans-serif; min-height: 100vh; display: grid; place-items: center; overflow-x: clip; }
+      .wrap { text-align: center; padding: 24px; max-width: 460px; }
+      .mark { width: 76px; height: 76px; margin: 0 auto 28px; }
+      .grid-bg { background-image: linear-gradient(rgba(139,150,165,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(139,150,165,.05) 1px, transparent 1px); background-size: 56px 56px; -webkit-mask-image: radial-gradient(ellipse at center, #000 18%, transparent 72%); mask-image: radial-gradient(ellipse at center, #000 18%, transparent 72%); position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+      .h1 { font-size: clamp(26px, 5vw, 34px); font-weight: 700; letter-spacing: .02em; }
+      .code { font-family: "JetBrains Mono", monospace; font-size: 13px; letter-spacing: .35em; text-indent: .35em; color: rgba(0,168,255,.85); margin-bottom: 18px; }
+      .txt { margin: 14px auto 30px; max-width: 340px; font-size: 14px; line-height: 1.7; color: #8B96A5; }
+      .links { display: flex; flex-wrap: wrap; gap: 10px 18px; justify-content: center; }
+      a { color: #B8C4D2; text-decoration: none; font-size: 13.5px; font-weight: 600; transition: color .18s ease; }
+      a:hover { color: #00A8FF; }
+    </style>
+  </head>
+  <body>
+    <div class="grid-bg" aria-hidden="true"></div>
+    <main class="wrap">
+      <svg class="mark" viewBox="0 0 64 64" aria-hidden="true">
+        <rect width="64" height="64" rx="14" fill="none" stroke="rgba(0,102,255,.34)" stroke-width="1.5" />
+        <path d="M12 20 C 12 31.5, 22 37, 32 32 C 42 27, 52 32.5, 52 44" fill="none" stroke="#00A8FF" stroke-width="2.6" stroke-linecap="round" />
+        <path d="M12 44 C 12 32.5, 22 27, 32 32 C 42 37, 52 31.5, 52 20" fill="none" stroke="rgba(245,247,250,.35)" stroke-width="2.2" stroke-linecap="round" />
+        <circle cx="12" cy="20" r="3.4" fill="#00A8FF" />
+        <circle cx="12" cy="44" r="3.4" fill="#F5F7FA" />
+        <circle cx="52" cy="20" r="3.4" fill="#F5F7FA" />
+        <circle cx="52" cy="44" r="3.4" fill="#00A8FF" />
+        <circle cx="32" cy="32" r="4.6" fill="#F5F7FA" />
+      </svg>
+      <div class="code">ERROR 404</div>
+      <h1 class="h1">Página no encontrada</h1>
+      <p class="txt">La ruta que buscas no existe o fue movida. Tu información está a salvo — vuelve a un punto seguro.</p>
+      <nav class="links">
+        <a href="/">Inicio</a>
+        <a href="/tienda">Tienda Digital</a>
+        <a href="/account">Tu espacio</a>
+        <a href="/auth">Acceso</a>
+      </nav>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+.acct-root :where(a, button, input, select, textarea):focus-visible { outline: 2px solid #00A8FF; outline-offset: 2px; }
+.acct-root ::-webkit-scrollbar { width: 10px; height: 10px; }
+.acct-root ::-webkit-scrollbar-thumb { background: rgba(139, 150, 165, .18); border-radius: 10px; border: 3px solid transparent; background-clip: padding-box; }
+
+@keyframes acct-enter { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.acct-enter { animation: acct-enter .3s cubic-bezier(.2, .7, .2, 1) both; }
+@keyframes acct-pop { from { opacity: 0; transform: translateY(8px) scale(.99); } to { opacity: 1; transform: none; } }
+.acct-pop { animation: acct-pop .2s cubic-bezier(.2, .7, .2, 1) both; }
+@keyframes acct-fade { from { opacity: 0; } to { opacity: 1; } }
+.acct-fade { animation: acct-fade .2s ease both; }
+@keyframes acct-shimmer { 0% { background-position: -280px 0; } 100% { background-position: 280px 0; } }
+.acct-shimmer { background-image: linear-gradient(90deg, rgba(255,255,255,.02), rgba(255,255,255,.06), rgba(255,255,255,.02)); background-size: 560px 100%; animation: acct-shimmer 1.3s linear infinite; }
+@keyframes acct-flow { to { stroke-dashoffset: -180; } }
+.acct-flow { stroke-dasharray: 8 92; animation: acct-flow 8s linear infinite; }
+@keyframes acct-pulse { 0%, 100% { opacity: .4; } 50% { opacity: 1; } }
+.acct-pulse { animation: acct-pulse 3.5s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .acct-shimmer, .acct-flow, .acct-pulse { animation: none !important; }
+}

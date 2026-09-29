@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Build outputs (los single-file publicados viven en la raiz del repo)
+dist/
+*.local
+
+# Entorno y herramientas
+.env
+.env.*
+vercel/.?
+.vercel
+.playwright-mcp/
+
+# Sistema
+.DS_Store
+Thumbs.db
