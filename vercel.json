@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "buildCommand": "cd web/app/admin && npm run build && cd ../account && npm run build && cd ../tienda && npm run build",
   "outputDirectory": "web",
   "rewrites": [
+    { "source": "/", "destination": "/index.html" },
     { "source": "/tienda", "destination": "/tienda.html" },
     { "source": "/tienda/:path*", "destination": "/tienda.html" },
     { "source": "/auth", "destination": "/auth.html" },
