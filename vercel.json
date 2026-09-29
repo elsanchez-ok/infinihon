@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "buildCommand": "cd web/app/admin && npm run build && cd ../account && npm run build && cd ../tienda && npm run build",
+  "outputDirectory": "web",
+  "rewrites": [
+    { "source": "/tienda", "destination": "/tienda.html" },
+    { "source": "/tienda/:path*", "destination": "/tienda.html" },
+    { "source": "/auth", "destination": "/auth.html" },
+    { "source": "/auth/:path*", "destination": "/auth.html" },
+    { "source": "/admin", "destination": "/admin.html" },
+    { "source": "/admin/:path*", "destination": "/admin.html" },
+    { "source": "/account", "destination": "/account.html" },
+    { "source": "/account/:path*", "destination": "/account.html" },
+    { "source": "/member", "destination": "/member.html" },
+    { "source": "/member/:path*", "destination": "/member.html" }
+  ]
+}
