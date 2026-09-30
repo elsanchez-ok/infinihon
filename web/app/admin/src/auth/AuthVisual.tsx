@@ -3,13 +3,8 @@ import type { ReactNode } from "react";
 export function AuthMark({ compact = false }: { compact?: boolean }) {
   return (
     <a className="auth-mark" href="/" aria-label="INFINIHON — volver al sitio">
-      <svg viewBox="0 0 38 38" className="auth-mark-symbol" aria-hidden="true">
-        <rect x=".5" y=".5" width="37" height="37" fill="#05070A" stroke="#0066FF" />
-        <path d="M8 25.5C8 16 14.5 12 19 19c4.5 7 11 3 11-6.5" fill="none" stroke="#F5F7FA" strokeWidth="2" strokeLinecap="round" />
-        <path d="M8 12.5c0 9.5 6.5 13.5 11 6.5 4.5-7 11-3 11 6.5" fill="none" stroke="#0066FF" strokeWidth="2" strokeLinecap="round" />
-        <circle cx="19" cy="19" r="2" fill="#00A8FF" />
-      </svg>
-      <span className="auth-mark-word">INFINIHON{!compact && <small>TECHNOLOGY & INFRASTRUCTURE</small>}</span>
+      <img src="/assets/infinihon.png" alt="INFINIHON" className="auth-mark-symbol" />
+      {!compact && <span className="auth-mark-word">Infrastructure · Innovation · Honduras</span>}
     </a>
   );
 }

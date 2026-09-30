@@ -54,13 +54,10 @@ function isActive(pathname: string, to: string) {
 
 export function Mark({ collapsed }: { collapsed?: boolean }) {
   return (
-    <span className="flex items-center gap-3">
-      <img src="/assets/infinihon.png" alt="INFINIHON" className="h-8 w-8 shrink-0" />
+    <span className={cn("flex flex-col items-center gap-1.5", collapsed ? "" : "w-max")}>
+      <img src="/assets/infinihon.png" alt="INFINIHON" className="h-8 w-auto shrink-0" />
       {!collapsed && (
-        <span className="leading-none">
-          <span className="block text-[14px] font-extrabold tracking-[0.12em] text-snow">INFINIHON</span>
-          <span className="mt-1.5 block font-mono text-[8.5px] uppercase tracking-[0.26em] text-volt/90">Control Center</span>
-        </span>
+        <span className="block max-w-[200px] text-center font-mono text-[7.5px] uppercase leading-[1.7] tracking-[0.22em] text-volt/90">Infrastructure · Innovation · Honduras</span>
       )}
     </span>
   );

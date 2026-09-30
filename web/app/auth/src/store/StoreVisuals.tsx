@@ -4,7 +4,7 @@ import type { VisualKind } from "./data";
 export function StoreMark({ className }: { className?: string }) {
   return (
     <a href="#top" className={cn("flex items-center gap-3", className)} aria-label="INFINIHON — inicio">
-      <img src="/assets/infinihon.png" alt="INFINIHON" className="h-8 w-8 shrink-0" />
+      <img src="/assets/infinihon.png" alt="INFINIHON" className="h-8 w-auto shrink-0" />
       <span className="leading-none">
         <span className="block text-[15px] font-extrabold tracking-[0.13em] text-snow">INFINIHON</span>
         <span className="mt-1 block font-mono text-[8px] uppercase tracking-[0.25em] text-steel">Technology & Infrastructure</span>

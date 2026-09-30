@@ -4,7 +4,7 @@ export function AuthMark({ compact = false }: { compact?: boolean }) {
   return (
     <a className="auth-mark" href="/" aria-label="INFINIHON — volver al sitio">
       <img src="/assets/infinihon.png" alt="INFINIHON" className="auth-mark-symbol" />
-      <span className="auth-mark-word">INFINIHON{!compact && <small>TECHNOLOGY & INFRASTRUCTURE</small>}</span>
+      {!compact && <span className="auth-mark-word">Infrastructure · Innovation · Honduras</span>}
     </a>
   );
 }

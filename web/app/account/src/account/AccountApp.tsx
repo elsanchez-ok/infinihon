@@ -282,7 +282,8 @@ function LoginGate({ navigate }: { navigate: (to: string) => void }) {
   return (
     <div className="acct-root min-h-screen bg-obsidian text-snow">
       <main className="mx-auto flex min-h-screen w-full max-w-md flex-col items-center justify-center px-4 text-center">
-        <div className="font-mono text-[10.5px] uppercase tracking-[0.24em] text-volt">Portal de usuario</div>
+        <AccountMark />
+        <div className="mt-6 font-mono text-[10.5px] uppercase tracking-[0.24em] text-volt">Portal de usuario</div>
         <h1 className="mt-5 text-4xl font-extrabold uppercase tracking-[-0.03em]">Tu espacio te espera.</h1>
         <p className="mt-4 text-[14.5px] leading-relaxed text-steel">
           Inicia sesión para ver tus servicios, pedidos, solicitudes y soporte — todo sincronizado con tu cuenta.

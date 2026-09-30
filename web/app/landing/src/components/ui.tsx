@@ -93,19 +93,9 @@ export function SectionLabel({ index, children, className }: { index: string; ch
 
 export function Logo({ className }: { className?: string }) {
   return (
-    <a href="#inicio" className={cn("group flex items-center gap-3", className)} aria-label="INF INIHON — inicio">
-      <svg viewBox="0 0 40 40" className="h-8 w-8" aria-hidden>
-        <rect x="0.5" y="0.5" width="39" height="39" rx="2" fill="none" stroke="#003B73" />
-        <path d="M8 26 C 8 14, 18 14, 20 20 S 32 26, 32 14" fill="none" stroke="#0066FF" strokeWidth="2" strokeLinecap="round" />
-        <path d="M8 14 C 8 26, 18 26, 20 20 S 32 14, 32 26" fill="none" stroke="#F5F7FA" strokeWidth="2" strokeLinecap="round" opacity="0.9" />
-        <circle cx="20" cy="20" r="2" fill="#00A8FF" />
-      </svg>
-      <span className="leading-none">
-        <span className="block text-[15px] font-extrabold tracking-[0.14em] text-snow">
-          INF<span className="text-tech">·</span>INIHON
-        </span>
-        <span className="mt-1 block font-mono text-[8.5px] uppercase tracking-[0.28em] text-steel">Technology & Infrastructure</span>
-      </span>
+    <a href="#inicio" className={cn("group flex flex-col items-center gap-1.5", className)} aria-label="INFINIHON — inicio">
+      <img src="/assets/infinihon.png" alt="INFINIHON" className="h-8 w-auto shrink-0" />
+      <span className="block font-mono text-[8px] uppercase leading-none tracking-[0.28em] text-steel">Infrastructure · Innovation · Honduras</span>
     </a>
   );
 }

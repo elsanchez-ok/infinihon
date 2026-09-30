@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Compass, LogIn, ShieldAlert } from "lucide-react";
 import { AdminLayout } from "./Layout";
+import { Mark } from "./Layout";
 import { AdminProvider } from "./store";
 import { Button, EmptyState, LoadingState, Panel, Toaster } from "./ui";
 import { AnalyticsPage, OverviewPage } from "./pages/Overview";
@@ -81,7 +82,8 @@ function NoSession() {
   return (
     <div className="min-h-screen bg-obsidian text-snow">
       <main className="mx-auto flex min-h-screen w-full max-w-md flex-col items-center justify-center px-4 text-center">
-        <div className="font-mono text-[10.5px] uppercase tracking-[0.24em] text-volt">Control Center</div>
+        <Mark />
+        <div className="mt-6 font-mono text-[10.5px] uppercase tracking-[0.24em] text-volt">Control Center</div>
         <h1 className="mt-5 text-4xl font-extrabold uppercase tracking-[-0.03em]">Acceso restringido.</h1>
         <p className="mt-4 text-[14.5px] leading-relaxed text-steel">
           Inicia sesión con una cuenta de administrador para gestionar el catálogo, pedidos y usuarios de INFINIHON.

@@ -11,12 +11,9 @@ import { fmtDate, statusTone } from "./data";
 
 export function AccountMark({ href = "/account", onNavigate }: { href?: string; onNavigate?: (to: string) => void }) {
   return (
-    <a href={href} onClick={(e) => { if (onNavigate) { e.preventDefault(); onNavigate(href); } }} className="flex items-center gap-3" aria-label="INFINIHON — inicio del portal">
-      <img src="/assets/infinihon.png" alt="INFINIHON" className="h-9 w-9 shrink-0" />
-      <span className="leading-none">
-        <span className="block text-[15px] font-extrabold tracking-[0.12em] text-snow">INFINIHON</span>
-        <span className="mt-1.5 block font-mono text-[8.5px] uppercase tracking-[0.26em] text-steel">Tu espacio</span>
-      </span>
+    <a href={href} onClick={(e) => { if (onNavigate) { e.preventDefault(); onNavigate(href); } }} className="flex flex-col items-center gap-1.5" aria-label="INFINIHON — inicio del portal">
+      <img src="/assets/infinihon.png" alt="INFINIHON" className="h-9 w-auto shrink-0" />
+      <span className="block font-mono text-[8px] uppercase leading-none tracking-[0.28em] text-steel">Infrastructure · Innovation · Honduras</span>
     </a>
   );
 }

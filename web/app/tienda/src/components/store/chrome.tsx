@@ -9,18 +9,14 @@ import { Corners } from "../ui";
 
 export function StoreLogo({ compact = false }: { compact?: boolean }) {
   return (
-    <Link to="/" className="group flex items-center gap-3" aria-label="INFINIHON — tienda">
-      <svg viewBox="0 0 36 36" className={cn("shrink-0", compact ? "h-8 w-8" : "h-9 w-9")} aria-hidden>
-        <rect x="0.5" y="0.5" width="35" height="35" rx="2" fill="none" stroke="#003B73" />
-        <path d="M7 24 C 7 13, 16 13, 18 18 S 29 24, 29 13" fill="none" stroke="#0066FF" strokeWidth="2.2" strokeLinecap="round" />
-        <path d="M7 13 C 7 24, 16 24, 18 18 S 29 13, 29 24" fill="none" stroke="#F5F7FA" strokeWidth="2.2" strokeLinecap="round" opacity="0.85" />
-        <circle cx="18" cy="18" r="2" fill="#00A8FF" />
-      </svg>
+    <Link to="/" className="group flex flex-col items-center gap-1.5" aria-label="INFINIHON — tienda">
+      <img
+        src="/assets/infinihon.png"
+        alt="INFINIHON"
+        className={cn("shrink-0 w-auto", compact ? "h-8" : "h-9")}
+      />
       {!compact && (
-        <span className="leading-none">
-          <span className="block text-[17px] font-extrabold tracking-[0.18em] text-snow">INFINIHON</span>
-          <span className="mt-1 block font-mono text-[8px] uppercase tracking-[0.3em] text-steel">Technology & Infrastructure</span>
-        </span>
+        <span className="block font-mono text-[9px] uppercase leading-none tracking-[0.28em] text-steel">Infrastructure · Innovation · Honduras</span>
       )}
     </Link>
   );
