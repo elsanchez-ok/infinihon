@@ -139,9 +139,13 @@ export function IntegrationsPage() {
   const { can, toast } = useAdmin();
   if (!can("integrations.view")) return <Forbidden permission="integrations.view" />;
   const categories = [...new Set(integrations.map((i) => i.category))];
+  const connectedCount = integrations.filter((i) => i.status === "Connected").length;
   return (
     <>
-      <PageHeader eyebrow="Infrastructure" title="Integrations" description="External services the Control Center can connect to. No integration is connected in this environment."
+      <PageHeader eyebrow="Infrastructure" title="Integrations"
+        description={connectedCount
+          ? `External services the Control Center can connect to. ${connectedCount} of ${integrations.length} integrations are connected in this environment.`
+          : "External services the Control Center can connect to. No integration is connected in this environment."}
         breadcrumbs={[{ label: "Overview", to: "/admin" }, { label: "Integrations" }]} />
       <div className="mb-4 grid grid-cols-3 gap-3">
         {(["Connected", "Not configured", "Unavailable"] as const).map((s) => (
@@ -160,9 +164,13 @@ export function IntegrationsPage() {
                     <div className="flex flex-wrap items-center gap-2"><span className="text-sm font-semibold">{i.name}</span><StatusBadge status={i.status} /></div>
                     <p className="mt-1 text-xs text-steel">{i.description}</p>
                   </div>
-                  <Button size="sm" disabled={!can("integrations.edit") || i.status === "Unavailable"}
-                    onClick={() => toast("Configuring integrations requires a backend to store credentials securely.", "info")}
-                    className={cn(i.status === "Unavailable" && "hidden sm:inline-flex")}>Configure</Button>
+                  {i.status === "Connected" ? (
+                    <Button size="sm" disabled>Connected</Button>
+                  ) : (
+                    <Button size="sm" disabled={!can("integrations.edit") || i.status === "Unavailable"}
+                      onClick={() => toast("Configuring integrations requires a backend to store credentials securely.", "info")}
+                      className={cn(i.status === "Unavailable" && "hidden sm:inline-flex")}>Configure</Button>
+                  )}
                 </div>
               ))}
             </div>
