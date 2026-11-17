@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { Corners } from "./ui";
+import { cn } from "../utils/cn";
 
 export const CONTACT_EMAIL = "contacto@infinihon.com";
 
@@ -33,7 +34,10 @@ export default function ContactForm({ className }: { className?: string }) {
   return (
     <div
       id="formulario"
-      className={className + " relative scroll-mt-28 border border-white/[0.08] bg-obsidian/70 p-6 backdrop-blur-md md:p-10"}
+      className={cn(
+        "relative scroll-mt-28 border border-white/[0.08] bg-obsidian/70 p-6 backdrop-blur-md md:p-10",
+        className
+      )}
     >
       <Corners />
       <div className="mb-8 flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.06] pb-4 font-mono text-[10px] uppercase tracking-[0.22em] text-steel">
