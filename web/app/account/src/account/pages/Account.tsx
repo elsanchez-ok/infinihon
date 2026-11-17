@@ -88,6 +88,8 @@ export function ProfilePage() {
 }
 /* ─────────── Seguridad ─────────── */
 export function SecurityPage() {
+  const { data, patch, toast } = useAccount();
+  const [confirmSignOut, setConfirmSignOut] = useState(false);
   const sec = data.security;
   const activity = data.notifications.filter((n) => n.group === "Seguridad");
 
@@ -198,7 +200,7 @@ export function SettingsPage() {
       <div className="grid gap-4 lg:grid-cols-2">
         <Panel title="Preferencias">
           <div className="grid gap-5 sm:grid-cols-2">
-            <Field label="Idioma" htmlFor="st-lang"><select id="st-lang" className={`${inputCls} [&>option]:bg-ink`} value={prefs.language} onChange={(e) => set("language", e.target.value)}>
+            <Field label="Idioma" htmlFor="st-lang"><select id="st-lang" className={`${inputCls} [&>option]:bg-ink`} value={prefs.language} onChange={(e) => set("language", e.target.value as Locale)}>
                 <option value="es-HN">Español (Honduras)</option><option value="en-US">Inglés (Estados Unidos)</option>
             </select></Field>
             <Field label="Zona horaria" htmlFor="st-tz"><select id="st-tz" className={`${inputCls} [&>option]:bg-ink`} value={prefs.timezone} onChange={(e) => set("timezone", e.target.value)}>
