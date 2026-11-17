@@ -86,7 +86,7 @@ function NoSession() {
         <div className="mt-6 font-mono text-[10.5px] uppercase tracking-[0.24em] text-volt">Control Center</div>
         <h1 className="mt-5 text-4xl font-extrabold uppercase tracking-[-0.03em]">Acceso restringido.</h1>
         <p className="mt-4 text-[14.5px] leading-relaxed text-steel">
-          Inicia sesión con una cuenta de administrador para gestionar el catálogo, pedidos y usuarios de INFINIHON.
+          Inicia sesión con una cuenta de administrador para gestionar el catálogo, pedidos y usuarios de InfiniHon Corp.
         </p>
         <a href="/auth" className="mt-8 inline-flex h-11 items-center gap-2 rounded-lg bg-tech px-6 text-sm font-semibold text-snow hover:bg-[#1a75ff]">
           <LogIn className="h-4 w-4" aria-hidden />Iniciar sesión
@@ -105,7 +105,7 @@ function Forbidden({ email }: { email: string }) {
         <h1 className="mt-5 text-3xl font-extrabold uppercase tracking-[-0.03em]">Sin permisos de administrador.</h1>
         <p className="mt-4 text-[14.5px] leading-relaxed text-steel">
           La cuenta <span className="font-mono text-snow">{email}</span> no tiene rol de administrador.
-          Si deberías tenerlo, contacta al equipo de INFINIHON.
+          Si deberías tenerlo, contacta al equipo de InfiniHon Corp.
         </p>
         <a href="/account" className="mt-8 inline-flex h-11 items-center gap-2 rounded-lg bg-tech px-6 text-sm font-semibold text-snow hover:bg-[#1a75ff]">Ir a mi portal</a>
         <button onClick={() => { void import("./supabaseSync").then((m) => m.signOutAndGo()); }} className="mt-4 text-xs text-steel hover:text-snow">Cerrar sesión</button>
@@ -118,7 +118,7 @@ export default function AdminApp({ pathname, navigate }: { pathname: string; nav
   const gate = useAdminGate();
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    document.title = "INFINIHON — Control Center";
+    document.title = "InfiniHon Corp. — Control Center";
     setLoading(true);
     const t = window.setTimeout(() => setLoading(false), 180);
     return () => window.clearTimeout(t);

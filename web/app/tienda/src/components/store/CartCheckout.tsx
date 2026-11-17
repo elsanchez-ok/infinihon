@@ -312,7 +312,7 @@ export function CheckoutPage() {
               </div>
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <button onClick={() => { clear(); navigate("/catalogo"); }} className="bg-tech px-6 py-4 text-sm font-semibold hover:bg-[#1a75ff]">Seguir explorando</button>
-                <Link to="/soporte" className="border border-white/15 px-6 py-4 text-center text-sm font-semibold hover:border-volt/60">Contactar a Infinihon</Link>
+                <Link to="/soporte" className="border border-white/15 px-6 py-4 text-center text-sm font-semibold hover:border-volt/60">Contactar a InfiniHon Corp.</Link>
               </div>
             </section>
           )}

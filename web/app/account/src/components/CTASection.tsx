@@ -63,7 +63,7 @@ export default function CTASection() {
             <span className="text-snow">Diseñemos la infraestructura para hacerlo posible.</span>
           </Reveal>
           <Reveal delay={400} className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
-            <PrimaryButton href="#formulario">Hablar con InfiniHon</PrimaryButton>
+            <PrimaryButton href="#formulario">Hablar con InfiniHon Corp.</PrimaryButton>
             <GhostButton href="#servicios">Ver servicios</GhostButton>
           </Reveal>
         </div>

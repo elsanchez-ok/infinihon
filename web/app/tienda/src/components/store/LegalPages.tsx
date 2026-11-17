@@ -116,7 +116,7 @@ export function TerminosPage() {
             por adelantado.
           </p>
         </DocSection>
-        <DocSection n="02" title="Qué vende Infinihon">
+        <DocSection n="02" title="Qué vende InfiniHon Corp.">
           <DocList
             items={[
               "Hardware de redes, cómputo, almacenamiento, seguridad y energía.",
@@ -157,7 +157,7 @@ export function TerminosPage() {
         </DocSection>
         <DocSection n="07" title="Límites de responsabilidad">
           <p>
-            Infinihon responde por sus errores de configuración y por la garantía de los equipos que vende, y no responde por
+            InfiniHon Corp. responde por sus errores de configuración y por la garantía de los equipos que vende, y no responde por
             lucro cesante, pérdida de datos sin respaldo ni fallas ajenas a lo contratado (energía eléctrica, ISP, actos de
             terceros). Recomendamos — y vendemos — respaldos y redundancia precisamente por eso.
           </p>
@@ -169,7 +169,7 @@ export function TerminosPage() {
           </p>
         </DocSection>
       </div>
-      <DocFooter note="Documento de alcance general para la operación comercial de Infinihon." />
+      <DocFooter note="Documento de alcance general para la operación comercial de InfiniHon Corp." />
     </LegalShell>
   );
 }
@@ -233,7 +233,7 @@ export function PrivacidadPage() {
           </p>
         </DocSection>
       </div>
-      <DocFooter note="Política aplicable a tienda e interacciones comerciales de Infinihon." />
+      <DocFooter note="Política aplicable a tienda e interacciones comerciales de InfiniHon Corp." />
     </LegalShell>
   );
 }
@@ -251,7 +251,7 @@ export function GarantiasPage() {
       <div className="mt-10">
         <DocSection n="01" title="Garantía de fabricante">
           <p>
-            Todo equipo nuevo incluye la garantía oficial de su fabricante (típicamente 12 meses, algunos 24 o más). Infinihon
+            Todo equipo nuevo incluye la garantía oficial de su fabricante (típicamente 12 meses, algunos 24 o más). InfiniHon Corp.
             gestiona el proceso por ti: recibimos el equipo, diagnosticamos, tramitamos con el fabricante y te devolvemos
             funcionando. Tú no peleas con nadie.
           </p>
@@ -265,7 +265,7 @@ export function GarantiasPage() {
             ]}
           />
         </DocSection>
-        <DocSection n="03" title="Garantía de instalación Infinihon">
+        <DocSection n="03" title="Garantía de instalación InfiniHon Corp.">
           <p>
             Todo servicio que ejecutamos lleva 30 días de garantía de configuración: si el problema viene de algo que
             instalamos o configuramos mal, lo corregimos sin costo, a la brevedad y sin discutir. Si el problema viene de otra
@@ -385,7 +385,7 @@ export function PagosPage() {
       <PageHead
         kicker="Compra"
         title="Métodos de pago"
-        sub="Cómo se paga en Infinihon: transferencia, tarjeta y efectivo, con el flujo de cotización que protege a las dos partes."
+        sub="Cómo se paga en InfiniHon Corp.: transferencia, tarjeta y efectivo, con el flujo de cotización que protege a las dos partes."
       />
       <div className="mt-10">
         <DocSection n="01" title="El flujo primero">
@@ -397,7 +397,7 @@ export function PagosPage() {
         </DocSection>
         <div className="my-10 grid gap-px bg-white/[0.07] sm:grid-cols-2">
           {[
-            ["Transferencia bancaria", "Cuentas en Lempiras y Dólares a nombre de Infinihon. El más ágil para montos empresariales; el despacho se activa con el comprobante verificado."],
+            ["Transferencia bancaria", "Cuentas en Lempiras y Dólares a nombre de InfiniHon Corp. El más ágil para montos empresariales; el despacho se activa con el comprobante verificado."],
             ["Tarjeta de crédito / débito", "Al habilitar el pago en línea: Visa y Mastercard con procesador certificado PCI-DSS. Nunca almacenamos el número de tu tarjeta en nuestros sistemas."],
             ["Efectivo contra entrega", "Disponible en Tegucigalpa para compras menores a $300. El repartidor lleva tu factura y tu recibo."],
             ["Financiamiento empresarial", "Para proyectos de infraestructura: anticipo + hitos de entrega. Estructura acordada en la cotización, por escrito."],
@@ -447,7 +447,7 @@ const FAQ_ITEMS: [string, string][] = [
   ["¿Puedo pedir equipos que no aparecen en el catálogo?", "Sí. El catálogo muestra la línea base; importamos bajo pedido casi cualquier equipo de red, cómputo o energía. Pídelo por soporte y te cotizamos con tiempo de entrega real."],
   ["¿Dan soporte a infraestructura comprada en otro lado?", "Sí, con un diagnóstico inicial. Si la base está sana, la operamos; si está en riesgo, te lo decimos claro y cotizamos la corrección. No cobramos por decir verdades incómodas."],
   ["¿Trabajan fuera de Honduras?", "Proyectos internacionales se coordinan caso a caso: alcance, viaje y condiciones por escrito antes de mover un solo cable. El soporte remoto no tiene fronteras."],
-  ["¿Cómo pido una cotización formal para mi empresa?", "En cualquier página, botón «Hablar con Infinihon». Recibes respuesta con alcance y precios en menos de un día hábil. Si tu caso es urgente, dilo en el mensaje y priorizamos."],
+  ["¿Cómo pido una cotización formal para mi empresa?", "En cualquier página, botón «Hablar con InfiniHon Corp.». Recibes respuesta con alcance y precios en menos de un día hábil. Si tu caso es urgente, dilo en el mensaje y priorizamos."],
 ];
 
 export function FaqPage() {
@@ -504,7 +504,7 @@ export function NosotrosPage() {
     <LegalShell crumbs={["Nosotros"]}>
       <PageHead
         kicker="Empresa"
-        title="Infinihon, de qué va"
+        title="InfiniHon Corp., de qué va"
         sub="Somos una empresa hondureña de tecnología e infraestructura. Diseñamos, implementamos y mantenemos lo que mantiene conectadas a las empresas."
       />
       <Reveal className="mt-10 border border-white/[0.08] bg-ink/40 p-6 md:p-10">
@@ -514,7 +514,7 @@ export function NosotrosPage() {
           lines={["Cada render", "es una promesa", "cumplida."]}
         />
         <p className="mt-7 max-w-2xl text-[15.5px] leading-relaxed text-steel">
-          Infinihon nació de una frustración conocida: redes que se caen cada viernes, «expertos» que desaparecen después de
+          InfiniHon Corp. nació de una frustración conocida: redes que se caen cada viernes, «expertos» que desaparecen después de
           cobrar y equipos caros mal configurados. Decidimos hacer lo contrario — ingeniería seria, documentada y con
           respaldo local, al estándar que esperarías de un proveedor internacional.
         </p>
@@ -863,7 +863,7 @@ export function InsightPage({ slug }: { slug: string }) {
   if (!item) {
     return (
       <LegalShell crumbs={["Insights"]}>
-        <PageHead kicker="Infinihon Tech" title="Artículo no encontrado" sub="Ese contenido no existe o cambió de dirección." />
+        <PageHead kicker="InfiniHon Corp. Tech" title="Artículo no encontrado" sub="Ese contenido no existe o cambió de dirección." />
         <Link to="/insights" className="mt-10 inline-flex bg-tech px-6 py-3.5 text-sm font-semibold hover:bg-[#1a75ff]">
           Ver todos los artículos <span className="font-mono">→</span>
         </Link>
@@ -943,7 +943,7 @@ export function InsightsIndexPage() {
   return (
     <LegalShell crumbs={["Insights"]}>
       <PageHead
-        kicker="Infinihon Tech"
+        kicker="InfiniHon Corp. Tech"
         title="Guías y comparativas"
         sub="Escrito por el equipo que implementa, no por un redactor de contenidos. Sin humo, con checklists aplicables."
       />

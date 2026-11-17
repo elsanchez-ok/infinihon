@@ -39,7 +39,7 @@ export function UsersPage() {
 
   return (
     <>
-      <PageHeader eyebrow="Platform" title="Users" description="Accounts that use InfiniHon's platform and store. Administrators are managed separately."
+      <PageHeader eyebrow="Platform" title="Users" description="Accounts that use InfiniHon Corp.'s platform and store. Administrators are managed separately."
         breadcrumbs={[{ label: "Overview", to: "/admin" }, { label: "Users" }]} />
       <Panel padded={false}>
         <FilterBar>
@@ -309,7 +309,7 @@ export function ServicesPage() {
 
   return (
     <>
-      <PageHeader eyebrow="Platform" title="Services" description="Professional services InfiniHon offers. Services use quotes instead of fixed prices."
+      <PageHeader eyebrow="Platform" title="Services" description="Professional services InfiniHon Corp. offers. Services use quotes instead of fixed prices."
         breadcrumbs={[{ label: "Overview", to: "/admin" }, { label: "Services" }]}
         actions={can("services.create") && <Button variant="primary" icon={Plus} onClick={() => { setFeatureInput(""); setEditing({ id: newId("s"), name: "", description: "", category: "Infrastructure", status: "Draft", cta: "Request a Quote", features: [], visible: false, updated: new Date().toISOString(), demo: false }); }}>New service</Button>} />
       {data.services.length ? (

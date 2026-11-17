@@ -9,12 +9,17 @@ import { Corners } from "../ui";
 
 export function StoreLogo({ compact = false }: { compact?: boolean }) {
   return (
-    <Link to="/" className="group flex flex-col items-center gap-1.5" aria-label="INFINIHON — tienda">
-      <img
-        src="/assets/infinihon.png"
-        alt="INFINIHON"
-        className={cn("shrink-0 w-auto", compact ? "h-8" : "h-9")}
-      />
+    <Link to="/" className="group flex flex-col items-center gap-1.5" aria-label="InfiniHon Corp. — tienda">
+      <span className="flex items-center">
+        <img
+          src="/assets/infinihon.png"
+          alt="InfiniHon Corp."
+          className={cn("shrink-0 w-auto", compact ? "h-8" : "h-9")}
+        />
+        <span className="ml-1 translate-y-[2px] font-mono text-[10px] font-semibold uppercase tracking-[0.1em] text-volt">
+          Corp.
+        </span>
+      </span>
       {!compact && (
         <span className="block font-mono text-[9px] uppercase leading-none tracking-[0.28em] text-steel">Infrastructure · Innovation · Honduras</span>
       )}
@@ -65,7 +70,7 @@ export function StoreNavbar() {
           <div className="mx-auto flex max-w-[1500px] items-center gap-3 px-4 py-2.5 md:px-8">
             <span className="hidden shrink-0 border border-volt/40 px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.2em] text-volt sm:block">Info</span>
             <p className="font-mono text-[10.5px] leading-4 tracking-[0.06em] text-steel">
-              Catálogo sincronizado con el panel de INFINIHON. Los productos <span className="text-snow">sin precio publicado</span> se cotizan a medida y el pago se coordina con nuestro equipo.
+              Catálogo sincronizado con el panel de InfiniHon Corp. Los productos <span className="text-snow">sin precio publicado</span> se cotizan a medida y el pago se coordina con nuestro equipo.
             </p>
             <button onClick={() => setDemoNotice(false)} className="ml-auto shrink-0 font-mono text-[11px] text-steel hover:text-snow" aria-label="Cerrar aviso">✕</button>
           </div>
@@ -194,7 +199,7 @@ export function CatalogNotice() {
       <div className="mx-auto flex max-w-[1500px] items-center gap-3 px-4 py-2.5 md:px-8">
         <span className="hidden shrink-0 border border-volt/40 px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.2em] text-volt sm:block">Info</span>
         <p className="font-mono text-[10.5px] leading-4 tracking-[0.06em] text-steel">
-          Catálogo sincronizado con el panel de INFINIHON. Los productos <span className="text-snow">sin precio publicado</span> se cotizan a medida y el pago se coordina con nuestro equipo.
+          Catálogo sincronizado con el panel de InfiniHon Corp. Los productos <span className="text-snow">sin precio publicado</span> se cotizan a medida y el pago se coordina con nuestro equipo.
         </p>
         <button onClick={() => setDemoNotice(false)} className="ml-auto shrink-0 font-mono text-[11px] text-steel hover:text-snow" aria-label="Cerrar aviso">
           ✕
@@ -468,7 +473,7 @@ export function StoreFooter() {
         </div>
 
         <div className="mt-14 flex flex-col gap-4 border-t border-white/[0.06] py-7 font-mono text-[10px] uppercase tracking-[0.2em] text-steel md:flex-row md:items-center md:justify-between">
-          <span>© {new Date().getFullYear()} INFINIHON · Technology & Infrastructure</span>
+          <span>© {new Date().getFullYear()} InfiniHon Corp. · Corporativo Tecnológico</span>
           <span className="flex flex-wrap items-center gap-4">
             <span>Catálogo sincronizado en vivo</span>
             <Link to="/sitio" className="text-snow/80 hover:text-volt">Sitio corporativo →</Link>
@@ -476,7 +481,7 @@ export function StoreFooter() {
         </div>
       </div>
       <div aria-hidden className="select-none overflow-hidden px-2 pb-2 text-center text-[13vw] font-extrabold leading-[0.78] tracking-[-0.06em] text-transparent [-webkit-text-stroke:1px_rgba(0,102,255,0.22)] md:text-[11vw]">
-        INFINIHON
+        INFINIHON CORP.
       </div>
     </footer>
   );

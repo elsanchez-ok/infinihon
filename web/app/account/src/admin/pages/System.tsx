@@ -206,7 +206,7 @@ export function SettingsPage() {
 
   return (
     <>
-      <PageHeader eyebrow="System" title="Settings" description="Platform configuration for InfiniHon."
+      <PageHeader eyebrow="System" title="Settings" description="Platform configuration for InfiniHon Corp."
         breadcrumbs={[{ label: "Overview", to: "/admin" }, { label: "Settings" }]}
         actions={editable && <><Button variant="ghost" disabled={!dirty} onClick={() => { setForm(data.settings); setErrors({}); }}>Discard</Button><Button variant="primary" icon={Save} disabled={!dirty} onClick={save}>Save changes</Button></>} />
       <Tabs tabs={settingsTabs} value={tab} onChange={setTab} />
@@ -264,7 +264,7 @@ export function SettingsPage() {
         {tab === "Appearance" && (
           <Panel title="Appearance">
             <div role="radiogroup" aria-label="Theme" className="grid gap-3 sm:grid-cols-2">
-              {[{ id: "Obsidian", note: "Default INFINIHON dark theme." }, { id: "Light", note: "Not available yet." }].map((t) => (
+              {[{ id: "Obsidian", note: "Default InfiniHon Corp. dark theme." }, { id: "Light", note: "Not available yet." }].map((t) => (
                 <button key={t.id} type="button" role="radio" aria-checked={form.theme === t.id} disabled={t.id === "Light"} onClick={() => set("theme", t.id)}
                   className={cn("rounded-lg border p-3 text-left disabled:opacity-40", form.theme === t.id ? "border-tech bg-tech/10" : "border-white/10")}>
                   <div className={cn("mb-3 h-14 rounded border border-white/10", t.id === "Obsidian" ? "bg-[linear-gradient(135deg,#05070A,#0A0F14_60%,#003B73)]" : "bg-[#F5F7FA]")} />
@@ -272,7 +272,7 @@ export function SettingsPage() {
                 </button>
               ))}
             </div>
-            <p className="mt-4 text-[11px] text-steel">Branding: INFINIHON · Technology & Infrastructure · Hecho en Honduras.</p>
+            <p className="mt-4 text-[11px] text-steel">Branding: InfiniHon Corp. · Technology & Infrastructure · Hecho en Honduras.</p>
           </Panel>
         )}
         {!editable && <p className="text-xs text-steel">Read-only: your role cannot edit settings.</p>}

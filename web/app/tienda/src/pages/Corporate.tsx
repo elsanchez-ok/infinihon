@@ -24,7 +24,7 @@ function StoreBridge() {
       >
         <span className="h-1.5 w-1.5 rounded-full bg-volt pulse-soft" />
         <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-steel transition-colors group-hover:text-snow">
-          Infinihon Store
+          InfiniHon Corp. Store
         </span>
         <span className="font-mono text-[11px] text-volt">→</span>
       </a>

@@ -20,7 +20,7 @@ export default function Footer() {
               Diseñamos, implementamos y protegemos la infraestructura tecnológica que mantiene conectadas a las empresas modernas.
             </p>
             <a href="#formulario" className="mt-8 inline-flex items-center gap-3 border-b border-tech pb-1 text-sm font-semibold text-snow hover:text-volt">
-              Hablar con InfiniHon <span className="font-mono">→</span>
+              Hablar con InfiniHon Corp. <span className="font-mono">→</span>
             </a>
           </div>
           <div className="md:col-span-3">
@@ -42,11 +42,11 @@ export default function Footer() {
         </div>
 
         <div aria-hidden className="mt-20 select-none whitespace-nowrap text-center text-[14vw] font-extrabold leading-[0.8] tracking-[-0.06em] text-transparent [-webkit-text-stroke:1px_rgba(0,102,255,0.28)] md:text-[13vw]">
-          INF INIHON
+          INFINIHON CORP.
         </div>
 
         <div className="mt-8 flex flex-col items-start justify-between gap-4 border-t border-white/[0.06] py-8 font-mono text-[10px] uppercase tracking-[0.22em] text-steel md:flex-row md:items-center">
-          <span>© {new Date().getFullYear()} INF INIHON · Technology & Infrastructure</span>
+          <span>© {new Date().getFullYear()} INFINIHON CORP. · Technology & Infrastructure</span>
           <span className="flex items-center gap-3">
             <span className="h-2 w-5 bg-hn" />
             Hecho en Honduras.

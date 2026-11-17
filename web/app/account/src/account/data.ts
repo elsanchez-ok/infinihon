@@ -1,11 +1,11 @@
 /**
- * INFINIHON — Portal de usuario.
+ * InfiniHon Corp. — Portal de usuario.
  *
  * Regla de honestidad: este archivo NO contiene datos de ningún usuario real.
  * No hay pedidos, servicios contratados, facturas, documentos ni organizaciones:
  * esas colecciones empiezan vacías y se llenan cuando exista un backend.
  *
- * Lo único precargado es el catálogo PÚBLICO de servicios de InfiniHon
+ * Lo único precargado es el catálogo PÚBLICO de servicios de InfiniHon Corp.
  * (información de marketing, no datos privados) para que "Favoritos" tenga sentido.
  */
 
@@ -21,7 +21,7 @@ export interface PublicService {
   id: string; name: string; category: string; description: string; highlights: string[];
 }
 
-/** Catálogo público de referencia (mismos servicios que ofrece InfiniHon). */
+/** Catálogo público de referencia (mismos servicios que ofrece InfiniHon Corp.). */
 export const publicServices: PublicService[] = [
   { id: "networking", name: "Networking", category: "Infraestructura", description: "Diseño, implementación y documentación de redes corporativas.", highlights: ["MikroTik", "VPN", "VLAN", "BGP"] },
   { id: "servers", name: "Server Infrastructure", category: "Infraestructura", description: "Servidores, virtualización y respaldos para tu operación.", highlights: ["Linux", "Virtualización", "Respaldos"] },
@@ -79,14 +79,14 @@ export interface TimelineEntry { label: string; date: string; note?: string }
 export interface RequestRecord {
   id: string; title: string; type: RequestType; description: string;
   status: RequestStatus; created: string; updated: string;
-  timeline: TimelineEntry[]; messages: { from: "Tú" | "InfiniHon"; text: string; date: string }[];
+  timeline: TimelineEntry[]; messages: { from: "Tú" | "InfiniHon Corp."; text: string; date: string }[];
   attachments: { name: string; size: string }[];
 }
 
 export interface TicketRecord {
   id: string; subject: string; category: TicketCategory; priority: Priority; description: string;
   status: TicketStatus; created: string; updated: string; serviceId?: string; orderId?: string; requestId?: string;
-  messages: { from: "Tú" | "Soporte InfiniHon"; text: string; date: string }[];
+  messages: { from: "Tú" | "Soporte InfiniHon Corp."; text: string; date: string }[];
   attachments: { name: string; size: string }[];
 }
 

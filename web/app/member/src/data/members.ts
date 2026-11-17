@@ -22,7 +22,7 @@ export const MEMBER: Member = {
   role: "Fundador & CEO",
   roleEn: "Founder & CEO",
   location: "Tegucigalpa, Honduras",
-  bio: "Fundé INFINIHON con una convicción simple: las empresas hondureñas merecen infraestructura tecnológica del mismo nivel que cualquier empresa del mundo — diseñada con criterio, implementada con disciplina y protegida de verdad. Hoy lidero la estrategia técnica y comercial: defino cómo diseñamos una red, cómo migramos un servidor o cómo blindamos un negocio, y me aseguro de que lo que prometemos sea exactamente lo que entregamos.",
+  bio: "Fundé InfiniHon Corp. con una convicción simple: las empresas hondureñas merecen infraestructura tecnológica del mismo nivel que cualquier empresa del mundo — diseñada con criterio, implementada con disciplina y protegida de verdad. Hoy lidero la estrategia técnica y comercial: defino cómo diseñamos una red, cómo migramos un servidor o cómo blindamos un negocio, y me aseguro de que lo que prometemos sea exactamente lo que entregamos.",
   status: "Disponible para proyectos y alianzas",
   focus: [
     "Arquitectura de redes corporativas",
@@ -31,7 +31,7 @@ export const MEMBER: Member = {
     "Estrategia y dirección técnica",
   ],
   duties: [
-    { title: "Dirección técnica", desc: "Define los estándares de diseño e implementación de cada proyecto de infraestructura que entrega INFINIHON." },
+    { title: "Dirección técnica", desc: "Define los estándares de diseño e implementación de cada proyecto de infraestructura que entrega InfiniHon Corp." },
     { title: "Relación con clientes", desc: "Acompaña personalmente las cotizaciones clave y las decisiones técnicas de mayor impacto." },
     { title: "Alianzas", desc: "Construye las relaciones con fabricantes, distribuidores y partners que hacen posible el catálogo." },
     { title: "Operación", desc: "Responsable de que el equipo tenga lo que necesita para ejecutar con calidad, en tiempo y forma." },
@@ -40,8 +40,9 @@ export const MEMBER: Member = {
     { label: "Instagram", href: "https://instagram.com/elsanchezok", note: "@elsanchezok" },
     { label: "GitHub", href: "https://github.com/elsanchez-ok", note: "elsanchez-ok" },
     { label: "Email corporativo", href: "mailto:contacto@infinihon.com", note: "contacto@infinihon.com" },
-    { label: "INFINIHON — sitio oficial", href: "https://infinihon.vercel.app/", note: "infinihon.vercel.app" },
-    { label: "Tienda INFINIHON", href: "https://infinihon.vercel.app/tienda", note: "Catálogo y equipamiento" },
+    { label: "InfiniHon Corp. — sitio oficial", href: "https://infinihon.vercel.app/", note: "infinihon.vercel.app" },
+    { label: "Proyectos — Ghost Browser", href: "https://infinihon.vercel.app/ghost-browser", note: "Proyecto propio" },
+    { label: "Tienda InfiniHon", href: "https://infinihon.vercel.app/tienda", note: "Catálogo y equipamiento" },
   ],
   initials: "ES",
 };

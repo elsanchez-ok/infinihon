@@ -3,10 +3,10 @@ import type { VisualKind } from "./data";
 
 export function StoreMark({ className }: { className?: string }) {
   return (
-    <a href="#top" className={cn("flex items-center gap-3", className)} aria-label="INFINIHON — inicio">
-      <img src="/assets/infinihon.png" alt="INFINIHON" className="h-8 w-auto shrink-0" />
+    <a href="#top" className={cn("flex items-center gap-3", className)} aria-label="InfiniHon Corp. — inicio">
+      <img src="/assets/infinihon.png" alt="InfiniHon Corp." className="h-8 w-auto shrink-0" />
       <span className="leading-none">
-        <span className="block text-[15px] font-extrabold tracking-[0.13em] text-snow">INFINIHON</span>
+        <span className="block text-[15px] font-extrabold tracking-[0.13em] text-snow">InfiniHon Corp.</span>
         <span className="mt-1 block font-mono text-[8px] uppercase tracking-[0.25em] text-steel">Technology & Infrastructure</span>
       </span>
     </a>
@@ -115,7 +115,7 @@ export function HeroStoreVisual() {
         <path d="M0 75l55-65h190l68 65H0z" fill="#101924" stroke="#0066FF" strokeOpacity=".7" />
         <path d="M55 10h190l40 45H18z" fill="#070b10" stroke="#8B96A5" strokeOpacity=".4" />
         {Array.from({length: 6}).map((_, i) => <g key={i}><rect x={70+i*30} y="36" width="19" height="11" fill="#003B73" stroke="#0066FF" strokeOpacity=".8" /><circle cx={76+i*30} cy="41.5" r="1.8" fill="#00A8FF" className={i%2 ? "pulse-soft" : ""}/></g>)}
-        <text x="155" y="101" textAnchor="middle" fontFamily="JetBrains Mono" fontSize="11" fill="#8B96A5" letterSpacing="3">INFINIHON / CORE</text>
+        <text x="155" y="101" textAnchor="middle" fontFamily="JetBrains Mono" fontSize="11" fill="#8B96A5" letterSpacing="3">InfiniHon Corp. / CORE</text>
       </g>
       {points.map(([x,y], i) => <g key={i}><circle cx={x} cy={y} r={i===5 ? 7 : 4} fill="#05070A" stroke="#00A8FF" strokeOpacity=".8"/><circle cx={x} cy={y} r={i===5 ? 26 : 14} fill="none" stroke="#0066FF" strokeOpacity=".25" className={i%3===0 ? "ring" : ""}/></g>)}
       <g fontFamily="JetBrains Mono" fontSize="10" fill="#8B96A5" letterSpacing="2"><text x="90" y="215">ROUTING</text><text x="255" y="255">SECURITY</text><text x="724" y="230">CLOUD</text><text x="930" y="245">OBSERVABILITY</text></g>

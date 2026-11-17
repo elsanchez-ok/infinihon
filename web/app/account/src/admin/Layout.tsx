@@ -60,7 +60,7 @@ export function Mark({ collapsed }: { collapsed?: boolean }) {
       </svg>
       {!collapsed && (
         <span className="leading-none">
-          <span className="block text-[14px] font-extrabold tracking-[0.12em] text-snow">INFINIHON</span>
+          <span className="block text-[14px] font-extrabold tracking-[0.12em] text-snow">InfiniHon Corp.</span>
           <span className="mt-1.5 block font-mono text-[8.5px] uppercase tracking-[0.26em] text-volt/90">Control Center</span>
         </span>
       )}
@@ -74,7 +74,7 @@ function Sidebar({ mobileOpen, onClose }: { mobileOpen: boolean; onClose: () => 
   const content = (compact: boolean) => (
     <div className="flex h-full flex-col">
       <div className={cn("flex h-16 items-center border-b border-white/[0.06]", compact ? "justify-center px-2" : "px-5")}>
-        <a href="/admin" onClick={(e) => { e.preventDefault(); go("/admin"); }} aria-label="INFINIHON Control Center — Overview"><Mark collapsed={compact} /></a>
+        <a href="/admin" onClick={(e) => { e.preventDefault(); go("/admin"); }} aria-label="InfiniHon Corp. Control Center — Overview"><Mark collapsed={compact} /></a>
       </div>
       <nav className="flex-1 overflow-y-auto px-3 py-4" aria-label="Control Center">
         {navGroups.map((group) => {
@@ -292,7 +292,7 @@ function Topbar({ onMenu }: { onMenu: () => void }) {
       </div>
 
       <GlobalSearch open={searchOpen} onClose={() => setSearchOpen(false)} />
-      <Modal open={helpOpen} onClose={() => setHelpOpen(false)} title="Help & documentation" description="Guidance for operating the INFINIHON Control Center.">
+      <Modal open={helpOpen} onClose={() => setHelpOpen(false)} title="Help & documentation" description="Guidance for operating the InfiniHon Corp. Control Center.">
         <ul className="space-y-3 text-sm text-steel">
           <li><span className="font-semibold text-snow">Search:</span> press ⌘K / Ctrl+K anywhere to open global search.</li>
           <li><span className="font-semibold text-snow">Demo data:</span> records marked <span className="font-mono text-xs">DEMO</span> are illustrative samples. Nothing is persisted.</li>

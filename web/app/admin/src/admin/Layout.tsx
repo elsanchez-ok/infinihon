@@ -55,7 +55,7 @@ function isActive(pathname: string, to: string) {
 export function Mark({ collapsed }: { collapsed?: boolean }) {
   return (
     <span className={cn("flex flex-col items-center gap-1.5", collapsed ? "" : "w-max")}>
-      <img src="/assets/infinihon.png" alt="INFINIHON" className="h-8 w-auto shrink-0" />
+      <img src="/assets/infinihon.png" alt="InfiniHon Corp." className="h-8 w-auto shrink-0" />
       {!collapsed && (
         <span className="block max-w-[200px] text-center font-mono text-[7.5px] uppercase leading-[1.7] tracking-[0.22em] text-volt/90">Infrastructure · Innovation · Honduras</span>
       )}
@@ -70,7 +70,7 @@ function Sidebar({ mobileOpen, onClose }: { mobileOpen: boolean; onClose: () => 
   const content = (compact: boolean) => (
     <div className="flex h-full flex-col">
       <div className={cn("flex h-16 items-center border-b border-white/[0.06]", compact ? "justify-center px-2" : "px-5")}>
-        <a href="/admin" onClick={(e) => { e.preventDefault(); go("/admin"); }} aria-label="INFINIHON Control Center — Overview"><Mark collapsed={compact} /></a>
+        <a href="/admin" onClick={(e) => { e.preventDefault(); go("/admin"); }} aria-label="InfiniHon Corp. Control Center — Overview"><Mark collapsed={compact} /></a>
       </div>
       <nav className="flex-1 overflow-y-auto px-3 py-4" aria-label="Control Center">
         {navGroups.map((group) => {
@@ -300,7 +300,7 @@ function Topbar({ onMenu }: { onMenu: () => void }) {
       </div>
 
       <GlobalSearch open={searchOpen} onClose={() => setSearchOpen(false)} />
-      <Modal open={helpOpen} onClose={() => setHelpOpen(false)} title={t("Help & documentation")} description={t("Guidance for operating the INFINIHON Control Center.")}>
+      <Modal open={helpOpen} onClose={() => setHelpOpen(false)} title={t("Help & documentation")} description={t("Guidance for operating the InfiniHon Corp. Control Center.")}>
         <ul className="space-y-3 text-sm text-steel">
           <li><span className="font-semibold text-snow">Search:</span> press ⌘K / Ctrl+K anywhere to open global search.</li>
           <li><span className="font-semibold text-snow">Data:</span> this panel reads and writes Supabase. Edits are saved as you make them; records marked <span className="font-mono text-xs">DEMO</span> are illustrative samples kept for reference.</li>

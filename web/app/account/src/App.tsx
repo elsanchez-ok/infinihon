@@ -4,7 +4,7 @@ import AuthApp from "./auth/AuthApp";
 import AdminApp from "./admin/AdminApp";
 
 /**
- * INFINIHON — tres experiencias separadas:
+ * InfiniHon Corp. — tres experiencias separadas:
  *   /account   Portal del usuario (su espacio personal)
  *   /auth      Acceso y registro
  *   /admin     Centro de control (administradores)

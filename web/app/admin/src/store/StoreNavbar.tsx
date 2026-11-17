@@ -30,7 +30,7 @@ export function StoreNavbar({ cartCount, onSearch, onCart }: Props) {
         </ul>
         <div className="flex items-center gap-1 sm:gap-2">
           <button onClick={onSearch} className="group flex h-10 items-center gap-2 px-2 text-steel transition-colors hover:text-snow" aria-label="Buscar en tienda"><TechIcon name="search" className="h-5 w-5" /><span className="hidden text-[13px] sm:inline">Buscar</span></button>
-          <a href="/auth" className="hidden h-10 items-center gap-2 px-2 text-steel transition-colors hover:text-snow lg:flex" aria-label="Acceder al portal de INFINIHON"><TechIcon name="user" className="h-5 w-5" /><span className="text-[13px]">Cuenta</span></a>
+          <a href="/auth" className="hidden h-10 items-center gap-2 px-2 text-steel transition-colors hover:text-snow lg:flex" aria-label="Acceder al portal de InfiniHon Corp."><TechIcon name="user" className="h-5 w-5" /><span className="text-[13px]">Cuenta</span></a>
           <button onClick={onCart} className="group relative flex h-10 items-center gap-2 border-l border-white/[0.08] px-3 text-snow transition-colors hover:text-volt" aria-label={`Abrir carrito. ${cartCount} productos`}>
             <TechIcon name="cart" className="h-5 w-5" />
             <span className="hidden text-[13px] sm:inline">Carrito</span>
@@ -47,7 +47,7 @@ export function StoreNavbar({ cartCount, onSearch, onCart }: Props) {
           {links.map(([label, href], i) => <a key={href} onClick={() => setOpen(false)} href={href} className="flex items-center justify-between border-b border-white/[0.07] py-4 text-2xl font-bold tracking-tight"><span>{label}</span><span className="font-mono text-xs text-steel">0{i+1}</span></a>)}
           <a href="/auth" className="flex items-center justify-between border-b border-white/[0.07] py-4 text-2xl font-bold tracking-tight"><span>Mi cuenta</span><span className="font-mono text-xs text-volt">↗</span></a>
           <a href="#soporte" onClick={() => setOpen(false)} className="mt-6 bg-tech py-4 text-center font-semibold">Hablar con un experto</a>
-          <p className="mt-auto pb-8 font-mono text-[10px] uppercase tracking-[0.2em] text-steel">INFINIHON / Technology & Infrastructure</p>
+          <p className="mt-auto pb-8 font-mono text-[10px] uppercase tracking-[0.2em] text-steel">InfiniHon Corp. / Technology & Infrastructure</p>
         </div>
       </div>
     </header>

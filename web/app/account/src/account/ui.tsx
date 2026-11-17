@@ -11,8 +11,8 @@ import { fmtDate, statusTone } from "./data";
 
 export function AccountMark({ href = "/account", onNavigate }: { href?: string; onNavigate?: (to: string) => void }) {
   return (
-    <a href={href} onClick={(e) => { if (onNavigate) { e.preventDefault(); onNavigate(href); } }} className="flex flex-col items-center gap-1.5" aria-label="INFINIHON — inicio del portal">
-      <img src="/assets/infinihon.png" alt="INFINIHON" className="h-9 w-auto shrink-0" />
+    <a href={href} onClick={(e) => { if (onNavigate) { e.preventDefault(); onNavigate(href); } }} className="flex flex-col items-center gap-1.5" aria-label="InfiniHon Corp. — inicio del portal">
+      <img src="/assets/infinihon.png" alt="InfiniHon Corp." className="h-9 w-auto shrink-0" />
       <span className="block font-mono text-[8px] uppercase leading-none tracking-[0.28em] text-steel">Infrastructure · Innovation · Honduras</span>
     </a>
   );
@@ -443,9 +443,9 @@ export function useOutside(onClose: () => void) {
 
 export function onboardingSteps() {
   return [
-    { title: "Bienvenido a InfiniHon", text: "Este es tu espacio personal: aquí gestionas tus servicios, pedidos y solicitudes." },
+    { title: "Bienvenido a InfiniHon Corp.", text: "Este es tu espacio personal: aquí gestionas tus servicios, pedidos y solicitudes." },
     { title: "Completa tu perfil", text: "Añade tu nombre y datos de contacto para que el equipo pueda atenderte mejor." },
-    { title: "Explora los servicios", text: "Descubre lo que InfiniHon puede implementar para tu operación." },
+    { title: "Explora los servicios", text: "Descubre lo que InfiniHon Corp. puede implementar para tu operación." },
     { title: "Configura tu seguridad", text: "Activa la verificación en dos pasos y revisa tus sesiones activas." },
     { title: "Todo listo", text: "Ya puedes empezar. Si necesitas ayuda, el soporte está a un clic." },
   ];

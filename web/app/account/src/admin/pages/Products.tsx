@@ -62,7 +62,7 @@ export function ProductsPage() {
 
   return (
     <>
-      <PageHeader eyebrow="Commerce" title="Products" description="Physical and digital catalog items managed by InfiniHon."
+      <PageHeader eyebrow="Commerce" title="Products" description="Physical and digital catalog items managed by InfiniHon Corp."
         breadcrumbs={[{ label: "Overview", to: "/admin" }, { label: "Products" }]}
         actions={can("products.create") && <Button variant="primary" icon={Plus} onClick={() => navigate("/admin/products/new")}>Create product</Button>} />
       <Panel padded={false}>

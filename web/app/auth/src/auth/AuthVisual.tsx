@@ -2,8 +2,8 @@ import type { ReactNode } from "react";
 
 export function AuthMark({ compact = false }: { compact?: boolean }) {
   return (
-    <a className="auth-mark" href="/" aria-label="INFINIHON — volver al sitio">
-      <img src="/assets/infinihon.png" alt="INFINIHON" className="auth-mark-symbol" />
+    <a className="auth-mark" href="/" aria-label="InfiniHon Corp. — volver al sitio">
+      <img src="/assets/infinihon.png" alt="InfiniHon Corp." className="auth-mark-symbol" />
       {!compact && <span className="auth-mark-word">Infrastructure · Innovation · Honduras</span>}
     </a>
   );
@@ -41,7 +41,7 @@ function Module({ x, y, width, label, index }: (typeof nodes)[number]) {
 
 function InfrastructureDiagram() {
   return (
-    <svg className="auth-diagram" viewBox="0 0 800 520" role="img" aria-label="Diagrama abstracto de la infraestructura INFINIHON: red, nube, sistemas, datos, servidores y seguridad conectados al núcleo">
+    <svg className="auth-diagram" viewBox="0 0 800 520" role="img" aria-label="Diagrama abstracto de la infraestructura InfiniHon Corp.: red, nube, sistemas, datos, servidores y seguridad conectados al núcleo">
       <defs>
         <linearGradient id="auth-plane" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0" stopColor="#152b41" /><stop offset=".6" stopColor="#07101b" /><stop offset="1" stopColor="#030609" />
@@ -90,7 +90,7 @@ function InfrastructureDiagram() {
       <circle cx="420" cy="247" r="28" fill="none" stroke="#0066FF" strokeOpacity=".25" className="auth-diagram-ring auth-diagram-ring-alt" />
 
       <path d="M420 358v24M420 148v27M273 277h-24M571 277h-25" stroke="#0066FF" strokeOpacity=".5" />
-      <text x="420" y="353" textAnchor="middle" fill="#D5E1EE" fontSize="10" letterSpacing="2" fontFamily="JetBrains Mono, monospace">NÚCLEO / INFINIHON</text>
+      <text x="420" y="353" textAnchor="middle" fill="#D5E1EE" fontSize="10" letterSpacing="2" fontFamily="JetBrains Mono, monospace">NÚCLEO / InfiniHon Corp.</text>
       <text x="420" y="369" textAnchor="middle" fill="#8B96A5" fontSize="8" letterSpacing="2" fontFamily="JetBrains Mono, monospace">ARQUITECTURA CONECTADA</text>
 
       {nodes.map((node) => <Module key={node.index} {...node} />)}
@@ -115,18 +115,18 @@ function HondurasSignature() {
 
 export function AuthBrandPanel({ children }: { children?: ReactNode }) {
   return (
-    <aside className="auth-brand-panel" aria-label="Identidad INFINIHON">
+    <aside className="auth-brand-panel" aria-label="Identidad InfiniHon Corp.">
       <div className="auth-brand-grain" aria-hidden="true" />
       <div className="auth-brand-copy">
-        <div className="auth-brand-eyebrow"><span className="auth-brand-beacon" /> PORTAL DIGITAL <span className="auth-eyebrow-separator">/</span> ECOSISTEMA INFINIHON</div>
-        <div className="auth-brand-title">INFINIHON<span className="auth-title-period">.</span></div>
+        <div className="auth-brand-eyebrow"><span className="auth-brand-beacon" /> PORTAL DIGITAL <span className="auth-eyebrow-separator">/</span> ECOSISTEMA InfiniHon Corp.</div>
+        <div className="auth-brand-title">InfiniHon Corp.<span className="auth-title-period">.</span></div>
         <div className="auth-brand-descriptor">TECHNOLOGY & INFRASTRUCTURE</div>
         <p className="auth-brand-statement">Tu infraestructura.<br />Tu tecnología.<br /><span>Tu espacio.</span></p>
       </div>
       <div className="auth-diagram-frame"><InfrastructureDiagram /></div>
       <div className="auth-brand-bottom">
         <HondurasSignature />
-        <span className="auth-brand-bottom-index">INFINIHON / ACCESO</span>
+        <span className="auth-brand-bottom-index">InfiniHon Corp. / ACCESO</span>
       </div>
       {children}
     </aside>

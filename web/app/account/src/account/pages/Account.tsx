@@ -72,7 +72,7 @@ export function ProfilePage() {
                 <Button size="sm" disabled={!capabilities.fileUpload} title={capabilities.fileUpload ? undefined : "Requiere almacenamiento de archivos conectado."}>Subir foto</Button>
                 <Button size="sm" variant="ghost" disabled={!photo || !capabilities.fileUpload} onClick={() => setPhoto(null)}>Quitar</Button>
               </div>
-              <p className="text-center text-[11px] leading-relaxed text-steel">Formatos habituales de imagen. InfiniHon no asigna una foto automática.</p>
+              <p className="text-center text-[11px] leading-relaxed text-steel">Formatos habituales de imagen. InfiniHon Corp. no asigna una foto automática.</p>
             </div>
           </Panel>
           <Panel title="Estado de la cuenta">
@@ -216,7 +216,7 @@ export function SettingsPage() {
             <Toggle label="Actualizaciones de pedidos" description="Cambios de estado en tus pedidos." checked={prefs.orderUpdates} onChange={(v) => set("orderUpdates", v)} />
             <Toggle label="Actualizaciones de servicios" description="Avances en tus servicios contratados." checked={prefs.serviceUpdates} onChange={(v) => set("serviceUpdates", v)} />
             <Toggle label="Respuestas de soporte" description="Cuando el equipo responde un ticket." checked={prefs.supportNotifications} onChange={(v) => set("supportNotifications", v)} />
-            <Toggle label="Comunicaciones comerciales" description="Novedades y contenido de InfiniHon. Puedes desactivarlo cuando quieras." checked={prefs.marketing} onChange={(v) => set("marketing", v)} />
+            <Toggle label="Comunicaciones comerciales" description="Novedades y contenido de InfiniHon Corp. Puedes desactivarlo cuando quieras." checked={prefs.marketing} onChange={(v) => set("marketing", v)} />
           </div>
           <div className="mt-4 flex items-center gap-2 text-[11px] text-steel"><Check className="h-3.5 w-3.5 text-volt" aria-hidden />Nunca vendemos ni compartimos tus datos.</div>
         </Panel>

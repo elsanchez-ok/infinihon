@@ -117,7 +117,7 @@ export default function ProductPage({ slug }: { slug: string }) {
                   <p className="text-[17px] leading-relaxed text-snow/90">{p.description}</p>
                   <p className="mt-6 text-[14.5px] leading-relaxed text-steel">
                     Todos los equipos se entregan con configuración inicial y documentación. Si necesitas un dimensionamiento
-                    específico, el equipo técnico de Infinihon puede ayudarte a elegir la versión adecuada.
+                    específico, el equipo técnico de InfiniHon Corp. puede ayudarte a elegir la versión adecuada.
                   </p>
                   <div className="mt-8 grid gap-4 sm:grid-cols-2">
                     <div className="border border-white/[0.08] p-5">
@@ -204,13 +204,13 @@ export default function ProductPage({ slug }: { slug: string }) {
               {tab === "Soporte" && (
                 <div className="max-w-2xl">
                   <p className="text-[15px] leading-relaxed text-steel">
-                    Este producto cuenta con acompañamiento técnico de Infinihon: instalación, configuración y soporte posterior.
+                    Este producto cuenta con acompañamiento técnico de InfiniHon Corp.: instalación, configuración y soporte posterior.
                   </p>
                   <div className="mt-6 grid gap-4 sm:grid-cols-2">
                     {[
                       ["Instalación", "Configuración inicial y pruebas de funcionamiento"],
                       ["Documentación", "Topología y configuraciones entregadas por escrito"],
-                      ["Garantía", "Cobertura del fabricante gestionada por Infinihon"],
+                      ["Garantía", "Cobertura del fabricante gestionada por InfiniHon Corp."],
                       ["Soporte", "Canal directo con el equipo que implementó"],
                     ].map(([t, d]) => (
                       <div key={t} className="border border-white/[0.08] p-5">

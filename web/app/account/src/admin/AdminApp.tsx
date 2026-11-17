@@ -48,7 +48,7 @@ function Router({ pathname, navigate }: { pathname: string; navigate: (to: strin
 export default function AdminApp({ pathname, navigate }: { pathname: string; navigate: (to: string) => void }) {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    document.title = "INFINIHON — Control Center";
+    document.title = "InfiniHon Corp. — Control Center";
     setLoading(true);
     const t = window.setTimeout(() => setLoading(false), 180);
     return () => window.clearTimeout(t);

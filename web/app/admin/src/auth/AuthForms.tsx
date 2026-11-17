@@ -147,7 +147,7 @@ export function LoginForm({ navigate }: { navigate: Navigate }) {
 
   return (
     <div className="auth-view">
-      <FormHeading step="01" title="Bienvenido de nuevo." description="Accede a tu cuenta de InfiniHon." />
+      <FormHeading step="01" title="Bienvenido de nuevo." description="Accede a tu cuenta de InfiniHon Corp." />
       <SocialAuth onProvider={signInWithProvider} pendingProvider={providerLoading} />
       <ServiceNotice />
       <form className="auth-form" onSubmit={submit} noValidate>
@@ -211,7 +211,7 @@ export function RegisterForm({ navigate }: { navigate: Navigate }) {
 
   return (
     <div className="auth-view">
-      <FormHeading step="02" title="Crea tu cuenta." description="Empieza a formar parte del ecosistema InfiniHon." />
+      <FormHeading step="02" title="Crea tu cuenta." description="Empieza a formar parte del ecosistema InfiniHon Corp." />
       <ServiceNotice />
       <form className="auth-form auth-form-register" onSubmit={submit} noValidate>
         <div className="auth-name-row">

@@ -18,24 +18,24 @@ export default function AuthApp({ pathname, navigate }: { pathname: string; navi
 
   useEffect(() => {
     const pageTitles: Record<AuthMode, string> = {
-      login: "Acceso | INFINIHON",
-      register: "Crear cuenta | INFINIHON",
-      recovery: "Recuperar acceso | INFINIHON",
+      login: "Acceso | InfiniHon Corp.",
+      register: "Crear cuenta | InfiniHon Corp.",
+      recovery: "Recuperar acceso | InfiniHon Corp.",
     };
     document.title = pageTitles[mode];
     document.querySelector('meta[name="description"]')?.setAttribute(
       "content",
-      "Portal de acceso de INFINIHON. Inicia sesión, crea tu cuenta o recupera el acceso al ecosistema tecnológico.",
+      "Portal de acceso de InfiniHon Corp. Inicia sesión, crea tu cuenta o recupera el acceso al ecosistema tecnológico.",
     );
     if (lastMode.current !== mode) {
       requestAnimationFrame(() => document.querySelector<HTMLElement>(".auth-view-transition h1")?.focus());
       lastMode.current = mode;
     }
     return () => {
-      document.title = "INFINIHON Store — Tecnología e infraestructura";
+      document.title = "InfiniHon Corp. Store — Tecnología e infraestructura";
       document.querySelector('meta[name="description"]')?.setAttribute(
         "content",
-        "INFINIHON Store — tecnología, infraestructura y servicios para construir lo que sigue.",
+        "InfiniHon Corp. Store — tecnología, infraestructura y servicios para construir lo que sigue.",
       );
     };
   }, [mode]);
@@ -51,7 +51,7 @@ export default function AuthApp({ pathname, navigate }: { pathname: string; navi
 
       <main className="auth-shell">
         <AuthBrandPanel />
-        <section className="auth-panel" id="auth-form" aria-label="Acceso a INFINIHON">
+        <section className="auth-panel" id="auth-form" aria-label="Acceso a InfiniHon Corp.">
           <div className="auth-panel-inner">
             <div className="auth-panel-brand">
               <AuthMark />
@@ -66,11 +66,11 @@ export default function AuthApp({ pathname, navigate }: { pathname: string; navi
 
             <div className="auth-panel-footnote">
               <span className="auth-footnote-dash" />
-              Un espacio para gestionar tu acceso al ecosistema INFINIHON.
+              Un espacio para gestionar tu acceso al ecosistema InfiniHon Corp.
             </div>
           </div>
           <footer className="auth-panel-footer">
-            <span>© {new Date().getFullYear()} INFINIHON</span>
+            <span>© {new Date().getFullYear()} InfiniHon Corp.</span>
             <span>PORTAL DIGITAL <span className="auth-footer-separator">/</span> HONDURAS</span>
           </footer>
           <a

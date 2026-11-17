@@ -54,7 +54,7 @@ export function ProfilePage() {
 
   return (
     <>
-      <PageHeader eyebrow="System" title="My Profile" description="Your administrator account on the INFINIHON Control Center."
+      <PageHeader eyebrow="System" title="My Profile" description="Your administrator account on the InfiniHon Corp. Control Center."
         breadcrumbs={[{ label: "Overview", to: "/admin" }, { label: "My Profile" }]}
         actions={editing ? (
           <div className="flex items-center gap-2">

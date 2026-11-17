@@ -28,7 +28,7 @@ export function DashboardPage() {
       <PageHeader
         eyebrow="Tu espacio"
         title={`Bienvenido de nuevo${data.profileCompleted ? `, ${data.profile.firstName}` : "."}`}
-        description="Esto es lo que está pasando con tu cuenta de InfiniHon."
+        description="Esto es lo que está pasando con tu cuenta de InfiniHon Corp."
         actions={<Button variant="primary" icon={Plus} onClick={() => navigate("/account/requests/new")}>Solicitar un servicio</Button>}
       />
 
@@ -43,7 +43,7 @@ export function DashboardPage() {
         <div className="space-y-4 lg:col-span-2">
           <Panel title="Acciones rápidas" description="Lo que la mayoría de usuarios necesita primero.">
             <div className="grid gap-3 sm:grid-cols-2">
-              <QuickAction label="Explorar servicios" description="Descubre lo que InfiniHon puede implementar" icon={Compass} onClick={() => navigate("/account/favorites")} />
+              <QuickAction label="Explorar servicios" description="Descubre lo que InfiniHon Corp. puede implementar" icon={Compass} onClick={() => navigate("/account/favorites")} />
               <QuickAction label="Ver pedidos" description="Consulta el estado de tus compras" icon={Package} onClick={() => navigate("/account/orders")} />
               <QuickAction label="Solicitar un servicio" description="Cotización, implementación o cambio" icon={Send} onClick={() => navigate("/account/requests/new")} />
               <QuickAction label="Contactar soporte" description="Abre un ticket con el equipo" icon={Headphones} onClick={() => navigate("/account/support")} />
@@ -68,7 +68,7 @@ export function DashboardPage() {
             )}
           </Panel>
 
-          <Panel title="Tu espacio InfiniHon" description="Vista conceptual de las áreas de tu cuenta.">
+          <Panel title="Tu espacio InfiniHon Corp." description="Vista conceptual de las áreas de tu cuenta.">
             <SpaceDiagram counts={{ services: 0, orders: data.orders.length, requests: data.requests.length, support: data.tickets.length }} />
             <p className="mt-3 text-[11.5px] leading-relaxed text-steel">
               Los números reflejan únicamente lo registrado en tu cuenta. Cuando un servicio se activa o un pedido se procesa,
@@ -116,19 +116,19 @@ export function ServicesPage() {
   const { navigate } = useAccount();
   return (
     <>
-      <PageHeader eyebrow="Mi InfiniHon" title="Mis servicios" description="Gestiona y consulta tus servicios de InfiniHon."
+      <PageHeader eyebrow="Mi InfiniHon Corp." title="Mis servicios" description="Gestiona y consulta tus servicios de InfiniHon Corp."
         breadcrumbs={[{ label: "Inicio", to: "/account" }, { label: "Mis servicios" }]}
         actions={<Button variant="primary" icon={Send} onClick={() => navigate("/account/requests/new")}>Solicitar un servicio</Button>} />
       <Panel padded={false}>
         <EmptyState icon={Boxes} title="Aún no tienes servicios activos"
-          description="Cuando contrates un servicio con InfiniHon aparecerá aquí, con su estado, fecha de inicio y próxima acción."
+          description="Cuando contrates un servicio con InfiniHon Corp. aparecerá aquí, con su estado, fecha de inicio y próxima acción."
           action={<div className="flex flex-wrap justify-center gap-2">
             <Button variant="primary" icon={Compass} onClick={() => navigate("/account/favorites")}>Explorar servicios</Button>
             <Button icon={Send} onClick={() => navigate("/account/requests/new")}>Solicitar un servicio</Button>
           </div>} />
       </Panel>
       <div className="mt-4"><DemoNote>
-        InfiniHon no simula servicios que no existen. Esta sección se llena desde el backend cuando un servicio se activa para tu cuenta.
+        InfiniHon Corp. no simula servicios que no existen. Esta sección se llena desde el backend cuando un servicio se activa para tu cuenta.
       </DemoNote></div>
     </>
   );
@@ -163,7 +163,7 @@ export function OrdersPage() {
   ];
   return (
     <>
-      <PageHeader eyebrow="Mi InfiniHon" title="Mis pedidos" description="Consulta el estado de tus compras."
+      <PageHeader eyebrow="Mi InfiniHon Corp." title="Mis pedidos" description="Consulta el estado de tus compras."
         breadcrumbs={[{ label: "Inicio", to: "/account" }, { label: "Mis pedidos" }]} />
       <Panel padded={false}>
         <ResourceTable caption="Mis pedidos" columns={columns} rows={data.orders} getKey={(o) => o.id}
@@ -245,7 +245,7 @@ export function FavoritesPage() {
   const saved = data.favorites.map((id) => catalog.find((s) => s.id === id)).filter(Boolean);
   return (
     <>
-      <PageHeader eyebrow="Mi InfiniHon" title="Favoritos" description="Servicios y productos que guardaste para consultar después."
+      <PageHeader eyebrow="Mi InfiniHon Corp." title="Favoritos" description="Servicios y productos que guardaste para consultar después."
         breadcrumbs={[{ label: "Inicio", to: "/account" }, { label: "Favoritos" }]} />
       {saved.length ? (
         <div className="grid gap-3 md:grid-cols-2">
@@ -267,11 +267,11 @@ export function FavoritesPage() {
         <Panel>
           <EmptyState icon={Heart} title="Aún no has guardado nada"
             description="Guarda los servicios que te interesen para tenerlos a mano."
-            action={<Button variant="primary" icon={Compass} onClick={() => navigate("/account/favorites")}>Explorar InfiniHon</Button>} />
+            action={<Button variant="primary" icon={Compass} onClick={() => navigate("/account/favorites")}>Explorar InfiniHon Corp.</Button>} />
         </Panel>
       )}
 
-      <Panel className="mt-4" title="Explorar servicios de InfiniHon" description="Guarda los que te interesen." padded={false}>
+      <Panel className="mt-4" title="Explorar servicios de InfiniHon Corp." description="Guarda los que te interesen." padded={false}>
         <ul className="divide-y divide-white/[0.05]">
           {catalog.map((s) => {
             const on = data.favorites.includes(s.id);
@@ -308,7 +308,7 @@ export function BillingPage() {
         </Panel>
         <Panel title="Métodos de pago">
           <p className="text-sm text-steel">No hay métodos de pago registrados.</p>
-          <DemoNote>Los pagos no están integrados. InfiniHon no simula un proceso de pago.</DemoNote>
+          <DemoNote>Los pagos no están integrados. InfiniHon Corp. no simula un proceso de pago.</DemoNote>
         </Panel>
         <Panel title="Facturas" padded={false}><EmptyState icon={FileText} title="Sin facturas" description="Tus facturas aparecerán cuando tu cuenta tenga actividad de facturación." /></Panel>
         <Panel title="Transacciones" padded={false}><EmptyState icon={CreditCard} title="Sin transacciones" description="No hay movimientos registrados en tu cuenta." /></Panel>
@@ -325,7 +325,7 @@ export function OrganizationPage() {
         breadcrumbs={[{ label: "Inicio", to: "/account" }, { label: "Organización" }]} />
       <Panel>
         <EmptyState icon={Users} title="No perteneces a una organización"
-          description="Tu cuenta es individual. Si tu empresa tiene una cuenta empresarial de InfiniHon, pídele al administrador que te invite con tu correo."
+          description="Tu cuenta es individual. Si tu empresa tiene una cuenta empresarial de InfiniHon Corp., pídele al administrador que te invite con tu correo."
           action={<Button variant="primary" icon={Headphones} onClick={() => window.location.assign("/account/support")}>Consultar a soporte</Button>} />
       </Panel>
       <div className="mt-4"><DemoNote>Esta sección solo se muestra a usuarios que pertenecen a una organización. Un usuario individual no debería verla.</DemoNote></div>
@@ -340,7 +340,7 @@ export function DocumentsPage() {
         breadcrumbs={[{ label: "Inicio", to: "/account" }, { label: "Documentos" }]} />
       <Panel padded={false}>
         <EmptyState icon={FileText} title="Sin documentos"
-          description="Aquí encontrarás las cotizaciones, acuerdos y reportes vinculados a tus servicios. InfiniHon no crea documentos de ejemplo." />
+          description="Aquí encontrarás las cotizaciones, acuerdos y reportes vinculados a tus servicios. InfiniHon Corp. no crea documentos de ejemplo." />
       </Panel>
     </>
   );

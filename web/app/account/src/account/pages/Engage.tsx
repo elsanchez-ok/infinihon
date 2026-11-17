@@ -25,7 +25,7 @@ export function RequestsPage() {
   ];
   return (
     <>
-      <PageHeader eyebrow="Mi InfiniHon" title="Mis solicitudes" description="Consulta el progreso de tus solicitudes."
+      <PageHeader eyebrow="Mi InfiniHon Corp." title="Mis solicitudes" description="Consulta el progreso de tus solicitudes."
         breadcrumbs={[{ label: "Inicio", to: "/account" }, { label: "Mis solicitudes" }]}
         actions={<Button variant="primary" icon={Plus} onClick={() => navigate("/account/requests/new")}>Nueva solicitud</Button>} />
 
@@ -41,7 +41,7 @@ export function RequestsPage() {
       <Panel padded={false}>
         <ResourceTable caption="Mis solicitudes" columns={columns} rows={rows} getKey={(r) => r.id} onRowClick={(r) => navigate(`/account/requests/${r.id}`)}
           empty={<EmptyState icon={Inbox} title={data.requests.length ? "Ninguna solicitud con este estado." : "Aún no tienes solicitudes"}
-            description={data.requests.length ? "Prueba con otro filtro." : "¿Necesitas algo de InfiniHon? Crea una solicitud y el equipo te responderá."}
+            description={data.requests.length ? "Prueba con otro filtro." : "¿Necesitas algo de InfiniHon Corp.? Crea una solicitud y el equipo te responderá."}
             action={!data.requests.length && <Button variant="primary" icon={Plus} onClick={() => navigate("/account/requests/new")}>Solicitar un servicio</Button>} />} />
       </Panel>
     </>
@@ -159,7 +159,7 @@ export function RequestDetailPage({ id }: { id: string }) {
                   </li>
                 ))}
               </ul>
-            ) : <p className="text-sm text-steel">Todavía no hay mensajes. El equipo de InfiniHon te escribirá aquí.</p>}
+            ) : <p className="text-sm text-steel">Todavía no hay mensajes. El equipo de InfiniHon Corp. te escribirá aquí.</p>}
 
             {!canCancel && (
               <div className="mt-4">
@@ -342,7 +342,7 @@ export function TicketDetailPage({ id }: { id: string }) {
 
       <div className="grid gap-4 lg:grid-cols-3">
         <div className="lg:col-span-2">
-          <Panel title="Conversación" description="Tú y el equipo de soporte de InfiniHon.">
+          <Panel title="Conversación" description="Tú y el equipo de soporte de InfiniHon Corp.">
             <ul className="space-y-3">
               {ticket.messages.map((m, i) => (
                 <li key={i} className={`rounded-xl border p-3.5 ${m.from === "Tú" ? "border-tech/30 bg-tech/[0.07]" : "border-white/[0.07] bg-white/[0.02]"}`}>
@@ -394,7 +394,7 @@ export function MessagesPage() {
 
   return (
     <>
-      <PageHeader eyebrow="Soporte" title="Mensajes" description="Comunicación profesional entre tú y el equipo de InfiniHon."
+      <PageHeader eyebrow="Soporte" title="Mensajes" description="Comunicación profesional entre tú y el equipo de InfiniHon Corp."
         breadcrumbs={[{ label: "Inicio", to: "/account" }, { label: "Mensajes" }]} />
       {data.tickets.length === 0 ? (
         <Panel><EmptyState icon={Inbox} title="No tienes mensajes"

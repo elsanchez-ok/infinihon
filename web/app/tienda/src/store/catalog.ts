@@ -1,5 +1,5 @@
 /**
- * INFINIHON — catálogo de la tienda.
+ * InfiniHon Corp. — catálogo de la tienda.
  *
  * Este archivo es el CATÁLOGO DE RESPALDO que se usa cuando la API no responde
  * (sin sesión de Supabase o sin conexión). El catálogo real vive en
@@ -402,7 +402,7 @@ export const products: Product[] = [
       { k: "Vigencia", v: "Suscripción anual" },
     ],
     features: ["Dashboards de operación", "Alertas priorizadas", "Histórico de métricas"],
-    compat: ["Todos los equipos InfiniHon", "Infraestructura existente"],
+    compat: ["Todos los equipos InfiniHon Corp.", "Infraestructura existente"],
     includes: ["Instalación", "Dashboards iniciales", "Capacitación al equipo"],
     docs: [{ t: "Lista de métricas base", note: "Se publica con el catálogo real" }],
     featured: true,
