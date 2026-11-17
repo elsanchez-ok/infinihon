@@ -45,8 +45,6 @@ function ProjectCard({ p, delay }: { p: Project; delay: number }) {
           <a
             href={p.download.url}
             download={p.download.file}
-            target="_blank"
-            rel="noreferrer"
             className="inline-flex items-center gap-2 bg-tech px-5 py-3 text-[13px] font-semibold text-snow transition-colors hover:bg-[#1a75ff]"
           >
             Descargar {p.download.file} <span className="font-mono">↓</span>
