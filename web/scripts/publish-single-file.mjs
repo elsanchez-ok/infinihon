@@ -12,6 +12,7 @@ const PUBLISH_AS = {
   tienda: "tienda.html",
   admin: "admin.html",
   account: "account.html",
+  proyectos: "proyectos.html",
 };
 
 if (!appName || !PUBLISH_AS[appName]) {

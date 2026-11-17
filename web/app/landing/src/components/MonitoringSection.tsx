@@ -113,7 +113,7 @@ export default function MonitoringSection() {
       <div className="relative mx-auto max-w-[1440px] px-5 md:px-10">
         <div className="grid gap-10 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-8">
-            <Reveal><SectionLabel index="06">Monitoring · Observability</SectionLabel></Reveal>
+            <Reveal><SectionLabel index="07">Monitoring · Observability</SectionLabel></Reveal>
             <RevealTitle
               className="mt-8 text-[10vw] font-extrabold uppercase leading-[0.92] tracking-[-0.04em] sm:text-6xl lg:text-[5rem]"
               lines={["Si no puedes verlo,", "no puedes controlarlo."]}

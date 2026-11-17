@@ -45,7 +45,7 @@ export default function ProcessSection() {
       <div className="mx-auto max-w-[1440px] px-5 md:px-10">
         <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
           <div>
-            <Reveal><SectionLabel index="10">Proceso</SectionLabel></Reveal>
+            <Reveal><SectionLabel index="11">Proceso</SectionLabel></Reveal>
             <RevealTitle
               className="mt-8 text-[10vw] font-extrabold uppercase leading-[0.92] tracking-[-0.04em] sm:text-6xl lg:text-[4.8rem]"
               lines={["Un método.", "Seis etapas."]}

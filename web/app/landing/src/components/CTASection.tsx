@@ -50,7 +50,7 @@ export default function CTASection() {
       <div className="mx-auto max-w-[1440px] px-5 pb-24 pt-32 md:px-10 md:pb-32 md:pt-48">
         <div className="text-center">
           <Reveal className="font-mono text-[11px] uppercase tracking-[0.28em] text-steel">
-            <span className="text-volt">12</span> — Siguiente paso
+            <span className="text-volt">13</span> — Siguiente paso
           </Reveal>
           <RevealTitle
             as="h2"
@@ -63,7 +63,7 @@ export default function CTASection() {
             <span className="text-snow">Diseñemos la infraestructura para hacerlo posible.</span>
           </Reveal>
           <Reveal delay={400} className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
-            <PrimaryButton href="#formulario">Hablar con InfiniHon</PrimaryButton>
+            <PrimaryButton href="#formulario">Hablar con InfiniHon Corp.</PrimaryButton>
             <GhostButton href="#servicios">Ver servicios</GhostButton>
           </Reveal>
         </div>

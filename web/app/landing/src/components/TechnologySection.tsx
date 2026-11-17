@@ -33,7 +33,7 @@ export default function TechnologySection() {
       <div className="mx-auto max-w-[1440px] px-5 md:px-10">
         <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
           <div>
-            <Reveal><SectionLabel index="08">Tecnología</SectionLabel></Reveal>
+            <Reveal><SectionLabel index="09">Tecnología</SectionLabel></Reveal>
             <RevealTitle
               className="mt-8 text-[10vw] font-extrabold uppercase leading-[0.92] tracking-[-0.04em] sm:text-6xl lg:text-[4.8rem]"
               lines={["Stack construido", "para escalar."]}
