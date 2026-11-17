@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Corners, GhostButton, PrimaryButton, Reveal, RevealTitle, SectionLabel } from "../components/ui";
+import { BetaBadge, Corners, GhostButton, PrimaryButton, Reveal, RevealTitle, SectionLabel } from "../components/ui";
 import { benchmark, ghostDownload, shortcuts } from "../data/projects";
 import { cn } from "../utils/cn";
 
@@ -39,7 +39,8 @@ const capabilities = [
 const engines = [
   {
     name: "Wisp Engine",
-    badge: "Beta · 100% Rust",
+    badge: "100% Rust",
+    beta: true,
     desc: "Motor experimental escrito en Rust pensado para lectura, artículos y documentación con consumo mínimo de memoria dentro del proceso principal.",
     items: [
       ["HTML5 + Cascada CSS real", "especificidad, @media por ancho de pestaña, variables var(--token), calc(), em/rem/% y bordes por lado."],
@@ -358,9 +359,13 @@ export default function GhostBrowser() {
                   <Corners />
                   <div className="flex items-center justify-between gap-4">
                     <h3 className="text-2xl font-extrabold uppercase tracking-tight text-snow md:text-3xl">{e.name}</h3>
-                    <span className="shrink-0 border border-tech/50 bg-tech/10 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-volt">
-                      {e.badge}
-                    </span>
+                    {e.beta ? (
+                      <BetaBadge label={e.badge} />
+                    ) : (
+                      <span className="shrink-0 border border-tech/50 bg-tech/10 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-volt">
+                        {e.badge}
+                      </span>
+                    )}
                   </div>
                   <p className="mt-4 text-[15px] leading-relaxed text-steel">{e.desc}</p>
                   <ul className="mt-8 space-y-5">

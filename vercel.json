@@ -18,6 +18,8 @@
     { "source": "/proyectos/:path*", "destination": "/proyectos.html" },
     { "source": "/ghost-browser", "destination": "/proyectos.html" },
     { "source": "/ghost-browser/:path*", "destination": "/proyectos.html" },
+    { "source": "/contacto", "destination": "/index.html" },
+    { "source": "/contacto/:path*", "destination": "/index.html" },
     { "source": "/", "destination": "/index.html" }
   ]
 }

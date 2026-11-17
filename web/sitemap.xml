@@ -33,6 +33,10 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://infinihon.vercel.app/contacto</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://infinihon.vercel.app/tienda/contacto</loc>
     <priority>0.7</priority>
   </url>

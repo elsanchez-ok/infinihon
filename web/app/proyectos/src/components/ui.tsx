@@ -141,6 +141,32 @@ export function GhostButton({ href, children, className }: { href: string; child
   );
 }
 
+export function BetaBadge({ className, label }: { className?: string; label?: string }) {
+  return (
+    <span
+      title="Motor en fase beta"
+      className={cn(
+        "inline-flex shrink-0 items-center gap-2 border border-volt/50 bg-volt/10 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-volt",
+        className
+      )}
+    >
+      <span className="relative flex h-1.5 w-1.5" aria-hidden>
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-volt opacity-75" />
+        <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-volt" />
+      </span>
+      <span className="font-bold">Beta</span>
+      {label ? (
+        <>
+          <span className="text-volt/40" aria-hidden>
+            ·
+          </span>
+          <span className="text-volt/80">{label}</span>
+        </>
+      ) : null}
+    </span>
+  );
+}
+
 export function Corners({ className }: { className?: string }) {
   const c = "absolute h-3 w-3 border-volt/50";
   return (

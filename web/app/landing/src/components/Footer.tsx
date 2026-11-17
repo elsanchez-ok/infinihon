@@ -1,12 +1,12 @@
 import { Logo } from "./ui";
 
 const nav = [
-  ["Servicios", "#servicios"],
+  ["Servicios", "/#servicios"],
   ["Proyectos", "/proyectos"],
-  ["Infraestructura", "#infraestructura"],
-  ["Tecnología", "#tecnologia"],
-  ["Nosotros", "#nosotros"],
-  ["Contacto", "#contacto"],
+  ["Infraestructura", "/#infraestructura"],
+  ["Tecnología", "/#tecnologia"],
+  ["Nosotros", "/#nosotros"],
+  ["Contacto", "/contacto"],
 ];
 const services = ["Networking · MikroTik", "Cloud · AWS · Azure · GCP", "DevOps · Kubernetes · K3s", "Seguridad · VPN", "Monitorización", "Software a medida", "Soporte tecnológico"];
 
@@ -21,7 +21,7 @@ export default function Footer() {
               Corporativo tecnológico hondureño: diseñamos, implementamos y protegemos la infraestructura que mantiene conectadas a
               las empresas modernas, y publicamos los proyectos de software y plataformas que construimos.
             </p>
-            <a href="#formulario" className="mt-8 inline-flex items-center gap-3 border-b border-tech pb-1 text-sm font-semibold text-snow hover:text-volt">
+            <a href="/contacto" className="mt-8 inline-flex items-center gap-3 border-b border-tech pb-1 text-sm font-semibold text-snow hover:text-volt">
               Hablar con InfiniHon Corp. <span className="font-mono">→</span>
             </a>
           </div>
@@ -37,7 +37,7 @@ export default function Footer() {
             <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-steel/60">Servicios</div>
             <ul className="mt-5 space-y-3">
               {services.map((s) => (
-                <li key={s}><a href="#servicios" className="text-[15px] text-snow/80 transition-colors hover:text-volt">{s}</a></li>
+                <li key={s}><a href="/#servicios" className="text-[15px] text-snow/80 transition-colors hover:text-volt">{s}</a></li>
               ))}
             </ul>
           </div>

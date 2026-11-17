@@ -9,6 +9,7 @@ desde `infinihon.vercel.app`:
 | Ruta             | Archivo            | App             |
 |------------------|--------------------|-----------------|
 | `/`              | `index.html`       | Landing         |
+| `/contacto`      | `index.html`       | Landing (ruta de contacto independiente) |
 | `/proyectos`     | `proyectos.html`   | Proyectos       |
 | `/ghost-browser` | `proyectos.html`   | Proyectos       |
 | `/tienda`        | `tienda.html`      | Tienda Digital  |
