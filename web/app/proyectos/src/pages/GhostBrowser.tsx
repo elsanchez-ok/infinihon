@@ -189,7 +189,7 @@ export default function GhostBrowser() {
             src="/assets/ghost.png"
             alt=""
             aria-hidden
-            className="pointer-events-none absolute right-[4%] top-[36%] z-[1] hidden h-[380px] w-auto -translate-y-1/2 select-none lg:block xl:h-[440px]"
+            className="pointer-events-none absolute right-[5%] top-[34%] z-[1] hidden h-[360px] w-auto -translate-y-1/2 select-none xl:block 2xl:h-[420px]"
           />
 
           <div className="relative z-10 mx-auto max-w-[1440px] px-5 md:px-10">
