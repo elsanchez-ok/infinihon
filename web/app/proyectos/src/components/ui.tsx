@@ -103,6 +103,7 @@ export function ArrowIcon({ className }: { className?: string }) {
 }
 
 export function PrimaryButton({ href, children, className, download }: { href: string; children: ReactNode; className?: string; download?: string }) {
+  const isDownload = Boolean(download);
   return (
     <a
       href={href}
@@ -114,7 +115,13 @@ export function PrimaryButton({ href, children, className, download }: { href: s
     >
       <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
       <span className="relative">{children}</span>
-      <ArrowIcon className="relative transition-transform duration-300 group-hover:translate-x-1" />
+      {isDownload ? (
+        <span aria-hidden className="relative font-mono text-base leading-none transition-transform duration-300 group-hover:translate-y-0.5">
+          ↓
+        </span>
+      ) : (
+        <ArrowIcon className="relative transition-transform duration-300 group-hover:translate-x-1" />
+      )}
     </a>
   );
 }
