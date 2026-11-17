@@ -179,3 +179,15 @@ export async function authSignOut(): Promise<void> {
 export function postLoginPath(): string {
   return window.location.pathname.startsWith("/admin") ? "/admin" : "/account";
 }
+
+/** Consulta si la sesión actual pertenece a un administrador (profiles.is_admin). */
+export async function isAdminUser(token?: string | null): Promise<boolean> {
+  try {
+    const t = token ?? (await getAccessToken());
+    if (!t) return false;
+    const rows = (await sb("/rest/v1/profiles?select=is_admin&limit=1", { token: t })) as { is_admin?: boolean }[];
+    return Boolean(rows?.[0]?.is_admin);
+  } catch {
+    return false;
+  }
+}
