@@ -171,9 +171,28 @@ export default function GhostBrowser() {
       <main>
         {/* Hero */}
         <section className="relative overflow-hidden border-b border-white/[0.06] pb-20 pt-36 md:pb-28 md:pt-48">
-          <div className="absolute inset-0 -z-10 bg-grid grid-drift mask-radial opacity-60" />
-          <div className="absolute left-[60%] top-[30%] -z-10 h-[60vmin] w-[80vmin] -translate-x-1/2 -translate-y-1/2 rounded-full bg-hn/40 blur-[130px]" />
-          <div className="mx-auto max-w-[1440px] px-5 md:px-10">
+          {/* Imagen de fondo del hero */}
+          <div className="absolute inset-0 z-0">
+            <img
+              src="/assets/ghost-hero.webp"
+              alt=""
+              aria-hidden
+              className="h-full w-full object-cover object-center opacity-50"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-obsidian via-obsidian/85 to-obsidian/25" />
+          </div>
+          <div className="absolute inset-0 z-0 bg-grid grid-drift mask-radial opacity-40" />
+          <div className="absolute left-[60%] top-[30%] z-0 h-[60vmin] w-[80vmin] -translate-x-1/2 -translate-y-1/2 rounded-full bg-hn/40 blur-[130px]" />
+
+          {/* Fantasma en el espacio vacío de la derecha */}
+          <img
+            src="/assets/ghost.png"
+            alt=""
+            aria-hidden
+            className="pointer-events-none absolute right-[4%] top-[36%] z-[1] hidden h-[380px] w-auto -translate-y-1/2 select-none lg:block xl:h-[440px]"
+          />
+
+          <div className="relative z-10 mx-auto max-w-[1440px] px-5 md:px-10">
             <Reveal className="flex flex-wrap items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-steel">
               <a href="/" className="hover:text-snow">Inicio</a>
               <span className="text-steel/40">/</span>
