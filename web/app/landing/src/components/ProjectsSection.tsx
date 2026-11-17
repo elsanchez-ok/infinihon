@@ -34,10 +34,21 @@ function ProjectCard({ p, delay }: { p: Project; delay: number }) {
       </div>
 
       <div className="mt-8 flex flex-wrap gap-3">
+        {p.download && (
+          <a
+            href={p.download.url}
+            download={p.download.file}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 bg-tech px-5 py-3 text-[13px] font-semibold text-snow transition-colors hover:bg-[#1a75ff]"
+          >
+            Descargar {p.download.file} <span className="font-mono">↓</span>
+          </a>
+        )}
         {p.links.demo && (
           <a
             href={p.links.demo}
-            className="inline-flex items-center gap-2 bg-tech px-5 py-3 text-[13px] font-semibold text-snow transition-colors hover:bg-[#1a75ff]"
+            className="inline-flex items-center gap-2 border border-steel/30 px-5 py-3 text-[13px] font-semibold text-snow transition-all hover:border-volt/60 hover:bg-white/[0.03]"
           >
             Abrir proyecto <span className="font-mono">→</span>
           </a>
@@ -53,6 +64,9 @@ function ProjectCard({ p, delay }: { p: Project; delay: number }) {
           </a>
         )}
       </div>
+      {p.download && (
+        <p className="mt-3 font-mono text-[10.5px] uppercase tracking-[0.14em] text-steel/70">{p.download.meta}</p>
+      )}
     </Reveal>
   );
 }

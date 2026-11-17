@@ -102,10 +102,11 @@ export function ArrowIcon({ className }: { className?: string }) {
   );
 }
 
-export function PrimaryButton({ href, children, className }: { href: string; children: ReactNode; className?: string }) {
+export function PrimaryButton({ href, children, className, download }: { href: string; children: ReactNode; className?: string; download?: string }) {
   return (
     <a
       href={href}
+      download={download}
       className={cn(
         "group relative inline-flex items-center justify-center gap-3 overflow-hidden bg-tech px-6 py-4 text-sm font-semibold text-snow transition-colors duration-300 hover:bg-[#1a75ff] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-volt",
         className

@@ -10,7 +10,7 @@ Contacto: contacto@infinihon.com · Tegucigalpa, Francisco Morazán, Honduras.
 
 - [Inicio](https://infinihon.vercel.app/): propuesta de valor, servicios, proyectos y capacidades de InfiniHon Corp.
 - [Proyectos](https://infinihon.vercel.app/proyectos): portafolio oficial de proyectos propios (software, motores experimentales, infraestructura y plataformas).
-- [Ghost Browser](https://infinihon.vercel.app/ghost-browser): navegador de escritorio ligero en Rust con motor híbrido Wisp + WebView2, benchmarks de RAM, arquitectura y guía de compilación.
+- [Ghost Browser](https://infinihon.vercel.app/ghost-browser): navegador de escritorio ligero en Rust con motor híbrido Wisp + WebView2, benchmarks de RAM, arquitectura, guía de compilación y descarga del instalador GhostSetup.exe (v0.1.0, Windows x64) desde las releases de GitHub.
 - [Tienda](https://infinihon.vercel.app/tienda): catálogo de equipamiento de redes, servidores, energía y seguridad (demostración; los precios se confirman al conectar el inventario real).
 - [Servicios](https://infinihon.vercel.app/tienda/servicios): diseño, implementación, monitoreo y soporte de infraestructura.
 - [Soluciones](https://infinihon.vercel.app/tienda/soluciones): paquetes por tipo y tamaño de empresa.
