@@ -16,14 +16,6 @@ export function ProfilePage() {
   const { data, user, role, mutate, toast, navigate } = useAdmin();
   const me = data.admins.find((a) => a.id === user?.id) ?? data.admins.find((a) => a.email === user?.email);
   const fallbackName = [user?.firstName, user?.lastName].filter(Boolean).join(" ") || user?.email || "Administrator";
-        <Panel title="Language" description="This preference is shared with your account portal.">
-          <Field label="Language" htmlFor="profile-language">
-            <select id="profile-language" className={cn(inputCls, "[&>option]:bg-ink")} value={locale} onChange={(event) => { setLocale(event.target.value as "en-US" | "es-HN"); toast("Language preference updated."); }}>
-              <option value="en-US">English (United States)</option>
-              <option value="es-HN">Español (Honduras)</option>
-            </select>
-          </Field>
-        </Panel>
   const displayName = me?.name ?? fallbackName;
   const email = me?.email ?? user?.email ?? "";
 
@@ -105,6 +97,14 @@ export function ProfilePage() {
               <dd className="text-xs text-snow/90">{fmtDate(me?.created ?? null)}</dd>
             </div>
           </dl>
+          <div className="mt-5 border-t border-white/[0.06] pt-4">
+            <Field label="Language" htmlFor="profile-language" hint="This preference is shared with your account portal.">
+              <select id="profile-language" className={cn(inputCls, "[&>option]:bg-ink")} value={locale} onChange={(event) => { setLocale(event.target.value as "en-US" | "es-HN"); toast("Language preference updated."); }}>
+                <option value="en-US">English (United States)</option>
+                <option value="es-HN">Español (Honduras)</option>
+              </select>
+            </Field>
+          </div>
           <div className="mt-5 border-t border-white/[0.06] pt-4">
             <div className="mb-2 flex items-center gap-2 text-xs font-semibold text-snow/90"><KeyRound className="h-3.5 w-3.5 text-steel" aria-hidden />Role permissions · {role.permissions.length}</div>
             {role.permissions.length ? (
