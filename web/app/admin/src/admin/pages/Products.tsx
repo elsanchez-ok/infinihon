@@ -1,7 +1,8 @@
-import { useMemo, useState } from "react";
-import { Archive, ArchiveRestore, Copy, ImagePlus, Package, Pencil, Plus, Save, Trash2, X } from "lucide-react";
+import { useMemo, useRef, useState } from "react";
+import { Archive, ArchiveRestore, Copy, ImagePlus, Loader2, Package, Pencil, Plus, Save, Trash2, X } from "lucide-react";
 import type { Doc, Product, ProductStatus, Spec } from "../data";
 import { fmtDate, fmtMoney, newId, productDisplayStatus, productStockState, useAdmin } from "../store";
+import { uploadProductImage } from "../supabaseSync";
 import { RowMenu } from "../RowMenu";
 import { Button, ConfirmDialog, DataTable, DemoTag, EmptyState, Field, FilterBar, Forbidden, PageHeader, Panel, SearchInput, Select, StatusBadge, inputCls, type Column } from "../ui";
 import { cn } from "../../utils/cn";
@@ -102,12 +103,15 @@ export function ProductsPage() {
 
 const blank = (): Product => ({
   id: newId("p"), name: "", sku: "", category: "", brand: "", description: "", price: null, cost: null, discount: null, tax: null,
-  stock: 0, minStock: 0, warehouse: "Main warehouse", status: "Draft", specs: [], images: 0, seoTitle: "", seoDescription: "", slug: "",
+  stock: 0, minStock: 0, warehouse: "Main warehouse", status: "Draft", specs: [], images: [], seoTitle: "", seoDescription: "", slug: "",
   tech: [], use: [], features: [], compat: [], includes: [], docs: [],
   updated: new Date().toISOString(), demo: false,
 });
 const slugify = (s: string) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-const sections = ["General", "Pricing", "Inventory", "Media", "Specifications", "Public page", "SEO", "Visibility"];
+const sections: [string, string][] = [
+  ["General", "General"], ["Pricing", "Pricing"], ["Inventory", "Inventory"], ["Media", "Media"],
+  ["Specifications", "Specifications"], ["Public-page", "Public page"], ["SEO", "SEO"], ["Visibility", "Visibility"],
+];
 
 function NumberInput({ id, value, onChange, disabled, placeholder = "Not set" }: { id: string; value: number | null; onChange: (v: number | null) => void; disabled?: boolean; placeholder?: string }) {
   return <input id={id} type="number" min={0} step="any" inputMode="decimal" disabled={disabled} className={inputCls} placeholder={placeholder}
@@ -127,6 +131,62 @@ function ProductTags({ label, hint, value, onChange, placeholder }: { label: str
       <div className="mt-2 flex flex-wrap gap-1.5">
         {value.map((v, i) => <button key={v + i} type="button" onClick={() => onChange(value.filter((_, j) => j !== i))} className="rounded border border-white/10 px-2 py-0.5 text-xs text-snow/90 hover:border-red-300/40" aria-label={`Remove ${v}`}>{v} ×</button>)}
       </div>
+    </div>
+  );
+}
+
+const IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"];
+const IMAGE_MAX_MB = 5;
+
+/** Galería de imágenes del producto: sube archivos reales a Supabase Storage (bucket `product-images`). */
+function ProductImages({ productId, value, onChange }: { productId: string; value: string[]; onChange: (next: string[]) => void }) {
+  const { toast } = useAdmin();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(0);
+
+  const handleFiles = async (files: FileList | null) => {
+    if (!files?.length) return;
+    for (const file of Array.from(files)) {
+      if (!IMAGE_TYPES.includes(file.type)) { toast(`“${file.name}” no es una imagen compatible (PNG, JPG, WebP o GIF).`, "error"); continue; }
+      if (file.size > IMAGE_MAX_MB * 1024 * 1024) { toast(`“${file.name}” supera el límite de ${IMAGE_MAX_MB} MB.`, "error"); continue; }
+      setUploading((n) => n + 1);
+      try {
+        const url = await uploadProductImage(productId, file);
+        onChange([...value, url]);
+      } catch {
+        toast(`No se pudo subir “${file.name}”.`, "error");
+      } finally {
+        setUploading((n) => n - 1);
+      }
+    }
+  };
+
+  return (
+    <div>
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {value.map((url, i) => (
+          <div key={url + i} className="group relative aspect-square overflow-hidden rounded-lg border border-white/10 bg-obsidian/40">
+            <img src={url} alt="" className="h-full w-full object-cover" loading="lazy" />
+            {i === 0 && <span className="absolute left-1.5 top-1.5 rounded bg-black/70 px-1.5 py-0.5 text-[10px] font-semibold text-snow">Primary</span>}
+            <button type="button" onClick={() => onChange(value.filter((_, j) => j !== i))} aria-label={`Remove image ${i + 1}`}
+              className="absolute right-1.5 top-1.5 rounded bg-black/70 p-1 text-snow opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100 hover:bg-red-500/80">
+              <X className="h-3.5 w-3.5" aria-hidden />
+            </button>
+          </div>
+        ))}
+        {Array.from({ length: uploading }).map((_, i) => (
+          <div key={`uploading-${i}`} className="flex aspect-square flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-white/10 bg-obsidian/40 text-[11px] text-steel">
+            <Loader2 className="h-5 w-5 animate-spin" aria-hidden />Uploading…
+          </div>
+        ))}
+        <button type="button" onClick={() => inputRef.current?.click()}
+          className="flex aspect-square flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-white/15 bg-obsidian/40 text-center text-[11px] text-steel transition-colors hover:border-volt hover:text-snow">
+          <ImagePlus className="h-5 w-5" aria-hidden />{value.length === 0 ? "Add primary image" : "Add image"}
+        </button>
+      </div>
+      <input ref={inputRef} type="file" accept={IMAGE_TYPES.join(",")} multiple className="hidden"
+        onChange={(e) => { void handleFiles(e.target.files); e.target.value = ""; }} />
+      <p className="mt-3 text-[11px] text-steel">PNG, JPG, WebP or GIF, up to {IMAGE_MAX_MB} MB each. The first image is used as the product’s primary photo.</p>
     </div>
   );
 }
@@ -184,7 +244,7 @@ export function ProductEditor({ id }: { id: string }) {
       <div className="grid gap-6 lg:grid-cols-[180px_1fr]">
         <nav className="hidden lg:block" aria-label="Editor sections">
           <ul className="sticky top-24 space-y-0.5 border-l border-white/[0.07]">
-            {sections.map((s) => <li key={s}><a href={`#sec-${s}`} className="-ml-px block border-l border-transparent py-1.5 pl-4 text-sm text-steel hover:border-volt hover:text-snow">{s}</a></li>)}
+            {sections.map(([id, label]) => <li key={id}><a href={`#sec-${id}`} className="-ml-px block border-l border-transparent py-1.5 pl-4 text-sm text-steel hover:border-volt hover:text-snow">{label}</a></li>)}
           </ul>
         </nav>
 
@@ -223,14 +283,7 @@ export function ProductEditor({ id }: { id: string }) {
           </Panel>
 
           <Panel title="Media" description="Product images and gallery."><div id="sec-Media" className="-mt-24 pt-24" />
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {[0, 1, 2, 3].map((i) => (
-                <div key={i} className="flex aspect-square flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-white/10 bg-obsidian/40 text-center text-[11px] text-steel">
-                  <ImagePlus className="h-5 w-5" aria-hidden />{i === 0 ? "Primary image" : `Gallery ${i}`}
-                </div>
-              ))}
-            </div>
-            <p className="mt-3 text-[11px] text-steel">Uploads require an object storage integration. <span className="text-snow/80">Status: Not configured.</span></p>
+            <ProductImages productId={form.id} value={form.images} onChange={(v) => set("images", v)} />
           </Panel>
 
           <Panel title="Specifications" description="Only publish specifications confirmed by the real catalog."

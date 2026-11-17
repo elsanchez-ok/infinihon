@@ -7,6 +7,33 @@
 export const SUPABASE_URL = "https://jcizfmpagprxyhvzuymx.supabase.co";
 const PUBLISHABLE_KEY = "sb_publishable_f8X-zd5BTDecZwdGSKLZsw_9P6Dm8Uf";
 
+/**
+ * Sube un archivo binario al bucket de Storage indicado y devuelve su URL pública.
+ * El bucket `product-images` es de lectura pública; la escritura requiere
+ * sesión de administrador (RLS: `is_admin()`), igual que el resto del catálogo.
+ */
+export async function uploadStorageFile(bucket: string, path: string, file: File, token: string): Promise<string> {
+  const res = await fetch(`${SUPABASE_URL}/storage/v1/object/${bucket}/${encodeURIComponent(path)}`, {
+    method: "POST",
+    headers: { apikey: PUBLISHABLE_KEY, Authorization: `Bearer ${token}`, "Content-Type": file.type || "application/octet-stream", "x-upsert": "true" },
+    body: file,
+  });
+  if (!res.ok) {
+    let msg = res.statusText;
+    try { const j = await res.json(); msg = j.message ?? j.error ?? msg; } catch { /* sin cuerpo JSON */ }
+    throw new SupabaseError(res.status, msg);
+  }
+  return `${SUPABASE_URL}/storage/v1/object/public/${bucket}/${path}`;
+}
+
+/** Borra un archivo del bucket indicado (silencioso si ya no existe). */
+export async function deleteStorageFile(bucket: string, path: string, token: string): Promise<void> {
+  await fetch(`${SUPABASE_URL}/storage/v1/object/${bucket}/${encodeURIComponent(path)}`, {
+    method: "DELETE",
+    headers: { apikey: PUBLISHABLE_KEY, Authorization: `Bearer ${token}` },
+  }).catch(() => undefined);
+}
+
 const LS_KEY = "infinihon.auth.session";
 const SS_KEY = "infinihon.auth.session.mem";
 

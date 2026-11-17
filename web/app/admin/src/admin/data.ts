@@ -13,7 +13,7 @@ export interface Product {
   id: string; name: string; sku: string; category: string; brand: string; description: string;
   price: number | null; cost: number | null; discount: number | null; tax: number | null;
   stock: number | null; minStock: number; warehouse: string; status: ProductStatus;
-  specs: Spec[]; images: number; seoTitle: string; seoDescription: string; slug: string;
+  specs: Spec[]; images: string[]; seoTitle: string; seoDescription: string; slug: string;
   /** Campos que la tienda pública muestra además de las especificaciones. */
   tech: string[]; use: string[]; features: string[]; compat: string[]; includes: string[]; docs: Doc[];
   updated: string; demo: boolean;
@@ -113,9 +113,9 @@ export const seedCategories: Category[] = [
 ];
 
 const baseProduct = {
-  cost: null, discount: null, tax: null, images: 0, seoTitle: "", seoDescription: "", demo: true,
+  cost: null, discount: null, tax: null, images: [] as string[], seoTitle: "", seoDescription: "", demo: true,
   tech: [] as string[], use: [] as string[], features: [] as string[], compat: [] as string[], includes: [] as string[], docs: [] as Doc[],
-} as const;
+};
 
 export const seedProducts: Product[] = [
   { ...baseProduct, id: "p1", name: "Edge Router — Reference", sku: "DEMO-NET-001", category: "networking", brand: "To be confirmed", description: "Reference item for an edge routing layer with VPN and VLAN segmentation.", price: null, stock: 12, minStock: 4, warehouse: "Main warehouse", status: "Active", specs: [{ key: "Interfaces", value: "Pending catalog" }], slug: "edge-router-reference", updated: d(26) },
@@ -198,6 +198,6 @@ export const integrations: { name: string; category: string; description: string
   { name: "Cloud provider", category: "Cloud", description: "Resource inventory from a cloud account.", status: "Not configured" },
   { name: "Web analytics", category: "Analytics", description: "Traffic and conversion metrics.", status: "Not configured" },
   { name: "Identity provider", category: "Authentication", description: "Email/password and OAuth sign-in.", status: "Not configured" },
-  { name: "Object storage", category: "Storage", description: "Product images and media library.", status: "Not configured" },
+  { name: "Object storage", category: "Storage", description: "Product images and media library.", status: "Connected" },
   { name: "Metrics backend", category: "Monitoring", description: "Server and service metrics source.", status: "Unavailable" },
 ];
