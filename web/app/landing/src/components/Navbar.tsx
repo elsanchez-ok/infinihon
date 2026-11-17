@@ -3,13 +3,13 @@ import { Logo } from "./ui";
 import { cn } from "../utils/cn";
 
 const links = [
-  { label: "Inicio", href: "#inicio" },
-  { label: "Servicios", href: "#servicios" },
+  { label: "Inicio", href: "/" },
+  { label: "Servicios", href: "/#servicios" },
   { label: "Proyectos", href: "/proyectos" },
-  { label: "Infraestructura", href: "#infraestructura" },
-  { label: "Tecnología", href: "#tecnologia" },
-  { label: "Nosotros", href: "#nosotros" },
-  { label: "Contacto", href: "#contacto" },
+  { label: "Infraestructura", href: "/#infraestructura" },
+  { label: "Tecnología", href: "/#tecnologia" },
+  { label: "Nosotros", href: "/#nosotros" },
+  { label: "Contacto", href: "/contacto" },
 ];
 
 export default function Navbar() {
@@ -86,7 +86,7 @@ export default function Navbar() {
             </li>
           ))}
           <li className="mt-6">
-            <a href="#contacto" onClick={() => setOpen(false)} className="flex w-full items-center justify-center bg-tech py-4 font-semibold">
+            <a href="/contacto" onClick={() => setOpen(false)} className="flex w-full items-center justify-center bg-tech py-4 font-semibold">
               Hablar con InfiniHon Corp.
             </a>
           </li>

@@ -20,7 +20,8 @@ Contacto: contacto@infinihon.com · Tegucigalpa, Francisco Morazán, Honduras.
 - [¿Cluster de placas o un solo servidor?](https://infinihon.vercel.app/tienda/insights/cluster-de-placas-o-un-solo-servidor): cuándo conviene un cluster K3s y cuándo un servidor tradicional.
 - [Checklist de exposición antes de abrir puertos](https://infinihon.vercel.app/tienda/insights/checklist-de-exposicion-antes-de-abrir-puertos): endurecimiento básico de un servidor expuesto.
 - [Nosotros](https://infinihon.vercel.app/tienda/nosotros): historia, principios y forma de trabajar.
-- [Contacto](https://infinihon.vercel.app/tienda/contacto): canales oficiales y tiempos de respuesta.
+- [Contacto](https://infinihon.vercel.app/contacto): página independiente de contacto con brief de proyecto, email oficial y ubicación.
+- [Contacto (tienda)](https://infinihon.vercel.app/tienda/contacto): canales oficiales y tiempos de respuesta.
 - [Envíos y cobertura](https://infinihon.vercel.app/tienda/envios): zonas y tiempos de entrega.
 - [Garantías](https://infinihon.vercel.app/tienda/garantias): política de garantía y acompañamiento.
 - [Pagos](https://infinihon.vercel.app/tienda/pagos): métodos de pago y facturación.

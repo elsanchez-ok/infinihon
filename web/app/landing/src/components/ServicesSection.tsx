@@ -55,7 +55,7 @@ function Panel({ i }: { i: number }) {
           </ul>
         </div>
       </div>
-      <a href="#contacto" className="mt-10 inline-flex items-center gap-2 text-sm font-semibold text-snow hover:text-volt">
+      <a href="/contacto" className="mt-10 inline-flex items-center gap-2 text-sm font-semibold text-snow hover:text-volt">
         Consultar sobre {s.t} <span className="font-mono">→</span>
       </a>
     </div>

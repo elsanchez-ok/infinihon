@@ -93,7 +93,7 @@ export function SectionLabel({ index, children, className }: { index: string; ch
 
 export function Logo({ className }: { className?: string }) {
   return (
-    <a href="#inicio" className={cn("group flex flex-col items-center gap-1.5", className)} aria-label="InfiniHon Corp. — inicio">
+    <a href="/" className={cn("group flex flex-col items-center gap-1.5", className)} aria-label="InfiniHon Corp. — inicio">
       <span className="flex items-center">
         <img src="/assets/infinihon.png" alt="InfiniHon Corp." className="h-8 w-auto shrink-0" />
         <span className="ml-1 translate-y-[2px] font-mono text-[10px] font-semibold uppercase tracking-[0.1em] text-volt">

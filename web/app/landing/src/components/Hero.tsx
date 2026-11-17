@@ -73,7 +73,7 @@ export default function Hero() {
           </p>
 
           <div className="reveal mt-10 flex flex-col gap-3 sm:flex-row" style={{ "--d": "800ms" } as CSSProperties}>
-            <PrimaryButton href="#contacto">Construir mi infraestructura</PrimaryButton>
+            <PrimaryButton href="/contacto">Construir mi infraestructura</PrimaryButton>
             <GhostButton href="#servicios">Explorar servicios</GhostButton>
             <GhostButton href="/proyectos">Ver proyectos</GhostButton>
           </div>
