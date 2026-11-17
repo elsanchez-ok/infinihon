@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Corners, GhostButton, PrimaryButton, Reveal, RevealTitle, SectionLabel } from "../components/ui";
-import { benchmark, shortcuts } from "../data/projects";
+import { benchmark, ghostDownload, shortcuts } from "../data/projects";
 import { cn } from "../utils/cn";
 
 const capabilities = [
@@ -209,8 +209,16 @@ export default function GhostBrowser() {
             </Reveal>
 
             <Reveal delay={380} className="mt-10 flex flex-col gap-3 sm:flex-row">
-              <PrimaryButton href="https://github.com/sarch-codelab/ghost-browser">Ver código en GitHub</PrimaryButton>
+              <PrimaryButton href={ghostDownload.url} download={ghostDownload.file}>
+                Descargar {ghostDownload.file}
+              </PrimaryButton>
+              <GhostButton href="https://github.com/sarch-codelab/ghost-browser">Ver código en GitHub</GhostButton>
               <GhostButton href="#compilar">Compilar para Windows</GhostButton>
+            </Reveal>
+            <Reveal delay={420} className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[11px] uppercase tracking-[0.16em] text-steel">
+              <span className="text-volt">{ghostDownload.meta}</span>
+              <span className="text-steel/50">·</span>
+              <span className="break-all text-steel/70">{ghostDownload.checksum}</span>
             </Reveal>
 
             <Reveal delay={480} className="mt-14 grid grid-cols-2 gap-px border border-white/[0.08] bg-white/[0.06] lg:grid-cols-4">
@@ -397,7 +405,7 @@ export default function GhostBrowser() {
         <section id="compilar" className="relative border-b border-white/[0.06] py-20 md:py-28">
           <div className="mx-auto max-w-[1440px] px-5 md:px-10">
             <Reveal>
-              <SectionLabel index="06">Compilar y probar</SectionLabel>
+              <SectionLabel index="06">Descargar · Compilar y probar</SectionLabel>
             </Reveal>
             <RevealTitle
               className="mt-8 max-w-4xl text-[10vw] font-extrabold uppercase leading-[0.92] tracking-[-0.04em] sm:text-6xl lg:text-[4.4rem]"
@@ -407,6 +415,26 @@ export default function GhostBrowser() {
             <Reveal delay={200} className="mt-8 max-w-2xl text-[15px] leading-relaxed text-steel">
               Ghost está orientado actualmente a Windows (<span className="font-mono text-snow">x86_64-pc-windows-msvc</span>) y
               usa el runtime de Microsoft Edge WebView2.
+            </Reveal>
+
+            <Reveal delay={240} className="mt-10 border border-tech/30 bg-tech/[0.06] p-8">
+              <div className="flex flex-col justify-between gap-6 md:flex-row md:items-center">
+                <div>
+                  <h3 className="text-2xl font-extrabold uppercase tracking-tight text-snow">Descargar Ghost Browser</h3>
+                  <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-steel">
+                    Instalador listo para Windows: no requiere compilar. Si Windows no tiene el runtime de WebView2, el propio
+                    instalador te lo indica.
+                  </p>
+                  <p className="mt-4 font-mono text-[11px] uppercase leading-5 tracking-[0.16em] text-steel">
+                    <span className="text-volt">{ghostDownload.meta}</span>
+                    <span className="text-steel/50"> · </span>
+                    <span className="break-all text-steel/70">{ghostDownload.checksum}</span>
+                  </p>
+                </div>
+                <PrimaryButton href={ghostDownload.url} download={ghostDownload.file} className="shrink-0">
+                  Descargar {ghostDownload.file}
+                </PrimaryButton>
+              </div>
             </Reveal>
 
             <div className="mt-12 grid gap-10 lg:grid-cols-2">
