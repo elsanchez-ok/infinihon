@@ -72,11 +72,11 @@ export function ServicesPage() {
         <div className="lg:col-span-7">
           <div className="font-mono text-[10.5px] uppercase tracking-[0.24em] text-steel"><span className="text-volt">Servicios</span> <span className="h-px w-10 bg-steel/40" /></div>
           <h1 className="mt-5 text-[10vw] font-extrabold uppercase leading-[0.92] tracking-[-0.04em] text-snow sm:text-5xl lg:text-[4rem]">
-            Soluciones Infinihon
+            Soluciones InfiniHon Corp.
           </h1>
         </div>
         <p className="max-w-md text-[14.5px] leading-relaxed text-steel lg:col-span-5">
-          Infinihon no solo vende hardware. Estos servicios se cotizan por alcance y se ejecutan con documentación entregable.
+          InfiniHon Corp. no solo vende hardware. Estos servicios se cotizan por alcance y se ejecutan con documentación entregable.
         </p>
       </header>
 
@@ -181,7 +181,7 @@ const FAQ = [
   ["¿Puedo comprar sin saber exactamente qué necesito?", "Sí. Es el caso más frecuente. Planteas el problema y el equipo técnico define la arquitectura y los componentes."],
   ["¿Los precios que veo son reales?", "El precio publicado es el que mantiene nuestro equipo en el catálogo. Los productos sin precio se cotizan a medida según configuración, disponibilidad y entrega."],
   ["¿Entregan fuera de Honduras?", "Sí, con coordinación previa y costos de importación definidos por escrito antes de despachar."],
-  ["¿Qué pasa después de la compra?", "Los equipos incluyen garantía del fabricante y acompañamiento técnico de Infinihon para instalación y configuración."],
+  ["¿Qué pasa después de la compra?", "Los equipos incluyen garantía del fabricante y acompañamiento técnico de InfiniHon Corp. para instalación y configuración."],
   ["¿Cómo se cotizan los servicios?", "Por alcance: número de sedes, equipos, complejidad y ventanas de trabajo. Siempre con propuesta escrita previa."],
 ];
 
@@ -199,7 +199,7 @@ export function SupportPage() {
           <Reveal delay={200} className="mt-7 max-w-xl text-[16.5px] leading-relaxed text-steel">
             Nuestro equipo puede ayudarte a encontrar la solución adecuada para tu infraestructura.
           </Reveal>
-          <Reveal delay={300} className="mt-9"><PrimaryButton href="#cotizar">Hablar con Infinihon</PrimaryButton></Reveal>
+          <Reveal delay={300} className="mt-9"><PrimaryButton href="#cotizar">Hablar con InfiniHon Corp.</PrimaryButton></Reveal>
           <div className="mt-12 grid gap-6 border-t border-white/[0.08] pt-8 sm:grid-cols-3">
             {[["Ingeniería", "Quien te atiende es quien implementa"], ["Transparencia", "Sin promesas que no podamos sostener"], ["Cobertura", "Territorio nacional y coordinación internacional"]].map(([t, d]) => (
               <div key={t}>
@@ -244,7 +244,7 @@ export function SupportPage() {
                 ["Privacidad", "Tratamos los datos de contacto únicamente para responder solicitudes y procesar órdenes.", "/privacidad"],
                 ["Términos", "Condiciones de venta, entregables y responsabilidades por escrito antes de cada proyecto.", "/terminos"],
                 ["Envíos", "Cobertura nacional con coordinación de importación cuando el equipo no está en stock local.", "/envios"],
-                ["Garantías", "Cobertura del fabricante gestionada por Infinihon, más soporte de instalación propio.", "/garantias"],
+                ["Garantías", "Cobertura del fabricante gestionada por InfiniHon Corp., más soporte de instalación propio.", "/garantias"],
               ].map(([t, d, to]) => (
                 <Link key={t} to={to} className="group bg-ink/40 p-6 transition-colors hover:bg-hn/15">
                   <h3 className="text-[15px] font-bold text-snow group-hover:text-volt">{t}</h3>
@@ -257,7 +257,7 @@ export function SupportPage() {
         </div>
 
         <aside className="lg:sticky lg:top-24 lg:self-start">
-          <QuoteForm title="Hablar con Infinihon" />
+          <QuoteForm title="Hablar con InfiniHon Corp." />
           <div className="mt-6 border border-white/[0.08] bg-obsidian/50 p-6">
             <div className="flex items-center justify-between">
               <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-steel">Identidad</span>

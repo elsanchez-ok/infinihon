@@ -11,7 +11,7 @@ export default function AboutSection() {
   return (
     <section id="nosotros" className="relative border-t border-white/[0.06] bg-ink py-28 md:py-40">
       <div className="mx-auto max-w-[1440px] px-5 md:px-10">
-        <Reveal><SectionLabel index="11">Nosotros</SectionLabel></Reveal>
+        <Reveal><SectionLabel index="12">Nosotros</SectionLabel></Reveal>
         <RevealTitle
           className="mt-8 max-w-6xl text-[10vw] font-extrabold uppercase leading-[0.92] tracking-[-0.04em] sm:text-6xl lg:text-[5.4rem]"
           lines={["No solo instalamos", "tecnología.", "Construimos sistemas."]}
@@ -21,7 +21,7 @@ export default function AboutSection() {
         <div className="mt-16 grid gap-16 md:mt-24 lg:grid-cols-12">
           <div className="lg:col-span-5">
             <Reveal className="text-xl leading-relaxed text-snow/90 md:text-2xl">
-              INF INIHON es una empresa tecnológica hondureña enfocada en infraestructura, sistemas y soluciones IT.
+              InfiniHon Corp. es un corporativo tecnológico hondureño enfocado en infraestructura, sistemas, soluciones IT y proyectos propios de software.
             </Reveal>
             <Reveal delay={100} className="mt-6 text-[15px] leading-relaxed text-steel">
               Trabajamos en todo el recorrido: desde el cableado lógico de una red y la configuración de un router

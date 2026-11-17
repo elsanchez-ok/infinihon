@@ -1,5 +1,5 @@
 /**
- * INFINIHON Control Center — seed data.
+ * InfiniHon Corp. Control Center — seed data.
  * Every record with `demo: true` is illustrative sample content for interface design.
  * No record here represents a real customer, sale, server, user or integration.
  * Replace with the API adapter in `api.ts` when a backend exists.
@@ -110,7 +110,7 @@ export const seedProducts: Product[] = [
   { ...baseProduct, id: "p3", name: "Storage Node — Reference", sku: "DEMO-STO-001", category: "storage", brand: "To be confirmed", description: "Reference network storage for backups and shared data.", price: null, stock: 0, minStock: 2, warehouse: "Main warehouse", status: "Active", specs: [], slug: "storage-node-reference", updated: d(24) },
   { ...baseProduct, id: "p4", name: "Secure Gateway — Reference", sku: "DEMO-SEC-001", category: "security", brand: "To be confirmed", description: "Reference perimeter gateway with remote access.", price: null, stock: 7, minStock: 3, warehouse: "Secondary warehouse", status: "Draft", specs: [], slug: "secure-gateway-reference", updated: d(22) },
   { ...baseProduct, id: "p5", name: "Edge Cluster Kit — Reference", sku: "DEMO-HW-001", category: "hardware", brand: "To be confirmed", description: "Reference kit for edge computing labs and K3s.", price: null, stock: 0, minStock: 2, warehouse: "Main warehouse", status: "Draft", specs: [], slug: "edge-cluster-kit-reference", updated: d(20) },
-  { ...baseProduct, id: "p6", name: "Observability Stack — Reference", sku: "DEMO-SW-001", category: "software", brand: "INFINIHON", description: "Reference software offering for metrics, dashboards and alerts.", price: null, stock: null, minStock: 0, warehouse: "Digital", status: "Archived", specs: [], slug: "observability-stack-reference", updated: d(12) },
+  { ...baseProduct, id: "p6", name: "Observability Stack — Reference", sku: "DEMO-SW-001", category: "software", brand: "InfiniHon Corp.", description: "Reference software offering for metrics, dashboards and alerts.", price: null, stock: null, minStock: 0, warehouse: "Digital", status: "Archived", specs: [], slug: "observability-stack-reference", updated: d(12) },
 ];
 
 const svc = (id: string, name: string, category: string, description: string, features: string[], status: PublishStatus = "Published"): Service =>
@@ -173,7 +173,7 @@ export const seedActivity: Activity[] = [
 ];
 
 export const seedSettings: Settings = {
-  companyName: "INFINIHON", contactEmail: "", contactPhone: "", currency: "", taxRate: "",
+  companyName: "InfiniHon Corp.", contactEmail: "", contactPhone: "", currency: "", taxRate: "",
   lowStockAlerts: true, allowRegistration: false, minPasswordLength: 12, sessionTimeout: 30,
   require2fa: true, emailNotifications: false, systemNotifications: true, theme: "Obsidian",
 };

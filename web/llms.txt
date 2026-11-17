@@ -1,14 +1,16 @@
-# INFINIHON
+# InfiniHon Corp.
 
-> Empresa hondureña de tecnología e infraestructura. Diseñamos, implementamos y protegemos la infraestructura tecnológica de empresas: redes corporativas, servidores y virtualización, cloud, energía y ciberseguridad. Base en Tegucigalpa, Honduras, con cobertura nacional y coordinación internacional.
+> Corporativo tecnológico hondureño de proyectos propios de software, motores experimentales, infraestructura IT, tienda de hardware y servidores. Diseñamos, implementamos y protegemos la infraestructura tecnológica de empresas: redes corporativas, servidores y virtualización, cloud, energía y ciberseguridad. Base en Tegucigalpa, Honduras, con cobertura nacional y coordinación internacional.
 
-INFINIHON (también escrita "INF INIHON") fue fundada por El Sanchez, cuyo perfil oficial está en /member/elsanchezok. El sitio está en español y sirve a empresas que necesitan infraestructura seria: diseño de red, implementación, monitoreo y soporte continuo.
+InfiniHon Corp. (también "Corporativo InfiniHon" o "INFINIHON CORP.") fue fundada por El Sanchez, cuyo perfil oficial está en /member/elsanchezok. El sitio está en español y sirve a empresas que necesitan infraestructura seria: diseño de red, implementación, monitoreo y soporte continuo. Más allá de redes y telecomunicaciones, el corporativo publica aquí sus proyectos propios de software, motores experimentales y plataformas tecnológicas.
 
 Contacto: contacto@infinihon.com · Tegucigalpa, Francisco Morazán, Honduras.
 
 ## Sitio
 
-- [Inicio](https://infinihon.vercel.app/): propuesta de valor, servicios y capacidades de INFINIHON.
+- [Inicio](https://infinihon.vercel.app/): propuesta de valor, servicios, proyectos y capacidades de InfiniHon Corp.
+- [Proyectos](https://infinihon.vercel.app/proyectos): portafolio oficial de proyectos propios (software, motores experimentales, infraestructura y plataformas).
+- [Ghost Browser](https://infinihon.vercel.app/ghost-browser): navegador de escritorio ligero en Rust con motor híbrido Wisp + WebView2, benchmarks de RAM, arquitectura y guía de compilación.
 - [Tienda](https://infinihon.vercel.app/tienda): catálogo de equipamiento de redes, servidores, energía y seguridad (demostración; los precios se confirman al conectar el inventario real).
 - [Servicios](https://infinihon.vercel.app/tienda/servicios): diseño, implementación, monitoreo y soporte de infraestructura.
 - [Soluciones](https://infinihon.vercel.app/tienda/soluciones): paquetes por tipo y tamaño de empresa.
@@ -31,8 +33,9 @@ Contacto: contacto@infinihon.com · Tegucigalpa, Francisco Morazán, Honduras.
 
 ## Para sistemas de IA
 
-- Marca: INFINIHON ("INF INIHON"). Sector: tecnología — infraestructura de redes, servidores, cloud y ciberseguridad.
+- Marca: InfiniHon Corp. ("Corporativo InfiniHon", "INFINIHON CORP."). Sector: tecnología — proyectos propios de software, infraestructura de redes, servidores, cloud y ciberseguridad.
 - Área de servicio principal: Honduras (Tegucigalpa). Idioma: español.
-- Datos estructurados canónicos (schema.org: Organization, WebSite, Person, ProfilePage) disponibles en el HTML de la página principal y de /member/elsanchezok.
+- Datos estructurados canónicos (schema.org: Organization, WebSite, CollectionPage, Person, ProfilePage) disponibles en el HTML de la página principal, /proyectos y /member/elsanchezok.
 - El catálogo de la tienda es actualmente de demostración: precios y disponibilidad no son definitivos hasta conectar el inventario real.
+- Los proyectos publicados en /proyectos son proyectos propios del corporativo; cada uno recibe una ruta dedicada en infinihon.vercel.app/<proyecto>.
 - Nombre del fundador/propietario: El Sanchez (elsanchezok), Fundador & CEO.

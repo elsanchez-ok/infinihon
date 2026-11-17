@@ -5,6 +5,7 @@ import { cn } from "../utils/cn";
 const links = [
   { label: "Inicio", href: "#inicio" },
   { label: "Servicios", href: "#servicios" },
+  { label: "Proyectos", href: "/proyectos" },
   { label: "Infraestructura", href: "#infraestructura" },
   { label: "Tecnología", href: "#tecnologia" },
   { label: "Nosotros", href: "#nosotros" },
@@ -51,7 +52,7 @@ export default function Navbar() {
             className="hidden items-center gap-2 border border-tech/60 bg-tech/10 px-4 py-2.5 text-[13px] font-semibold text-snow transition-all hover:bg-tech sm:inline-flex"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-volt pulse-soft" />
-            Hablar con InfiniHon
+            Hablar con InfiniHon Corp.
           </a>
           <button
             className="relative flex h-10 w-10 items-center justify-center border border-white/10 lg:hidden"
@@ -86,7 +87,7 @@ export default function Navbar() {
           ))}
           <li className="mt-6">
             <a href="#contacto" onClick={() => setOpen(false)} className="flex w-full items-center justify-center bg-tech py-4 font-semibold">
-              Hablar con InfiniHon
+              Hablar con InfiniHon Corp.
             </a>
           </li>
         </ul>

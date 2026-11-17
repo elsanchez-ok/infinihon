@@ -93,7 +93,7 @@ export function SectionLabel({ index, children, className }: { index: string; ch
 
 export function Logo({ className }: { className?: string }) {
   return (
-    <a href="#inicio" className={cn("group flex items-center gap-3", className)} aria-label="INF INIHON — inicio">
+    <a href="#inicio" className={cn("group flex items-center gap-3", className)} aria-label="INFINIHON CORP. — inicio">
       <svg viewBox="0 0 40 40" className="h-8 w-8" aria-hidden>
         <rect x="0.5" y="0.5" width="39" height="39" rx="2" fill="none" stroke="#003B73" />
         <path d="M8 26 C 8 14, 18 14, 20 20 S 32 26, 32 14" fill="none" stroke="#0066FF" strokeWidth="2" strokeLinecap="round" />

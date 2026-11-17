@@ -4,7 +4,7 @@ export type Locale = "en-US" | "es-HN";
 const KEY = "infinihon.locale.v1";
 
 const en: Record<string, string> = {
-  "Resumen": "Overview", "Inicio": "Home", "Mi InfiniHon": "My InfiniHon", "Mis servicios": "My services", "Mis pedidos": "My orders", "Mis solicitudes": "My requests", "Favoritos": "Favorites",
+  "Resumen": "Overview", "Inicio": "Home", "Mi InfiniHon Corp.": "My InfiniHon Corp.", "Mis servicios": "My services", "Mis pedidos": "My orders", "Mis solicitudes": "My requests", "Favoritos": "Favorites",
   "Soporte": "Support", "Mensajes": "Messages", "Centro de ayuda": "Help center", "Cuenta": "Account", "Mi perfil": "My profile", "Seguridad": "Security", "Configuración": "Settings", "Notificaciones": "Notifications", "Facturación": "Billing", "Organización": "Organization", "Documentos": "Documents",
   "Cerrar sesión": "Sign out", "Abrir navegación": "Open navigation", "Cerrar navegación": "Close navigation", "Saltar al contenido": "Skip to content", "Buscar en tu cuenta": "Search your account", "Buscar en tu cuenta...": "Search your account...", "Sin resultados en tu cuenta para": "No account results for", "Sección": "Section", "Solicitud": "Request", "Ticket": "Ticket",
   "Portal de usuario": "Account portal", "Ver todas": "View all", "Marcar todo como leído": "Mark all as read", "No tienes notificaciones todavía.": "No notifications yet.", "Sin sesión activa.": "No active session.", "Sesión activa:": "Active session:", "Administrador": "Administrator", "Cliente": "Customer", "Tu información se sincroniza con tu cuenta.": "Your information is synced with your account.", "¿Quieres cerrar tu sesión en este dispositivo?": "Do you want to sign out on this device?", "Cerrar": "Close", "Descartar": "Dismiss",

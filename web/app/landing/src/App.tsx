@@ -3,6 +3,7 @@ import Hero from "./components/Hero";
 import ProblemSection from "./components/ProblemSection";
 import ArchitectureSection from "./components/ArchitectureSection";
 import ServicesSection from "./components/ServicesSection";
+import ProjectsSection from "./components/ProjectsSection";
 import NetworkSection from "./components/NetworkSection";
 import CloudSection from "./components/CloudSection";
 import MonitoringSection from "./components/MonitoringSection";
@@ -26,6 +27,7 @@ export default function App() {
         <ProblemSection />
         <ArchitectureSection />
         <ServicesSection />
+        <ProjectsSection />
         <NetworkSection />
         <CloudSection />
         <MonitoringSection />

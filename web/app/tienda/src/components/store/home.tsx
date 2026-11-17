@@ -86,7 +86,7 @@ export function StoreHero() {
         <div>
           <Reveal className="flex items-center gap-3 font-mono text-[10.5px] uppercase tracking-[0.24em] text-steel">
             <span className="h-1.5 w-1.5 rounded-full bg-volt pulse-soft" />
-            Infinihon Store <span className="text-steel/40">/</span> Tienda oficial
+            InfiniHon Corp. Store <span className="text-steel/40">/</span> Tienda oficial
           </Reveal>
           <RevealTitle
             as="h1"
@@ -123,7 +123,7 @@ export function CategoryGrid() {
   return (
     <section className="relative border-b border-white/[0.06] py-20 md:py-28">
       <div className="mx-auto max-w-[1500px] px-4 md:px-8">
-        <SectionHead kicker="01" title="Explora el ecosistema Infinihon" note="Ocho áreas que cubren todo el recorrido: desde el puerto de red hasta el despliegue en la nube." />
+        <SectionHead kicker="01" title="Explora el ecosistema InfiniHon Corp." note="Ocho áreas que cubren todo el recorrido: desde el puerto de red hasta el despliegue en la nube." />
         <div className="mt-12 grid grid-cols-2 gap-px bg-white/[0.07] md:grid-cols-4">
           {categories.map((c, i) => (
             <Reveal key={c.id} delay={i * 45}>
@@ -198,7 +198,7 @@ export function SolutionsSection() {
   return (
     <section className="relative border-b border-white/[0.06] bg-ink py-20 md:py-28">
       <div className="mx-auto max-w-[1500px] px-4 md:px-8">
-        <SectionHead kicker="03" title="Soluciones Infinihon" note="Servicios profesionales que se cotizan según alcance. No todo lo que necesitas cabe en un carrito." to="/servicios" />
+        <SectionHead kicker="03" title="Soluciones InfiniHon Corp." note="Servicios profesionales que se cotizan según alcance. No todo lo que necesitas cabe en un carrito." to="/servicios" />
         <div className="mt-12 grid gap-px bg-white/[0.07] md:grid-cols-2">
           {servicesFeatured.map((s, i) => (
             <Reveal key={s.slug} delay={i * 60} className="bg-ink"><SolutionCard s={s} i={i} /></Reveal>
@@ -249,7 +249,7 @@ export function SupportSection() {
               Nuestro equipo puede ayudarte a encontrar la solución adecuada para tu infraestructura.
             </Reveal>
             <Reveal delay={350} className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
-              <PrimaryButton href="#/soporte">Hablar con Infinihon</PrimaryButton>
+              <PrimaryButton href="#/soporte">Hablar con InfiniHon Corp.</PrimaryButton>
               <GhostButton href="#/catalogo">Explorar productos</GhostButton>
             </Reveal>
             <Reveal delay={450} className="mt-10 flex flex-wrap justify-center gap-x-8 gap-y-2 font-mono text-[10px] uppercase tracking-[0.18em] text-steel/70">
@@ -277,7 +277,7 @@ export function TrustSection() {
   return (
     <section className="relative border-b border-white/[0.06] py-20 md:py-28">
       <div className="mx-auto max-w-[1500px] px-4 md:px-8">
-        <SectionHead kicker="05" title="Tecnología con el respaldo de Infinihon" note="Mostramos solo lo que podemos sostener. Nada de cifras inventadas ni sellos que no poseemos." />
+        <SectionHead kicker="05" title="Tecnología con el respaldo de InfiniHon Corp." note="Mostramos solo lo que podemos sostener. Nada de cifras inventadas ni sellos que no poseemos." />
         <div className="mt-12 grid gap-px bg-white/[0.07] md:grid-cols-3 lg:grid-cols-5">
           {items.map((it, i) => (
             <Reveal key={it.t} delay={i * 60} className="group bg-obsidian p-6 transition-colors duration-500 hover:bg-hn/30">
@@ -328,7 +328,7 @@ export function TechInsights() {
   return (
     <section className="relative border-b border-white/[0.06] py-20 md:py-28">
       <div className="mx-auto max-w-[1500px] px-4 md:px-8">
-        <SectionHead kicker="06" title="Infinihon Tech" note="Guías y comparativas escritas por el equipo que implementa. Contenido en construcción." />
+        <SectionHead kicker="06" title="InfiniHon Corp. Tech" note="Guías y comparativas escritas por el equipo que implementa. Contenido en construcción." />
         <div className="mt-12 grid gap-5 md:grid-cols-3">
           {insights.map((n, i) => {
             const slug = slugify(n.t);

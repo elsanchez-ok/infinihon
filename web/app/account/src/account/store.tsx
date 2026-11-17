@@ -153,7 +153,7 @@ export function AccountProvider({ children, pathname, navigate }: { children: Re
     const record: RequestRecord = {
       id: uid("REQ").toUpperCase(), title: input.title.trim(), type: input.type, description: input.description.trim(),
       status: "Enviada", created: now, updated: now,
-      timeline: [{ label: "Solicitud creada", date: now, note: "Recibida por el equipo de InfiniHon." }],
+      timeline: [{ label: "Solicitud creada", date: now, note: "Recibida por el equipo de InfiniHon Corp." }],
       messages: [], attachments: [],
     };
     setData((d) => ({
@@ -253,6 +253,6 @@ export function useAccount() {
   return ctx;
 }
 
-export const displayName = (p: Profile) => [p.firstName, p.lastName].filter(Boolean).join(" ") || "Usuario de InfiniHon";
+export const displayName = (p: Profile) => [p.firstName, p.lastName].filter(Boolean).join(" ") || "Usuario de InfiniHon Corp.";
 export const initialsOf = (p: Profile) => ((p.firstName[0] ?? "") + (p.lastName[0] ?? "")).toUpperCase() || "IH";
 export { changePassword };

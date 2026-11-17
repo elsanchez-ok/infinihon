@@ -166,7 +166,7 @@ export default function NetworkSection() {
       <div className="relative mx-auto max-w-[1440px] px-5 md:px-10">
         <div className="grid gap-10 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-8">
-            <Reveal><SectionLabel index="04">Network core</SectionLabel></Reveal>
+            <Reveal><SectionLabel index="05">Network core</SectionLabel></Reveal>
             <RevealTitle
               className="mt-8 text-[12vw] font-extrabold uppercase leading-[0.9] tracking-[-0.045em] sm:text-7xl lg:text-[6.5rem]"
               lines={["Todo comienza", "con una red."]}

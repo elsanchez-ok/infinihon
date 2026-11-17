@@ -53,7 +53,7 @@ export function InfrastructurePage() {
   if (!can("infrastructure.view")) return <Forbidden permission="infrastructure.view" />;
   return (
     <>
-      <PageHeader eyebrow="Infrastructure" title="Infrastructure" description="The operational layer behind InfiniHon. Live resources appear here once a monitoring or cloud integration is connected."
+      <PageHeader eyebrow="Infrastructure" title="Infrastructure" description="The operational layer behind InfiniHon Corp. Live resources appear here once a monitoring or cloud integration is connected."
         breadcrumbs={[{ label: "Overview", to: "/admin" }, { label: "Infrastructure" }]}
         actions={can("integrations.view") && <Button variant="primary" icon={Plug} onClick={() => navigate("/admin/integrations")}>Connect a source</Button>} />
       <div className="grid gap-4 xl:grid-cols-[1fr_360px]">
@@ -86,7 +86,7 @@ function ResourcePage({ title, icon: Icon, description, source }: { title: strin
         breadcrumbs={[{ label: "Infrastructure", to: "/admin/infrastructure" }, { label: title }]} />
       <Panel>
         <EmptyState icon={Icon} title={`No ${title.toLowerCase()} connected.`}
-          description={`${title} are discovered from a ${source}. InfiniHon does not simulate resources that aren't connected.`}
+          description={`${title} are discovered from a ${source}. InfiniHon Corp. does not simulate resources that aren't connected.`}
           action={can("integrations.view") && <Button variant="primary" icon={Plug} onClick={() => navigate("/admin/integrations")}>Configure integration</Button>} />
       </Panel>
     </>

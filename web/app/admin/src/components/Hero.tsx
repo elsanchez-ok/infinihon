@@ -45,7 +45,7 @@ export default function Hero() {
               <span className="relative h-2 w-2 rounded-full bg-volt" />
             </span>
             <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-steel">
-              INF INIHON <span className="text-steel/40">/</span> Technology & Infrastructure
+              INFINIHON CORP. <span className="text-steel/40">/</span> Technology & Infrastructure
             </span>
           </div>
 
@@ -100,7 +100,7 @@ export default function Hero() {
             Scroll
           </a>
           <span className="hidden sm:block">Networking · Servers · Cloud · Security · Observability</span>
-          <span>© INF INIHON</span>
+          <span>© INFINIHON CORP.</span>
         </div>
       </div>
     </section>

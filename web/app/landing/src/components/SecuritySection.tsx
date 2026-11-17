@@ -69,7 +69,7 @@ export default function SecuritySection() {
     <section className="relative overflow-hidden border-t border-white/[0.06] bg-[#030507] py-28 md:py-40">
       <div className="absolute inset-0 bg-grid opacity-30 mask-radial" />
       <div className="relative mx-auto max-w-[1440px] px-5 md:px-10">
-        <Reveal><SectionLabel index="07">Seguridad</SectionLabel></Reveal>
+        <Reveal><SectionLabel index="08">Seguridad</SectionLabel></Reveal>
         <RevealTitle
           className="mt-8 max-w-6xl text-[10vw] font-extrabold uppercase leading-[0.92] tracking-[-0.04em] sm:text-6xl lg:text-[5.4rem]"
           lines={["La seguridad no", "es una función.", "Es una capa."]}

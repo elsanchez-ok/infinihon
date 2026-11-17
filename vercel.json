@@ -4,7 +4,6 @@
   "rewrites": [
     { "source": "/assets/(.*)", "destination": "/assets/$1" },
     { "source": "/fonts/(.*)", "destination": "/fonts/$1" },
-    { "source": "/", "destination": "/index.html" },
     { "source": "/tienda", "destination": "/tienda.html" },
     { "source": "/tienda/:path*", "destination": "/tienda.html" },
     { "source": "/auth", "destination": "/auth.html" },
@@ -14,6 +13,11 @@
     { "source": "/account", "destination": "/account.html" },
     { "source": "/account/:path*", "destination": "/account.html" },
     { "source": "/member", "destination": "/member.html" },
-    { "source": "/member/:path*", "destination": "/member.html" }
+    { "source": "/member/:path*", "destination": "/member.html" },
+    { "source": "/proyectos", "destination": "/proyectos.html" },
+    { "source": "/proyectos/:path*", "destination": "/proyectos.html" },
+    { "source": "/ghost-browser", "destination": "/proyectos.html" },
+    { "source": "/ghost-browser/:path*", "destination": "/proyectos.html" },
+    { "source": "/", "destination": "/index.html" }
   ]
 }

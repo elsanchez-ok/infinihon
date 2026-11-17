@@ -166,7 +166,7 @@ export default function HondurasSection() {
       <div className="absolute right-0 top-1/2 h-[70vmin] w-[70vmin] -translate-y-1/2 rounded-full bg-hn/30 blur-[140px]" />
       <div className="relative mx-auto grid max-w-[1440px] items-center gap-16 px-5 md:px-10 lg:grid-cols-12">
         <div className="lg:col-span-5">
-          <Reveal><SectionLabel index="09">Identidad</SectionLabel></Reveal>
+          <Reveal><SectionLabel index="10">Identidad</SectionLabel></Reveal>
           <RevealTitle
             className="mt-8 text-[10vw] font-extrabold uppercase leading-[0.92] tracking-[-0.04em] sm:text-6xl lg:text-[4.4rem]"
             lines={["Tecnología", "construida", "desde Honduras."]}

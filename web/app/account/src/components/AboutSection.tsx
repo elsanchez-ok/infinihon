@@ -21,7 +21,7 @@ export default function AboutSection() {
         <div className="mt-16 grid gap-16 md:mt-24 lg:grid-cols-12">
           <div className="lg:col-span-5">
             <Reveal className="text-xl leading-relaxed text-snow/90 md:text-2xl">
-              INF INIHON es una empresa tecnológica hondureña enfocada en infraestructura, sistemas y soluciones IT.
+              INFINIHON CORP. es una empresa tecnológica hondureña enfocada en infraestructura, sistemas y soluciones IT.
             </Reveal>
             <Reveal delay={100} className="mt-6 text-[15px] leading-relaxed text-steel">
               Trabajamos en todo el recorrido: desde el cableado lógico de una red y la configuración de un router

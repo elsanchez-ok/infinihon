@@ -113,7 +113,7 @@ export default function CloudSection() {
     <section className="relative border-t border-white/[0.06] bg-ink py-28 md:py-40">
       <div className="mx-auto grid max-w-[1440px] gap-16 px-5 md:px-10 lg:grid-cols-2 lg:gap-20">
         <div>
-          <Reveal><SectionLabel index="05">Cloud + DevOps</SectionLabel></Reveal>
+          <Reveal><SectionLabel index="06">Cloud + DevOps</SectionLabel></Reveal>
           <RevealTitle
             className="mt-8 text-[12vw] font-extrabold uppercase leading-[0.9] tracking-[-0.045em] sm:text-7xl lg:text-[5.4rem]"
             lines={["Del servidor", "al cloud."]}

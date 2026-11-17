@@ -30,8 +30,13 @@ function Reveal({ children, delay = 0, className = "" }: { children: React.React
 
 function Logo() {
   return (
-    <a href="/" className="group flex flex-col items-center gap-1.5" aria-label="INFINIHON — sitio oficial">
-      <img src="/assets/infinihon.png" alt="INFINIHON" className="h-9 w-auto shrink-0" />
+    <a href="/" className="group flex flex-col items-center gap-1.5" aria-label="InfiniHon Corp. — sitio oficial">
+      <span className="flex items-center">
+        <img src="/assets/infinihon.png" alt="InfiniHon Corp." className="h-9 w-auto shrink-0" />
+        <span className="ml-1 translate-y-[2px] font-mono text-[10px] font-semibold uppercase tracking-[0.1em] text-volt">
+          Corp.
+        </span>
+      </span>
       <span className="block font-mono text-[8px] uppercase leading-none tracking-[0.28em] text-steel">Infrastructure · Innovation · Honduras</span>
     </a>
   );
@@ -48,7 +53,7 @@ function MemberNotFound({ id }: { id: string }) {
         La dirección <span className="font-mono text-snow">/member/{id}</span> no corresponde a ningún miembro del equipo.
       </p>
       <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-        <a href="/" className="bg-tech px-6 py-4 text-center text-sm font-semibold text-snow hover:bg-[#1a75ff]">Ir a INFINIHON</a>
+        <a href="/" className="bg-tech px-6 py-4 text-center text-sm font-semibold text-snow hover:bg-[#1a75ff]">Ir a InfiniHon Corp.</a>
         <a href="mailto:contacto@infinihon.com" className="border border-white/15 px-6 py-4 text-center text-sm font-semibold hover:border-volt/60">Contactar</a>
       </div>
     </div>
@@ -140,7 +145,7 @@ function Profile({ m }: { m: Member }) {
         {/* responsabilidades */}
         <section className="relative mx-auto max-w-[1500px] px-4 py-14 md:px-8">
           <Reveal>
-            <h2 className="text-2xl font-extrabold uppercase tracking-tight md:text-3xl">Qué hace en INFINIHON</h2>
+            <h2 className="text-2xl font-extrabold uppercase tracking-tight md:text-3xl">Qué hace en InfiniHon Corp.</h2>
           </Reveal>
           <div className="mt-8 grid gap-px bg-white/[0.08] sm:grid-cols-2">
             {m.duties.map((d, i) => (
@@ -193,7 +198,7 @@ function Profile({ m }: { m: Member }) {
                   Infraestructura que sí responde.
                 </h2>
                 <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
-                  <a href="/" className="bg-tech px-6 py-4 text-sm font-semibold text-snow hover:bg-[#1a75ff]">Conocer INFINIHON</a>
+                  <a href="/" className="bg-tech px-6 py-4 text-sm font-semibold text-snow hover:bg-[#1a75ff]">Conocer InfiniHon Corp.</a>
                   <a href="/tienda" className="border border-white/15 px-6 py-4 text-sm font-semibold hover:border-volt/60">Ver la tienda</a>
                 </div>
               </div>
@@ -204,7 +209,7 @@ function Profile({ m }: { m: Member }) {
 
       <footer className="border-t border-white/[0.07] py-8">
         <div className="mx-auto flex max-w-[1500px] flex-col items-center justify-between gap-3 px-4 font-mono text-[10px] uppercase tracking-[0.2em] text-steel/70 sm:flex-row md:px-8">
-          <span>INFINIHON — Technology &amp; Infrastructure</span>
+          <span>InfiniHon Corp. — Corporativo Tecnológico</span>
           <span>Tegucigalpa · Honduras</span>
           <span>© {new Date().getFullYear()} · infinihon.vercel.app</span>
         </div>

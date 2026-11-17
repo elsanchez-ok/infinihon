@@ -93,8 +93,13 @@ export function SectionLabel({ index, children, className }: { index: string; ch
 
 export function Logo({ className }: { className?: string }) {
   return (
-    <a href="#inicio" className={cn("group flex flex-col items-center gap-1.5", className)} aria-label="INFINIHON — inicio">
-      <img src="/assets/infinihon.png" alt="INFINIHON" className="h-8 w-auto shrink-0" />
+    <a href="#inicio" className={cn("group flex flex-col items-center gap-1.5", className)} aria-label="InfiniHon Corp. — inicio">
+      <span className="flex items-center">
+        <img src="/assets/infinihon.png" alt="InfiniHon Corp." className="h-8 w-auto shrink-0" />
+        <span className="ml-1 translate-y-[2px] font-mono text-[10px] font-semibold uppercase tracking-[0.1em] text-volt">
+          Corp.
+        </span>
+      </span>
       <span className="block font-mono text-[8px] uppercase leading-none tracking-[0.28em] text-steel">Infrastructure · Innovation · Honduras</span>
     </a>
   );

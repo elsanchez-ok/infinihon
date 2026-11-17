@@ -65,7 +65,7 @@ export async function replyToTicket(ticket: SupportTicket, text: string): Promis
     ...ticket,
     status: ticket.status === "Resuelto" || ticket.status === "Cerrado" ? "En progreso" : ticket.status,
     updated: new Date().toISOString(),
-    messages: [...ticket.messages, { from: "Soporte InfiniHon", text, date: new Date().toISOString() }],
+    messages: [...ticket.messages, { from: "Soporte InfiniHon Corp.", text, date: new Date().toISOString() }],
   };
   await sb(`/rest/v1/tickets?id=eq.${encodeURIComponent(ticket.id)}`, {
     method: "PATCH", token,

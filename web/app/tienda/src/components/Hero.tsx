@@ -3,7 +3,7 @@ import InfrastructureVisual from "./InfrastructureVisual";
 import { PrimaryButton, GhostButton } from "./ui";
 import { cn } from "../utils/cn";
 
-const micro = ["Redes", "Cloud", "Seguridad", "DevOps", "Automatización"];
+const micro = ["Proyectos", "Redes", "Cloud", "Seguridad", "DevOps", "Automatización"];
 
 export default function Hero() {
   const [ready, setReady] = useState(false);
@@ -45,7 +45,7 @@ export default function Hero() {
               <span className="relative h-2 w-2 rounded-full bg-volt" />
             </span>
             <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-steel">
-              INF INIHON <span className="text-steel/40">/</span> Technology & Infrastructure
+              INFINIHON CORP. <span className="text-steel/40">/</span> Corporativo de Proyectos &amp; IT
             </span>
           </div>
 
@@ -68,12 +68,14 @@ export default function Hero() {
             style={{ "--d": "650ms" } as CSSProperties}
           >
             Diseñamos, implementamos y protegemos la <span className="text-snow">infraestructura tecnológica</span> que mantiene
-            conectadas a las empresas modernas.
+            conectadas a las empresas modernas. Y publicamos los <span className="text-snow">proyectos de software y plataformas</span>{" "}
+            que construimos dentro del corporativo.
           </p>
 
           <div className="reveal mt-10 flex flex-col gap-3 sm:flex-row" style={{ "--d": "800ms" } as CSSProperties}>
             <PrimaryButton href="#contacto">Construir mi infraestructura</PrimaryButton>
             <GhostButton href="#servicios">Explorar servicios</GhostButton>
+            <GhostButton href="/proyectos">Ver proyectos</GhostButton>
           </div>
 
           <div
@@ -100,7 +102,7 @@ export default function Hero() {
             Scroll
           </a>
           <span className="hidden sm:block">Networking · Servers · Cloud · Security · Observability</span>
-          <span>© INF INIHON</span>
+          <span>© INFINIHON CORP.</span>
         </div>
       </div>
     </section>

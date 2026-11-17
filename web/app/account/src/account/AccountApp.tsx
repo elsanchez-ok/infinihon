@@ -26,7 +26,7 @@ interface NavItem { label: string; to: string; icon: React.ComponentType<{ class
 
 const groups: { label: string; items: NavItem[] }[] = [
   { label: "Resumen", items: [{ label: "Inicio", to: "/account", icon: Compass }] },
-  { label: "Mi InfiniHon", items: [
+  { label: "Mi InfiniHon Corp.", items: [
     { label: "Mis servicios", to: "/account/services", icon: Boxes },
     { label: "Mis pedidos", to: "/account/orders", icon: Package },
     { label: "Mis solicitudes", to: "/account/requests", icon: Send },
@@ -186,7 +186,7 @@ function Topbar({ onMenu }: { onMenu: () => void }) {
             {menuOpen && (
               <div role="menu" className="acct-pop absolute right-0 top-12 w-64 overflow-hidden rounded-xl border border-white/10 bg-ink shadow-2xl">
                 <div className="border-b border-white/[0.06] px-4 py-3">
-                  <div className="text-sm font-semibold">{data.profileCompleted ? displayName(data.profile) : session?.email || "Usuario de InfiniHon"}</div>
+                  <div className="text-sm font-semibold">{data.profileCompleted ? displayName(data.profile) : session?.email || "Usuario de InfiniHon Corp."}</div>
                   <div className="mt-0.5 truncate text-xs text-steel">{data.profile.email || session?.email || "Correo sin confirmar"}</div>
                 </div>
                 {[{ label: "Mi perfil", icon: User, to: "/account/profile" }, { label: "Seguridad", icon: ShieldCheck, to: "/account/security" }, { label: "Configuración", icon: Settings, to: "/account/settings" }].map((i) => (
@@ -215,9 +215,9 @@ function Topbar({ onMenu }: { onMenu: () => void }) {
 }
 
 const onboardingSteps = [
-  { title: "Bienvenido a InfiniHon", text: "Este es tu espacio personal: aquí gestionas tus servicios, pedidos, solicitudes y soporte.", to: "" },
+  { title: "Bienvenido a InfiniHon Corp.", text: "Este es tu espacio personal: aquí gestionas tus servicios, pedidos, solicitudes y soporte.", to: "" },
   { title: "Completa tu perfil", text: "Añade tu nombre y datos de contacto para que el equipo pueda atenderte mejor.", to: "/account/profile" },
-  { title: "Explora los servicios", text: "Descubre lo que InfiniHon puede implementar para tu operación y guarda tus favoritos.", to: "/account/favorites" },
+  { title: "Explora los servicios", text: "Descubre lo que InfiniHon Corp. puede implementar para tu operación y guarda tus favoritos.", to: "/account/favorites" },
   { title: "Configura tu seguridad", text: "Revisa la verificación en dos pasos y las sesiones activas de tu cuenta.", to: "/account/security" },
   { title: "Todo listo", text: "Ya puedes empezar. Si necesitas ayuda, el soporte está a un clic.", to: "/account/support" },
 ];
@@ -269,7 +269,7 @@ function Router({ section, id, sub, navigate }: { section?: string; id?: string;
     case "help": return <HelpPage />;
     default: return (
       <>
-        <PageHeader title="No encontramos esta página" description="La dirección no existe en tu espacio de InfiniHon." />
+        <PageHeader title="No encontramos esta página" description="La dirección no existe en tu espacio de InfiniHon Corp." />
         <Panel><EmptyState icon={Compass} title="Página no encontrada"
           description="Revisa la dirección o vuelve al inicio de tu espacio."
           action={<Button variant="primary" onClick={() => navigate("/account")}>Volver al inicio</Button>} /></Panel>
@@ -304,8 +304,8 @@ function PortalShell({ pathname, navigate }: { pathname: string; navigate: (to: 
   const [, , section, id, sub] = pathname.replace(/\/+$/, "").split("/");
 
   useEffect(() => {
-    document.title = "Mi espacio | INFINIHON";
-    document.querySelector('meta[name="description"]')?.setAttribute("content", "Portal de usuario de INFINIHON: gestiona tus servicios, pedidos, solicitudes, soporte y seguridad.");
+    document.title = "Mi espacio | InfiniHon Corp.";
+    document.querySelector('meta[name="description"]')?.setAttribute("content", "Portal de usuario de InfiniHon Corp.: gestiona tus servicios, pedidos, solicitudes, soporte y seguridad.");
     setSidebar(false);
   }, [pathname]);
 
@@ -334,7 +334,7 @@ function PortalShell({ pathname, navigate }: { pathname: string; navigate: (to: 
         </main>
         <footer className="mx-auto w-full max-w-[1180px] px-4 pb-10 md:px-6 lg:px-8">
           <div className="flex flex-col gap-2 border-t border-white/[0.06] pt-6 font-mono text-[9.5px] uppercase tracking-[0.2em] text-steel/60 sm:flex-row sm:items-center sm:justify-between">
-            <span>INFINIHON · Portal de usuario</span>
+            <span>InfiniHon Corp. · Portal de usuario</span>
             <span>Hecho en Honduras.</span>
           </div>
         </footer>

@@ -33,6 +33,8 @@ const APP_ROUTES = [
   ['/admin', 'admin.html'],
   ['/account', 'account.html'],
   ['/member', 'member.html'],
+  ['/proyectos', 'proyectos.html'],
+  ['/ghost-browser', 'proyectos.html'],
 ];
 
 function send(res, status, body, contentType) {
@@ -93,4 +95,6 @@ server.listen(PORT, () => {
   console.log(`- Admin:    http://localhost:${PORT}/admin`);
   console.log(`- Account:  http://localhost:${PORT}/account`);
   console.log(`- Miembro:  http://localhost:${PORT}/member`);
+  console.log(`- Proyectos: http://localhost:${PORT}/proyectos`);
+  console.log(`- Ghost Browser: http://localhost:${PORT}/ghost-browser`);
 });

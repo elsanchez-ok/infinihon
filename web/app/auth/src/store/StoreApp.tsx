@@ -9,10 +9,10 @@ type Flight = { x: number; y: number; id: number } | null;
 
 export default function StoreApp() {
   useEffect(() => {
-    document.title = "INFINIHON Store — Tecnología e infraestructura";
+    document.title = "InfiniHon Corp. Store — Tecnología e infraestructura";
     document.querySelector('meta[name="description"]')?.setAttribute(
       "content",
-      "INFINIHON Store — tecnología, infraestructura y servicios para construir lo que sigue.",
+      "InfiniHon Corp. Store — tecnología, infraestructura y servicios para construir lo que sigue.",
     );
   }, []);
 
