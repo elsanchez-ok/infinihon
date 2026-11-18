@@ -3,7 +3,7 @@ import { AlertTriangle, Bell, Check, KeyRound, Monitor, ShieldCheck, Trash2 } fr
 import { fmtDate, fmtDateTime, fmtRelative, initialPreferences, initialSecurity } from "../data";
 import { capabilities } from "../accountService";
 import { displayName, useAccount } from "../store";
-import { authRecover } from "../../lib/supabase";
+import { authRecover, authSignOut } from "../../lib/supabase";
 import { useLocale, type Locale } from "../locale";
 import {
   Button, ConfirmDialog, DemoNote, EmptyState, Field, PageHeader, Panel, StatusBadge, Toggle, UserAvatar, inputCls,
@@ -174,7 +174,10 @@ export function SecurityPage() {
 
       <ConfirmDialog open={confirmSignOut} onClose={() => setConfirmSignOut(false)} title="Cerrar sesión" confirmLabel="Cerrar sesión"
         message="¿Quieres cerrar tu sesión en este dispositivo?"
-        onConfirm={() => { patch({ security: { ...initialSecurity, sessions: initialSecurity.sessions.map((s) => ({ ...s, lastActive: new Date().toISOString() })) } }); window.location.assign("/auth"); }} />
+        onConfirm={() => {
+          patch({ security: { ...initialSecurity, sessions: initialSecurity.sessions.map((s) => ({ ...s, lastActive: new Date().toISOString() })) } });
+          void authSignOut().finally(() => window.location.assign("/auth"));
+        }} />
     </>
   );
 }
