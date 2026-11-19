@@ -319,6 +319,7 @@ export function BillingPage() {
 }
 
 export function OrganizationPage() {
+  const { navigate } = useAccount();
   return (
     <>
       <PageHeader eyebrow="Cuenta" title="Organización" description="Gestiona la organización a la que perteneces, sus miembros y servicios."
@@ -326,7 +327,7 @@ export function OrganizationPage() {
       <Panel>
         <EmptyState icon={Users} title="No perteneces a una organización"
           description="Tu cuenta es individual. Si tu empresa tiene una cuenta empresarial de InfiniHon Corp., pídele al administrador que te invite con tu correo."
-          action={<Button variant="primary" icon={Headphones} onClick={() => window.location.assign("/account/support")}>Consultar a soporte</Button>} />
+          action={<Button variant="primary" icon={Headphones} onClick={() => navigate("/account/support")}>Consultar a soporte</Button>} />
       </Panel>
       <div className="mt-4"><DemoNote>Esta sección solo se muestra a usuarios que pertenecen a una organización. Un usuario individual no debería verla.</DemoNote></div>
     </>

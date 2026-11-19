@@ -10,7 +10,7 @@
  * RLS en el servidor es la autoridad real: is_admin decide quién puede
  * escribir el catálogo y ver datos de otros usuarios.
  */
-import { getSessionUser, getAccessToken, sb, SupabaseError, authSignOut, type SessionUser } from "../lib/supabase";
+import { getSessionUser, getAccessToken, sb, SupabaseError, authSignOut, uploadStorageFile, deleteStorageFile, type SessionUser } from "../lib/supabase";
 import type {
   Activity, Administrator, Category, ContentItem, Customer, Doc, Movement, Notice, Order, OrderStatus, PlatformUser,
   Product, PublishStatus, Role, Service, Settings, Spec, SupportTicket,
@@ -72,6 +72,27 @@ export async function replyToTicket(ticket: SupportTicket, text: string): Promis
     body: { status: next.status, messages: next.messages, updated_at: next.updated },
   });
   return next;
+}
+
+/* ─────────── Catálogo: imágenes ─────────── */
+
+const IMAGE_BUCKET = "product-images";
+
+/** Sube una imagen de producto al bucket público y devuelve su URL. */
+export async function uploadProductImage(productId: string, file: File): Promise<string> {
+  const token = await withToken();
+  const ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+  const path = `${productId}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+  return uploadStorageFile(IMAGE_BUCKET, path, file, token);
+}
+
+/** Borra una imagen de producto del bucket a partir de su URL pública. */
+export async function deleteProductImage(url: string): Promise<void> {
+  const token = await withToken();
+  const marker = `/storage/v1/object/public/${IMAGE_BUCKET}/`;
+  const i = url.indexOf(marker);
+  if (i === -1) return;
+  await deleteStorageFile(IMAGE_BUCKET, url.slice(i + marker.length), token);
 }
 
 /* ─────────── Catálogo: lectura ─────────── */
@@ -158,7 +179,8 @@ function toItem(r: RemoteItem): Product {
     compat: textList(d.compat),
     includes: textList(d.includes),
     docs: toDocs(d.docs),
-    images: 0, seoTitle: "", seoDescription: "",
+    images: textList(d.images),
+    seoTitle: (d.seoTitle as string) ?? "", seoDescription: (d.seoDescription as string) ?? "",
     slug: r.slug,
     updated: r.updated_at,
     demo: false,
@@ -299,6 +321,9 @@ function patchFromProduct(p: Product, current: RemoteItem | null): Partial<Remot
       compat: p.compat ?? [],
       includes: p.includes ?? [],
       docs: p.docs ?? [],
+      images: p.images ?? [],
+      seoTitle: p.seoTitle ?? "",
+      seoDescription: p.seoDescription ?? "",
     },
     updated_at: new Date().toISOString(),
   };
@@ -343,7 +368,11 @@ export async function createCatalogProduct(p: Product): Promise<string> {
       badge: null,
       featured: false,
       sort: 999,
-      data: { brand: p.brand, sku: p.sku, specs: fromSpecs(p.specs), tech: p.tech ?? [], use: p.use ?? [], features: p.features ?? [], compat: p.compat ?? [], includes: p.includes ?? [], docs: p.docs ?? [] },
+      data: {
+        brand: p.brand, sku: p.sku, specs: fromSpecs(p.specs), tech: p.tech ?? [], use: p.use ?? [], features: p.features ?? [],
+        compat: p.compat ?? [], includes: p.includes ?? [], docs: p.docs ?? [], images: p.images ?? [],
+        seoTitle: p.seoTitle ?? "", seoDescription: p.seoDescription ?? "",
+      },
     },
   });
   return slug;

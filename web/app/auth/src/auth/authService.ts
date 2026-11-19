@@ -1,4 +1,4 @@
-import { authSignIn, authSignUp, authRecover, authSignOut, postLoginPath } from "../lib/supabase";
+import { authSignIn, authSignUp, authRecover, authSignOut, isAdminUser, postLoginPath } from "../lib/supabase";
 
 export type AuthFailureReason = "unavailable" | "invalid-credentials" | "rate-limited" | "network";
 
@@ -18,7 +18,10 @@ export interface AuthService {
 export const authService: AuthService = {
   login: async ({ email, password, remember }) => {
     const r = await authSignIn(email, password, remember);
-    return r.ok ? { ok: true, redirect: postLoginPath() } : r;
+    if (!r.ok) return r;
+    // Los administradores entran directo al centro de control.
+    const admin = await isAdminUser();
+    return { ok: true, redirect: admin ? "/admin" : postLoginPath() };
   },
   register: async (input) => {
     const r = await authSignUp(input);

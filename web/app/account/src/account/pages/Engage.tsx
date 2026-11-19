@@ -6,7 +6,7 @@ import {
 } from "../data";
 import { useAccount } from "../store";
 import {
-  Button, ConfirmDialog, EmptyState, Field, Modal, PageHeader, Panel,
+  Button, ConfirmDialog, EmptyState, Field, PageHeader, Panel,
   ResourceTable, StatusBadge, Timeline, inputCls, type Column,
 } from "../ui";
 
@@ -196,7 +196,6 @@ export function RequestDetailPage({ id }: { id: string }) {
 
 export function SupportPage() {
   const { data, createTicket, navigate, toast } = useAccount();
-  const [open, setOpen] = useState(true);
   const [form, setForm] = useState({ subject: "", category: "Cuenta" as TicketCategory, priority: "Normal" as Priority, description: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -267,8 +266,6 @@ export function SupportPage() {
           </Panel>
         </div>
       </div>
-
-      <Modal open={open && false} onClose={() => setOpen(false)} title="">​</Modal>
     </>
   );
 }
@@ -399,7 +396,7 @@ export function MessagesPage() {
       {data.tickets.length === 0 ? (
         <Panel><EmptyState icon={Inbox} title="No tienes mensajes"
           description="Cuando escribas a soporte, la conversación aparecerá aquí."
-          action={<Button variant="primary" onClick={() => window.location.assign("/account/support")}>Contactar soporte</Button>} /></Panel>
+          action={<Button variant="primary" onClick={() => navigate("/account/support")}>Contactar soporte</Button>} /></Panel>
       ) : (
         <div className="grid gap-4 lg:grid-cols-[320px_1fr]">
           <Panel title="Conversaciones" padded={false}>

@@ -62,7 +62,7 @@ export default function Footer() {
 
         <div
           aria-hidden
-          className="mt-20 select-none whitespace-nowrap text-center text-[13vw] font-extrabold leading-[0.8] tracking-[-0.06em] text-transparent [-webkit-text-stroke:1px_rgba(0,102,255,0.28)] md:text-[12vw]"
+          className="mt-20 cursor-default select-none overflow-hidden whitespace-nowrap text-center text-[13vw] font-extrabold leading-[0.8] tracking-[-0.06em] text-transparent [-webkit-text-stroke:1px_rgba(0,102,255,0.28)] transition-all duration-500 ease-out hover:[-webkit-text-stroke:1.5px_rgba(0,168,255,0.95)] hover:[text-shadow:0_0_50px_rgba(0,168,255,0.25)] md:text-[12vw]"
         >
           INFINIHON CORP.
         </div>
