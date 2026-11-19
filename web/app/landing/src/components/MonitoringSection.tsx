@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { Reveal, RevealTitle, SectionLabel, useInView, useReducedMotion } from "./ui";
+import { Reveal, RevealTitle, SectionLabel, useReducedMotion } from "./ui";
 import { cn } from "../utils/cn";
 
 const N = 40;
@@ -14,7 +14,7 @@ function init(base: number, vol: number, min: number, max: number) {
   return a;
 }
 
-function useTelemetry(active: boolean) {
+function useTelemetry() {
   const reduced = useReducedMotion();
   const [s, setS] = useState(() => ({
     cpu: init(42, 10, 15, 85),
@@ -25,7 +25,7 @@ function useTelemetry(active: boolean) {
     req: init(60, 18, 20, 100),
   }));
   useEffect(() => {
-    if (!active || reduced) return;
+    if (reduced) return;
     const id = setInterval(() => {
       setS((p) => ({
         cpu: [...p.cpu.slice(1), walk(p.cpu[N - 1], 15, 85, 12)],
@@ -37,7 +37,7 @@ function useTelemetry(active: boolean) {
       }));
     }, 1400);
     return () => clearInterval(id);
-  }, [active, reduced]);
+  }, [reduced]);
   return s;
 }
 
@@ -103,8 +103,7 @@ const alerts = [
 ];
 
 export default function MonitoringSection() {
-  const { ref, inView } = useInView<HTMLDivElement>(0.1, false);
-  const s = useTelemetry(inView);
+  const s = useTelemetry();
   const last = (a: number[]) => a[a.length - 1];
 
   return (
@@ -127,7 +126,7 @@ export default function MonitoringSection() {
         </div>
 
         <Reveal delay={100} className="mt-16 md:mt-20">
-          <div ref={ref} className="border border-white/[0.08]">
+          <div className="border border-white/[0.08]">
             {/* toolbar */}
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] bg-ink px-4 py-3 font-mono text-[10px] uppercase tracking-[0.2em] text-steel md:px-5">
               <div className="flex items-center gap-4">
