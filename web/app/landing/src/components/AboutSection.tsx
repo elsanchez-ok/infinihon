@@ -1,4 +1,4 @@
-import { Reveal, RevealTitle, SectionLabel } from "./ui";
+import { Corners, Reveal, RevealTitle, SectionLabel } from "./ui";
 
 const principles = [
   { k: "Arquitectura primero", v: "Antes de instalar, diseñamos. Cada decisión técnica responde a un objetivo de la operación." },
@@ -17,6 +17,22 @@ export default function AboutSection() {
           lines={["No solo instalamos", "tecnología.", "Construimos sistemas."]}
           accentLast
         />
+
+        <Reveal delay={120} className="relative mt-14 border border-white/[0.08] bg-obsidian md:mt-20">
+          <Corners />
+          <img
+            src="/assets/oficina-infinihon.webp"
+            alt="Fachada de la sede corporativa de InfiniHon Corp. en Tegucigalpa, Honduras"
+            width={1800}
+            height={972}
+            loading="lazy"
+            className="aspect-[16/8.6] w-full object-cover opacity-90 grayscale-[20%]"
+          />
+          <div className="flex flex-wrap items-center justify-between gap-2 border-t border-white/[0.08] px-5 py-3.5 font-mono text-[9.5px] uppercase tracking-[0.2em] text-steel/60 md:px-7">
+            <span>Sede corporativa · Tegucigalpa, HN</span>
+            <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-volt pulse-soft" /> HQ · operación activa</span>
+          </div>
+        </Reveal>
 
         <div className="mt-16 grid gap-16 md:mt-24 lg:grid-cols-12">
           <div className="lg:col-span-5">
