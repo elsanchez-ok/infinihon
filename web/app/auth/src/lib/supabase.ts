@@ -175,9 +175,26 @@ export async function authSignOut(): Promise<void> {
   clearSession();
 }
 
-/** A dónde ir después de iniciar sesión, según la app actual. */
+/**
+ * Lee `?redirect=` de la URL actual (p. ej. cuando /tienda envía al checkout
+ * a registrarse). Solo acepta rutas relativas internas para evitar open-redirect
+ * y nunca reenvía de vuelta a /auth.
+ */
+export function getSafeRedirect(): string | null {
+  try {
+    const r = new URLSearchParams(window.location.search).get("redirect");
+    if (!r) return null;
+    if (!r.startsWith("/") || r.startsWith("//") || r.includes("://")) return null;
+    if (r.startsWith("/auth")) return null;
+    return r;
+  } catch {
+    return null;
+  }
+}
+
+/** A dónde ir después de iniciar sesión, según la app actual (o el redirect pedido). */
 export function postLoginPath(): string {
-  return window.location.pathname.startsWith("/admin") ? "/admin" : "/account";
+  return getSafeRedirect() ?? (window.location.pathname.startsWith("/admin") ? "/admin" : "/account");
 }
 
 /** Consulta si la sesión actual pertenece a un administrador (profiles.is_admin). */
