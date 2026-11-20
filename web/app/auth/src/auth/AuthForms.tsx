@@ -67,6 +67,7 @@ function failureText(reason: AuthFailureReason, action: "login" | "register" | "
   }
   if (reason === "rate-limited") return "Hay demasiados intentos. Espera unos minutos antes de volver a probar.";
   if (reason === "network") return "No pudimos conectar con el servicio. Comprueba tu conexión e inténtalo de nuevo.";
+  if (reason === "email-unconfirmed") return "Tu correo aún no está confirmado. Revisa tu bandeja de entrada (y spam) para activar la cuenta.";
   return action === "login"
     ? "Correo o contraseña incorrectos. Revisa tus datos e inténtalo de nuevo."
     : action === "register"

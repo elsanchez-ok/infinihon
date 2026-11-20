@@ -121,11 +121,17 @@ export async function getSessionUser(): Promise<SessionUser | null> {
 
 /* ─────────── Auth ─────────── */
 
-export type AuthOutcome = { ok: true } | { ok: false; reason: "invalid-credentials" | "rate-limited" | "network" };
+export type AuthOutcome =
+  | { ok: true }
+  | { ok: false; reason: "invalid-credentials" | "rate-limited" | "network" | "email-unconfirmed" };
 
-function mapAuthError(status: number): AuthOutcome {
+function mapAuthError(status: number, message?: string): AuthOutcome {
   if (status === 429) return { ok: false, reason: "rate-limited" };
   if (status === 0) return { ok: false, reason: "network" };
+  // Defensa en profundidad: si alguna vez se reactiva la confirmación de correo
+  // (mailer_autoconfirm = false en Supabase), un intento de login con cuenta sin
+  // confirmar no debe reportarse como "contraseña incorrecta".
+  if (status === 400 && /confirm/i.test(message ?? "")) return { ok: false, reason: "email-unconfirmed" };
   return { ok: false, reason: "invalid-credentials" };
 }
 
@@ -136,7 +142,7 @@ export async function authSignIn(email: string, password: string, remember: bool
     writeStorage(t, remember);
     return { ok: true };
   } catch (e) {
-    return e instanceof SupabaseError ? mapAuthError(e.status) : { ok: false, reason: "network" };
+    return e instanceof SupabaseError ? mapAuthError(e.status, e.message) : { ok: false, reason: "network" };
   }
 }
 
@@ -153,7 +159,7 @@ export async function authSignUp(input: { firstName: string; lastName: string; e
     }
     return { ok: true, session: false }; // requiere confirmar correo
   } catch (e) {
-    const base = e instanceof SupabaseError ? mapAuthError(e.status) : ({ ok: false, reason: "network" } as const);
+    const base = e instanceof SupabaseError ? mapAuthError(e.status, e.message) : ({ ok: false, reason: "network" } as const);
     return { ...base, session: false };
   }
 }
@@ -163,7 +169,7 @@ export async function authRecover(email: string): Promise<AuthOutcome> {
     await sb("/auth/v1/recover", { method: "POST", body: { email } });
     return { ok: true };
   } catch (e) {
-    return e instanceof SupabaseError ? mapAuthError(e.status) : { ok: false, reason: "network" };
+    return e instanceof SupabaseError ? mapAuthError(e.status, e.message) : { ok: false, reason: "network" };
   }
 }
 
