@@ -43,12 +43,12 @@ export default function Hero() {
             </span>
           </div>
 
-          <div className="reveal mb-6 md:mb-8" style={{ "--d": "160ms" } as CSSProperties}>
+          <div className="reveal -mb-2 md:-mb-4" style={{ "--d": "160ms" } as CSSProperties}>
             <img
-              src="/favicon.png"
+              src="/assets/mascot-hero.png"
               alt=""
               aria-hidden="true"
-              className="float-soft mx-auto h-16 w-16 drop-shadow-[0_12px_32px_rgba(0,102,255,0.5)] md:h-20 md:w-20"
+              className="float-soft relative z-10 mx-auto h-32 w-32 drop-shadow-[0_18px_40px_rgba(0,102,255,0.55)] sm:h-40 sm:w-40 md:h-48 md:w-48"
             />
           </div>
 
