@@ -66,7 +66,7 @@ export default function FounderSection() {
        las esquinas redondeadas arriba y abajo — como el footer, solo que
        el footer únicamente redondea arriba porque es el final de la
        página; esta sección no lo es, así que redondea los cuatro lados. */
-    <section id="equipo" className="founder-card relative overflow-hidden rounded-[32px] border-t border-white/[0.06] py-16 md:rounded-[40px] md:py-24">
+    <section id="equipo" className="founder-card relative overflow-hidden rounded-[32px] border-t border-white/[0.06] py-10 md:rounded-[40px] md:py-14">
       {/* palabra gigante de fondo */}
       <div
         aria-hidden
@@ -87,7 +87,7 @@ export default function FounderSection() {
         </Reveal>
 
         {/* ---- Escritorio: composición tipo póster, igual a la referencia ---- */}
-        <Reveal delay={120} className="relative mt-10 hidden min-h-[560px] lg:block xl:min-h-[640px]">
+        <Reveal delay={120} className="relative mt-8 hidden min-h-[400px] lg:block xl:min-h-[440px]">
           <Badges className="absolute left-0 top-[26%] flex max-w-[300px] flex-wrap gap-2" />
 
           <span
