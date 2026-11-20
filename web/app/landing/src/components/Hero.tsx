@@ -19,12 +19,6 @@ export default function Hero() {
         className="hero-ambient-glow pointer-events-none absolute inset-x-0 bottom-0 -z-20 h-full w-full"
         aria-hidden
       />
-      <img
-        src="/assets/hero-glow-light.jpg"
-        alt=""
-        aria-hidden="true"
-        className="hero-glow-light-img pointer-events-none absolute inset-0 -z-20 h-full w-full object-cover"
-      />
       <div className="absolute inset-0 -z-10 bg-grid grid-drift mask-radial opacity-60" />
       <div className="hero-ambient-blob absolute left-1/2 top-[55%] -z-10 h-[70vmin] w-[90vmin] -translate-x-1/2 -translate-y-1/2 rounded-full bg-hn/40 blur-[120px] lg:left-[68%]" />
       <div className="absolute inset-x-0 bottom-0 -z-10 h-48 bg-gradient-to-t from-obsidian to-transparent" />

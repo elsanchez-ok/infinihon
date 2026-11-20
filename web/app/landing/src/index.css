@@ -87,28 +87,32 @@ body {
   transition: opacity .4s ease;
 }
 [data-theme="light"] .hero-ambient-glow {
-  /* En tema claro se usa la imagen real (hero-glow-light-img) en vez de
-     este degradado por CSS, así que aquí se oculta. */
-  display: none;
+  /* Degradado vertical muestreado píxel a píxel de la imagen de referencia
+     del usuario (zonas limpias de fondo, sin los íconos/letras superpuestos):
+     azul casi negro arriba, pasando por azul vivo a la mitad, hasta blanco
+     puro abajo. Es un degradado simple de lado a lado (no una imagen), así
+     se adapta perfecto a cualquier tamaño de pantalla sin recortes. */
+  background: linear-gradient(
+    180deg,
+    #01080f 0%,
+    #041220 10%,
+    #08223c 20%,
+    #0d3966 30%,
+    #2568af 42%,
+    #5ba1eb 55%,
+    #b0d5fe 68%,
+    #eaf4ff 80%,
+    #ffffff 92%,
+    #ffffff 100%
+  );
+  mix-blend-mode: normal;
+  opacity: 1;
 }
 
-/* Imagen real de fondo para el Hero en tema claro: generada a partir de la
-   imagen de referencia que mandó el usuario (azul fuerte arriba, blanco
-   puro abajo). object-cover + sin min-width para que se adapte a
-   cualquier tamaño de pantalla sin recortes raros. Solo se muestra en
-   tema claro; en oscuro se usa el degradado de .hero-ambient-glow. */
-.hero-glow-light-img {
-  display: none;
-}
-[data-theme="light"] .hero-glow-light-img {
-  display: block;
-}
-
-/* En tema claro ya la propia imagen hace de resplandor, así que se apaga
-   el blob extra difuminado (blur-[120px]) que antes se sumaba encima:
-   esa capa extra era justo lo que hacía ver la imagen "difuminada" en vez
-   de nítida detrás del texto. En oscuro se mantiene para la profundidad
-   del fondo. */
+/* En tema claro el propio degradado ya cubre toda la sección, así que se
+   apaga el blob extra difuminado (blur-[120px]) que antes se sumaba
+   encima: esa capa extra era justo lo que diluía el fondo. En oscuro se
+   mantiene para la profundidad del fondo. */
 [data-theme="light"] .hero-ambient-blob {
   display: none;
 }
