@@ -22,9 +22,8 @@ const allLinks = [...primaryLinks.slice(0, -1), ...secondaryLinks, primaryLinks[
 
 function Wordmark() {
   return (
-    <a href="/" className="flex shrink-0 items-center gap-2.5" aria-label="InfiniHon Corp. — inicio">
-      <img src="/favicon.png" alt="" aria-hidden="true" className="h-8 w-8 shrink-0" />
-      <img src="/assets/infinihon.png" alt="InfiniHon Corp." className="h-5 w-auto" />
+    <a href="/" className="flex shrink-0 items-center" aria-label="InfiniHon Corp. — inicio">
+      <img src="/assets/infinihon.png" alt="InfiniHon Corp." className="h-6 w-auto" />
     </a>
   );
 }
@@ -45,8 +44,8 @@ export default function Navbar() {
   }, [moreOpen]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50">
-      <nav className="nav-glow relative mx-auto flex h-[72px] max-w-[1920px] items-center justify-between rounded-b-[26px] px-5 md:rounded-b-[32px] md:px-10">
+    <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-4 sm:pt-4">
+      <nav className="nav-glow relative mx-auto flex h-[68px] max-w-[1400px] items-center justify-between rounded-[24px] px-5 md:rounded-[28px] md:px-8">
         <Wordmark />
 
         {/* ---- Escritorio ancho (xl+): los 7 links, centrados ---- */}
@@ -113,7 +112,7 @@ export default function Navbar() {
       {/* ---- Menú "Más": panel que aparece debajo de la barra (solo lg) ---- */}
       <div
         className={cn(
-          "mx-auto hidden max-w-[1920px] overflow-hidden px-5 transition-[max-height] duration-300 lg:block xl:hidden",
+          "mx-auto hidden max-w-[1400px] overflow-hidden transition-[max-height] duration-300 lg:block xl:hidden",
           moreOpen ? "max-h-24" : "max-h-0"
         )}
       >
@@ -138,7 +137,7 @@ export default function Navbar() {
           open ? "max-h-[100svh]" : "max-h-0"
         )}
       >
-        <ul className="nav-glow mx-5 mt-2 flex h-[calc(100svh-96px)] flex-col gap-1 rounded-[20px] px-5 pt-6">
+        <ul className="nav-glow mt-2 flex h-[calc(100svh-104px)] flex-col gap-1 rounded-[20px] px-5 pt-6">
           {allLinks.map((l, i) => (
             <li key={l.href}>
               <a
