@@ -55,7 +55,7 @@ export default function Hero() {
           <h1 className="text-[12vw] font-extrabold uppercase leading-[0.98] tracking-[-0.03em] text-[#F5F7FA] sm:text-[8vw] lg:text-[4.6rem] xl:text-[5.2rem]">
             <span className="line-reveal pb-[0.05em]" style={{ "--d": "260ms" } as CSSProperties}>
               <span>
-                Ingeniería <span className="inline-block rounded-2xl bg-tech px-[0.35em] py-[0.05em]">de infraestructura</span>
+                Ingeniería de <span className="inline-block rounded-2xl bg-tech px-[0.35em] py-[0.05em]">infraestructura</span>
               </span>
             </span>
             <span className="line-reveal pb-[0.08em]" style={{ "--d": "400ms" } as CSSProperties}>
