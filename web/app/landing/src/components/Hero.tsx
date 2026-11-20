@@ -70,11 +70,16 @@ export default function Hero() {
             <span className="line-reveal pb-[0.05em]" style={{ "--d": "260ms" } as CSSProperties}>
               <span>
                 Ingeniería de{" "}
-                <span
-                  className="relative inline-block rounded-2xl bg-tech px-[0.35em] py-[0.05em]"
-                  style={{ minWidth: `${LONGEST_HEADLINE_WORD.length}ch` } as CSSProperties}
-                >
-                  <span aria-hidden="true">
+                {/* Píldora de tamaño fijo: una palabra invisible (la más larga
+                    de la lista) reserva el ancho/alto real del fondo azul en
+                    la misma celda de grid que el texto animado, así el fondo
+                    nunca cambia de tamaño aunque la palabra visible sea más
+                    corta o más larga. */}
+                <span className="relative inline-grid items-center justify-items-start rounded-2xl bg-tech px-[0.35em] py-[0.05em]">
+                  <span className="invisible col-start-1 row-start-1" aria-hidden="true">
+                    {LONGEST_HEADLINE_WORD}
+                  </span>
+                  <span className="col-start-1 row-start-1" aria-hidden="true">
                     {typedWord}
                     <span className="blink -mb-[0.08em] ml-[0.02em] inline-block h-[0.82em] w-[0.06em] translate-y-[0.08em] bg-white/90" />
                   </span>
