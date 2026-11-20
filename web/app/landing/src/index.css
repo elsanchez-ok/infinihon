@@ -104,6 +104,15 @@ body {
   display: block;
 }
 
+/* En tema claro ya la propia imagen hace de resplandor, así que se apaga
+   el blob extra difuminado (blur-[120px]) que antes se sumaba encima:
+   esa capa extra era justo lo que hacía ver la imagen "difuminada" en vez
+   de nítida detrás del texto. En oscuro se mantiene para la profundidad
+   del fondo. */
+[data-theme="light"] .hero-ambient-blob {
+  display: none;
+}
+
 /* Footer: siempre oscuro con un resplandor azul en la esquina inferior
    izquierda, igual que en el tema claro u oscuro de la plataforma (como el
    panel de marca de /auth). Se fijan los tokens de color aquí dentro para
