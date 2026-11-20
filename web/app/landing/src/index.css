@@ -69,18 +69,48 @@ body {
 }
 ::selection { background: var(--color-tech); color: var(--color-snow); }
 
-/* Resplandor de fondo del Hero: PNG con fondo negro + brillo azul/blanco.
-   mix-blend-mode: screen hace que el negro desaparezca sobre el fondo oscuro
-   y solo se vea el brillo. En tema claro el fondo ya es claro, así que el
-   brillo se atenúa bastante para que no "lave" el contraste del texto. */
-.hero-glow-img {
+/* Resplandor de fondo del Hero: degradado puro en CSS (no imagen), así se
+   adapta perfectamente a cualquier tamaño de pantalla sin recortes ni
+   distorsión. mix-blend-mode: screen lo funde con el fondo oscuro. En tema
+   claro se atenúa bastante para no "lavar" el contraste del texto. */
+.hero-ambient-glow {
+  background: radial-gradient(
+    120% 70% at 50% 100%,
+    rgba(245, 247, 250, 0.95) 0%,
+    rgba(180, 222, 255, 0.85) 16%,
+    rgba(0, 168, 255, 0.55) 36%,
+    rgba(0, 102, 255, 0.26) 58%,
+    transparent 80%
+  );
   mix-blend-mode: screen;
-  opacity: .85;
+  opacity: .9;
   transition: opacity .4s ease;
 }
-[data-theme="light"] .hero-glow-img {
+[data-theme="light"] .hero-ambient-glow {
   mix-blend-mode: normal;
-  opacity: .18;
+  opacity: .22;
+}
+
+/* Footer: siempre oscuro con un resplandor azul en la esquina inferior
+   izquierda, igual que en el tema claro u oscuro de la plataforma (como el
+   panel de marca de /auth). Se fijan los tokens de color aquí dentro para
+   que bg-obsidian / text-snow / text-steel / text-volt no se repinten al
+   tema claro dentro del footer. */
+.footer-glow {
+  --color-obsidian: #05070A;
+  --color-ink: #0A0F14;
+  --color-snow: #F5F7FA;
+  --color-steel: #8B96A5;
+  --color-volt: #00A8FF;
+  --color-white: #fff;
+  color-scheme: dark;
+  background-color: #000;
+  background-image: radial-gradient(
+    65% 150% at 10% 85%,
+    rgba(0, 122, 255, 0.55) 0%,
+    rgba(3, 12, 28, 0.88) 42%,
+    #000 72%
+  );
 }
 
 /* Grid backgrounds */

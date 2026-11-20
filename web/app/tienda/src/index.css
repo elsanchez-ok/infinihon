@@ -64,6 +64,27 @@ select, input, textarea { color-scheme: dark; }
 [data-theme="light"] select, [data-theme="light"] input, [data-theme="light"] textarea { color-scheme: light; }
 input[type="range"] { accent-color: var(--color-tech); }
 
+/* Footer: siempre oscuro con un resplandor azul en la esquina inferior
+   izquierda, igual que en el panel de marca de /auth. Se fijan los tokens
+   de color aquí dentro para que bg-obsidian / text-snow / text-steel /
+   text-volt no se repinten al tema claro dentro del footer. */
+.footer-glow {
+  --color-obsidian: #05070A;
+  --color-ink: #0A0F14;
+  --color-snow: #F5F7FA;
+  --color-steel: #8B96A5;
+  --color-volt: #00A8FF;
+  --color-white: #fff;
+  color-scheme: dark;
+  background-color: #000;
+  background-image: radial-gradient(
+    65% 150% at 10% 85%,
+    rgba(0, 122, 255, 0.55) 0%,
+    rgba(3, 12, 28, 0.88) 42%,
+    #000 72%
+  );
+}
+
 /* Grid backgrounds */
 .bg-grid {
   background-image:
