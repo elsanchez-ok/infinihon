@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 /* Zuri, la mascota del Hero, "camina" mientras el usuario hace scroll,
    trazando una ruta de izquierda a derecha a lo largo de toda la página:
@@ -9,8 +10,15 @@ import { useEffect, useRef, useState } from "react";
      caminata con un pequeño rebote ("mascot-walk").
    - En cuanto el scroll se detiene (~220ms sin eventos), se queda
      completamente quieta (sin rebote) mostrando la misma pose del Hero,
-     en la posición horizontal donde se detuvo. */
-export default function ScrollMascot() {
+     en la posición horizontal donde se detuvo.
+
+   Nota: se renderiza con un portal directo a document.body. El
+   contenedor raíz de la página usa overflow-x-clip (para evitar el
+   scroll horizontal del sitio), y aunque Zuri es position:fixed, ese
+   overflow-x-clip igual recorta su drop-shadow cuando se acerca a los
+   bordes izquierdo/derecho — se veía "estrecharse" de un lado. Al
+   montarla fuera de ese contenedor, su sombra ya no se recorta. */
+function ScrollMascotOverlay() {
   const [walking, setWalking] = useState(false);
   const [frame, setFrame] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -56,7 +64,7 @@ export default function ScrollMascot() {
 
   return (
     <div
-      className="pointer-events-none fixed inset-x-3 bottom-2 z-40 sm:inset-x-6 sm:bottom-4"
+      className="pointer-events-none fixed inset-x-4 bottom-2 z-40 sm:inset-x-8 sm:bottom-4"
       aria-hidden="true"
     >
       {/* El truco left:pct% + translateX(-pct%) interpola la posición del
@@ -75,4 +83,8 @@ export default function ScrollMascot() {
       </div>
     </div>
   );
+}
+
+export default function ScrollMascot() {
+  return createPortal(<ScrollMascotOverlay />, document.body);
 }
