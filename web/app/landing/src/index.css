@@ -250,6 +250,11 @@ body {
 @keyframes float-soft { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 .float-soft { animation: float-soft 4.5s ease-in-out infinite; }
 
+/* Pequeño rebote sincronizado con el cambio de fotograma de caminata de
+   Zuri (ver ScrollMascot.tsx): sube un poco en cada "paso". */
+@keyframes mascot-walk { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-6px) rotate(-2deg); } }
+.mascot-walk { animation: mascot-walk .34s ease-in-out infinite; }
+
 
 /* Colores fijos (no usan los tokens --color-*) con su equivalente claro */
 [data-theme="light"] .bg-\[\#030507\] { background-color: #F5F7FA; }

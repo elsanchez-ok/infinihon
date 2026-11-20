@@ -17,6 +17,7 @@ import AboutSection from "./components/AboutSection";
 import FAQSection from "./components/FAQSection";
 import ContactPage from "./components/ContactPage";
 import Footer from "./components/Footer";
+import ScrollMascot from "./components/ScrollMascot";
 
 export default function App() {
   const isContact = window.location.pathname.replace(/\/+$/, "") === "/contacto";
@@ -37,6 +38,7 @@ export default function App() {
           <ContactPage />
         </main>
         <Footer />
+        <ScrollMascot />
       </div>
     );
   }
@@ -65,6 +67,7 @@ export default function App() {
         <FAQSection />
       </main>
       <Footer />
+      <ScrollMascot />
     </div>
   );
 }
