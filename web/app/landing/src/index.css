@@ -87,23 +87,21 @@ body {
   transition: opacity .4s ease;
 }
 [data-theme="light"] .hero-ambient-glow {
-  /* En claro: degradado vertical dramático, azul fuerte cubriendo casi toda
-     la sección y aclarándose hasta blanco puro justo al final del hero,
-     para que se funda sin corte con el fondo blanco de la sección
-     siguiente (referencia visual pedida por el usuario). Es un fondo
-     opaco (no un brillo semitransparente) por eso usa mix-blend-mode normal. */
-  background: linear-gradient(
-    180deg,
-    #0a63f0 0%,
-    #1f7dff 18%,
-    #5aa6ff 36%,
-    #a8d1ff 54%,
-    #eaf4ff 70%,
-    #ffffff 86%,
-    #ffffff 100%
-  );
-  mix-blend-mode: normal;
-  opacity: 1;
+  /* En tema claro se usa la imagen real (hero-glow-light-img) en vez de
+     este degradado por CSS, así que aquí se oculta. */
+  display: none;
+}
+
+/* Imagen real de fondo para el Hero en tema claro: generada a partir de la
+   imagen de referencia que mandó el usuario (azul fuerte arriba, blanco
+   puro abajo). object-cover + sin min-width para que se adapte a
+   cualquier tamaño de pantalla sin recortes raros. Solo se muestra en
+   tema claro; en oscuro se usa el degradado de .hero-ambient-glow. */
+.hero-glow-light-img {
+  display: none;
+}
+[data-theme="light"] .hero-glow-light-img {
+  display: block;
 }
 
 /* Footer: siempre oscuro con un resplandor azul en la esquina inferior
