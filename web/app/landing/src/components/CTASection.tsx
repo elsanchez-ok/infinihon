@@ -40,7 +40,7 @@ export default function CTASection() {
       <div className="mx-auto max-w-[1440px] px-5 pb-24 pt-32 md:px-10 md:pb-32 md:pt-48">
         <div className="text-center">
           <Reveal className="font-mono text-[11px] uppercase tracking-[0.28em] text-steel">
-            <span className="text-volt">13</span> — Siguiente paso
+            <span className="text-volt">14</span> — Siguiente paso
           </Reveal>
           <RevealTitle
             as="h2"

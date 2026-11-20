@@ -139,6 +139,21 @@ body {
   );
 }
 
+/* Tarjeta "Equipo": degradado azul fijo (no depende del tema claro/oscuro),
+   calcado por muestreo de píxeles del fondo de la sección EKSPERT de
+   https://ds.mohirdev.uz/ — azul vivo arriba, azul pastel abajo. */
+.founder-card {
+  color-scheme: dark;
+  background-image: linear-gradient(
+    180deg,
+    #1f6fe0 0%,
+    #3d8ef0 12%,
+    #5aabfd 45%,
+    #86c2fe 75%,
+    #b9ddff 100%
+  );
+}
+
 /* Grid backgrounds */
 .bg-grid {
   background-image:

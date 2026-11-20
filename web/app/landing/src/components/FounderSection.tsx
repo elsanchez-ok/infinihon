@@ -1,77 +1,99 @@
-import { Reveal, PrimaryButton, SectionLabel } from "./ui";
+import { Reveal, SectionLabel, ArrowIcon } from "./ui";
 
-const badges = [
-  "Fundador de InfiniHon Corp.",
-  "Proyectos de infraestructura a gran escala",
-  "Ingeniería end-to-end: redes, cloud y seguridad",
-];
+const badges = ["Fundador de InfiniHon Corp.", "Proyectos de infraestructura a gran escala", "Ingeniería end-to-end"];
+
+const Photo = ({ className }: { className?: string }) => (
+  <img
+    src="/assets/joseph.webp"
+    alt="Joseph Sánchez, CEO y fundador de InfiniHon Corp."
+    className={className}
+  />
+);
+
+const Badges = ({ className }: { className?: string }) => (
+  <div className={className}>
+    <span className="rounded-full bg-white px-4 py-2 text-[11px] font-semibold text-[#0A0F14] sm:text-xs">
+      {badges[0]}
+    </span>
+    <span className="rounded-full bg-white px-4 py-2 text-[11px] font-semibold text-[#0A0F14] sm:text-xs">
+      {badges[1]}
+    </span>
+    <span className="rounded-full bg-white px-4 py-2 text-[11px] font-semibold text-[#0A0F14] sm:text-xs">
+      {badges[2]}
+    </span>
+  </div>
+);
+
+const CredentialCard = ({ className }: { className?: string }) => (
+  <div className={className}>
+    Instituto Tecnológico de Excelencia Educativa (ITEE), San Pedro Sula, Honduras
+  </div>
+);
+
+const MoreInfoButton = ({ className }: { className?: string }) => (
+  <a
+    href="/contacto"
+    className={
+      "group inline-flex items-center gap-4 rounded-[20px] bg-black/35 px-6 py-5 backdrop-blur-md transition-colors hover:bg-black/45 " +
+      (className ?? "")
+    }
+  >
+    <span className="text-left text-lg font-extrabold leading-[1.1] text-white sm:text-xl">
+      Más
+      <br />
+      información
+    </span>
+    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/90 text-[#0A0F14] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+      <ArrowIcon className="h-4 w-4 -rotate-45" />
+    </span>
+  </a>
+);
 
 export default function FounderSection() {
   return (
-    <section id="fundador" className="relative overflow-hidden border-t border-white/[0.06] bg-ink py-28 md:py-40">
-      {/* resplandor de marca, sutil, igual familia visual que el footer */}
-      <div
-        className="pointer-events-none absolute inset-0 -z-10 opacity-70"
-        style={{
-          backgroundImage:
-            "radial-gradient(55% 90% at 85% 15%, rgba(0,122,255,0.18) 0%, rgba(3,12,28,0) 60%)",
-        }}
-        aria-hidden
-      />
+    <section id="equipo" className="relative border-t border-white/[0.06] bg-ink py-16 md:py-24">
+      <div className="mx-auto max-w-[1440px] px-5 md:px-10">
+        <Reveal>
+          <SectionLabel index="13">Equipo</SectionLabel>
+        </Reveal>
 
-      {/* palabra gigante de fondo */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-10 select-none text-center font-extrabold uppercase leading-none tracking-tight text-white/[0.05] md:top-16"
-        style={{ fontSize: "min(22vw, 13rem)" }}
-      >
-        Fundador
-      </div>
+        <Reveal delay={120} className="founder-card relative mt-10 overflow-hidden rounded-[32px] md:rounded-[40px]">
+          {/* palabra gigante de fondo */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 top-6 select-none text-center font-extrabold uppercase leading-none tracking-tight text-white/30 md:top-10"
+            style={{ fontSize: "min(15vw, 8.5rem)" }}
+          >
+            Equipo
+          </div>
 
-      <div className="relative mx-auto max-w-[1440px] px-5 md:px-10">
-        <Reveal><SectionLabel index="12">Equipo</SectionLabel></Reveal>
+          {/* ---- Escritorio: composición tipo póster, igual a la referencia ---- */}
+          <div className="relative hidden min-h-[620px] lg:block xl:min-h-[680px]">
+            <Badges className="absolute left-10 top-[30%] flex max-w-[300px] flex-wrap gap-2" />
 
-        <div className="mt-14 grid items-end gap-14 lg:grid-cols-12 lg:gap-10">
-          <Reveal className="lg:col-span-5 lg:order-1">
-            <div className="flex flex-wrap gap-2">
-              {badges.map((b) => (
-                <span
-                  key={b}
-                  className="rounded-full border border-white/15 bg-white/[0.04] px-4 py-2 text-xs font-medium text-snow/90"
-                >
-                  {b}
-                </span>
-              ))}
-            </div>
+            <span
+              className="pointer-events-none absolute right-[11%] top-[27%] rotate-[-6deg] font-serif text-2xl italic text-[#9CFF6B] xl:text-3xl"
+              aria-hidden
+            >
+              Joseph Sánchez
+            </span>
 
-            <h3 className="mt-8 text-4xl font-extrabold tracking-tight text-snow md:text-5xl">Joseph Sánchez</h3>
-            <p className="mt-2 font-mono text-xs uppercase tracking-[0.22em] text-volt">CEO &amp; Fundador</p>
+            <Photo className="pointer-events-none absolute bottom-0 right-[6%] h-[94%] w-auto object-contain object-bottom" />
 
-            <div className="mt-8 max-w-sm rounded-2xl border border-white/10 bg-white/[0.04] p-5 text-[15px] leading-relaxed text-snow/90 backdrop-blur">
-              Graduado en Computación — Instituto Técnico de Electricidad y Electrónica (ITEE), San Pedro Sula, Honduras.
-            </div>
+            <CredentialCard className="absolute right-[4%] top-[46%] max-w-[230px] rounded-2xl bg-white p-4 text-sm font-semibold leading-snug text-[#0A0F14] shadow-[0_20px_40px_-10px_rgba(0,0,0,0.35)]" />
 
-            <PrimaryButton href="/contacto" className="mt-10">
-              Más información
-            </PrimaryButton>
-          </Reveal>
+            <MoreInfoButton className="absolute bottom-10 left-10" />
+          </div>
 
-          <Reveal delay={150} className="relative lg:col-span-7 lg:order-2">
-            <div className="relative mx-auto flex max-w-[420px] justify-center lg:ml-auto lg:mr-0">
-              <span
-                className="pointer-events-none absolute -top-8 right-2 rotate-[-6deg] text-2xl font-bold italic text-volt md:-top-10 md:right-6 md:text-3xl"
-                aria-hidden
-              >
-                Joseph Sánchez
-              </span>
-              <img
-                src="/assets/joseph.webp"
-                alt="Joseph Sánchez, CEO y fundador de InfiniHon Corp."
-                className="relative z-10 h-[340px] w-auto object-contain drop-shadow-[0_30px_60px_rgba(0,0,0,0.55)] sm:h-[400px] md:h-[460px]"
-              />
-            </div>
-          </Reveal>
-        </div>
+          {/* ---- Móvil/tablet: versión apilada, sin posicionamiento absoluto ---- */}
+          <div className="relative flex flex-col items-center gap-6 px-6 pb-8 pt-28 lg:hidden">
+            <Badges className="flex flex-wrap justify-center gap-2" />
+            <span className="rotate-[-4deg] font-serif text-xl italic text-[#9CFF6B]">Joseph Sánchez</span>
+            <Photo className="h-[300px] w-auto object-contain sm:h-[360px]" />
+            <CredentialCard className="w-full max-w-sm rounded-2xl bg-white p-4 text-center text-sm font-semibold leading-snug text-[#0A0F14] shadow-[0_20px_40px_-10px_rgba(0,0,0,0.35)]" />
+            <MoreInfoButton className="w-full max-w-sm justify-center" />
+          </div>
+        </Reveal>
       </div>
     </section>
   );

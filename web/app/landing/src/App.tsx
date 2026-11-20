@@ -60,8 +60,8 @@ export default function App() {
         <TechnologySection />
         <HondurasSection />
         <ProcessSection />
-        <FounderSection />
         <AboutSection />
+        <FounderSection />
         <CTASection />
       </main>
       <Footer />
