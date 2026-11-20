@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { PrimaryButton, GhostButton, useTypewriterCycle } from "./ui";
 import { cn } from "../utils/cn";
 
@@ -10,16 +10,6 @@ const HEADLINE_WORDS = ["infraestructura", "redes", "nube", "seguridad", "monito
 // Texto accesible fijo para lectores de pantalla (la animación de letras
 // es solo decorativa y queda con aria-hidden).
 const HEADLINE_WORD_A11Y = HEADLINE_WORDS.join(" / ");
-// Ancho FIJO de la píldora azul, en "em" (escala con el tamaño de letra
-// responsivo del titular en cualquier punto de quiebre). Calculado offline
-// con el archivo real de la tipografía (Manrope, peso 800/extrabold,
-// mayúsculas, con el mismo letter-spacing -0.03em del titular) para que
-// "INFRAESTRUCTURA" -la palabra más larga de la lista- quepa exacta más el
-// padding de la píldora (0.35em a cada lado), con un margen de seguridad.
-// Al ser un valor fijo en CSS puro (sin medir nada en tiempo de ejecución),
-// no depende de ningún comportamiento del navegador: el fondo azul NUNCA
-// cambia de tamaño entre palabras.
-const PILL_WIDTH_EM = "10.3em";
 
 export default function Hero() {
   const [ready, setReady] = useState(false);
@@ -31,6 +21,26 @@ export default function Hero() {
   // pasa a la siguiente de la lista, en bucle, justo cuando el resto del
   // titular ya reveló su línea (260ms de delay + el tiempo de esa animación).
   const typedWord = useTypewriterCycle(HEADLINE_WORDS, ready, 55, 30, 1800, 520);
+
+  // La píldora azul debe abrazar justo el texto que se está escribiendo en
+  // cada instante (no quedarse fija al tamaño de la palabra más larga, que
+  // se veía como una barra vacía enorme con palabras cortas). Se mide, en
+  // cada letra que se escribe/borra, el ancho real que ocupa ese texto con
+  // un clon invisible y fuera de pantalla (misma tipografía/padding que la
+  // píldora visible), y ese ancho en píxeles se aplica como "width" de la
+  // píldora visible junto con una transición CSS de "width": así, en vez de
+  // saltar de golpe, el fondo azul crece/encoge con una animación fluida.
+  const sizerRef = useRef<HTMLSpanElement>(null);
+  const [pillWidth, setPillWidth] = useState<number>();
+  useEffect(() => {
+    const measure = () => {
+      if (sizerRef.current) setPillWidth(sizerRef.current.getBoundingClientRect().width);
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    document.fonts?.ready?.then(measure).catch(() => {});
+    return () => window.removeEventListener("resize", measure);
+  }, [typedWord]);
 
   return (
     <section id="inicio" className={cn("relative isolate min-h-[100svh] overflow-hidden", ready && "in hero-in")}>
@@ -78,10 +88,14 @@ export default function Hero() {
               <span>
                 Ingeniería de{" "}
                 {/* text-left: el contenedor del Hero tiene text-center, y sin
-                    esto el texto quedaría centrado (y "flotando") dentro de
-                    la píldora de ancho fijo en vez de salir siempre desde el
-                    borde izquierdo como una escritura normal. */}
-                <span className="relative inline-block whitespace-nowrap rounded-2xl bg-tech px-[0.35em] py-[0.05em] text-left" style={{ width: PILL_WIDTH_EM } as CSSProperties}>
+                    esto el texto quedaría centrado dentro de la píldora en
+                    vez de salir siempre desde el borde izquierdo como una
+                    escritura normal. overflow-hidden evita que el texto se
+                    asome unos milisegundos durante la transición de ancho. */}
+                <span
+                  className="relative inline-block overflow-hidden whitespace-nowrap rounded-2xl bg-tech px-[0.35em] py-[0.05em] text-left transition-[width] duration-150 ease-out"
+                  style={pillWidth ? ({ width: `${pillWidth}px` } as CSSProperties) : undefined}
+                >
                   <span aria-hidden="true">
                     {typedWord}
                     <span className="blink -mb-[0.08em] ml-[0.02em] inline-block h-[0.82em] w-[0.06em] translate-y-[0.08em] bg-white/90" />
@@ -94,6 +108,19 @@ export default function Hero() {
               <span>para tu empresa.</span>
             </span>
           </h1>
+
+          {/* Clon invisible, fuera de pantalla, con exactamente la misma
+              tipografía/padding que la píldora azul de arriba, mostrando en
+              todo momento el mismo texto que se está escribiendo/borrando.
+              Solo existe para medir en píxeles reales (useEffect de arriba)
+              el ancho que debe tener la píldora en cada instante. */}
+          <span
+            ref={sizerRef}
+            aria-hidden="true"
+            className="pointer-events-none invisible fixed left-[-9999px] top-0 inline-block whitespace-nowrap rounded-2xl px-[0.35em] py-[0.05em] text-[12vw] font-extrabold uppercase tracking-[-0.03em] sm:text-[8vw] lg:text-[4.6rem] xl:text-[5.2rem]"
+          >
+            {typedWord}
+          </span>
 
           <p
             className="reveal mt-8 max-w-[560px] text-base leading-relaxed text-steel md:mt-10 md:text-lg"
