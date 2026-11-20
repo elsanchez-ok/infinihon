@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { PrimaryButton, GhostButton, useTypewriterCycle } from "./ui";
 import { cn } from "../utils/cn";
 
@@ -24,6 +24,25 @@ export default function Hero() {
   // pasa a la siguiente de la lista, en bucle, justo cuando el resto del
   // titular ya reveló su línea (260ms de delay + el tiempo de esa animación).
   const typedWord = useTypewriterCycle(HEADLINE_WORDS, ready, 55, 30, 1800, 520);
+
+  // Ancho fijo (en píxeles reales) de la píldora azul: se mide un clon
+  // invisible y fuera de pantalla que siempre muestra la palabra más larga,
+  // con exactamente la misma tipografía/padding que la píldora visible. Así
+  // el fondo azul queda con un tamaño constante sin importar qué tan larga
+  // sea la palabra que se está escribiendo/borrando en ese momento. Se
+  // recalcula si cambia el tamaño de ventana (el titular usa tamaños de
+  // fuente en vw) y cuando termina de cargar la tipografía personalizada.
+  const sizerRef = useRef<HTMLSpanElement>(null);
+  const [pillWidth, setPillWidth] = useState<number>();
+  useEffect(() => {
+    const measure = () => {
+      if (sizerRef.current) setPillWidth(sizerRef.current.getBoundingClientRect().width);
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    document.fonts?.ready?.then(measure).catch(() => {});
+    return () => window.removeEventListener("resize", measure);
+  }, []);
 
   return (
     <section id="inicio" className={cn("relative isolate min-h-[100svh] overflow-hidden", ready && "in hero-in")}>
@@ -70,16 +89,11 @@ export default function Hero() {
             <span className="line-reveal pb-[0.05em]" style={{ "--d": "260ms" } as CSSProperties}>
               <span>
                 Ingeniería de{" "}
-                {/* Píldora de tamaño fijo: una palabra invisible (la más larga
-                    de la lista) reserva el ancho/alto real del fondo azul en
-                    la misma celda de grid que el texto animado, así el fondo
-                    nunca cambia de tamaño aunque la palabra visible sea más
-                    corta o más larga. */}
-                <span className="relative inline-grid items-center justify-items-start rounded-2xl bg-tech px-[0.35em] py-[0.05em]">
-                  <span className="invisible col-start-1 row-start-1" aria-hidden="true">
-                    {LONGEST_HEADLINE_WORD}
-                  </span>
-                  <span className="col-start-1 row-start-1" aria-hidden="true">
+                <span
+                  className="relative inline-block rounded-2xl bg-tech px-[0.35em] py-[0.05em]"
+                  style={pillWidth ? ({ width: `${pillWidth}px` } as CSSProperties) : undefined}
+                >
+                  <span aria-hidden="true">
                     {typedWord}
                     <span className="blink -mb-[0.08em] ml-[0.02em] inline-block h-[0.82em] w-[0.06em] translate-y-[0.08em] bg-white/90" />
                   </span>
@@ -91,6 +105,19 @@ export default function Hero() {
               <span>para tu empresa.</span>
             </span>
           </h1>
+
+          {/* Clon invisible, fuera de pantalla, con exactamente la misma
+              tipografía/padding que la píldora azul de arriba, siempre
+              mostrando la palabra más larga de la lista. Solo existe para
+              medir en píxeles reales (useEffect de arriba) el ancho que debe
+              tener la píldora, y así fijarlo como un ancho constante. */}
+          <span
+            ref={sizerRef}
+            aria-hidden="true"
+            className="pointer-events-none invisible fixed left-[-9999px] top-0 inline-block whitespace-nowrap rounded-2xl px-[0.35em] py-[0.05em] text-[12vw] font-extrabold uppercase tracking-[-0.03em] sm:text-[8vw] lg:text-[4.6rem] xl:text-[5.2rem]"
+          >
+            {LONGEST_HEADLINE_WORD}
+          </span>
 
           <p
             className="reveal mt-8 max-w-[560px] text-base leading-relaxed text-steel md:mt-10 md:text-lg"
