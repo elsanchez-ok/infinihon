@@ -39,7 +39,7 @@ export const MEMBER: Member = {
   links: [
     { label: "Instagram", href: "https://instagram.com/elsanchezok", note: "@elsanchezok" },
     { label: "GitHub", href: "https://github.com/elsanchez-ok", note: "elsanchez-ok" },
-    { label: "Email corporativo", href: "mailto:contacto@infinihon.com", note: "contacto@infinihon.com" },
+    { label: "Email corporativo", href: "mailto:infinihon.hn@gmail.com", note: "infinihon.hn@gmail.com" },
     { label: "InfiniHon Corp. — sitio oficial", href: "https://infinihon.vercel.app/", note: "infinihon.vercel.app" },
     { label: "Proyectos — Ghost Browser", href: "https://infinihon.vercel.app/ghost-browser", note: "Proyecto propio" },
     { label: "Tienda InfiniHon", href: "https://infinihon.vercel.app/tienda", note: "Catálogo y equipamiento" },

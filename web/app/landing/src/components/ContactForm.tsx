@@ -2,7 +2,7 @@ import { useState, type FormEvent } from "react";
 import { Corners } from "./ui";
 import { cn } from "../utils/cn";
 
-export const CONTACT_EMAIL = "contacto@infinihon.com";
+export const CONTACT_EMAIL = "infinihon.hn@gmail.com";
 
 const CONTACT_ENDPOINT = "https://jcizfmpagprxyhvzuymx.supabase.co/functions/v1/contact-form";
 
