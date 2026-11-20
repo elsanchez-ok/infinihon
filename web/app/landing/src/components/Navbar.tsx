@@ -59,7 +59,7 @@ function AccountMenu() {
         aria-expanded={accountOpen}
         aria-haspopup="menu"
         className={cn(
-          "flex items-center gap-2 rounded-full border px-4 py-2.5 text-[13px] font-medium transition-colors",
+          "flex items-center gap-2 rounded-full border px-3.5 py-2.5 text-[13px] font-medium transition-colors lg:px-3 xl:px-4",
           accountOpen ? "border-volt/50 text-snow" : "border-white/10 text-steel hover:text-snow"
         )}
       >
@@ -67,7 +67,10 @@ function AccountMenu() {
           <circle cx="10" cy="6.5" r="3.25" />
           <path d="M3.5 17c.9-3.4 3.6-5.3 6.5-5.3s5.6 1.9 6.5 5.3" strokeLinecap="round" />
         </svg>
-        Cuenta
+        {/* En la franja "lg" (1024–1279px) el logo + links + Tienda + Cuenta
+            ya no caben con el texto completo, así que ahí se abrevia a solo
+            el ícono; el texto vuelve a verse en sm–md y de nuevo en xl+. */}
+        <span className="hidden sm:inline lg:hidden xl:inline">Cuenta</span>
         <svg viewBox="0 0 10 6" className={cn("h-[5px] w-[9px] transition-transform duration-300", accountOpen && "rotate-180")} fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
           <path d="M1 1l4 4 4-4" />
         </svg>
@@ -111,50 +114,57 @@ export default function Navbar() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-4 sm:pt-4">
-      <nav className="nav-glow relative mx-auto flex h-[68px] max-w-[1400px] items-center justify-between rounded-[24px] px-5 md:rounded-[28px] md:px-8">
+      <nav className="nav-glow relative mx-auto flex h-[68px] max-w-[1400px] items-center gap-4 rounded-[24px] px-5 md:rounded-[28px] md:px-8">
         <Wordmark />
 
-        {/* ---- Escritorio ancho (xl+): los 7 links, centrados ---- */}
-        <ul className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-7 xl:flex">
-          {allLinks.map((l) => (
-            <li key={l.href}>
-              <a href={l.href} className="group relative text-[13px] font-medium text-steel transition-colors hover:text-snow">
-                {l.label}
-                <span className="absolute -bottom-1.5 left-0 h-px w-0 bg-volt transition-all duration-300 group-hover:w-full" />
-              </a>
-            </li>
-          ))}
-        </ul>
+        {/* ---- Zona central de links: un hijo flex-1 propio (en vez de
+            posición absoluta centrada en toda la barra), así nunca invade
+            el espacio del logo ni el de los botones de la derecha, sin
+            importar cuántos elementos tenga cada lado. min-w-0 permite
+            que este hijo se angoste de verdad en vez de forzar overflow. ---- */}
+        <div className="flex min-w-0 flex-1 items-center justify-center overflow-hidden">
+          {/* ---- Escritorio ancho (xl+): los 7 links, centrados ---- */}
+          <ul className="hidden items-center gap-7 xl:flex">
+            {allLinks.map((l) => (
+              <li key={l.href} className="shrink-0">
+                <a href={l.href} className="group relative text-[13px] font-medium text-steel transition-colors hover:text-snow">
+                  {l.label}
+                  <span className="absolute -bottom-1.5 left-0 h-px w-0 bg-volt transition-all duration-300 group-hover:w-full" />
+                </a>
+              </li>
+            ))}
+          </ul>
 
-        {/* ---- Escritorio angosto (lg): solo los primarios + botón "Más" ---- */}
-        <ul className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-6 lg:flex xl:hidden">
-          {primaryLinks.map((l) => (
-            <li key={l.href}>
-              <a href={l.href} className="group relative text-[13px] font-medium text-steel transition-colors hover:text-snow">
-                {l.label}
-                <span className="absolute -bottom-1.5 left-0 h-px w-0 bg-volt transition-all duration-300 group-hover:w-full" />
-              </a>
+          {/* ---- Escritorio angosto (lg): solo los primarios + botón "Más" ---- */}
+          <ul className="hidden items-center gap-6 lg:flex xl:hidden">
+            {primaryLinks.map((l) => (
+              <li key={l.href} className="shrink-0">
+                <a href={l.href} className="group relative text-[13px] font-medium text-steel transition-colors hover:text-snow">
+                  {l.label}
+                  <span className="absolute -bottom-1.5 left-0 h-px w-0 bg-volt transition-all duration-300 group-hover:w-full" />
+                </a>
+              </li>
+            ))}
+            <li className="shrink-0">
+              <button
+                type="button"
+                onClick={() => setMoreOpen((v) => !v)}
+                aria-expanded={moreOpen}
+                className={cn(
+                  "flex items-center gap-1.5 text-[13px] font-medium transition-colors",
+                  moreOpen ? "text-volt" : "text-steel hover:text-snow"
+                )}
+              >
+                Más
+                <svg viewBox="0 0 10 6" className={cn("h-[5px] w-[9px] transition-transform duration-300", moreOpen && "rotate-180")} fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+                  <path d="M1 1l4 4 4-4" />
+                </svg>
+              </button>
             </li>
-          ))}
-          <li>
-            <button
-              type="button"
-              onClick={() => setMoreOpen((v) => !v)}
-              aria-expanded={moreOpen}
-              className={cn(
-                "flex items-center gap-1.5 text-[13px] font-medium transition-colors",
-                moreOpen ? "text-volt" : "text-steel hover:text-snow"
-              )}
-            >
-              Más
-              <svg viewBox="0 0 10 6" className={cn("h-[5px] w-[9px] transition-transform duration-300", moreOpen && "rotate-180")} fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
-                <path d="M1 1l4 4 4-4" />
-              </svg>
-            </button>
-          </li>
-        </ul>
+          </ul>
+        </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           <a
             href="/tienda"
             className="hidden items-center gap-2 rounded-full bg-tech px-5 py-2.5 text-[13px] font-semibold text-snow transition-all hover:bg-[#1a75ff] sm:inline-flex"
@@ -165,7 +175,7 @@ export default function Navbar() {
           <AccountMenu />
           <ThemeToggle className="hidden rounded-full sm:flex" />
           <button
-            className="relative flex h-10 w-10 items-center justify-center rounded-full border border-white/10 lg:hidden"
+            className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 lg:hidden"
             onClick={() => setOpen((o) => !o)}
             aria-label={open ? "Cerrar menú" : "Abrir menú"}
             aria-expanded={open}

@@ -73,13 +73,24 @@ function ScrollMascotOverlay() {
           esta transformación no choque con la animación de rebote
           (mascot-walk), que también anima `transform` pero en el <img>. */}
       <div className="absolute bottom-0" style={{ left: `${progress}%`, transform: `translateX(-${progress}%)` }}>
-        <img
-          src={src}
-          alt=""
-          className={`h-16 w-16 drop-shadow-[0_12px_28px_rgba(0,102,255,0.45)] sm:h-24 sm:w-24 ${
-            walking ? "mascot-walk" : ""
-          }`}
-        />
+        {/* Las imágenes de caminata (zuri-walk-1/2.webp) son una pose de
+            perfil donde el personaje ocupa ~53% del ancho de su lienzo,
+            mientras que la pose de reposo (mascot-hero.png) ocupa ~61%.
+            Es una diferencia real entre los archivos de arte, no un
+            recorte por CSS: sin corrección, Zuri se ve "más angosta" cada
+            vez que empieza a caminar (es decir, en cada scroll). Se
+            compensa con un escalado horizontal fijo solo mientras camina,
+            en un div propio para no chocar con la animación de rebote
+            (mascot-walk) que anima `transform` en el <img>. */}
+        <div style={walking ? { transform: "scaleX(1.14)" } : undefined}>
+          <img
+            src={src}
+            alt=""
+            className={`h-16 w-16 drop-shadow-[0_12px_28px_rgba(0,102,255,0.45)] sm:h-24 sm:w-24 ${
+              walking ? "mascot-walk" : ""
+            }`}
+          />
+        </div>
       </div>
     </div>
   );
