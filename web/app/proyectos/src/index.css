@@ -28,18 +28,46 @@
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
+/* ============================================================
+   Tema claro / oscuro — alternable con el botón de la barra de
+   navegación (ThemeToggle, components/ui.tsx). <html data-theme="dark|light">
+   se fija antes del primer render (ver script inline en index.html)
+   para que no haya parpadeo de tema incorrecto.
+   Por defecto el sitio usa "Obsidian" (oscuro); el tema claro
+   redefine aquí los mismos tokens de color, así que cada utilidad
+   de Tailwind (bg-obsidian, text-snow, border-steel, etc.) se
+   repinta sola sin tocar ningún componente.
+   ============================================================ */
+[data-theme="light"] {
+  color-scheme: light;
+  --color-obsidian: #F5F7FA;
+  --color-ink: #FFFFFF;
+  --color-snow: #05070A;
+  --color-steel: #4B5563;
+  --color-volt: #0072C6;
+  /* "white" es el color base de todos los bordes/superficies "glass"
+     (border-white/10, bg-white/[0.06], divide-white/..., etc.). Al
+     redefinirlo aquí, esas utilidades (que usan color-mix con esta
+     variable) pasan de "blanco sutil sobre fondo oscuro" a
+     "oscuro sutil sobre fondo claro" automáticamente. */
+  --color-white: #05070A;
+}
+[data-theme="dark"] { color-scheme: dark; }
+
+
 html {
   scroll-behavior: smooth;
-  background: #05070A;
+  background: var(--color-obsidian);
+  color-scheme: dark;
 }
 body {
-  background: #05070A;
-  color: #F5F7FA;
+  background: var(--color-obsidian);
+  color: var(--color-snow);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
-::selection { background: #0066FF; color: #F5F7FA; }
+::selection { background: var(--color-tech); color: var(--color-snow); }
 
 /* Grid backgrounds */
 .bg-grid {
@@ -109,13 +137,3 @@ body {
 @keyframes fade-up { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
 .fade-up { animation: fade-up .6s cubic-bezier(.2,.7,.2,1) both; }
 
-/* Reduced motion: turn off only the ambient/infinite decorations (persistent
-   pulsing, scanning, marquees, drifting grids). One-shot entrances - boot,
-   hero reveal - and the canvas keep their motion: they are the brand's story,
-   finish in seconds and never loop-flash content. */
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  :is(.pulse-soft, .ring, .scan, .blink, .marquee, .grid-drift, .bar, .container-life, .drop, .flow-line, .fade-up) {
-    animation: none !important;
-  }
-}

@@ -32,16 +32,16 @@ function Topology() {
       <defs><linearGradient id="inf-g" x1="0" y1="0" x2="0" y2="1"><stop stopColor="#0066FF" /><stop offset="1" stopColor="#003B73" /></linearGradient></defs>
       {links.map((d, i) => (
         <g key={i}>
-          <path d={d} fill="none" stroke="#1b344f" strokeWidth="1" />
+          <path d={d} fill="none" stroke="var(--color-steel)" strokeOpacity=".35" strokeWidth="1" />
           <path d={d} fill="none" stroke="url(#inf-g)" strokeWidth="1.4" className="admin-flow" style={{ animationDelay: `${i * -0.8}s` }} />
         </g>
       ))}
       {nodes.map((n) => (
         <g key={n.id} transform={`translate(${n.x} ${n.y})`}>
-          <rect width="120" height="40" rx="6" fill="#070b10" stroke={n.core ? "#0066FF" : "#284662"} />
-          <path d="M0 10V0h10M120 30v10h-10" fill="none" stroke="#0066FF" strokeOpacity=".7" />
-          <circle cx="12" cy="20" r="3" fill="none" stroke="#8B96A5" />
-          <text x="66" y="24" textAnchor="middle" fill="#D5E1EE" fontSize="10" letterSpacing="1.4" fontFamily="JetBrains Mono, monospace">{n.label}</text>
+          <rect width="120" height="40" rx="6" fill="var(--color-obsidian)" stroke={n.core ? "var(--color-tech)" : "var(--color-steel)"} />
+          <path d="M0 10V0h10M120 30v10h-10" fill="none" stroke="var(--color-tech)" strokeOpacity=".7" />
+          <circle cx="12" cy="20" r="3" fill="none" stroke="var(--color-steel)" />
+          <text x="66" y="24" textAnchor="middle" fill="var(--color-snow)" fontSize="10" letterSpacing="1.4" fontFamily="JetBrains Mono, monospace">{n.label}</text>
         </g>
       ))}
     </svg>

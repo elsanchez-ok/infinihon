@@ -2,12 +2,27 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("infinihon-theme");
+          if (t !== "light" && t !== "dark") {
+            t = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+          }
+          document.documentElement.setAttribute("data-theme", t);
+          document.documentElement.style.colorScheme = t;
+        } catch (e) {}
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="InfiniHon Corp. (Corporativo InfiniHon): corporativo tecnológico hondureño de proyectos propios de software, motores experimentales, infraestructura IT, tienda de hardware y servidores." />
     <meta name="theme-color" content="#05070A" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <title>InfiniHon Corp. — Corporativo de Proyectos, Software e Infraestructura IT</title>
     <link rel="canonical" href="https://infinihon.vercel.app/" />
     <meta name="robots" content="index, follow, max-image-preview:large" />

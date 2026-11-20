@@ -212,16 +212,13 @@ export default function ProcessSection() {
   const [pinEnabled, setPinEnabled] = useState(false);
 
   useEffect(() => {
+    // El efecto de pin-scroll se activa en escritorio sin importar la
+    // preferencia de "reducir movimiento" del sistema operativo.
     const mqDesktop = window.matchMedia("(min-width: 1024px)");
-    const mqReduced = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () => setPinEnabled(mqDesktop.matches && !mqReduced.matches);
+    const update = () => setPinEnabled(mqDesktop.matches);
     update();
     mqDesktop.addEventListener("change", update);
-    mqReduced.addEventListener("change", update);
-    return () => {
-      mqDesktop.removeEventListener("change", update);
-      mqReduced.removeEventListener("change", update);
-    };
+    return () => mqDesktop.removeEventListener("change", update);
   }, []);
 
   return (

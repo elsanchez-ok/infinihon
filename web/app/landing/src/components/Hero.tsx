@@ -16,6 +16,13 @@ export default function Hero() {
     <section id="inicio" className={cn("relative isolate min-h-[100svh] overflow-hidden", ready && "in hero-in")}>
       {/* background layers */}
       <div className="absolute inset-0 -z-20 bg-obsidian" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 -z-20 h-[65%] overflow-hidden" aria-hidden>
+        <img
+          src="/assets/hero-glow.png"
+          alt=""
+          className="hero-glow-img absolute inset-x-0 bottom-0 h-full w-full min-w-[1200px] object-cover"
+        />
+      </div>
       <div className="absolute inset-0 -z-10 bg-grid grid-drift mask-radial opacity-60" />
       <div className="absolute left-1/2 top-[55%] -z-10 h-[70vmin] w-[90vmin] -translate-x-1/2 -translate-y-1/2 rounded-full bg-hn/40 blur-[120px] lg:left-[68%]" />
 

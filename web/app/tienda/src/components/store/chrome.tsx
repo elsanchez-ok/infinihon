@@ -3,7 +3,7 @@ import { Link, navigate, useStore } from "../../store/app";
 import { categories, categoryLabel, products, services, statusLabel, bySlug } from "../../store/catalog";
 import { ProductVisual } from "./ProductVisual";
 import { cn } from "../../utils/cn";
-import { Corners } from "../ui";
+import { Corners, ThemeToggle } from "../ui";
 
 /* ------------------------------------------------------------------- logo */
 
@@ -102,6 +102,7 @@ export function StoreNavbar() {
           </nav>
 
           <div className="ml-auto flex items-center gap-1.5 lg:ml-0">
+            <ThemeToggle className="hidden h-10 w-10 border-white/[0.08] sm:flex" />
             <IconBtn label="Buscar" onClick={() => setSearch(true)} kbd>
               <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" {...ICON}><circle cx="11" cy="11" r="6.5" /><path d="M16 16l4 4" /></svg>
             </IconBtn>
@@ -156,6 +157,10 @@ export function StoreNavbar() {
             <Link to="/soporte" onClick={() => setMenu(false)} className="mt-4 flex items-center justify-center bg-tech py-3.5 text-sm font-semibold">
               Hablar con un experto
             </Link>
+            <div className="mt-4 flex items-center justify-between border-t border-white/[0.06] pt-4">
+              <span className="font-mono text-xs uppercase tracking-[0.18em] text-steel">Tema</span>
+              <ThemeToggle />
+            </div>
           </nav>
         </div>
       </header>

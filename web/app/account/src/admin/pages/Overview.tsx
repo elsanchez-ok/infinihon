@@ -39,11 +39,11 @@ function SystemDiagram() {
             "M70 110 H170", "M250 110 H330", "M410 110 C440 110 440 45 470 45", "M410 110 H470", "M410 110 C440 110 440 175 470 175",
           ].map((d, i) => (
             <g key={i}>
-              <path d={d} fill="none" stroke="#1d3a57" />
+              <path d={d} fill="none" stroke="var(--color-steel)" strokeOpacity=".35" />
               <path d={d} fill="none" stroke="url(#ov-line)" strokeWidth="1.2" className="admin-flow" style={{ animationDelay: `${i * -1.1}s` }} />
             </g>
           ))}
-          <path d="M370 140 V195 H600 V175" fill="none" stroke="#1d3a57" strokeDasharray="3 5" />
+          <path d="M370 140 V195 H600 V175" fill="none" stroke="var(--color-steel)" strokeOpacity=".35" strokeDasharray="3 5" />
           {[
             { x: 20, y: 90, w: 50, label: "USERS" },
             { x: 170, y: 90, w: 80, label: "NETWORK" },
@@ -53,12 +53,12 @@ function SystemDiagram() {
             { x: 470, y: 155, w: 130, label: "STORAGE" },
           ].map((n) => (
             <g key={n.label} transform={`translate(${n.x} ${n.y})`}>
-              <rect width={n.w} height={n.h ?? 40} rx="5" fill="#070b10" stroke={n.core ? "#0066FF" : "#284662"} />
-              <circle cx="10" cy="10" r="2.2" fill={n.core ? "#00A8FF" : "#8B96A5"} className={n.core ? "admin-pulse" : ""} />
-              <text x={n.w / 2} y={(n.h ?? 40) / 2 + 3.5} textAnchor="middle" fill="#D5E1EE" fontSize="9.5" letterSpacing="1.4" fontFamily="JetBrains Mono, monospace">{n.label}</text>
+              <rect width={n.w} height={n.h ?? 40} rx="5" fill="var(--color-obsidian)" stroke={n.core ? "var(--color-tech)" : "var(--color-steel)"} />
+              <circle cx="10" cy="10" r="2.2" fill={n.core ? "var(--color-volt)" : "var(--color-steel)"} className={n.core ? "admin-pulse" : ""} />
+              <text x={n.w / 2} y={(n.h ?? 40) / 2 + 3.5} textAnchor="middle" fill="var(--color-snow)" fontSize="9.5" letterSpacing="1.4" fontFamily="JetBrains Mono, monospace">{n.label}</text>
             </g>
           ))}
-          <text x="485" y="212" fill="#8B96A5" fontSize="8.5" letterSpacing="1.4" fontFamily="JetBrains Mono, monospace">MONITORING · OBSERVES ALL LAYERS</text>
+          <text x="485" y="212" fill="var(--color-steel)" fontSize="8.5" letterSpacing="1.4" fontFamily="JetBrains Mono, monospace">MONITORING · OBSERVES ALL LAYERS</text>
         </svg>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { AuthBrandPanel, AuthMark } from "./AuthVisual";
+import { ThemeToggle } from "../components/ui";
 import { ForgotPasswordForm, LoginForm, RegisterForm } from "./AuthForms";
 import "./auth.css";
 
@@ -45,7 +46,10 @@ export default function AuthApp({ pathname, navigate }: { pathname: string; navi
 
       <header className="auth-header">
         <AuthMark compact />
-        <a className="auth-exit-link" href="/">Volver al sitio <span aria-hidden="true">↗</span></a>
+        <div className="auth-header-actions">
+          <ThemeToggle />
+          <a className="auth-exit-link" href="/">Volver al sitio <span aria-hidden="true">↗</span></a>
+        </div>
       </header>
 
       <main className="auth-shell">

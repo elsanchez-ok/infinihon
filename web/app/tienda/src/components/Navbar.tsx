@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Logo } from "./ui";
+import { Logo, ThemeToggle } from "./ui";
 import { cn } from "../utils/cn";
 
 const links = [
@@ -54,6 +54,7 @@ export default function Navbar() {
             <span className="h-1.5 w-1.5 rounded-full bg-volt pulse-soft" />
             Hablar con InfiniHon Corp.
           </a>
+          <ThemeToggle className="hidden sm:flex" />
           <button
             className="relative flex h-10 w-10 items-center justify-center border border-white/10 lg:hidden"
             onClick={() => setOpen((o) => !o)}
@@ -85,10 +86,11 @@ export default function Navbar() {
               </a>
             </li>
           ))}
-          <li className="mt-6">
-            <a href="#contacto" onClick={() => setOpen(false)} className="flex w-full items-center justify-center bg-tech py-4 font-semibold">
+          <li className="mt-6 flex items-center gap-3">
+            <a href="#contacto" onClick={() => setOpen(false)} className="flex flex-1 items-center justify-center bg-tech py-4 font-semibold">
               Hablar con InfiniHon Corp.
             </a>
+            <ThemeToggle className="h-[54px] w-14 shrink-0" />
           </li>
         </ul>
       </div>

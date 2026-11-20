@@ -12,18 +12,46 @@
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
+/* ============================================================
+   Tema claro / oscuro — alternable con el botón de la barra de
+   navegación (ThemeToggle, components/ui.tsx). <html data-theme="dark|light">
+   se fija antes del primer render (ver script inline en index.html)
+   para que no haya parpadeo de tema incorrecto.
+   Por defecto el sitio usa "Obsidian" (oscuro); el tema claro
+   redefine aquí los mismos tokens de color, así que cada utilidad
+   de Tailwind (bg-obsidian, text-snow, border-steel, etc.) se
+   repinta sola sin tocar ningún componente.
+   ============================================================ */
+[data-theme="light"] {
+  color-scheme: light;
+  --color-obsidian: #F5F7FA;
+  --color-ink: #FFFFFF;
+  --color-snow: #05070A;
+  --color-steel: #4B5563;
+  --color-volt: #0072C6;
+  /* "white" es el color base de todos los bordes/superficies "glass"
+     (border-white/10, bg-white/[0.06], divide-white/..., etc.). Al
+     redefinirlo aquí, esas utilidades (que usan color-mix con esta
+     variable) pasan de "blanco sutil sobre fondo oscuro" a
+     "oscuro sutil sobre fondo claro" automáticamente. */
+  --color-white: #05070A;
+}
+[data-theme="dark"] { color-scheme: dark; }
+
+
 html {
   scroll-behavior: smooth;
-  background: #05070A;
+  background: var(--color-obsidian);
+  color-scheme: dark;
 }
 body {
-  background: #05070A;
-  color: #F5F7FA;
+  background: var(--color-obsidian);
+  color: var(--color-snow);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
-::selection { background: #0066FF; color: #F5F7FA; }
+::selection { background: var(--color-tech); color: var(--color-snow); }
 
 /* Grid backgrounds */
 .bg-grid {
@@ -101,13 +129,12 @@ body {
 }
 .cart-flight { animation: cart-flight .68s cubic-bezier(.2,.75,.25,1) both; }
 
-/* Reduced motion: turn off only the ambient/infinite decorations (persistent
-   pulsing, scanning, marquees, drifting grids). One-shot entrances - boot,
-   hero reveal - and the canvas keep their motion: they are the brand's story,
-   finish in seconds and never loop-flash content. */
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  :is(.pulse-soft, .ring, .scan, .blink, .marquee, .grid-drift, .bar, .container-life, .drop, .flow-line, .fade-up) {
-    animation: none !important;
-  }
-}
+
+/* Colores fijos (no usan los tokens --color-*) con su equivalente claro */
+[data-theme="light"] .bg-\[\#030507\] { background-color: #F5F7FA; }
+[data-theme="light"] .bg-\[\#070a0e\] { background-color: #FFFFFF; }
+[data-theme="light"] .bg-\[\#080e15\] { background-color: #EEF2F6; }
+[data-theme="light"] .bg-\[\#0d141c\] { background-color: #FFFFFF; }
+[data-theme="light"] .hover\:bg-\[\#070b10\]:hover { background-color: #EDF1F5; }
+[data-theme="light"] .hover\:bg-\[\#0c131b\]:hover { background-color: #EDF1F5; }
+[data-theme="light"] .text-\[\#9cc6ff\] { color: #0052CC; }

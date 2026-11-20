@@ -2,12 +2,27 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("infinihon-theme");
+          if (t !== "light" && t !== "dark") {
+            t = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+          }
+          document.documentElement.setAttribute("data-theme", t);
+          document.documentElement.style.colorScheme = t;
+        } catch (e) {}
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Proyectos — InfiniHon Corp. Portafolio oficial de proyectos propios: software, motores experimentales, infraestructura IT y plataformas tecnológicas creadas y publicadas por InfiniHon Corp." />
     <meta name="theme-color" content="#05070A" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <title>Proyectos — InfiniHon Corp.</title>
     <link rel="canonical" href="https://infinihon.vercel.app/proyectos" />
     <meta name="robots" content="index, follow, max-image-preview:large" />
