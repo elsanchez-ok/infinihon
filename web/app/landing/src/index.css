@@ -141,8 +141,13 @@ body {
 
 /* Tarjeta "Equipo": degradado azul fijo (no depende del tema claro/oscuro),
    calcado por muestreo de píxeles del fondo de la sección EKSPERT de
-   https://ds.mohirdev.uz/ — azul vivo arriba, azul pastel abajo. */
+   https://ds.mohirdev.uz/ — azul vivo arriba, azul pastel abajo.
+   Se fijan los tokens de color aquí dentro (igual que en .footer-glow) para
+   que bg-white / text-white no se inviertan a casi-negro en tema claro
+   (donde --color-white pasa a #05070A para los overlays tipo cristal). */
 .founder-card {
+  --color-white: #fff;
+  --color-snow: #F5F7FA;
   color-scheme: dark;
   background-image: linear-gradient(
     180deg,
