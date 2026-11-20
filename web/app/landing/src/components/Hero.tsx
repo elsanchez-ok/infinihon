@@ -1,5 +1,4 @@
 import { useEffect, useState, type CSSProperties } from "react";
-import InfrastructureVisual from "./InfrastructureVisual";
 import { PrimaryButton, GhostButton } from "./ui";
 import { cn } from "../utils/cn";
 
@@ -16,28 +15,16 @@ export default function Hero() {
     <section id="inicio" className={cn("relative isolate min-h-[100svh] overflow-hidden", ready && "in hero-in")}>
       {/* background layers */}
       <div className="absolute inset-0 -z-20 bg-obsidian" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 -z-20 h-[65%] overflow-hidden" aria-hidden>
-        <img
-          src="/assets/hero-glow.png"
-          alt=""
-          className="hero-glow-img absolute inset-x-0 bottom-0 h-full w-full min-w-[1200px] object-cover"
-        />
-      </div>
+      <div
+        className="hero-ambient-glow pointer-events-none absolute inset-x-0 bottom-0 -z-20 h-full w-full"
+        aria-hidden
+      />
       <div className="absolute inset-0 -z-10 bg-grid grid-drift mask-radial opacity-60" />
       <div className="absolute left-1/2 top-[55%] -z-10 h-[70vmin] w-[90vmin] -translate-x-1/2 -translate-y-1/2 rounded-full bg-hn/40 blur-[120px] lg:left-[68%]" />
-
-      <div className="absolute inset-0 -z-10 lg:left-[28%]">
-        <InfrastructureVisual className="h-full w-full opacity-70 lg:opacity-100" />
-      </div>
-      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-obsidian via-obsidian/70 to-transparent lg:via-obsidian/40" />
       <div className="absolute inset-x-0 bottom-0 -z-10 h-48 bg-gradient-to-t from-obsidian to-transparent" />
 
       {/* HUD frame */}
       <div className="pointer-events-none absolute inset-x-5 top-[88px] bottom-6 hidden md:inset-x-10 md:block" aria-hidden>
-        <div className="absolute right-0 top-0 text-right font-mono text-[10px] uppercase leading-5 tracking-[0.2em] text-steel/70">
-          <div>Topology view · Top-down</div>
-          <div className="text-steel/50">Render: live · visual simulation</div>
-        </div>
         <div className="absolute bottom-0 right-0 hidden text-right font-mono text-[10px] uppercase leading-5 tracking-[0.2em] text-steel/60 lg:block">
           <div>14.0818° N · 87.2068° W</div>
           <div className="text-steel/40">Tegucigalpa · HN</div>
