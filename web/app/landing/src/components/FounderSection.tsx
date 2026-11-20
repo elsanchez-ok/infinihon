@@ -1,4 +1,4 @@
-import { Reveal, SectionLabel, ArrowIcon } from "./ui";
+import { Reveal, ArrowIcon } from "./ui";
 
 const badges = ["Fundador de InfiniHon Corp.", "Proyectos de infraestructura a gran escala", "Ingeniería end-to-end"];
 
@@ -49,56 +49,64 @@ const MoreInfoButton = ({ className }: { className?: string }) => (
   </a>
 );
 
+function Label() {
+  return (
+    <div className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.22em] text-[#0A0F14]/70">
+      <span className="font-bold text-[#0A0F14]">13</span>
+      <span className="h-px w-10 bg-[#0A0F14]/30" />
+      <span>Equipo</span>
+    </div>
+  );
+}
+
 export default function FounderSection() {
   return (
-    <section id="equipo" className="relative border-t border-white/[0.06] bg-ink py-16 md:py-24">
-      <div className="mx-auto max-w-[1440px] px-5 md:px-10">
-        <Reveal>
-          <SectionLabel index="13">Equipo</SectionLabel>
-        </Reveal>
+    /* La tarjeta ES la sección: el degradado azul llega hasta el borde
+       superior e inferior (sin franja bg-ink arriba/abajo) y también va
+       pegada a los lados — pegada en los cuatro bordes, sin esquinas
+       redondeadas ni márgenes. */
+    <section id="equipo" className="founder-card relative overflow-hidden border-t border-white/[0.06] py-16 md:py-24">
+      {/* palabra gigante de fondo */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-6 select-none text-center font-extrabold uppercase leading-none tracking-tight text-white/30 md:top-10"
+        style={{ fontSize: "min(15vw, 8.5rem)" }}
+      >
+        Fundador
       </div>
 
-      {/* Tarjeta a todo lo ancho, sin márgenes ni esquinas redondeadas:
-          los bordes izquierdo y derecho van pegados al viewport. */}
-      <Reveal delay={120} className="founder-card relative mt-10 w-full overflow-hidden">
-        {/* palabra gigante de fondo */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-6 select-none text-center font-extrabold uppercase leading-none tracking-tight text-white/30 md:top-10"
-          style={{ fontSize: "min(15vw, 8.5rem)" }}
-        >
-          Equipo
-        </div>
+      <div className="relative mx-auto max-w-[1440px] px-5 md:px-10">
+        <Reveal>
+          <Label />
+        </Reveal>
 
-        <div className="relative mx-auto max-w-[1440px] px-5 md:px-10">
-          {/* ---- Escritorio: composición tipo póster, igual a la referencia ---- */}
-          <div className="relative hidden min-h-[620px] lg:block xl:min-h-[680px]">
-            <Badges className="absolute left-0 top-[30%] flex max-w-[300px] flex-wrap gap-2" />
+        {/* ---- Escritorio: composición tipo póster, igual a la referencia ---- */}
+        <Reveal delay={120} className="relative mt-10 hidden min-h-[560px] lg:block xl:min-h-[640px]">
+          <Badges className="absolute left-0 top-[26%] flex max-w-[300px] flex-wrap gap-2" />
 
-            <span
-              className="pointer-events-none absolute right-[11%] top-[27%] rotate-[-6deg] font-serif text-2xl italic text-[#9CFF6B] xl:text-3xl"
-              aria-hidden
-            >
-              Joseph Sánchez
-            </span>
+          <span
+            className="pointer-events-none absolute left-1/2 top-[22%] translate-x-[6%] rotate-[-6deg] font-serif text-2xl italic text-[#9CFF6B] xl:text-3xl"
+            aria-hidden
+          >
+            Joseph Sánchez
+          </span>
 
-            <Photo className="pointer-events-none absolute bottom-0 right-[6%] h-[94%] w-auto object-contain object-bottom" />
+          <Photo className="pointer-events-none absolute bottom-0 left-1/2 h-[94%] w-auto -translate-x-1/2 object-contain object-bottom" />
 
-            <CredentialCard className="absolute right-0 top-[46%] max-w-[230px] rounded-2xl bg-white p-4 text-sm font-semibold leading-snug text-[#0A0F14] shadow-[0_20px_40px_-10px_rgba(0,0,0,0.35)]" />
+          <CredentialCard className="absolute right-[14%] top-[44%] max-w-[230px] rounded-2xl bg-white p-4 text-sm font-semibold leading-snug text-[#0A0F14] shadow-[0_20px_40px_-10px_rgba(0,0,0,0.35)]" />
 
-            <MoreInfoButton className="absolute bottom-10 left-0" />
-          </div>
+          <MoreInfoButton className="absolute bottom-10 left-0" />
+        </Reveal>
 
-          {/* ---- Móvil/tablet: versión apilada, sin posicionamiento absoluto ---- */}
-          <div className="relative flex flex-col items-center gap-6 pb-8 pt-28 lg:hidden">
-            <Badges className="flex flex-wrap justify-center gap-2" />
-            <span className="rotate-[-4deg] font-serif text-xl italic text-[#9CFF6B]">Joseph Sánchez</span>
-            <Photo className="h-[300px] w-auto object-contain sm:h-[360px]" />
-            <CredentialCard className="w-full max-w-sm rounded-2xl bg-white p-4 text-center text-sm font-semibold leading-snug text-[#0A0F14] shadow-[0_20px_40px_-10px_rgba(0,0,0,0.35)]" />
-            <MoreInfoButton className="w-full max-w-sm justify-center" />
-          </div>
-        </div>
-      </Reveal>
+        {/* ---- Móvil/tablet: versión apilada, sin posicionamiento absoluto ---- */}
+        <Reveal delay={120} className="relative flex flex-col items-center gap-6 pb-8 pt-16 lg:hidden">
+          <Badges className="flex flex-wrap justify-center gap-2" />
+          <span className="rotate-[-4deg] font-serif text-xl italic text-[#9CFF6B]">Joseph Sánchez</span>
+          <Photo className="h-[300px] w-auto object-contain sm:h-[360px]" />
+          <CredentialCard className="w-full max-w-sm rounded-2xl bg-white p-4 text-center text-sm font-semibold leading-snug text-[#0A0F14] shadow-[0_20px_40px_-10px_rgba(0,0,0,0.35)]" />
+          <MoreInfoButton className="w-full max-w-sm justify-center" />
+        </Reveal>
+      </div>
     </section>
   );
 }
