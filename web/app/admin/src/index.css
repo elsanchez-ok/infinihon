@@ -101,13 +101,3 @@ body {
 }
 .cart-flight { animation: cart-flight .68s cubic-bezier(.2,.75,.25,1) both; }
 
-/* Reduced motion: turn off only the ambient/infinite decorations (persistent
-   pulsing, scanning, marquees, drifting grids). One-shot entrances - boot,
-   hero reveal - and the canvas keep their motion: they are the brand's story,
-   finish in seconds and never loop-flash content. */
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  :is(.pulse-soft, .ring, .scan, .blink, .marquee, .grid-drift, .bar, .container-life, .drop, .flow-line, .fade-up) {
-    animation: none !important;
-  }
-}

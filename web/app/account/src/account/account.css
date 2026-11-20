@@ -15,6 +15,3 @@
 @keyframes acct-pulse { 0%, 100% { opacity: .4; } 50% { opacity: 1; } }
 .acct-pulse { animation: acct-pulse 3.5s ease-in-out infinite; }
 
-@media (prefers-reduced-motion: reduce) {
-  .acct-shimmer, .acct-flow, .acct-pulse { animation: none !important; }
-}

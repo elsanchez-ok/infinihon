@@ -367,7 +367,3 @@
   .auth-diagram-frame { bottom: 50px; height: 47vh; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-
-  .auth-diagram-flow { stroke-dasharray: none; opacity: .35; }
-}

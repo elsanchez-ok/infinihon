@@ -87,7 +87,6 @@ export const useStore = () => {
 /** Flying dot animation from a clicked element to the cart icon. */
 function flyToCart(from?: DOMRect | null) {
   if (!from) return;
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   const target = document.getElementById("cart-anchor");
   if (!target) return;
   const to = target.getBoundingClientRect();

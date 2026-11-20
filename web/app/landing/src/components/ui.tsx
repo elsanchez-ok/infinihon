@@ -22,16 +22,12 @@ export function useInView<T extends Element>(threshold = 0.15, once = true) {
   return { ref, inView };
 }
 
+// El usuario prefiere que todos los efectos se ejecuten siempre, sin
+// importar la preferencia de "reducir movimiento" del sistema operativo.
+// Se mantiene la firma del hook (y el listener, por si se revierte) pero
+// se fuerza a que siempre reporte "sin reducir movimiento".
 export function useReducedMotion() {
-  const [reduced, setReduced] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduced(mq.matches);
-    const fn = () => setReduced(mq.matches);
-    mq.addEventListener("change", fn);
-    return () => mq.removeEventListener("change", fn);
-  }, []);
-  return reduced;
+  return false;
 }
 
 export function Reveal({

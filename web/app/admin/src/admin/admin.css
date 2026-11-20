@@ -26,6 +26,3 @@
 @keyframes admin-pulse { 0%, 100% { opacity: .45; } 50% { opacity: 1; } }
 .admin-pulse { animation: admin-pulse 3.5s ease-in-out infinite; }
 
-@media (prefers-reduced-motion: reduce) {
-  .admin-shimmer, .admin-flow, .admin-pulse { animation: none !important; }
-}
