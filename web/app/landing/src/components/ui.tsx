@@ -22,6 +22,34 @@ export function useInView<T extends Element>(threshold = 0.15, once = true) {
   return { ref, inView };
 }
 
+/** Efecto de escritura: revela `text` letra por letra, empezando `startDelay`
+ * ms después de que `start` se vuelva verdadero. Devuelve la porción ya
+ * "escrita" para renderizar. Como el usuario prefiere los efectos siempre
+ * activos, no respeta prefers-reduced-motion (igual que el resto del sitio). */
+export function useTypewriter(text: string, start: boolean, speed = 70, startDelay = 300) {
+  const [out, setOut] = useState("");
+  useEffect(() => {
+    if (!start) {
+      setOut("");
+      return;
+    }
+    let i = 0;
+    let interval: ReturnType<typeof setInterval> | undefined;
+    const delay = setTimeout(() => {
+      interval = setInterval(() => {
+        i += 1;
+        setOut(text.slice(0, i));
+        if (i >= text.length && interval) clearInterval(interval);
+      }, speed);
+    }, startDelay);
+    return () => {
+      clearTimeout(delay);
+      if (interval) clearInterval(interval);
+    };
+  }, [text, start, speed, startDelay]);
+  return out;
+}
+
 // El usuario prefiere que todos los efectos se ejecuten siempre, sin
 // importar la preferencia de "reducir movimiento" del sistema operativo.
 // Se mantiene la firma del hook (y el listener, por si se revierte) pero
