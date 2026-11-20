@@ -48,7 +48,7 @@ export default function Hero() {
               src="/assets/mascot-hero.png"
               alt=""
               aria-hidden="true"
-              className="float-soft relative z-10 mx-auto h-32 w-32 drop-shadow-[0_18px_40px_rgba(0,102,255,0.55)] sm:h-40 sm:w-40 md:h-48 md:w-48"
+              className="relative z-10 mx-auto h-32 w-32 drop-shadow-[0_18px_40px_rgba(0,102,255,0.55)] sm:h-40 sm:w-40 md:h-48 md:w-48"
             />
           </div>
 

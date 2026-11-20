@@ -28,7 +28,7 @@ export default function AboutSection() {
   return (
     <section id="nosotros" className="relative border-t border-white/[0.06] bg-ink py-28 md:py-40">
       <div className="mx-auto max-w-[1440px] px-5 md:px-10">
-        <Reveal><SectionLabel index="12">Nosotros</SectionLabel></Reveal>
+        <Reveal><SectionLabel index="13">Nosotros</SectionLabel></Reveal>
         <RevealTitle
           className="mt-8 max-w-6xl text-[10vw] font-extrabold uppercase leading-[0.92] tracking-[-0.04em] sm:text-6xl lg:text-[5.4rem]"
           lines={["No solo instalamos", "tecnología.", "Construimos sistemas."]}
