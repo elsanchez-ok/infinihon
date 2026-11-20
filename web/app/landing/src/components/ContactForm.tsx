@@ -4,6 +4,8 @@ import { cn } from "../utils/cn";
 
 export const CONTACT_EMAIL = "contacto@infinihon.com";
 
+const CONTACT_ENDPOINT = "https://jcizfmpagprxyhvzuymx.supabase.co/functions/v1/contact-form";
+
 const interests = [
   "Redes / MikroTik",
   "Cloud (AWS · Azure · GCP)",
@@ -18,18 +20,43 @@ const interests = [
 const input =
   "w-full border-0 border-b border-white/15 bg-transparent px-0 py-3 text-snow placeholder:text-steel/50 focus:border-volt focus:outline-none focus:ring-0 transition-colors";
 
-export default function ContactForm({ className }: { className?: string }) {
-  const [sent, setSent] = useState(false);
+type SendState = "idle" | "loading" | "sent" | "error";
 
-  const submit = (e: FormEvent<HTMLFormElement>) => {
+export default function ContactForm({ className }: { className?: string }) {
+  const [state, setState] = useState<SendState>("idle");
+
+  const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const f = new FormData(e.currentTarget);
-    const body = `Nombre: ${f.get("name")}\nEmpresa: ${f.get("company")}\nEmail: ${f.get("email")}\nInterés: ${f.get("interest")}\n\n${f.get("message")}`;
-    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
-      "Proyecto de infraestructura — " + (f.get("company") || f.get("name"))
-    )}&body=${encodeURIComponent(body)}`;
-    setSent(true);
+    const form = e.currentTarget;
+    const f = new FormData(form);
+    setState("loading");
+    try {
+      const res = await fetch(CONTACT_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: f.get("name"),
+          company: f.get("company"),
+          email: f.get("email"),
+          interest: f.get("interest"),
+          message: f.get("message"),
+          // Honeypot: campo oculto para bots, invisible para personas (ver <input name="website">).
+          website: f.get("website"),
+        }),
+      });
+      const data = await res.json().catch(() => null);
+      if (res.ok && data?.ok) {
+        setState("sent");
+        form.reset();
+      } else {
+        setState("error");
+      }
+    } catch {
+      setState("error");
+    }
   };
+
+  const sent = state === "sent";
 
   return (
     <div
@@ -46,24 +73,41 @@ export default function ContactForm({ className }: { className?: string }) {
       </div>
       {sent ? (
         <div className="py-10 text-center">
-          <div className="font-mono text-xs uppercase tracking-[0.22em] text-volt">Mensaje preparado</div>
-          <p className="mt-4 text-2xl font-bold">Se abrió tu cliente de correo.</p>
+          <div className="font-mono text-xs uppercase tracking-[0.22em] text-volt">Mensaje enviado</div>
+          <p className="mt-4 text-2xl font-bold">Recibimos tu solicitud.</p>
           <p className="mt-2 text-steel">
-            Si no se abrió, escríbenos directamente a{" "}
+            Te responderemos pronto. Si prefieres escribirnos directamente, hazlo a{" "}
             <a className="text-snow underline decoration-tech underline-offset-4" href={`mailto:${CONTACT_EMAIL}`}>
               {CONTACT_EMAIL}
             </a>
             .
           </p>
           <button
-            onClick={() => setSent(false)}
+            onClick={() => setState("idle")}
             className="mt-8 font-mono text-xs uppercase tracking-[0.2em] text-steel hover:text-snow"
           >
-            ← Volver al formulario
+            ← Enviar otro mensaje
           </button>
         </div>
       ) : (
         <form onSubmit={submit} className="grid gap-x-10 gap-y-6 md:grid-cols-2">
+          <input
+            type="text"
+            name="website"
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden="true"
+            className="absolute left-[-9999px] h-0 w-0 opacity-0"
+          />
+          {state === "error" && (
+            <p className="md:col-span-2 border border-red-500/30 bg-red-500/10 px-4 py-3 text-[13px] text-red-200">
+              No pudimos enviar tu mensaje. Inténtalo de nuevo o escríbenos a{" "}
+              <a className="underline decoration-current underline-offset-4" href={`mailto:${CONTACT_EMAIL}`}>
+                {CONTACT_EMAIL}
+              </a>
+              .
+            </p>
+          )}
           <label className="block">
             <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-steel">Nombre *</span>
             <input required name="name" autoComplete="name" className={input} placeholder="Tu nombre" />
@@ -98,9 +142,13 @@ export default function ContactForm({ className }: { className?: string }) {
             <p className="text-[13px] text-steel">Sin compromiso. Usamos tus datos solo para responder a tu solicitud.</p>
             <button
               type="submit"
-              className="group inline-flex items-center gap-3 bg-tech px-6 py-4 text-sm font-semibold text-snow transition-colors hover:bg-[#1a75ff]"
+              disabled={state === "loading"}
+              className="group inline-flex items-center gap-3 bg-tech px-6 py-4 text-sm font-semibold text-snow transition-colors hover:bg-[#1a75ff] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              Enviar solicitud <span className="font-mono transition-transform group-hover:translate-x-1">→</span>
+              {state === "loading" ? "Enviando..." : "Enviar solicitud"}
+              {state !== "loading" && (
+                <span className="font-mono transition-transform group-hover:translate-x-1">→</span>
+              )}
             </button>
           </div>
         </form>

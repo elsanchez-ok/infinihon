@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { authService, type AuthFailureReason } from "./authService";
+import { getSafeRedirect } from "../lib/supabase";
 import { AuthFeedback, AuthLink, FormField, PasswordField, PasswordStrength, ServiceNotice, SocialAuth, SubmitButton } from "./AuthFields";
 import {
   emailError,
@@ -54,12 +55,19 @@ function useValidatedForm<T extends object>(initial: T, validator: (values: T) =
   return { values, errors, change, blur, validateAll };
 }
 
+/** Conserva `?redirect=` al cambiar entre login / registro / recuperar acceso. */
+function withRedirect(path: string): string {
+  const r = getSafeRedirect();
+  return r ? `${path}?redirect=${encodeURIComponent(r)}` : path;
+}
+
 function failureText(reason: AuthFailureReason, action: "login" | "register" | "reset") {
   if (reason === "unavailable") {
     return "Este método de acceso aún no está disponible. Usa tu correo y contraseña.";
   }
   if (reason === "rate-limited") return "Hay demasiados intentos. Espera unos minutos antes de volver a probar.";
   if (reason === "network") return "No pudimos conectar con el servicio. Comprueba tu conexión e inténtalo de nuevo.";
+  if (reason === "email-unconfirmed") return "Tu correo aún no está confirmado. Revisa tu bandeja de entrada (y spam) para activar la cuenta.";
   return action === "login"
     ? "Correo o contraseña incorrectos. Revisa tus datos e inténtalo de nuevo."
     : action === "register"
@@ -89,8 +97,8 @@ function Completion({ title, description, navigate, destination = "/auth", actio
       <span className="auth-completion-mark" aria-hidden="true">✓</span>
       <h1 tabIndex={-1}>{title}</h1>
       <p>{description}</p>
-      {destination === "/"
-        ? <a href="/" className="auth-completion-action">{action} <span aria-hidden="true">↗</span></a>
+      {destination === "/" || destination.includes("?")
+        ? <a href={destination} className="auth-completion-action">{action} <span aria-hidden="true">↗</span></a>
         : <AuthLink href={destination} navigate={navigate} className="auth-completion-action">{action} <span aria-hidden="true">↗</span></AuthLink>}
     </div>
   );
@@ -165,12 +173,12 @@ export function LoginForm({ navigate }: { navigate: Navigate }) {
             <input id="login-remember" type="checkbox" checked={form.values.remember} disabled={state === "loading"} onChange={(event) => form.change("remember", event.target.checked)} />
             <span>Recordarme</span>
           </label>
-          <AuthLink href="/auth/forgot-password" navigate={navigate} className="auth-inline-link">¿Olvidaste tu contraseña?</AuthLink>
+          <AuthLink href={withRedirect("/auth/forgot-password")} navigate={navigate} className="auth-inline-link">¿Olvidaste tu contraseña?</AuthLink>
         </div>
         {message && <AuthFeedback type="error">{message}</AuthFeedback>}
         <SubmitButton pending={state === "loading"} pendingText="Iniciando sesión...">Iniciar sesión</SubmitButton>
       </form>
-      <div className="auth-form-switch">¿No tienes una cuenta? <AuthLink href="/auth/register" navigate={navigate}>Crear cuenta <span aria-hidden="true">↗</span></AuthLink></div>
+      <div className="auth-form-switch">¿No tienes una cuenta? <AuthLink href={withRedirect("/auth/register")} navigate={navigate}>Crear cuenta <span aria-hidden="true">↗</span></AuthLink></div>
     </div>
   );
 }
@@ -198,7 +206,7 @@ export function RegisterForm({ navigate }: { navigate: Navigate }) {
       });
       if (result.ok && "session" in result && result.session) {
         setState("success");
-        window.setTimeout(() => window.location.assign("/account"), 500);
+        window.setTimeout(() => window.location.assign(getSafeRedirect() ?? "/account"), 500);
       }
       else if (result.ok) setState("success");
       else { setState("error"); setMessage(failureText(result.reason, "register")); }
@@ -208,7 +216,17 @@ export function RegisterForm({ navigate }: { navigate: Navigate }) {
     }
   }
 
-  if (state === "success") return <Completion title="Cuenta creada correctamente." description="Tu cuenta ya está lista. Puedes iniciar sesión para continuar." navigate={navigate} />;
+  if (state === "success") {
+    const redirect = getSafeRedirect();
+    return (
+      <Completion
+        title="Cuenta creada correctamente."
+        description="Tu cuenta ya está lista. Puedes iniciar sesión para continuar."
+        navigate={navigate}
+        destination={redirect ? `/auth?redirect=${encodeURIComponent(redirect)}` : "/auth"}
+      />
+    );
+  }
 
   return (
     <div className="auth-view">
@@ -268,7 +286,7 @@ export function RegisterForm({ navigate }: { navigate: Navigate }) {
         {message && <AuthFeedback type="error">{message}</AuthFeedback>}
         <SubmitButton pending={state === "loading"} pendingText="Creando cuenta...">Crear cuenta</SubmitButton>
       </form>
-      <div className="auth-form-switch">¿Ya tienes una cuenta? <AuthLink href="/auth" navigate={navigate}>Iniciar sesión <span aria-hidden="true">↗</span></AuthLink></div>
+      <div className="auth-form-switch">¿Ya tienes una cuenta? <AuthLink href={withRedirect("/auth")} navigate={navigate}>Iniciar sesión <span aria-hidden="true">↗</span></AuthLink></div>
     </div>
   );
 }
@@ -313,7 +331,7 @@ export function ForgotPasswordForm({ navigate }: { navigate: Navigate }) {
         <SubmitButton pending={state === "loading"} pendingText="Enviando instrucciones...">Enviar instrucciones</SubmitButton>
       </form>
       <div className="auth-form-switch auth-form-switch-recovery">
-        <AuthLink href="/auth" navigate={navigate}>← Volver a iniciar sesión</AuthLink>
+        <AuthLink href={withRedirect("/auth")} navigate={navigate}>← Volver a iniciar sesión</AuthLink>
       </div>
     </div>
   );

@@ -3,12 +3,20 @@ import { Link, navigate, useStore } from "../../store/app";
 import { bySlug, categoryLabel, products, registerOrder } from "../../store/catalog";
 import { ProductVisual } from "./ProductVisual";
 import { Breadcrumb, EmptyState, StatusDot } from "./cards";
+import { AuthGateModal, AuthGateNotice } from "./AuthGate";
+import { hasStoredSession } from "../../auth/session";
 import { cn } from "../../utils/cn";
 
 /* ------------------------------------------------------------- cart page */
 
 export function CartPage() {
   const { cartLines, setQty, remove, subtotal, clear, cartCount } = useStore();
+  const [authGate, setAuthGate] = useState(false);
+
+  const handleCheckout = () => {
+    if (hasStoredSession()) navigate("/checkout");
+    else setAuthGate(true);
+  };
 
   if (cartLines.length === 0) {
     return (
@@ -101,9 +109,9 @@ export function CartPage() {
               <span className="font-mono text-[17px] text-snow">{subtotal === null ? "A definir" : `$${subtotal.toLocaleString("en-US")}`}</span>
             </div>
 
-            <Link to="/checkout" className="mt-6 flex items-center justify-center gap-2 bg-tech py-4 text-sm font-semibold text-snow transition-colors hover:bg-[#1a75ff]">
+            <button onClick={handleCheckout} className="mt-6 flex w-full items-center justify-center gap-2 bg-tech py-4 text-sm font-semibold text-snow transition-colors hover:bg-[#1a75ff]">
               Continuar compra <span className="font-mono">→</span>
-            </Link>
+            </button>
 
             <div className="mt-5 space-y-2 border-t border-white/[0.08] pt-5 font-mono text-[10px] uppercase leading-relaxed tracking-[0.14em] text-steel/70">
               <div className="flex items-center gap-2"><span className="h-1 w-1 rounded-full bg-amber-400" />Pago sin procesar en línea</div>
@@ -121,6 +129,8 @@ export function CartPage() {
           </div>
         </aside>
       </div>
+
+      <AuthGateModal open={authGate} onClose={() => setAuthGate(false)} />
     </div>
   );
 }
@@ -140,6 +150,7 @@ export function CheckoutPage() {
   const [pay, setPay] = useState("transfer");
   const [err, setErr] = useState<string | null>(null);
   const [orderId] = useState(() => "IH-" + Math.random().toString(36).slice(2, 7).toUpperCase());
+  const [authed] = useState(() => hasStoredSession());
 
   if (cartLines.length === 0) {
     return (
@@ -147,6 +158,19 @@ export function CheckoutPage() {
         <Breadcrumb items={[{ l: "Checkout" }]} />
         <div className="mt-10">
           <EmptyState title="No hay nada que procesar." text="Agrega productos al carrito para continuar con la compra." cta="Explorar productos" onCta={() => navigate("/catalogo")} />
+        </div>
+      </div>
+    );
+  }
+
+  // Acceso directo a /checkout (link guardado, retroceso del navegador, etc.) sin
+  // haber iniciado sesión: por seguridad, se exige registro antes de continuar.
+  if (!authed) {
+    return (
+      <div className="mx-auto max-w-[760px] px-4 py-14 md:px-8">
+        <Breadcrumb items={[{ l: "Carrito", to: "/carrito" }, { l: "Checkout" }]} />
+        <div className="mt-10">
+          <AuthGateNotice />
         </div>
       </div>
     );

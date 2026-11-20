@@ -12,8 +12,12 @@ export default function App() {
   }, []);
 
   const navigate = useCallback((to: string) => {
-    if (window.location.pathname !== to) window.history.pushState(null, "", to);
-    setPathname(to);
+    // `to` puede traer query string (p. ej. "/auth/register?redirect=..."). La URL
+    // del navegador se actualiza completa, pero el estado de ruta interno solo
+    // guarda el path: así la comparación de rutas no se rompe con el query string.
+    const current = window.location.pathname + window.location.search;
+    if (current !== to) window.history.pushState(null, "", to);
+    setPathname(to.split("?")[0]);
     window.scrollTo({ top: 0, behavior: "instant" });
   }, []);
 

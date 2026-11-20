@@ -1,6 +1,11 @@
 import { authSignIn, authSignUp, authRecover, authSignOut, isAdminUser, postLoginPath } from "../lib/supabase";
 
-export type AuthFailureReason = "unavailable" | "invalid-credentials" | "rate-limited" | "network";
+export type AuthFailureReason =
+  | "unavailable"
+  | "invalid-credentials"
+  | "rate-limited"
+  | "network"
+  | "email-unconfirmed";
 
 export type AuthResult =
   | { ok: true; session?: boolean; redirect?: string }
