@@ -1,22 +1,22 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 /* Zuri, la mascota del Hero, "camina" mientras el usuario hace scroll:
    se fija en la esquina inferior de la pantalla y alterna entre los dos
    fotogramas de caminata (piernas cruzadas) con un pequeño rebote. En
    cuanto el scroll se detiene (~220ms sin eventos), vuelve a mostrar la
-   misma pose que aparece en el Hero, quieta. Se respeta
-   prefers-reduced-motion mostrando siempre la pose quieta. */
+   misma pose que aparece en el Hero, quieta.
+
+   Nota: antes esto se desactivaba por completo si el sistema/navegador
+   reportaba prefers-reduced-motion, lo cual terminó apagando la
+   animación en el entorno de pruebas sin ningún aviso visible. Como es
+   un efecto puramente decorativo (no es contenido esencial ni parpadea
+   agresivamente), se quita esa condición para que camine siempre que
+   el usuario haga scroll. */
 export default function ScrollMascot() {
   const [walking, setWalking] = useState(false);
   const [frame, setFrame] = useState(0);
-  const reduceMotionRef = useRef(false);
 
   useEffect(() => {
-    reduceMotionRef.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  }, []);
-
-  useEffect(() => {
-    if (reduceMotionRef.current) return;
     let stopTimer: number | undefined;
     const onScroll = () => {
       setWalking(true);
@@ -36,8 +36,7 @@ export default function ScrollMascot() {
     return () => window.clearInterval(id);
   }, [walking]);
 
-  const isWalking = walking && !reduceMotionRef.current;
-  const src = isWalking ? (frame === 0 ? "/assets/zuri-walk-1.webp" : "/assets/zuri-walk-2.webp") : "/assets/mascot-hero.png";
+  const src = walking ? (frame === 0 ? "/assets/zuri-walk-1.webp" : "/assets/zuri-walk-2.webp") : "/assets/mascot-hero.png";
 
   return (
     <div
@@ -48,7 +47,7 @@ export default function ScrollMascot() {
         src={src}
         alt=""
         className={`h-16 w-16 drop-shadow-[0_12px_28px_rgba(0,102,255,0.45)] transition-transform duration-150 sm:h-24 sm:w-24 ${
-          isWalking ? "mascot-walk" : "float-soft"
+          walking ? "mascot-walk" : "float-soft"
         }`}
       />
     </div>
