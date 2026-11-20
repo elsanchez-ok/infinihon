@@ -1,9 +1,18 @@
 import { useEffect, useState, type CSSProperties } from "react";
-import { PrimaryButton, GhostButton, useTypewriter } from "./ui";
+import { PrimaryButton, GhostButton, useTypewriterCycle } from "./ui";
 import { cn } from "../utils/cn";
 
 const micro = ["Proyectos", "Redes", "Cloud", "Seguridad", "DevOps", "Automatización"];
-const HEADLINE_WORD = "infraestructura";
+// Palabras que rotan en el titular ("Ingeniería de ___ para tu empresa."),
+// todas en relación directa con lo que describe el párrafo de debajo
+// (infraestructura, redes, nube, seguridad, monitoreo, software).
+const HEADLINE_WORDS = ["infraestructura", "redes", "nube", "seguridad", "monitoreo", "software"];
+// Texto accesible fijo para lectores de pantalla (la animación de letras
+// es solo decorativa y queda con aria-hidden).
+const HEADLINE_WORD_A11Y = HEADLINE_WORDS.join(" / ");
+// Ancho mínimo de la píldora azul basado en la palabra más larga, para que
+// el resto del titular no "salte" de línea cada vez que cambia la palabra.
+const LONGEST_HEADLINE_WORD = HEADLINE_WORDS.reduce((a, b) => (b.length > a.length ? b : a));
 
 export default function Hero() {
   const [ready, setReady] = useState(false);
@@ -11,10 +20,10 @@ export default function Hero() {
     const id = requestAnimationFrame(() => setReady(true));
     return () => cancelAnimationFrame(id);
   }, []);
-  // "infraestructura" se escribe letra por letra justo cuando el resto del
+  // La palabra del titular se escribe, se mantiene un momento, se borra y
+  // pasa a la siguiente de la lista, en bucle, justo cuando el resto del
   // titular ya reveló su línea (260ms de delay + el tiempo de esa animación).
-  const typedWord = useTypewriter(HEADLINE_WORD, ready, 55, 520);
-  const typingDone = typedWord.length >= HEADLINE_WORD.length;
+  const typedWord = useTypewriterCycle(HEADLINE_WORDS, ready, 55, 30, 1800, 520);
 
   return (
     <section id="inicio" className={cn("relative isolate min-h-[100svh] overflow-hidden", ready && "in hero-in")}>
@@ -61,12 +70,15 @@ export default function Hero() {
             <span className="line-reveal pb-[0.05em]" style={{ "--d": "260ms" } as CSSProperties}>
               <span>
                 Ingeniería de{" "}
-                <span className="relative inline-block rounded-2xl bg-tech px-[0.35em] py-[0.05em]">
+                <span
+                  className="relative inline-block rounded-2xl bg-tech px-[0.35em] py-[0.05em]"
+                  style={{ minWidth: `${LONGEST_HEADLINE_WORD.length}ch` } as CSSProperties}
+                >
                   <span aria-hidden="true">
                     {typedWord}
-                    <span className={cn("blink -mb-[0.08em] ml-[0.02em] inline-block h-[0.82em] w-[0.06em] translate-y-[0.08em] bg-white/90", typingDone && "opacity-70")} />
+                    <span className="blink -mb-[0.08em] ml-[0.02em] inline-block h-[0.82em] w-[0.06em] translate-y-[0.08em] bg-white/90" />
                   </span>
-                  <span className="sr-only">{HEADLINE_WORD}</span>
+                  <span className="sr-only">{HEADLINE_WORD_A11Y}</span>
                 </span>
               </span>
             </span>

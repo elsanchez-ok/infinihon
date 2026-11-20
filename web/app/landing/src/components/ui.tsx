@@ -50,6 +50,52 @@ export function useTypewriter(text: string, start: boolean, speed = 70, startDel
   return out;
 }
 
+/** Efecto de escritura "en ciclo": escribe `words[0]` letra por letra, lo
+ * mantiene visible `holdMs`, lo borra letra por letra y pasa a la
+ * siguiente palabra de la lista, en bucle infinito mientras `start` sea
+ * verdadero. Devuelve solo el texto parcial a mostrar (sin índice ni
+ * estado de borrado) para que el componente no necesite más lógica. */
+export function useTypewriterCycle(words: string[], start: boolean, speed = 55, deleteSpeed = 30, holdMs = 1800, startDelay = 520) {
+  const [index, setIndex] = useState(0);
+  const [subIndex, setSubIndex] = useState(0);
+  const [deleting, setDeleting] = useState(false);
+  const [began, setBegan] = useState(false);
+
+  // Espera `startDelay` antes de arrancar (para sincronizar con el resto
+  // del titular), y reinicia todo si `start` vuelve a false.
+  useEffect(() => {
+    if (!start) {
+      setBegan(false);
+      setIndex(0);
+      setSubIndex(0);
+      setDeleting(false);
+      return;
+    }
+    const t = setTimeout(() => setBegan(true), startDelay);
+    return () => clearTimeout(t);
+  }, [start, startDelay]);
+
+  useEffect(() => {
+    if (!began || words.length === 0) return;
+    const word = words[index % words.length];
+
+    if (!deleting && subIndex === word.length) {
+      const t = setTimeout(() => setDeleting(true), holdMs);
+      return () => clearTimeout(t);
+    }
+    if (deleting && subIndex === 0) {
+      setDeleting(false);
+      setIndex((i) => (i + 1) % words.length);
+      return;
+    }
+    const t = setTimeout(() => setSubIndex((s) => s + (deleting ? -1 : 1)), deleting ? deleteSpeed : speed);
+    return () => clearTimeout(t);
+  }, [began, subIndex, deleting, index, words, speed, deleteSpeed, holdMs]);
+
+  const word = words[index % words.length] ?? "";
+  return word.slice(0, subIndex);
+}
+
 // El usuario prefiere que todos los efectos se ejecuten siempre, sin
 // importar la preferencia de "reducir movimiento" del sistema operativo.
 // Se mantiene la firma del hook (y el listener, por si se revierte) pero
