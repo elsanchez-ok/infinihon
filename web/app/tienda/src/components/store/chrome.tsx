@@ -3,26 +3,16 @@ import { Link, navigate, useStore } from "../../store/app";
 import { categories, categoryLabel, products, services, statusLabel, bySlug } from "../../store/catalog";
 import { ProductVisual } from "./ProductVisual";
 import { cn } from "../../utils/cn";
-import { Corners, ThemeToggle } from "../ui";
+import { ArrowIcon, Corners, ThemeToggle } from "../ui";
 
 /* ------------------------------------------------------------------- logo */
 
+/* Logo simplificado a una sola línea (solo el isotipo InfiniHon), igual
+   que en la barra de navegación del sitio principal. */
 export function StoreLogo({ compact = false }: { compact?: boolean }) {
   return (
-    <Link to="/" className="group flex flex-col items-center gap-1.5" aria-label="InfiniHon Corp. — tienda">
-      <span className="flex items-center">
-        <img
-          src="/assets/infinihon.png"
-          alt="InfiniHon Corp."
-          className={cn("shrink-0 w-auto", compact ? "h-8" : "h-9")}
-        />
-        <span className="ml-1 translate-y-[2px] font-mono text-[10px] font-semibold uppercase tracking-[0.1em] text-volt">
-          Corp.
-        </span>
-      </span>
-      {!compact && (
-        <span className="block font-mono text-[9px] uppercase leading-none tracking-[0.28em] text-steel">Infrastructure · Innovation · Honduras</span>
-      )}
+    <Link to="/" className="flex shrink-0 items-center" aria-label="InfiniHon Corp. — tienda">
+      <img src="/assets/infinihon.png" alt="InfiniHon Corp." className={cn("w-auto", compact ? "h-6" : "h-7")} />
     </Link>
   );
 }
@@ -64,9 +54,12 @@ export function StoreNavbar() {
 
   return (
     <>
-      <header className={cn("sticky top-0 z-50 transition-all duration-500", scrolled ? "bg-obsidian/85 backdrop-blur-xl" : "bg-obsidian/50 backdrop-blur-sm")}>
+      {/* Barra de navegación flotante con esquinas redondeadas y resplandor
+          azul (.nav-glow), igual que en la página de inicio. El aviso de
+          catálogo queda fuera, a ancho completo, arriba de la barra. */}
+      <header className="sticky top-0 z-50">
         {/* aviso de catálogo: colapsa al hacer scroll para no estorbar la navegación */}
-        <div className={cn("overflow-hidden border-b border-hn/60 bg-hn/25 transition-[max-height] duration-500", demoNotice && scrolled ? "max-h-0" : demoNotice ? "max-h-12" : "max-h-0")}>
+        <div className={cn("overflow-hidden border-b border-hn/60 bg-hn/25 transition-[max-height] duration-500", demoNotice && !scrolled ? "max-h-12" : "max-h-0")}>
           <div className="mx-auto flex max-w-[1500px] items-center gap-3 px-4 py-2.5 md:px-8">
             <span className="hidden shrink-0 border border-volt/40 px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.2em] text-volt sm:block">Info</span>
             <p className="font-mono text-[10.5px] leading-4 tracking-[0.06em] text-steel">
@@ -75,68 +68,72 @@ export function StoreNavbar() {
             <button onClick={() => setDemoNotice(false)} className="ml-auto shrink-0 font-mono text-[11px] text-steel hover:text-snow" aria-label="Cerrar aviso">✕</button>
           </div>
         </div>
-        <div className={cn("border-b transition-colors duration-500", scrolled ? "border-white/[0.07]" : "border-transparent")}>
-        <div className="mx-auto flex h-[68px] max-w-[1500px] items-center gap-6 px-4 md:px-8">
-          <StoreLogo />
 
-          <nav aria-label="Principal" className="mx-auto hidden items-center gap-7 lg:flex">
-            {NAV.map((n) => {
-              const active = n.section ? false : route.raw === n.to || route.raw.startsWith(n.to + "/");
-              return n.section ? (
-                <button
-                  key={n.l}
-                  type="button"
-                  onClick={() => goSection(n.section!)}
-                  className="group relative text-[13px] font-medium text-steel transition-colors hover:text-snow"
-                >
-                  {n.l}
-                  <span className="absolute -bottom-1.5 left-0 h-px w-0 bg-volt transition-all duration-300 group-hover:w-full" />
-                </button>
-              ) : (
-                <Link key={n.l} to={n.to} className={cn("group relative text-[13px] font-medium transition-colors", active ? "text-snow" : "text-steel hover:text-snow")}>
-                  {n.l}
-                  <span className={cn("absolute -bottom-1.5 left-0 h-px bg-volt transition-all duration-300", active ? "w-full" : "w-0 group-hover:w-full")} />
+        <div className="bg-obsidian px-3 pt-3 sm:px-4 sm:pt-4">
+          <nav aria-label="Principal" className="nav-glow relative mx-auto flex h-[68px] max-w-[1500px] items-center gap-4 rounded-[24px] px-4 md:rounded-[28px] md:px-6">
+            <StoreLogo compact />
+
+            <ul className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-7 lg:flex">
+              {NAV.map((n) => {
+                const active = n.section ? false : route.raw === n.to || route.raw.startsWith(n.to + "/");
+                return (
+                  <li key={n.l}>
+                    {n.section ? (
+                      <button
+                        type="button"
+                        onClick={() => goSection(n.section!)}
+                        className="group relative text-[13px] font-medium text-steel transition-colors hover:text-snow"
+                      >
+                        {n.l}
+                        <span className="absolute -bottom-1.5 left-0 h-px w-0 bg-volt transition-all duration-300 group-hover:w-full" />
+                      </button>
+                    ) : (
+                      <Link to={n.to} className={cn("group relative text-[13px] font-medium transition-colors", active ? "text-snow" : "text-steel hover:text-snow")}>
+                        {n.l}
+                        <span className={cn("absolute -bottom-1.5 left-0 h-px bg-volt transition-all duration-300", active ? "w-full" : "w-0 group-hover:w-full")} />
+                      </Link>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+
+            <div className="ml-auto flex items-center gap-1.5">
+              <ThemeToggle className="hidden h-10 w-10 rounded-full border-white/[0.08] sm:flex" />
+              <IconBtn label="Buscar" onClick={() => setSearch(true)} kbd>
+                <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" {...ICON}><circle cx="11" cy="11" r="6.5" /><path d="M16 16l4 4" /></svg>
+              </IconBtn>
+              <IconBtn label="Cuenta" onClick={() => navigate("/soporte")} className="hidden sm:flex">
+                <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" {...ICON}><circle cx="12" cy="8.5" r="3.5" /><path d="M5 20c1.2-3.6 4-5 7-5s5.8 1.4 7 5" /></svg>
+              </IconBtn>
+              <IconBtn label={`Carrito, ${cartCount} productos`} onClick={() => setDrawer(true)} badge={cartCount} anchor>
+                <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" {...ICON}><path d="M4 6h16l-1.4 11.2A2 2 0 0 1 16.6 19H7.4a2 2 0 0 1-2-1.8z" /><path d="M9 6V4.8A3 3 0 0 1 15 4.8V6" /></svg>
+              </IconBtn>
+
+              {compare.length > 0 && (
+                <Link to="/comparar" className="relative ml-1 hidden items-center gap-2 rounded-full border border-volt/50 bg-volt/10 px-3 py-2 text-[12px] font-semibold text-snow md:flex">
+                  <svg viewBox="0 0 24 24" className="h-4 w-4" {...ICON}><path d="M4 7h16M4 12h10M4 17h6" /></svg>
+                  {compare.length}
                 </Link>
-              );
-            })}
-          </nav>
+              )}
 
-          <div className="ml-auto flex items-center gap-1.5 lg:ml-0">
-            <ThemeToggle className="hidden h-10 w-10 border-white/[0.08] sm:flex" />
-            <IconBtn label="Buscar" onClick={() => setSearch(true)} kbd>
-              <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" {...ICON}><circle cx="11" cy="11" r="6.5" /><path d="M16 16l4 4" /></svg>
-            </IconBtn>
-            <IconBtn label="Cuenta" onClick={() => navigate("/soporte")} className="hidden sm:flex">
-              <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" {...ICON}><circle cx="12" cy="8.5" r="3.5" /><path d="M5 20c1.2-3.6 4-5 7-5s5.8 1.4 7 5" /></svg>
-            </IconBtn>
-            <IconBtn label={`Carrito, ${cartCount} productos`} onClick={() => setDrawer(true)} badge={cartCount} anchor>
-              <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" {...ICON}><path d="M4 6h16l-1.4 11.2A2 2 0 0 1 16.6 19H7.4a2 2 0 0 1-2-1.8z" /><path d="M9 6V4.8A3 3 0 0 1 15 4.8V6" /></svg>
-            </IconBtn>
-
-            {compare.length > 0 && (
-              <Link to="/comparar" className="relative ml-1 hidden items-center gap-2 border border-volt/50 bg-volt/10 px-3 py-2 text-[12px] font-semibold text-snow md:flex">
-                <svg viewBox="0 0 24 24" className="h-4 w-4" {...ICON}><path d="M4 7h16M4 12h10M4 17h6" /></svg>
-                {compare.length}
+              <Link to="/soporte" className="ml-1 hidden items-center gap-2 rounded-full bg-tech px-4 py-2.5 text-[12.5px] font-semibold text-snow transition-all hover:bg-[#1a75ff] xl:flex">
+                <ArrowIcon className="h-3.5 w-3.5" />
+                Hablar con un experto
               </Link>
-            )}
 
-            <Link to="/soporte" className="ml-1 hidden items-center gap-2 border border-tech/60 bg-tech/10 px-4 py-2.5 text-[12.5px] font-semibold text-snow transition-colors hover:bg-tech xl:flex">
-              <span className="h-1.5 w-1.5 rounded-full bg-volt pulse-soft" />
-              Hablar con un experto
-            </Link>
-
-            <IconBtn label="Menú" onClick={() => setMenu((m) => !m)} className="lg:hidden">
-              <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" {...ICON}>
-                {menu ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 8h16M4 16h16" />}
-              </svg>
-            </IconBtn>
-          </div>
-        </div>
+              <IconBtn label="Menú" onClick={() => setMenu((m) => !m)} className="lg:hidden">
+                <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" {...ICON}>
+                  {menu ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 8h16M4 16h16" />}
+                </svg>
+              </IconBtn>
+            </div>
+          </nav>
         </div>
 
-        {/* mobile menu */}
-        <div className={cn("overflow-hidden border-t border-white/[0.07] bg-obsidian/95 backdrop-blur-xl transition-[max-height] duration-500 lg:hidden", menu ? "max-h-[80svh]" : "max-h-0")}>
-          <nav className="px-4 py-3">
+        {/* menú móvil: panel redondeado que aparece justo debajo de la barra */}
+        <div className={cn("mx-auto max-w-[1500px] overflow-hidden px-3 transition-[max-height] duration-500 sm:px-4 lg:hidden", menu ? "max-h-[80svh]" : "max-h-0")}>
+          <nav className="nav-glow mt-2 rounded-[20px] px-4 py-3">
             {NAV.map((n, i) => (
               <div key={n.l} className="flex items-center justify-between border-b border-white/[0.06] py-3.5">
                 {n.section ? (
@@ -154,12 +151,12 @@ export function StoreNavbar() {
                 Comparar <span className="font-mono text-xs text-volt">{compare.length}</span>
               </Link>
             )}
-            <Link to="/soporte" onClick={() => setMenu(false)} className="mt-4 flex items-center justify-center bg-tech py-3.5 text-sm font-semibold">
+            <Link to="/soporte" onClick={() => setMenu(false)} className="mt-4 flex items-center justify-center rounded-full bg-tech py-3.5 text-sm font-semibold">
               Hablar con un experto
             </Link>
             <div className="mt-4 flex items-center justify-between border-t border-white/[0.06] pt-4">
               <span className="font-mono text-xs uppercase tracking-[0.18em] text-steel">Tema</span>
-              <ThemeToggle />
+              <ThemeToggle className="rounded-full" />
             </div>
           </nav>
         </div>
@@ -177,11 +174,11 @@ function IconBtn({ label, onClick, children, badge, kbd, anchor, className }: {
       onClick={onClick}
       aria-label={label}
       title={label}
-      className={cn("relative flex h-10 w-10 items-center justify-center border border-white/[0.08] text-steel transition-all hover:border-volt/50 hover:text-snow focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-volt", className)}
+      className={cn("relative flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.08] text-steel transition-all hover:border-volt/50 hover:text-snow focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-volt", className)}
     >
       {children}
       {badge !== undefined && badge > 0 && (
-        <span className="absolute -right-1.5 -top-1.5 flex h-[18px] min-w-[18px] items-center justify-center bg-tech px-1 font-mono text-[10px] font-semibold text-snow">
+        <span className="absolute -right-1.5 -top-1.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-tech px-1 font-mono text-[10px] font-semibold text-snow">
           {badge > 9 ? "9+" : badge}
         </span>
       )}
