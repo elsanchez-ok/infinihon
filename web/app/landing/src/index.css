@@ -69,6 +69,20 @@ body {
 }
 ::selection { background: var(--color-tech); color: var(--color-snow); }
 
+/* Resplandor de fondo del Hero: PNG con fondo negro + brillo azul/blanco.
+   mix-blend-mode: screen hace que el negro desaparezca sobre el fondo oscuro
+   y solo se vea el brillo. En tema claro el fondo ya es claro, así que el
+   brillo se atenúa bastante para que no "lave" el contraste del texto. */
+.hero-glow-img {
+  mix-blend-mode: screen;
+  opacity: .85;
+  transition: opacity .4s ease;
+}
+[data-theme="light"] .hero-glow-img {
+  mix-blend-mode: normal;
+  opacity: .18;
+}
+
 /* Grid backgrounds */
 .bg-grid {
   background-image:
