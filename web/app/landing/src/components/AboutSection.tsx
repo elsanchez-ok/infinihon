@@ -35,8 +35,8 @@ export default function AboutSection() {
           accentLast
         />
 
-        <Reveal delay={120} className="relative mt-14 overflow-hidden rounded-[2rem] border border-white/[0.08] bg-black md:mt-20">
-          {/* Desktop/tablet grande: collage disperso con el titular al centro */}
+        <Reveal delay={120} className="relative mt-14 md:mt-20">
+          {/* Desktop/tablet grande: collage disperso con el titular al centro, sin marco ni caja */}
           <div className="relative hidden h-[620px] lg:block">
             {communityPhotos.map((p) => (
               <img
@@ -56,7 +56,7 @@ export default function AboutSection() {
           </div>
 
           {/* Móvil/tablet: titular + tira horizontal con scroll */}
-          <div className="px-6 py-16 lg:hidden">
+          <div className="py-10 lg:hidden">
             <h3 className="mx-auto max-w-sm text-center text-3xl font-extrabold uppercase leading-[1.05] tracking-tight text-snow">
               Juntos construimos infraestructura.
             </h3>
@@ -73,8 +73,9 @@ export default function AboutSection() {
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-2 border-t border-white/[0.08] px-5 py-3.5 font-mono text-[9.5px] uppercase tracking-[0.2em] text-steel/60 md:px-7">
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-2 font-mono text-[9.5px] uppercase tracking-[0.2em] text-steel/60">
             <span>Comunidad InfiniHon · Tegucigalpa, HN</span>
+            <span className="text-steel/30">·</span>
             <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-volt pulse-soft" /> HQ · operación activa</span>
           </div>
         </Reveal>

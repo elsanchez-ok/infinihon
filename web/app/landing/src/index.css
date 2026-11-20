@@ -87,21 +87,54 @@ body {
   transition: opacity .4s ease;
 }
 [data-theme="light"] .hero-ambient-glow {
-  /* En claro la base ya es blanca/gris muy clara, así que un degradado
-     "lavado" hacia blanco (el de oscuro) se vuelve invisible. Aquí se usa
-     un degradado propio, dominado por azul y bien saturado, con mezcla
-     "multiply" para que se note como un tinte de color sobre el fondo
-     claro sin tapar el contraste del texto. */
-  background: radial-gradient(
-    120% 70% at 50% 100%,
-    rgba(0, 114, 198, 0.65) 0%,
-    rgba(0, 102, 255, 0.5) 20%,
-    rgba(0, 168, 255, 0.32) 40%,
-    rgba(0, 168, 255, 0.12) 62%,
-    transparent 82%
+  /* Degradado vertical muestreado píxel a píxel de la imagen de referencia
+     del usuario (zonas limpias de fondo, sin los íconos/letras superpuestos):
+     azul casi negro arriba, pasando por azul vivo a la mitad, hasta blanco
+     puro abajo. Es un degradado simple de lado a lado (no una imagen), así
+     se adapta perfecto a cualquier tamaño de pantalla sin recortes. */
+  background: linear-gradient(
+    180deg,
+    #01080f 0%,
+    #041220 10%,
+    #08223c 20%,
+    #0d3966 30%,
+    #2568af 42%,
+    #5ba1eb 55%,
+    #b0d5fe 68%,
+    #eaf4ff 80%,
+    #ffffff 92%,
+    #ffffff 100%
   );
-  mix-blend-mode: multiply;
+  mix-blend-mode: normal;
   opacity: 1;
+}
+
+/* En tema claro el propio degradado ya cubre toda la sección, así que se
+   apaga el blob extra difuminado (blur-[120px]) que antes se sumaba
+   encima: esa capa extra era justo lo que diluía el fondo. En oscuro se
+   mantiene para la profundidad del fondo. */
+[data-theme="light"] .hero-ambient-blob {
+  display: none;
+}
+
+/* Navbar: barra oscura fija de ancho completo, con las esquinas
+   inferiores redondeadas y un resplandor azul sutil abajo — igual que la
+   referencia de https://ds.mohirdev.uz/. Fija los mismos tokens que
+   .footer-glow para que no se repinte con el tema claro. */
+.nav-glow {
+  --color-obsidian: #05070A;
+  --color-ink: #0A0F14;
+  --color-snow: #F5F7FA;
+  --color-steel: #8B96A5;
+  --color-volt: #00A8FF;
+  --color-white: #fff;
+  color-scheme: dark;
+  background-color: rgba(5, 7, 10, 0.92);
+  background-image: radial-gradient(
+    60% 140% at 12% 120%,
+    rgba(0, 122, 255, 0.35) 0%,
+    rgba(3, 12, 28, 0) 70%
+  );
 }
 
 /* Footer: siempre oscuro con un resplandor azul en la esquina inferior
@@ -123,6 +156,26 @@ body {
     rgba(0, 122, 255, 0.55) 0%,
     rgba(3, 12, 28, 0.88) 42%,
     #000 72%
+  );
+}
+
+/* Tarjeta "Equipo": degradado azul fijo (no depende del tema claro/oscuro),
+   calcado por muestreo de píxeles del fondo de la sección EKSPERT de
+   https://ds.mohirdev.uz/ — azul vivo arriba, azul pastel abajo.
+   Se fijan los tokens de color aquí dentro (igual que en .footer-glow) para
+   que bg-white / text-white no se inviertan a casi-negro en tema claro
+   (donde --color-white pasa a #05070A para los overlays tipo cristal). */
+.founder-card {
+  --color-white: #fff;
+  --color-snow: #F5F7FA;
+  color-scheme: dark;
+  background-image: linear-gradient(
+    180deg,
+    #1f6fe0 0%,
+    #3d8ef0 12%,
+    #5aabfd 45%,
+    #86c2fe 75%,
+    #b9ddff 100%
   );
 }
 
@@ -193,6 +246,9 @@ body {
 
 @keyframes fade-up { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
 .fade-up { animation: fade-up .6s cubic-bezier(.2,.7,.2,1) both; }
+
+@keyframes float-soft { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+.float-soft { animation: float-soft 4.5s ease-in-out infinite; }
 
 
 /* Colores fijos (no usan los tokens --color-*) con su equivalente claro */

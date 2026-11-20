@@ -20,7 +20,7 @@ export default function Hero() {
         aria-hidden
       />
       <div className="absolute inset-0 -z-10 bg-grid grid-drift mask-radial opacity-60" />
-      <div className="absolute left-1/2 top-[55%] -z-10 h-[70vmin] w-[90vmin] -translate-x-1/2 -translate-y-1/2 rounded-full bg-hn/40 blur-[120px] lg:left-[68%]" />
+      <div className="hero-ambient-blob absolute left-1/2 top-[55%] -z-10 h-[70vmin] w-[90vmin] -translate-x-1/2 -translate-y-1/2 rounded-full bg-hn/40 blur-[120px] lg:left-[68%]" />
       <div className="absolute inset-x-0 bottom-0 -z-10 h-48 bg-gradient-to-t from-obsidian to-transparent" />
 
       {/* HUD frame */}
@@ -31,8 +31,8 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="mx-auto flex min-h-[100svh] max-w-[1440px] flex-col justify-center px-5 pb-28 pt-32 md:px-10">
-        <div className="max-w-[860px]">
+      <div className="mx-auto flex min-h-[100svh] max-w-[1440px] flex-col items-center justify-center px-5 pb-28 pt-32 text-center md:px-10">
+        <div className="flex max-w-[780px] flex-col items-center">
           <div className="reveal mb-8 flex items-center gap-4 md:mb-10" style={{ "--d": "100ms" } as CSSProperties}>
             <span className="relative flex h-2 w-2">
               <span className="absolute inset-0 rounded-full bg-volt ring" />
@@ -43,17 +43,23 @@ export default function Hero() {
             </span>
           </div>
 
-          <h1 className="text-[13vw] font-extrabold uppercase leading-[0.9] tracking-[-0.045em] text-snow sm:text-[10vw] lg:text-[7.4rem] xl:text-[8.4rem]">
-            <span className="line-reveal pb-[0.05em]" style={{ "--d": "200ms" } as CSSProperties}>
-              <span>Infraestructura</span>
-            </span>
-            <span className="line-reveal pb-[0.05em]" style={{ "--d": "320ms" } as CSSProperties}>
+          <div className="reveal -mb-2 md:-mb-4" style={{ "--d": "160ms" } as CSSProperties}>
+            <img
+              src="/assets/mascot-hero.png"
+              alt=""
+              aria-hidden="true"
+              className="relative z-10 mx-auto h-32 w-32 drop-shadow-[0_18px_40px_rgba(0,102,255,0.55)] sm:h-40 sm:w-40 md:h-48 md:w-48"
+            />
+          </div>
+
+          <h1 className="text-[12vw] font-extrabold uppercase leading-[0.98] tracking-[-0.03em] text-[#F5F7FA] sm:text-[8vw] lg:text-[4.6rem] xl:text-[5.2rem]">
+            <span className="line-reveal pb-[0.05em]" style={{ "--d": "260ms" } as CSSProperties}>
               <span>
-                que mueve <span className="bg-gradient-to-r from-tech to-volt bg-clip-text text-transparent">el</span>
+                Ingeniería de <span className="inline-block rounded-2xl bg-tech px-[0.35em] py-[0.05em]">infraestructura</span>
               </span>
             </span>
-            <span className="line-reveal pb-[0.08em]" style={{ "--d": "440ms" } as CSSProperties}>
-              <span className="bg-gradient-to-r from-tech via-volt to-snow bg-clip-text text-transparent">futuro.</span>
+            <span className="line-reveal pb-[0.08em]" style={{ "--d": "400ms" } as CSSProperties}>
+              <span>para tu empresa.</span>
             </span>
           </h1>
 
@@ -73,7 +79,7 @@ export default function Hero() {
           </div>
 
           <div
-            className="reveal mt-12 flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[11px] uppercase tracking-[0.2em] text-steel md:mt-16"
+            className="reveal mt-12 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 font-mono text-[11px] uppercase tracking-[0.2em] text-steel md:mt-16"
             style={{ "--d": "950ms" } as CSSProperties}
           >
             {micro.map((m, i) => (

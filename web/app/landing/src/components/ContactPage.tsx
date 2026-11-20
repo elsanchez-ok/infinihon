@@ -1,6 +1,6 @@
 import { Reveal, RevealTitle, SectionLabel, PrimaryButton, GhostButton } from "./ui";
 import ContactForm, { CONTACT_EMAIL } from "./ContactForm";
-import { NetBackdrop } from "./CTASection";
+import { NetBackdrop } from "./NetBackdrop";
 
 const channels = [
   { t: "Email", d: CONTACT_EMAIL, href: `mailto:${CONTACT_EMAIL}` },

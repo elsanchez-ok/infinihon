@@ -12,8 +12,9 @@ import SecuritySection from "./components/SecuritySection";
 import TechnologySection from "./components/TechnologySection";
 import HondurasSection from "./components/HondurasSection";
 import ProcessSection from "./components/ProcessSection";
+import FounderSection from "./components/FounderSection";
 import AboutSection from "./components/AboutSection";
-import CTASection from "./components/CTASection";
+import FAQSection from "./components/FAQSection";
 import ContactPage from "./components/ContactPage";
 import Footer from "./components/Footer";
 
@@ -60,7 +61,8 @@ export default function App() {
         <HondurasSection />
         <ProcessSection />
         <AboutSection />
-        <CTASection />
+        <FounderSection />
+        <FAQSection />
       </main>
       <Footer />
     </div>
