@@ -87,8 +87,21 @@ body {
   transition: opacity .4s ease;
 }
 [data-theme="light"] .hero-ambient-glow {
-  mix-blend-mode: normal;
-  opacity: .22;
+  /* En claro la base ya es blanca/gris muy clara, así que un degradado
+     "lavado" hacia blanco (el de oscuro) se vuelve invisible. Aquí se usa
+     un degradado propio, dominado por azul y bien saturado, con mezcla
+     "multiply" para que se note como un tinte de color sobre el fondo
+     claro sin tapar el contraste del texto. */
+  background: radial-gradient(
+    120% 70% at 50% 100%,
+    rgba(0, 114, 198, 0.65) 0%,
+    rgba(0, 102, 255, 0.5) 20%,
+    rgba(0, 168, 255, 0.32) 40%,
+    rgba(0, 168, 255, 0.12) 62%,
+    transparent 82%
+  );
+  mix-blend-mode: multiply;
+  opacity: 1;
 }
 
 /* Footer: siempre oscuro con un resplandor azul en la esquina inferior

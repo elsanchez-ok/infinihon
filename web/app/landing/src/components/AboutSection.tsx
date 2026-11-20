@@ -1,4 +1,21 @@
-import { Corners, Reveal, RevealTitle, SectionLabel } from "./ui";
+import { Reveal, RevealTitle, SectionLabel } from "./ui";
+
+/* Collage disperso de fotos de comunidad/equipo: posiciones en % sobre un
+   lienzo de referencia de 1200x620, con una ligera rotación aleatoria para
+   que se vea orgánico en vez de una cuadrícula. Solo se muestra así en
+   pantallas grandes (lg+); en móvil cae a una tira horizontal con scroll. */
+const communityPhotos = [
+  { src: "01-interview.jpg", alt: "Entrevista en vivo en un evento tecnológico", top: "4%", left: "4%", w: 168, rot: -4 },
+  { src: "03-audience.jpg", alt: "Audiencia atenta en una conferencia de tecnología", top: "0%", left: "29%", w: 220, rot: 2 },
+  { src: "02-coder.jpg", alt: "Desarrollador trabajando en su laptop", top: "9%", left: "56%", w: 150, rot: -3 },
+  { src: "04-networking.jpg", alt: "Networking entre profesionales de tecnología", top: "2%", left: "78%", w: 170, rot: 3 },
+  { src: "06-panel.jpg", alt: "Panel de discusión sobre tecnología", top: "46%", left: "10%", w: 150, rot: 3 },
+  { src: "09-hallway.jpg", alt: "Asistente en el pasillo de una conferencia", top: "30%", left: "80%", w: 190, rot: -2 },
+  { src: "05-crowd-phones.jpg", alt: "Público grabando una charla con el celular", top: "70%", left: "22%", w: 190, rot: -3 },
+  { src: "10-laughing.jpg", alt: "Compañeros de equipo riendo juntos", top: "76%", left: "48%", w: 160, rot: 4 },
+  { src: "08-notes.jpg", alt: "Tomando notas durante una conferencia", top: "66%", left: "86%", w: 116, rot: -5 },
+  { src: "07-aerial-crowd.jpg", alt: "Vista aérea de una multitud en un evento tecnológico", top: "66%", left: "66%", w: 210, rot: 2 },
+];
 
 const principles = [
   { k: "Arquitectura primero", v: "Antes de instalar, diseñamos. Cada decisión técnica responde a un objetivo de la operación." },
@@ -18,18 +35,46 @@ export default function AboutSection() {
           accentLast
         />
 
-        <Reveal delay={120} className="relative mt-14 border border-white/[0.08] bg-obsidian md:mt-20">
-          <Corners />
-          <img
-            src="/assets/oficina-infinihon.webp"
-            alt="Fachada de la sede corporativa de InfiniHon Corp. en Tegucigalpa, Honduras"
-            width={1800}
-            height={972}
-            loading="lazy"
-            className="aspect-[16/8.6] w-full object-cover opacity-90 grayscale-[20%]"
-          />
+        <Reveal delay={120} className="relative mt-14 overflow-hidden rounded-[2rem] border border-white/[0.08] bg-black md:mt-20">
+          {/* Desktop/tablet grande: collage disperso con el titular al centro */}
+          <div className="relative hidden h-[620px] lg:block">
+            {communityPhotos.map((p) => (
+              <img
+                key={p.src}
+                src={`/assets/community/${p.src}`}
+                alt={p.alt}
+                loading="lazy"
+                style={{ top: p.top, left: p.left, width: p.w, transform: `rotate(${p.rot}deg)` }}
+                className="absolute aspect-square rounded-2xl border border-white/10 object-cover shadow-[0_18px_40px_-12px_rgba(0,0,0,0.65)] transition-transform duration-500 hover:z-10 hover:scale-105 hover:rotate-0"
+              />
+            ))}
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center px-10">
+              <h3 className="max-w-xl text-center text-4xl font-extrabold uppercase leading-[1.05] tracking-tight text-snow xl:text-5xl">
+                Juntos construimos infraestructura.
+              </h3>
+            </div>
+          </div>
+
+          {/* Móvil/tablet: titular + tira horizontal con scroll */}
+          <div className="px-6 py-16 lg:hidden">
+            <h3 className="mx-auto max-w-sm text-center text-3xl font-extrabold uppercase leading-[1.05] tracking-tight text-snow">
+              Juntos construimos infraestructura.
+            </h3>
+            <div className="mt-10 flex gap-3 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {communityPhotos.map((p) => (
+                <img
+                  key={p.src}
+                  src={`/assets/community/${p.src}`}
+                  alt={p.alt}
+                  loading="lazy"
+                  className="h-28 w-28 shrink-0 rounded-xl border border-white/10 object-cover sm:h-36 sm:w-36"
+                />
+              ))}
+            </div>
+          </div>
+
           <div className="flex flex-wrap items-center justify-between gap-2 border-t border-white/[0.08] px-5 py-3.5 font-mono text-[9.5px] uppercase tracking-[0.2em] text-steel/60 md:px-7">
-            <span>Sede corporativa · Tegucigalpa, HN</span>
+            <span>Comunidad InfiniHon · Tegucigalpa, HN</span>
             <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-volt pulse-soft" /> HQ · operación activa</span>
           </div>
         </Reveal>
