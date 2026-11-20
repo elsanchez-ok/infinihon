@@ -138,7 +138,7 @@ function MemberNotFound({ id }: { id: string }) {
       </p>
       <div className="mt-10 flex flex-col gap-3 sm:flex-row">
         <a href="/" className="bg-tech px-6 py-4 text-center text-sm font-semibold text-snow hover:bg-[#1a75ff]">Ir a InfiniHon Corp.</a>
-        <a href="mailto:contacto@infinihon.com" className="border border-white/15 px-6 py-4 text-center text-sm font-semibold hover:border-volt/60">Contactar</a>
+        <a href="mailto:infinihon.hn@gmail.com" className="border border-white/15 px-6 py-4 text-center text-sm font-semibold hover:border-volt/60">Contactar</a>
       </div>
     </div>
   );

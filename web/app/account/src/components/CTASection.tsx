@@ -1,7 +1,7 @@
 import { useMemo, useState, type FormEvent } from "react";
 import { Reveal, RevealTitle, PrimaryButton, GhostButton, Corners } from "./ui";
 
-const CONTACT_EMAIL = "contacto@infinihon.com";
+const CONTACT_EMAIL = "infinihon.hn@gmail.com";
 const interests = ["Redes / MikroTik", "Cloud (AWS · Azure · GCP)", "DevOps / Kubernetes", "Seguridad / VPN", "Monitorización", "Desarrollo de software", "Soporte tecnológico", "Aún no lo sé"];
 
 function NetBackdrop() {

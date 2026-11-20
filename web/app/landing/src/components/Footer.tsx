@@ -8,6 +8,11 @@ const navCol2 = [
   ["Tecnología", "/#tecnologia"],
   ["Contacto", "/contacto"],
 ];
+const legalLinks = [
+  ["Términos y condiciones", "/terminos"],
+  ["Política de privacidad", "/privacidad"],
+  ["Política de cookies", "/cookies"],
+];
 
 export default function Footer() {
   return (
@@ -32,10 +37,19 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="relative z-10 border-t border-white/[0.06] px-6 py-6 text-center sm:px-10">
-        <p className="text-[13px] text-steel/80">
-          © InfiniHon Corp. {new Date().getFullYear()}. Todos los derechos reservados.
-        </p>
+      <div className="relative z-10 border-t border-white/[0.06] px-6 py-6 sm:px-10">
+        <div className="mx-auto flex max-w-[1440px] flex-col items-center gap-4 sm:flex-row sm:justify-between">
+          <p className="text-[13px] text-steel/80">
+            © InfiniHon Corp. {new Date().getFullYear()}. Todos los derechos reservados.
+          </p>
+          <ul className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+            {legalLinks.map(([l, h]) => (
+              <li key={l}>
+                <a href={h} className="text-[12.5px] text-steel/80 transition-colors hover:text-volt">{l}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </footer>
   );

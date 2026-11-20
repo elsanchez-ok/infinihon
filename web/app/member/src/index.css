@@ -67,6 +67,18 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
+
+/* Transición suave entre tema claro/oscuro: sin esto, el cambio de
+   colores (fondo, texto, bordes, iconos) ocurre de golpe en todo el
+   sitio al pulsar el botón de tema. Se excluyen transform/opacity para
+   no interferir con animaciones de scroll-reveal ni con prefers-reduced-motion. */
+@media (prefers-reduced-motion: no-preference) {
+  *, *::before, *::after {
+    transition-property: background-color, border-color, color, fill, stroke, box-shadow, text-decoration-color;
+    transition-duration: 320ms;
+    transition-timing-function: ease;
+  }
+}
 ::selection { color: var(--color-snow); background: var(--color-tech); }
 .bg-grid {
   background-image: linear-gradient(#8b96a512 1px, #0000 1px), linear-gradient(90deg, #8b96a512 1px, #0000 1px);

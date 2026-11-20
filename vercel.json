@@ -20,6 +20,9 @@
     { "source": "/ghost-browser/:path*", "destination": "/proyectos.html" },
     { "source": "/contacto", "destination": "/index.html" },
     { "source": "/contacto/:path*", "destination": "/index.html" },
+    { "source": "/terminos", "destination": "/index.html" },
+    { "source": "/privacidad", "destination": "/index.html" },
+    { "source": "/cookies", "destination": "/index.html" },
     { "source": "/", "destination": "/index.html" }
   ]
 }

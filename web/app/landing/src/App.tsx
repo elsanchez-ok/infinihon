@@ -16,27 +16,44 @@ import FounderSection from "./components/FounderSection";
 import AboutSection from "./components/AboutSection";
 import FAQSection from "./components/FAQSection";
 import ContactPage from "./components/ContactPage";
+import { TerminosPage, PrivacidadPage, CookiesPage } from "./components/LegalPages";
 import Footer from "./components/Footer";
+import ScrollMascot from "./components/ScrollMascot";
+
+/* Páginas estáticas adicionales que este SPA sirve bajo index.html (ver
+   rewrites en vercel.json: cada una de estas rutas apunta a /index.html,
+   y aquí se decide qué pintar según la URL actual). Cada entrada define
+   el <title> y la ruta canónica/OG para esa página. */
+const staticPages: Record<string, { title: string; Component: () => JSX.Element }> = {
+  "/contacto": { title: "Contacto — InfiniHon Corp.", Component: ContactPage },
+  "/terminos": { title: "Términos y condiciones — InfiniHon Corp.", Component: TerminosPage },
+  "/privacidad": { title: "Política de privacidad — InfiniHon Corp.", Component: PrivacidadPage },
+  "/cookies": { title: "Política de cookies — InfiniHon Corp.", Component: CookiesPage },
+};
 
 export default function App() {
-  const isContact = window.location.pathname.replace(/\/+$/, "") === "/contacto";
+  const path = window.location.pathname.replace(/\/+$/, "") || "/";
+  const page = staticPages[path];
 
   useEffect(() => {
-    if (!isContact) return;
-    document.title = "Contacto — InfiniHon Corp.";
-    document.querySelector('link[rel="canonical"]')?.setAttribute("href", "https://infinihon.vercel.app/contacto");
-    document.querySelector('meta[property="og:url"]')?.setAttribute("content", "https://infinihon.vercel.app/contacto");
+    if (!page) return;
+    document.title = page.title;
+    document.querySelector('link[rel="canonical"]')?.setAttribute("href", `https://infinihon.vercel.app${path}`);
+    document.querySelector('meta[property="og:url"]')?.setAttribute("content", `https://infinihon.vercel.app${path}`);
     window.scrollTo({ top: 0, behavior: "auto" });
-  }, [isContact]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [path]);
 
-  if (isContact) {
+  if (page) {
+    const { Component } = page;
     return (
       <div className="relative min-h-screen overflow-x-clip bg-obsidian text-snow">
         <Navbar />
         <main>
-          <ContactPage />
+          <Component />
         </main>
         <Footer />
+        <ScrollMascot />
       </div>
     );
   }
@@ -65,6 +82,7 @@ export default function App() {
         <FAQSection />
       </main>
       <Footer />
+      <ScrollMascot />
     </div>
   );
 }

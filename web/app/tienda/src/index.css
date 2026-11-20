@@ -51,6 +51,18 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
+
+/* Transición suave entre tema claro/oscuro: sin esto, el cambio de
+   colores (fondo, texto, bordes, iconos) ocurre de golpe en todo el
+   sitio al pulsar el botón de tema. Se excluyen transform/opacity para
+   no interferir con animaciones de scroll-reveal ni con prefers-reduced-motion. */
+@media (prefers-reduced-motion: no-preference) {
+  *, *::before, *::after {
+    transition-property: background-color, border-color, color, fill, stroke, box-shadow, text-decoration-color;
+    transition-duration: 320ms;
+    transition-timing-function: ease;
+  }
+}
 ::selection { background: var(--color-tech); color: var(--color-snow); }
 
 /* keyboard focus visibility */
@@ -63,6 +75,27 @@ section[id], div[id] { scroll-margin-top: 96px; }
 select, input, textarea { color-scheme: dark; }
 [data-theme="light"] select, [data-theme="light"] input, [data-theme="light"] textarea { color-scheme: light; }
 input[type="range"] { accent-color: var(--color-tech); }
+
+/* Navbar: barra oscura fija de ancho completo, con las esquinas
+   redondeadas y un resplandor azul sutil abajo — igual que la de la
+   página de inicio (igual que la referencia de https://ds.mohirdev.uz/).
+   Fija los mismos tokens que .footer-glow para que no se repinte con el
+   tema claro. */
+.nav-glow {
+  --color-obsidian: #05070A;
+  --color-ink: #0A0F14;
+  --color-snow: #F5F7FA;
+  --color-steel: #8B96A5;
+  --color-volt: #00A8FF;
+  --color-white: #fff;
+  color-scheme: dark;
+  background-color: rgba(5, 7, 10, 0.92);
+  background-image: radial-gradient(
+    60% 140% at 12% 120%,
+    rgba(0, 122, 255, 0.35) 0%,
+    rgba(3, 12, 28, 0) 70%
+  );
+}
 
 /* Footer: siempre oscuro con un resplandor azul en la esquina inferior
    izquierda, igual que en el panel de marca de /auth. Se fijan los tokens
