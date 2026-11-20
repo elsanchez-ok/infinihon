@@ -61,11 +61,12 @@ function Label() {
 
 export default function FounderSection() {
   return (
-    /* La tarjeta ES la sección: el degradado azul llega hasta el borde
-       superior e inferior (sin franja bg-ink arriba/abajo) y también va
-       pegada a los lados — pegada en los cuatro bordes, sin esquinas
-       redondeadas ni márgenes. */
-    <section id="equipo" className="founder-card relative overflow-hidden border-t border-white/[0.06] py-16 md:py-24">
+    /* La tarjeta ES la sección: el degradado azul va pegado a los cuatro
+       bordes del viewport (sin márgenes, igual que el footer), pero con
+       las esquinas redondeadas arriba y abajo — como el footer, solo que
+       el footer únicamente redondea arriba porque es el final de la
+       página; esta sección no lo es, así que redondea los cuatro lados. */
+    <section id="equipo" className="founder-card relative overflow-hidden rounded-[32px] border-t border-white/[0.06] py-16 md:rounded-[40px] md:py-24">
       {/* palabra gigante de fondo */}
       <div
         aria-hidden
@@ -74,6 +75,11 @@ export default function FounderSection() {
       >
         Fundador
       </div>
+
+      {/* Foto: pegada al piso real de la sección (no al de su columna con
+          padding), centrada horizontalmente, pero dentro del marco
+          redondeado (no se recorta contra las esquinas). */}
+      <Photo className="pointer-events-none absolute bottom-0 left-1/2 hidden h-[94%] w-auto -translate-x-1/2 object-contain object-bottom lg:block" />
 
       <div className="relative mx-auto max-w-[1440px] px-5 md:px-10">
         <Reveal>
@@ -90,8 +96,6 @@ export default function FounderSection() {
           >
             Joseph Sánchez
           </span>
-
-          <Photo className="pointer-events-none absolute bottom-0 left-1/2 h-[94%] w-auto -translate-x-1/2 object-contain object-bottom" />
 
           <CredentialCard className="absolute right-[14%] top-[44%] max-w-[230px] rounded-2xl bg-white p-4 text-sm font-semibold leading-snug text-[#0A0F14] shadow-[0_20px_40px_-10px_rgba(0,0,0,0.35)]" />
 
