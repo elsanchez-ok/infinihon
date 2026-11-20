@@ -30,6 +30,93 @@ export function useReducedMotion() {
   return false;
 }
 
+
+/* ---------------------------------------------------------------------
+ * Tema claro / oscuro
+ * El tema activo vive en <html data-theme="dark|light"> (fijado antes del
+ * primer render por un script inline en index.html, para evitar parpadeo)
+ * y se guarda en localStorage para recordarse en toda la plataforma.
+ * ------------------------------------------------------------------- */
+export type Theme = "dark" | "light";
+const THEME_STORAGE_KEY = "infinihon-theme";
+const THEME_EVENT = "infinihon-theme-change";
+
+function readStoredTheme(): Theme | null {
+  try {
+    const v = window.localStorage.getItem(THEME_STORAGE_KEY);
+    return v === "light" || v === "dark" ? v : null;
+  } catch {
+    return null;
+  }
+}
+
+function systemTheme(): Theme {
+  if (typeof window === "undefined" || !window.matchMedia) return "dark";
+  return window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+}
+
+export function getActiveTheme(): Theme {
+  if (typeof document !== "undefined") {
+    const attr = document.documentElement.getAttribute("data-theme");
+    if (attr === "light" || attr === "dark") return attr;
+  }
+  return readStoredTheme() ?? systemTheme();
+}
+
+export function applyTheme(theme: Theme) {
+  if (typeof document === "undefined") return;
+  document.documentElement.setAttribute("data-theme", theme);
+  document.documentElement.style.colorScheme = theme;
+  try {
+    window.localStorage.setItem(THEME_STORAGE_KEY, theme);
+  } catch {
+    /* almacenamiento no disponible: el tema igual se aplica, solo no persiste */
+  }
+  window.dispatchEvent(new CustomEvent(THEME_EVENT, { detail: theme }));
+}
+
+export function useTheme(): [Theme, (theme: Theme) => void] {
+  const [theme, setThemeState] = useState<Theme>(() => getActiveTheme());
+  useEffect(() => {
+    const onChange = (e: Event) => setThemeState((e as CustomEvent<Theme>).detail);
+    window.addEventListener(THEME_EVENT, onChange as EventListener);
+    return () => window.removeEventListener(THEME_EVENT, onChange as EventListener);
+  }, []);
+  const setTheme = (next: Theme) => {
+    applyTheme(next);
+    setThemeState(next);
+  };
+  return [theme, setTheme];
+}
+
+export function ThemeToggle({ className }: { className?: string }) {
+  const [theme, setTheme] = useTheme();
+  const isLight = theme === "light";
+  return (
+    <button
+      type="button"
+      onClick={() => setTheme(isLight ? "dark" : "light")}
+      aria-label={isLight ? "Cambiar a modo oscuro" : "Cambiar a modo claro"}
+      title={isLight ? "Modo oscuro" : "Modo claro"}
+      className={cn(
+        "relative flex h-10 w-10 shrink-0 items-center justify-center border border-white/10 text-steel transition-colors hover:border-volt/50 hover:text-snow",
+        className
+      )}
+    >
+      {isLight ? (
+        <svg viewBox="0 0 24 24" className="h-[17px] w-[17px]" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+          <circle cx="12" cy="12" r="4.3" />
+          <path d="M12 2.5v2.4M12 19.1v2.4M4.6 4.6l1.7 1.7M17.7 17.7l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.6 19.4l1.7-1.7M17.7 6.3l1.7-1.7" />
+        </svg>
+      ) : (
+        <svg viewBox="0 0 24 24" className="h-[17px] w-[17px]" fill="currentColor" aria-hidden>
+          <path d="M20.6 14.3a8.4 8.4 0 0 1-10.9-10.9.5.5 0 0 0-.6-.66A9.9 9.9 0 1 0 21.26 14.9a.5.5 0 0 0-.66-.6Z" />
+        </svg>
+      )}
+    </button>
+  );
+}
+
 export function Reveal({
   children,
   delay = 0,

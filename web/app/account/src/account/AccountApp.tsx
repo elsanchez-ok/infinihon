@@ -20,6 +20,7 @@ import {
 import { ProfilePage, SecurityPage, SettingsPage, NotificationsPage } from "./pages/Account";
 import { LocaleProvider } from "./locale";
 import { EmptyState, PageHeader, Panel } from "./ui";
+import { ThemeToggle } from "../components/ui";
 import "./account.css";
 
 interface NavItem { label: string; to: string; icon: React.ComponentType<{ className?: string }> }
@@ -145,6 +146,7 @@ function Topbar({ onMenu }: { onMenu: () => void }) {
         </div>
 
         <div className="ml-auto flex items-center gap-1">
+          <ThemeToggle className="h-10 w-10 border-0" />
           <div ref={bellRef} className="relative">
             <button onClick={() => setBellOpen((v) => !v)} aria-expanded={bellOpen}
               aria-label={unread ? `Notificaciones, ${unread} sin leer` : "Notificaciones"}

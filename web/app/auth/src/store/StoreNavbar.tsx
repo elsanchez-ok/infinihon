@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { cn } from "../utils/cn";
 import { StoreMark, TechIcon } from "./StoreVisuals";
+import { ThemeToggle } from "../components/ui";
 
 const links = [
   ["Tienda", "#tienda"],
@@ -29,6 +30,7 @@ export function StoreNavbar({ cartCount, onSearch, onCart }: Props) {
           {links.map(([label, href]) => <li key={href}><a href={href} className="group relative text-[13px] font-medium text-steel transition-colors hover:text-snow">{label}<span className="absolute -bottom-2 left-0 h-px w-0 bg-volt transition-all duration-300 group-hover:w-full" /></a></li>)}
         </ul>
         <div className="flex items-center gap-1 sm:gap-2">
+          <ThemeToggle className="hidden h-10 w-10 border-0 sm:flex" />
           <button onClick={onSearch} className="group flex h-10 items-center gap-2 px-2 text-steel transition-colors hover:text-snow" aria-label="Buscar en tienda"><TechIcon name="search" className="h-5 w-5" /><span className="hidden text-[13px] sm:inline">Buscar</span></button>
           <a href="/auth" className="hidden h-10 items-center gap-2 px-2 text-steel transition-colors hover:text-snow lg:flex" aria-label="Acceder al portal de InfiniHon Corp."><TechIcon name="user" className="h-5 w-5" /><span className="text-[13px]">Cuenta</span></a>
           <button onClick={onCart} className="group relative flex h-10 items-center gap-2 border-l border-white/[0.08] px-3 text-snow transition-colors hover:text-volt" aria-label={`Abrir carrito. ${cartCount} productos`}>

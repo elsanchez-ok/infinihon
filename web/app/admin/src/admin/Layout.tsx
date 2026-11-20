@@ -8,6 +8,7 @@ import { cn } from "../utils/cn";
 import { useAdmin } from "./store";
 import { signOutAndGo } from "./supabaseSync";
 import { Modal } from "./ui";
+import { ThemeToggle } from "../components/ui";
 import { useLocale } from "./locale";
 
 export interface NavItem { label: string; to: string; icon: LucideIcon; permission: string }
@@ -220,6 +221,7 @@ function Topbar({ onMenu }: { onMenu: () => void }) {
       </button>
 
       <div className="flex items-center gap-1 md:ml-auto">
+        <ThemeToggle className="h-10 w-10 border-0" />
         <div ref={bellRef} className="relative">
           <button onClick={() => setBellOpen((v) => !v)} className="relative rounded-md p-2 text-steel hover:bg-white/[0.05] hover:text-snow" aria-label={unread ? `Notifications, ${unread} unread` : "Notifications"} aria-expanded={bellOpen}>
             <Bell className="h-[18px] w-[18px]" />

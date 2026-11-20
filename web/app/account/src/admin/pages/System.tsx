@@ -3,6 +3,7 @@ import { Bell, CheckCheck, History, KeyRound, LogIn, Monitor, Save, ShieldAlert,
 import type { Settings } from "../data";
 import { fmtDateTime, useAdmin } from "../store";
 import { Button, DemoTag, EmptyState, Field, FilterBar, Forbidden, PageHeader, Panel, SearchInput, Select, StatusBadge, Tabs, Toggle, inputCls } from "../ui";
+import { useTheme } from "../../components/ui";
 import { cn } from "../../utils/cn";
 
 /* ─────────── Notifications ─────────── */
@@ -185,6 +186,7 @@ const settingsTabs = ["General", "Commerce", "Authentication", "Notifications", 
 export function SettingsPage() {
   const { data, mutate, can, toast } = useAdmin();
   const [tab, setTab] = useState("General");
+  const [activeTheme, setTheme] = useTheme();
   const [form, setForm] = useState<Settings>(data.settings);
   const [errors, setErrors] = useState<Record<string, string>>({});
   if (!can("settings.view")) return <Forbidden permission="settings.view" />;
@@ -264,15 +266,20 @@ export function SettingsPage() {
         {tab === "Appearance" && (
           <Panel title="Appearance">
             <div role="radiogroup" aria-label="Theme" className="grid gap-3 sm:grid-cols-2">
-              {[{ id: "Obsidian", note: "Default InfiniHon Corp. dark theme." }, { id: "Light", note: "Not available yet." }].map((t) => (
-                <button key={t.id} type="button" role="radio" aria-checked={form.theme === t.id} disabled={t.id === "Light"} onClick={() => set("theme", t.id)}
-                  className={cn("rounded-lg border p-3 text-left disabled:opacity-40", form.theme === t.id ? "border-tech bg-tech/10" : "border-white/10")}>
+              {[{ id: "Obsidian", note: "Default InfiniHon Corp. dark theme." }, { id: "Light", note: "Bright theme for daytime use." }].map((t) => {
+                const checked = (t.id === "Light") === (activeTheme === "light");
+                return (
+                <button key={t.id} type="button" role="radio" aria-checked={checked}
+                  onClick={() => setTheme(t.id === "Light" ? "light" : "dark")}
+                  className={cn("rounded-lg border p-3 text-left", checked ? "border-tech bg-tech/10" : "border-white/10")}>
                   <div className={cn("mb-3 h-14 rounded border border-white/10", t.id === "Obsidian" ? "bg-[linear-gradient(135deg,#05070A,#0A0F14_60%,#003B73)]" : "bg-[#F5F7FA]")} />
                   <div className="text-sm font-semibold">{t.id}</div><div className="text-[11px] text-steel">{t.note}</div>
                 </button>
-              ))}
+                );
+              })}
             </div>
-            <p className="mt-4 text-[11px] text-steel">Branding: InfiniHon Corp. · Technology & Infrastructure · Hecho en Honduras.</p>
+            <p className="mt-4 text-[11px] text-steel">Este selector cambia el tema de inmediato; también puedes alternarlo con el botón de sol/luna en la barra superior.</p>
+            <p className="mt-2 text-[11px] text-steel">Branding: InfiniHon Corp. · Technology & Infrastructure · Hecho en Honduras.</p>
           </Panel>
         )}
         {!editable && <p className="text-xs text-steel">Read-only: your role cannot edit settings.</p>}
