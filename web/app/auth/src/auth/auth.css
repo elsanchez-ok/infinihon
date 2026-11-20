@@ -82,7 +82,12 @@
   border-right: 1px solid color-mix(in srgb, var(--color-snow) 8%, transparent);
   background: #F5F7FA;
 }
-.auth-brand-image { display: block; width: 100%; height: 100%; object-fit: cover; }
+.auth-brand-image { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
+/* Imagen clara por defecto; en tema oscuro se intercambia por la versión
+   en blanco y negro que pidió el usuario. */
+.auth-brand-image-dark { display: none; }
+html[data-theme="dark"] .auth-brand-image-light { display: none; }
+html[data-theme="dark"] .auth-brand-image-dark { display: block; }
 
 .auth-panel {
   position: relative;
