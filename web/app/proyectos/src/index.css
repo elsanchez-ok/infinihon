@@ -70,14 +70,14 @@ body {
 
 /* Transición suave entre tema claro/oscuro: sin esto, el cambio de
    colores (fondo, texto, bordes, iconos) ocurre de golpe en todo el
-   sitio al pulsar el botón de tema. Se excluyen transform/opacity para
-   no interferir con animaciones de scroll-reveal ni con prefers-reduced-motion. */
-@media (prefers-reduced-motion: no-preference) {
-  *, *::before, *::after {
-    transition-property: background-color, border-color, color, fill, stroke, box-shadow, text-decoration-color;
-    transition-duration: 320ms;
-    transition-timing-function: ease;
-  }
+   sitio al pulsar el botón de tema. Se excluyen transform/opacity para no
+   interferir con animaciones de scroll-reveal. El usuario prefiere que
+   este efecto (como el resto del sitio) corra siempre, así que NO se
+   condiciona a prefers-reduced-motion. */
+*, *::before, *::after {
+  transition-property: background-color, border-color, color, fill, stroke, box-shadow, text-decoration-color;
+  transition-duration: 320ms;
+  transition-timing-function: ease;
 }
 ::selection { background: var(--color-tech); color: var(--color-snow); }
 
