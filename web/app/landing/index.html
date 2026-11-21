@@ -14,6 +14,67 @@
         } catch (e) {}
       })();
     </script>
+    <!-- Pantalla de carga: marcado y estilos propios (no dependen del bundle
+         de React) para que aparezca de inmediato al recargar o entrar a la
+         página, y para que cubra toda la carga real (fuentes + recursos)
+         sin depender de que React ya haya montado. Ver el script al final
+         de <body> para la lógica que la oculta. -->
+    <style>
+      #app-loader {
+        position: fixed;
+        inset: 0;
+        z-index: 2147483647;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1.1rem;
+        background: var(--color-obsidian, #05070a);
+        transition: opacity 0.4s ease, visibility 0.4s ease;
+      }
+      #app-loader[data-hidden="true"] {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+      #app-loader img {
+        width: 84px;
+        height: 84px;
+        object-fit: contain;
+        animation: app-loader-bob 1.4s ease-in-out infinite;
+        filter: drop-shadow(0 18px 40px rgba(0, 102, 255, 0.55));
+      }
+      #app-loader .app-loader-label {
+        font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+        font-size: 11px;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: var(--color-steel, #8b96a5);
+      }
+      #app-loader .app-loader-track {
+        width: 160px;
+        height: 3px;
+        border-radius: 999px;
+        overflow: hidden;
+        background: color-mix(in srgb, var(--color-steel, #8b96a5) 25%, transparent);
+      }
+      #app-loader .app-loader-bar {
+        width: 40%;
+        height: 100%;
+        border-radius: 999px;
+        background: var(--color-tech, #0066ff);
+        animation: app-loader-slide 1.1s ease-in-out infinite;
+      }
+      @keyframes app-loader-bob {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+      }
+      @keyframes app-loader-slide {
+        0% { transform: translateX(-120%); }
+        50% { transform: translateX(60%); }
+        100% { transform: translateX(220%); }
+      }
+    </style>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="InfiniHon Corp. (Corporativo InfiniHon): corporativo tecnológico hondureño de proyectos propios de software, motores experimentales, infraestructura IT, tienda de hardware y servidores." />
     <meta name="theme-color" content="#05070A" />
@@ -71,7 +132,37 @@
     </script>
   </head>
   <body>
+    <div id="app-loader" role="status" aria-live="polite" aria-label="Cargando InfiniHon Corp.">
+      <img src="/assets/mascot-hero.png" alt="" aria-hidden="true" />
+      <div class="app-loader-track"><div class="app-loader-bar"></div></div>
+      <span class="app-loader-label">INFINIHON CORP.</span>
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      (function () {
+        var loader = document.getElementById("app-loader");
+        if (!loader) return;
+        var hidden = false;
+        function hide() {
+          if (hidden) return;
+          hidden = true;
+          loader.setAttribute("data-hidden", "true");
+          window.setTimeout(function () {
+            if (loader.parentNode) loader.parentNode.removeChild(loader);
+          }, 450);
+        }
+        var fontsReady =
+          document.fonts && document.fonts.ready ? document.fonts.ready.catch(function () {}) : Promise.resolve();
+        var pageReady = new Promise(function (resolve) {
+          if (document.readyState === "complete") resolve();
+          else window.addEventListener("load", resolve, { once: true });
+        });
+        Promise.all([fontsReady, pageReady]).then(hide);
+        // Red de seguridad: si una fuente o imagen tarda demasiado (o falla),
+        // la pantalla de carga nunca debe quedar trabada indefinidamente.
+        window.setTimeout(hide, 6000);
+      })();
+    </script>
   </body>
 </html>
