@@ -67,9 +67,35 @@ Deno.serve(async (req: Request) => {
   const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
   const supabase = createClient(supabaseUrl, serviceRoleKey);
 
+  // Rate limiting basico (defensa en profundidad contra flood/spam): la funcion
+  // es publica y sin esto cualquiera podia llenar la tabla o agotar la cuota
+  // gratuita de Resend con peticiones repetidas. Limites: por IP y por email.
+  const clientIp = (req.headers.get("x-forwarded-for")?.split(",")[0]?.trim())
+    || req.headers.get("cf-connecting-ip")
+    || null;
+
+  const shortWindow = new Date(Date.now() - 10 * 60 * 1000).toISOString(); // 10 min
+  const longWindow = new Date(Date.now() - 60 * 60 * 1000).toISOString(); // 1 hora
+
+  if (clientIp) {
+    const { count: byIp } = await supabase
+      .from("contact_submissions")
+      .select("id", { count: "exact", head: true })
+      .eq("client_ip", clientIp)
+      .gte("created_at", shortWindow);
+    if ((byIp ?? 0) >= 3) return json({ ok: false, error: "rate-limited" }, 429);
+  }
+
+  const { count: byEmail } = await supabase
+    .from("contact_submissions")
+    .select("id", { count: "exact", head: true })
+    .eq("email", email)
+    .gte("created_at", longWindow);
+  if ((byEmail ?? 0) >= 5) return json({ ok: false, error: "rate-limited" }, 429);
+
   const { data: inserted, error: insertError } = await supabase
     .from("contact_submissions")
-    .insert({ name, company, email, interest, message })
+    .insert({ name, company, email, interest, message, client_ip: clientIp })
     .select("id")
     .single();
 
