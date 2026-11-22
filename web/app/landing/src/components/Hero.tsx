@@ -5,8 +5,10 @@ import { cn } from "../utils/cn";
 const micro = ["Proyectos", "Redes", "Cloud", "Seguridad", "DevOps", "Automatización"];
 // Palabras que rotan en el titular ("Ingeniería de ___ para tu empresa."),
 // todas en relación directa con lo que describe el párrafo de debajo
-// (infraestructura, redes, nube, seguridad, monitoreo, software).
-const HEADLINE_WORDS = ["infraestructura", "redes", "nube", "seguridad", "monitoreo", "software"];
+// (sistemas, redes, nube, seguridad, monitoreo, software, IA).
+// "sistemas" reemplaza a "infraestructura": decía lo mismo pero esa palabra
+// era demasiado larga y la píldora azul se veía desproporcionada.
+const HEADLINE_WORDS = ["sistemas", "redes", "nube", "seguridad", "monitoreo", "software", "IA"];
 // Texto accesible fijo para lectores de pantalla (la animación de letras
 // es solo decorativa y queda con aria-hidden).
 const HEADLINE_WORD_A11Y = HEADLINE_WORDS.join(" / ");
