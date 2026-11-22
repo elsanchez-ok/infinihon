@@ -103,11 +103,12 @@ export default function ServicesSection() {
                   <span className={cn("absolute left-0 top-0 h-px bg-volt transition-all duration-700", active === i ? "w-full" : "w-0")} />
                   <span
                     className={cn(
-                      "relative text-5xl font-extrabold leading-none tracking-tighter transition-colors duration-500 md:text-7xl",
-                      active === i ? "text-tech" : "text-white/[0.1]"
+                      "relative flex items-center justify-start transition-all duration-500 md:justify-center",
+                      active === i ? "opacity-100 grayscale-0" : "opacity-[0.1] grayscale"
                     )}
                   >
-                    {s.n}
+                    <span className="sr-only">{s.n}</span>
+                    <img src={`/numbers/${i + 1}.png`} alt="" aria-hidden="true" className="h-14 w-auto md:h-20" />
                   </span>
                   <span className="relative">
                     <span className="flex items-center gap-4">
