@@ -17,12 +17,33 @@ import { createPortal } from "react-dom";
    scroll horizontal del sitio), y aunque Zuri es position:fixed, ese
    overflow-x-clip igual recorta su drop-shadow cuando se acerca a los
    bordes izquierdo/derecho — se veía "estrecharse" de un lado. Al
-   montarla fuera de ese contenedor, su sombra ya no se recorta. */
+   montarla fuera de ese contenedor, su sombra ya no se recorta (el
+   `body` tampoco debe tener overflow-x:hidden/clip propio, o volvería a
+   recortarla pese al portal — ver index.css). */
+const WALK_FRAME_MS = 170;
+const WALK_STOP_DELAY_MS = 220;
+
 function ScrollMascotOverlay() {
   const [walking, setWalking] = useState(false);
   const [frame, setFrame] = useState(0);
   const [progress, setProgress] = useState(0);
-  const rafRef = useRef<number | null>(null);
+  const lastScrollRef = useRef(0);
+  const walkStartRef = useRef<number | null>(null);
+  const rafLoopRef = useRef<number | null>(null);
+
+  // Precarga los tres fotogramas (reposo + 2 de caminata): sin esto, la
+  // primera vez que se scrollea en la sesión el navegador recién empieza
+  // a descargar zuri-walk-1/2.webp en ese instante, así que el primer
+  // cambio de pose puede tardar en pintarse (se veía como si "no
+  // caminara": la posición ya se movió, pero la imagen tarda en
+  // cambiar). Al precargarlas apenas monta, ya están en caché del
+  // navegador antes de que el usuario llegue a tocar el scroll.
+  useEffect(() => {
+    for (const src of ["/assets/mascot-hero.png", "/assets/zuri-walk-1.webp", "/assets/zuri-walk-2.webp"]) {
+      const img = new Image();
+      img.src = src;
+    }
+  }, []);
 
   useEffect(() => {
     const updateProgress = () => {
@@ -32,33 +53,49 @@ function ScrollMascotOverlay() {
     };
     updateProgress();
 
-    let stopTimer: number | undefined;
     const onScroll = () => {
-      setWalking(true);
-      window.clearTimeout(stopTimer);
-      stopTimer = window.setTimeout(() => setWalking(false), 220);
-      if (rafRef.current == null) {
-        rafRef.current = requestAnimationFrame(() => {
-          updateProgress();
-          rafRef.current = null;
-        });
-      }
+      lastScrollRef.current = performance.now();
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", updateProgress);
+
+    // Un único bucle de rAF decide, en cada fotograma, si seguimos "en
+    // caminata" (hubo scroll hace menos de WALK_STOP_DELAY_MS) y qué pose
+    // corresponde mostrar, calculando el fotograma a partir del tiempo
+    // real transcurrido desde que empezó a caminar (walkStartRef), en vez
+    // de depender de un setInterval que solo arrancaba *después* de que
+    // el estado "walking" ya se había confirmado en React. Con ese
+    // setInterval, un scroll corto (el primer scroll de la página, un
+    // solo golpe de rueda) podía terminar —se detenía a los 220ms— antes
+    // de que el intervalo llegara a dispararse ni una vez: la pose pasaba
+    // de reposo a "caminando" una sola vez y volvía a reposo sin alternar
+    // nunca entre los dos fotogramas de caminata — se veía como "se mueve
+    // pero no camina". Calculando el fotograma por tiempo transcurrido,
+    // la alternancia es inmediata y no depende de que un timer alcance a
+    // dispararse primero.
+    const tick = () => {
+      const now = performance.now();
+      const isWalking = now - lastScrollRef.current < WALK_STOP_DELAY_MS;
+      if (isWalking) {
+        if (walkStartRef.current == null) walkStartRef.current = now;
+        const elapsed = now - walkStartRef.current;
+        const nextFrame = Math.floor(elapsed / WALK_FRAME_MS) % 2;
+        setFrame((f) => (f === nextFrame ? f : nextFrame));
+      } else {
+        walkStartRef.current = null;
+      }
+      setWalking((w) => (w === isWalking ? w : isWalking));
+      updateProgress();
+      rafLoopRef.current = requestAnimationFrame(tick);
+    };
+    rafLoopRef.current = requestAnimationFrame(tick);
+
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", updateProgress);
-      window.clearTimeout(stopTimer);
-      if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
+      if (rafLoopRef.current != null) cancelAnimationFrame(rafLoopRef.current);
     };
   }, []);
-
-  useEffect(() => {
-    if (!walking) return;
-    const id = window.setInterval(() => setFrame((f) => (f === 0 ? 1 : 0)), 170);
-    return () => window.clearInterval(id);
-  }, [walking]);
 
   const src = walking ? (frame === 0 ? "/assets/zuri-walk-1.webp" : "/assets/zuri-walk-2.webp") : "/assets/mascot-hero.png";
 

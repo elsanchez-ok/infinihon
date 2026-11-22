@@ -35,8 +35,9 @@ export default function ProblemSection() {
               <Reveal as="li" key={p.t} delay={i * 60} className="group relative border-t border-white/[0.08] last:border-b">
                 <div className="absolute inset-y-0 left-0 w-0 bg-gradient-to-r from-hn/30 to-transparent transition-all duration-700 group-hover:w-full" />
                 <div className="relative grid grid-cols-[auto_1fr] gap-x-6 py-8 md:grid-cols-[120px_1fr_auto] md:gap-x-10 md:py-10">
-                  <span className="text-5xl font-extrabold leading-none tracking-tighter text-white/[0.08] transition-colors duration-500 group-hover:text-tech md:text-7xl">
-                    {String(i + 1).padStart(2, "0")}
+                  <span className="flex items-center justify-start opacity-[0.08] grayscale transition-all duration-500 group-hover:opacity-100 group-hover:grayscale-0 md:justify-center">
+                    <span className="sr-only">{i + 1}</span>
+                    <img src={`/numbers/${i + 1}.png`} alt="" aria-hidden="true" className="h-14 w-auto md:h-20" />
                   </span>
                   <div>
                     <h3 className="text-2xl font-bold tracking-tight text-snow md:text-3xl">{p.t}</h3>
