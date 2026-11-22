@@ -71,7 +71,7 @@ function Sidebar({ mobileOpen, onClose }: { mobileOpen: boolean; onClose: () => 
   const content = (compact: boolean) => (
     <div className="flex h-full flex-col">
       <div className={cn("flex h-16 items-center border-b border-white/[0.06]", compact ? "justify-center px-2" : "px-5")}>
-        <a href="/admin" onClick={(e) => { e.preventDefault(); go("/admin"); }} aria-label="InfiniHon Corp. Control Center — Overview"><Mark collapsed={compact} /></a>
+        <a href="/admin" onClick={(e) => { e.preventDefault(); go("/admin"); }} aria-label={t("InfiniHon Corp. Control Center — Overview")}><Mark collapsed={compact} /></a>
       </div>
       <nav className="flex-1 overflow-y-auto px-3 py-4" aria-label="Control Center">
         {navGroups.map((group) => {
@@ -104,9 +104,9 @@ function Sidebar({ mobileOpen, onClose }: { mobileOpen: boolean; onClose: () => 
         <div className="border-t border-white/[0.06] px-5 py-4">
           <div className={cn("flex items-center gap-2 font-mono text-[9.5px] uppercase tracking-[0.2em]", backend === "online" ? "text-emerald-400/80" : backend === "loading" ? "text-steel" : "text-red-300/80")}>
             <span className={cn("h-1.5 w-1.5 rounded-full", backend === "online" ? "bg-emerald-400" : backend === "loading" ? "bg-steel/60 animate-pulse" : "bg-red-300")} aria-hidden />
-            {backend === "online" ? "Supabase connected" : backend === "loading" ? "Connecting…" : "Supabase offline"}
+            {backend === "online" ? t("Supabase connected") : backend === "loading" ? t("Connecting…") : t("Supabase offline")}
           </div>
-          <div className="mt-2 font-mono text-[9px] uppercase tracking-[0.2em] text-steel/50">Hecho en Honduras.</div>
+          <div className="mt-2 font-mono text-[9px] uppercase tracking-[0.2em] text-steel/50">{t("Hecho en Honduras.")}</div>
         </div>
       )}
     </div>
@@ -118,7 +118,7 @@ function Sidebar({ mobileOpen, onClose }: { mobileOpen: boolean; onClose: () => 
       <aside className="fixed inset-y-0 left-0 z-40 hidden w-[256px] border-r border-white/[0.06] bg-[#070a0e] xl:block">{content(false)}</aside>
       <div className={cn("fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm transition-opacity md:hidden", mobileOpen ? "opacity-100" : "pointer-events-none opacity-0")} onClick={onClose} />
       <aside aria-hidden={!mobileOpen} className={cn("fixed inset-y-0 left-0 z-[65] w-[280px] border-r border-white/[0.08] bg-[#070a0e] transition-transform duration-300 md:hidden", mobileOpen ? "translate-x-0" : "-translate-x-full")}>
-        <button onClick={onClose} className="absolute right-3 top-4 rounded-md p-2 text-steel hover:text-snow" aria-label="Close navigation"><X className="h-4 w-4" /></button>
+        <button onClick={onClose} className="absolute right-3 top-4 rounded-md p-2 text-steel hover:text-snow" aria-label={t("Close navigation")}><X className="h-4 w-4" /></button>
         {content(false)}
       </aside>
     </>
@@ -139,6 +139,7 @@ function useOutside(onClose: () => void) {
 
 function GlobalSearch({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { data, navigate, can } = useAdmin();
+  const { t } = useLocale();
   const [q, setQ] = useState("");
   useEffect(() => { if (!open) setQ(""); }, [open]);
   const results = useMemo(() => {
@@ -159,26 +160,26 @@ function GlobalSearch({ open, onClose }: { open: boolean; onClose: () => void })
   if (!open) return null;
   const groups = [...new Set(results.map((r) => r.group))];
   return (
-    <div className="fixed inset-0 z-[90] flex items-start justify-center p-4 pt-[10vh]" role="dialog" aria-modal="true" aria-label="Global search">
+    <div className="fixed inset-0 z-[90] flex items-start justify-center p-4 pt-[10vh]" role="dialog" aria-modal="true" aria-label={t("Global search")}>
       <div className="admin-fade absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
       <div className="admin-pop relative w-full max-w-xl overflow-hidden rounded-xl border border-white/10 bg-ink shadow-2xl">
         <div className="flex items-center gap-3 border-b border-white/[0.07] px-4">
           <Search className="h-4 w-4 text-volt" aria-hidden />
           <input autoFocus value={q} onChange={(e) => setQ(e.target.value)} onKeyDown={(e) => e.key === "Escape" && onClose()}
-            placeholder="Search products, orders, customers, users…" aria-label="Search anything"
+            placeholder={t("Search products, orders, customers, users…")} aria-label={t("Search anything")}
             className="h-14 flex-1 bg-transparent text-sm text-snow outline-none placeholder:text-steel/60" />
           <kbd className="rounded border border-white/10 px-1.5 py-0.5 font-mono text-[10px] text-steel">ESC</kbd>
         </div>
         <div className="max-h-[55vh] overflow-y-auto p-2">
-          {!q && <p className="px-3 py-6 text-center text-xs text-steel">Type to search across products, services, orders, customers, users, administrators and modules.</p>}
-          {q && !results.length && <p className="px-3 py-6 text-center text-xs text-steel">No results for “{q}”.</p>}
+          {!q && <p className="px-3 py-6 text-center text-xs text-steel">{t("Type to search across products, services, orders, customers, users, administrators and modules.")}</p>}
+          {q && !results.length && <p className="px-3 py-6 text-center text-xs text-steel">{t("No results for")} “{q}”.</p>}
           {groups.map((g) => (
             <div key={g} className="mb-2">
-              <div className="px-3 py-1.5 font-mono text-[9.5px] uppercase tracking-[0.18em] text-steel/70">{g}</div>
+              <div className="px-3 py-1.5 font-mono text-[9.5px] uppercase tracking-[0.18em] text-steel/70">{t(g)}</div>
               {results.filter((r) => r.group === g).map((r, i) => (
                 <button key={g + i} onClick={() => { navigate(r.to); onClose(); }} className="flex w-full items-center justify-between gap-3 rounded-md px-3 py-2 text-left text-sm hover:bg-white/[0.05] focus:bg-white/[0.05] focus:outline-none">
                   <span className="truncate text-snow">{r.label}</span>
-                  <span className="truncate text-xs text-steel">{r.meta}</span>
+                  <span className="truncate text-xs text-steel">{t(r.meta)}</span>
                 </button>
               ))}
             </div>
@@ -223,7 +224,7 @@ function Topbar({ onMenu }: { onMenu: () => void }) {
       <div className="flex items-center gap-1 md:ml-auto">
         <ThemeToggle className="h-10 w-10 border-0" />
         <div ref={bellRef} className="relative">
-          <button onClick={() => setBellOpen((v) => !v)} className="relative rounded-md p-2 text-steel hover:bg-white/[0.05] hover:text-snow" aria-label={unread ? `Notifications, ${unread} unread` : "Notifications"} aria-expanded={bellOpen}>
+          <button onClick={() => setBellOpen((v) => !v)} className="relative rounded-md p-2 text-steel hover:bg-white/[0.05] hover:text-snow" aria-label={unread ? `${t("Notifications")}, ${unread} ${t("unread")}` : t("Notifications")} aria-expanded={bellOpen}>
             <Bell className="h-[18px] w-[18px]" />
             {unread + pendingTickets.length > 0 && <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-tech px-1 font-mono text-[9px] text-snow">{unread + pendingTickets.length}</span>}
           </button>
@@ -231,7 +232,7 @@ function Topbar({ onMenu }: { onMenu: () => void }) {
             <div className="admin-pop absolute right-0 top-11 w-80 max-w-[calc(100vw-2rem)] overflow-hidden rounded-xl border border-white/10 bg-ink shadow-2xl">
               <div className="flex items-center justify-between border-b border-white/[0.06] px-4 py-3">
                 <span className="text-sm font-bold">{t("Notifications")}</span>
-                {unread > 0 && <button className="text-xs text-volt hover:text-snow" onClick={() => mutate("notifications", (n) => n.map((x) => ({ ...x, read: true })))}>Mark all as read</button>}
+                {unread > 0 && <button className="text-xs text-volt hover:text-snow" onClick={() => mutate("notifications", (n) => n.map((x) => ({ ...x, read: true })))}>{t("Mark all as read")}</button>}
               </div>
               {data.notifications.length || pendingTickets.length ? (
                 <ul className="max-h-72 overflow-y-auto">
@@ -247,8 +248,8 @@ function Topbar({ onMenu }: { onMenu: () => void }) {
                   {data.notifications.slice(0, 6).map((n) => (
                     <li key={n.id} className="border-b border-white/[0.04] px-4 py-3 last:border-0">
                       <div className="flex items-start gap-2">
-                        {!n.read && <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-volt" aria-label="Unread" />}
-                        <div><p className="text-sm text-snow/90">{n.title}</p><p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-steel">{n.type}</p></div>
+                        {!n.read && <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-volt" aria-label={t("Unread")} />}
+                        <div><p className="text-sm text-snow/90">{t(n.title)}</p><p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-steel">{t(n.type)}</p></div>
                       </div>
                     </li>
                   ))}
@@ -265,24 +266,24 @@ function Topbar({ onMenu }: { onMenu: () => void }) {
           <button onClick={() => setProfileOpen((v) => !v)} className="flex items-center gap-2.5 rounded-md py-1 pl-1 pr-2 hover:bg-white/[0.04]" aria-expanded={profileOpen} aria-haspopup="menu">
             <span className="flex h-8 w-8 items-center justify-center rounded-md border border-tech/40 bg-hn/50 text-xs font-bold text-snow"><User className="h-4 w-4" aria-hidden /></span>
             <span className="hidden text-left leading-tight lg:block">
-              <span className="block text-[13px] font-semibold text-snow">{user?.email ?? "Sesión"}</span>
-              <span className="block text-[11px] text-steel">{role.name}</span>
+              <span className="block text-[13px] font-semibold text-snow">{user?.email ?? t("Session")}</span>
+              <span className="block text-[11px] text-steel">{t(role.name)}</span>
             </span>
             <ChevronDown className="hidden h-3.5 w-3.5 text-steel lg:block" aria-hidden />
           </button>
           {profileOpen && (
             <div role="menu" className="admin-pop absolute right-0 top-12 w-72 overflow-hidden rounded-xl border border-white/10 bg-ink shadow-2xl">
               <div className="border-b border-white/[0.06] px-4 py-3">
-                <div className="text-sm font-semibold">{user?.email ?? "Sesión de administrador"}</div>
-                <div className="text-xs text-steel">Sesión verificada · {role.name}</div>
+                <div className="text-sm font-semibold">{user?.email ?? t("Administrator session")}</div>
+                <div className="text-xs text-steel">{t("Verified session")} · {t(role.name)}</div>
               </div>
               <div className="border-b border-white/[0.06] px-4 py-3">
-                <label htmlFor="role-preview" className="font-mono text-[9.5px] uppercase tracking-[0.16em] text-steel">Preview as role</label>
-                <select id="role-preview" value={roleId} onChange={(e) => { setRoleId(e.target.value); toast(`Previewing interface as ${data.roles.find((r) => r.id === e.target.value)?.name}.`, "info"); }}
+                <label htmlFor="role-preview" className="font-mono text-[9.5px] uppercase tracking-[0.16em] text-steel">{t("Preview as role")}</label>
+                <select id="role-preview" value={roleId} onChange={(e) => { setRoleId(e.target.value); toast(`${t("Previewing interface as")} ${t(data.roles.find((r) => r.id === e.target.value)?.name ?? "")}.`, "info"); }}
                   className="mt-1.5 h-9 w-full rounded-md border border-white/10 bg-obsidian px-2 text-sm text-snow [&>option]:bg-ink">
-                  {data.roles.map((r) => <option key={r.id} value={r.id}>{r.name}</option>)}
+                  {data.roles.map((r) => <option key={r.id} value={r.id}>{t(r.name)}</option>)}
                 </select>
-                <p className="mt-1.5 text-[10.5px] leading-snug text-steel">Hides UI the role can't use. Real enforcement must happen on the server.</p>
+                <p className="mt-1.5 text-[10.5px] leading-snug text-steel">{t("Hides UI the role can't use. Real enforcement must happen on the server.")}</p>
               </div>
               {[
                 { label: "My Profile", icon: User, to: "/admin/profile" },
@@ -294,7 +295,7 @@ function Topbar({ onMenu }: { onMenu: () => void }) {
                 </button>
               ))}
               <a role="menuitem" href="/auth" onClick={(e) => { e.preventDefault(); void signOutAndGo(); }} className="flex w-full items-center gap-3 border-t border-white/[0.06] px-4 py-2.5 text-sm text-snow/90 hover:bg-white/[0.04]">
-                <LogOut className="h-4 w-4 text-steel" aria-hidden />{t("Cerrar sesión")}
+                <LogOut className="h-4 w-4 text-steel" aria-hidden />{t("Sign out")}
               </a>
             </div>
           )}
@@ -304,10 +305,10 @@ function Topbar({ onMenu }: { onMenu: () => void }) {
       <GlobalSearch open={searchOpen} onClose={() => setSearchOpen(false)} />
       <Modal open={helpOpen} onClose={() => setHelpOpen(false)} title={t("Help & documentation")} description={t("Guidance for operating the InfiniHon Corp. Control Center.")}>
         <ul className="space-y-3 text-sm text-steel">
-          <li><span className="font-semibold text-snow">Search:</span> press ⌘K / Ctrl+K anywhere to open global search.</li>
-          <li><span className="font-semibold text-snow">Data:</span> this panel reads and writes Supabase. Edits are saved as you make them; records marked <span className="font-mono text-xs">DEMO</span> are illustrative samples kept for reference.</li>
-          <li><span className="font-semibold text-snow">Permissions:</span> use “Preview as role” in the profile menu to see what each role can access. Supabase RLS is the real authority.</li>
-          <li><span className="font-semibold text-snow">Public site:</span> the store reads the same catalog, so changes in Inventory, Services and Content appear on the public pages.</li>
+          <li><span className="font-semibold text-snow">{t("Search:")}</span> {t("press ⌘K / Ctrl+K anywhere to open global search.")}</li>
+          <li><span className="font-semibold text-snow">{t("Data:")}</span> {t("this panel reads and writes Supabase. Edits are saved as you make them; records marked")} <span className="font-mono text-xs">DEMO</span> {t("are illustrative samples kept for reference.")}</li>
+          <li><span className="font-semibold text-snow">{t("Permissions:")}</span> {t("use “Preview as role” in the profile menu to see what each role can access. Supabase RLS is the real authority.")}</li>
+          <li><span className="font-semibold text-snow">{t("Public site:")}</span> {t("the store reads the same catalog, so changes in Inventory, Services and Content appear on the public pages.")}</li>
         </ul>
       </Modal>
     </header>
@@ -317,10 +318,11 @@ function Topbar({ onMenu }: { onMenu: () => void }) {
 export function AdminLayout({ children }: { children: ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { pathname, backend } = useAdmin();
+  const { t } = useLocale();
   useEffect(() => setMobileOpen(false), [pathname]);
   return (
     <div className="admin-root min-h-screen bg-obsidian text-snow">
-      <a href="#admin-main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded focus:bg-tech focus:px-3 focus:py-2">Skip to content</a>
+      <a href="#admin-main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded focus:bg-tech focus:px-3 focus:py-2">{t("Skip to content")}</a>
       <Sidebar mobileOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
       <div className="md:pl-[72px] xl:pl-[256px]">
         <Topbar onMenu={() => setMobileOpen(true)} />
@@ -330,8 +332,8 @@ export function AdminLayout({ children }: { children: ReactNode }) {
             backend === "loading" ? "border-dashed border-white/[0.06] bg-hn/[0.12] text-steel" : "border-red-300/25 bg-red-500/10 text-red-200",
           )}>
             {backend === "loading"
-              ? <>Loading data from Supabase…</>
-              : <>Supabase is unreachable. You are seeing sample data and <span className="font-semibold">changes will not be saved</span> until the connection is back.</>}
+              ? <>{t("Loading data from Supabase…")}</>
+              : <>{t("Supabase is unreachable. You are seeing sample data and")} <span className="font-semibold">{t("changes will not be saved")}</span> {t("until the connection is back.")}</>}
           </div>
         )}
         <main id="admin-main" className="relative mx-auto w-full max-w-[1400px] px-4 py-7 md:px-6 lg:px-8">{children}</main>

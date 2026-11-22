@@ -12,7 +12,7 @@ const splitName = (name: string) => {
 };
 
 export function ProfilePage() {
-  const { locale, setLocale } = useLocale();
+  const { locale, setLocale, t } = useLocale();
   const { data, user, role, mutate, toast, navigate } = useAdmin();
   const me = data.admins.find((a) => a.id === user?.id) ?? data.admins.find((a) => a.email === user?.email);
   const fallbackName = [user?.firstName, user?.lastName].filter(Boolean).join(" ") || user?.email || "Administrator";
@@ -65,7 +65,7 @@ export function ProfilePage() {
             </span>
             <div>
               <div className="text-lg font-semibold leading-tight">{displayName}</div>
-              <div className="flex items-center gap-2"><span className="flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#9cc6ff]">{role.id === "super" && <KeyRound className="h-3 w-3" aria-hidden />}{role.name}</span><StatusBadge status={me?.status ?? "Active"} /></div>
+              <div className="flex items-center gap-2"><span className="flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#9cc6ff]">{role.id === "super" && <KeyRound className="h-3 w-3" aria-hidden />}{t(role.name)}</span><StatusBadge status={me?.status ?? "Active"} /></div>
             </div>
           </div>
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
@@ -75,7 +75,7 @@ export function ProfilePage() {
               <Field label="Work email" htmlFor="pf-email" hint={editing ? "Email is managed by your authentication provider." : undefined}>
                 <div className="flex items-center gap-2">
                   <input id="pf-email" type="email" className={cn(inputCls, "font-mono")} value={email} disabled readOnly />
-                  <button type="button" aria-label="Copy email" onClick={() => copyText(email)} className="rounded-md border border-white/10 p-2 text-steel hover:text-snow"><Copy className="h-4 w-4" aria-hidden /></button>
+                  <button type="button" aria-label={t("Copy email")} onClick={() => copyText(email)} className="rounded-md border border-white/10 p-2 text-steel hover:text-snow"><Copy className="h-4 w-4" aria-hidden /></button>
                 </div>
               </Field>
             </div>
@@ -85,15 +85,15 @@ export function ProfilePage() {
         <Panel title="Account details" description="Status of your administrator account.">
           <dl className="space-y-3 text-sm">
             <div className="flex items-start justify-between gap-3">
-              <dt className="flex items-center gap-2 text-steel"><Fingerprint className="h-4 w-4" aria-hidden />Administrator ID</dt>
-              <dd className="flex items-center gap-1.5"><span className="max-w-[140px] truncate font-mono text-xs text-snow/90">{me?.id ?? user?.id ?? "—"}</span><button type="button" aria-label="Copy ID" onClick={() => me?.id && copyText(me.id)} className="text-steel hover:text-snow"><Copy className="h-3.5 w-3.5" aria-hidden /></button></dd>
+              <dt className="flex items-center gap-2 text-steel"><Fingerprint className="h-4 w-4" aria-hidden />{t("Administrator ID")}</dt>
+              <dd className="flex items-center gap-1.5"><span className="max-w-[140px] truncate font-mono text-xs text-snow/90">{me?.id ?? user?.id ?? "—"}</span><button type="button" aria-label={t("Copy ID")} onClick={() => me?.id && copyText(me.id)} className="text-steel hover:text-snow"><Copy className="h-3.5 w-3.5" aria-hidden /></button></dd>
             </div>
             <div className="flex items-start justify-between gap-3">
-              <dt className="flex items-center gap-2 text-steel"><Clock className="h-4 w-4" aria-hidden />Last login</dt>
+              <dt className="flex items-center gap-2 text-steel"><Clock className="h-4 w-4" aria-hidden />{t("Last login")}</dt>
               <dd className="text-xs text-snow/90">{fmtDate(me?.lastLogin ?? null)}</dd>
             </div>
             <div className="flex items-start justify-between gap-3">
-              <dt className="flex items-center gap-2 text-steel"><ShieldCheck className="h-4 w-4" aria-hidden />Member since</dt>
+              <dt className="flex items-center gap-2 text-steel"><ShieldCheck className="h-4 w-4" aria-hidden />{t("Member since")}</dt>
               <dd className="text-xs text-snow/90">{fmtDate(me?.created ?? null)}</dd>
             </div>
           </dl>
@@ -106,24 +106,24 @@ export function ProfilePage() {
             </Field>
           </div>
           <div className="mt-5 border-t border-white/[0.06] pt-4">
-            <div className="mb-2 flex items-center gap-2 text-xs font-semibold text-snow/90"><KeyRound className="h-3.5 w-3.5 text-steel" aria-hidden />Role permissions · {role.permissions.length}</div>
+            <div className="mb-2 flex items-center gap-2 text-xs font-semibold text-snow/90"><KeyRound className="h-3.5 w-3.5 text-steel" aria-hidden />{t("Role permissions")} · {role.permissions.length}</div>
             {role.permissions.length ? (
               <div className="flex flex-wrap gap-1.5">
                 {role.permissions.slice(0, 10).map((p) => <span key={p} className="rounded border border-white/10 bg-obsidian/60 px-2 py-1 font-mono text-[10px] text-steel">{p}</span>)}
-                {role.permissions.length > 10 && <span className="rounded border border-white/10 bg-obsidian/60 px-2 py-1 text-[10px] text-steel">+{role.permissions.length - 10} more</span>}
+                {role.permissions.length > 10 && <span className="rounded border border-white/10 bg-obsidian/60 px-2 py-1 text-[10px] text-steel">+{role.permissions.length - 10} {t("more")}</span>}
               </div>
-            ) : <span className="text-xs text-steel">No permissions granted.</span>}
-            <p className="mt-3 text-[11px] text-steel">Permissions are defined by your role and managed in <button className="text-tech hover:underline" onClick={() => navigate("/admin/roles")}>Roles</button>.</p>
+            ) : <span className="text-xs text-steel">{t("No permissions granted.")}</span>}
+            <p className="mt-3 text-[11px] text-steel">{t("Permissions are defined by your role and managed in")} <button className="text-tech hover:underline" onClick={() => navigate("/admin/roles")}>{t("Roles")}</button>.</p>
           </div>
         </Panel>
 
         <Panel title="Security" description="Protect access to the Control Center." className="lg:col-span-3">
           <button onClick={() => navigate("/admin/security")} className="flex w-full items-center gap-3 rounded-lg border border-white/[0.07] bg-obsidian/40 p-4 text-left hover:border-white/20">
             <span className="flex h-9 w-9 items-center justify-center rounded-md border border-white/10 bg-ink text-steel"><Lock className="h-4 w-4" aria-hidden /></span>
-            <span className="flex-1"><span className="block text-sm font-semibold">Security settings</span><span className="block text-xs text-steel">Password, two-factor authentication and recent sign-in activity.</span></span>
+            <span className="flex-1"><span className="block text-sm font-semibold">{t("Security settings")}</span><span className="block text-xs text-steel">{t("Password, two-factor authentication and recent sign-in activity.")}</span></span>
             <ArrowRight className="h-4 w-4 text-steel" aria-hidden />
           </button>
-          <p className="mt-3 text-[11px] text-steel">Signed in as <span className="font-mono text-snow/80">{email}</span>. Sessions and sign-in history are provided by the authentication backend.</p>
+          <p className="mt-3 text-[11px] text-steel">{t("Signed in as")} <span className="font-mono text-snow/80">{email}</span>. {t("Sessions and sign-in history are provided by the authentication backend.")}</p>
         </Panel>
       </div>
     </>

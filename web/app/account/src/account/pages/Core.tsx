@@ -8,45 +8,47 @@ import { fmtDate, type PortalOrder } from "../data";
 import {
   Button, DashboardCard, DemoNote, EmptyState, PageHeader, Panel, QuickAction, ResourceTable, SpaceDiagram, StatusBadge, type Column,
 } from "../ui";
+import { useLocale } from "../locale";
 
 /* ─────────── Dashboard ─────────── */
 
 export function DashboardPage() {
   const { data, navigate } = useAccount();
+  const { t } = useLocale();
   const openRequests = data.requests.filter((r) => !["Completada", "Cancelada"].includes(r.status));
   const openTickets = data.tickets.filter((t) => !["Resuelto", "Cerrado"].includes(t.status));
   const unread = data.notifications.filter((n) => !n.read);
   const attention = [
-    ...openRequests.map((r) => ({ id: r.id, label: r.title, meta: `Solicitud · ${r.status}`, to: `/account/requests/${r.id}` })),
-    ...openTickets.filter((t) => t.status === "Esperándote").map((t) => ({ id: t.id, label: t.subject, meta: `Ticket · ${t.status}`, to: `/account/support/tickets/${t.id}` })),
-    ...(!data.profileCompleted ? [{ id: "profile", label: "Completa tu perfil", meta: "Cuenta · acción recomendada", to: "/account/profile" }] : []),
-    ...(data.security.twoFactor === "No configurado" ? [{ id: "2fa", label: "Configura la verificación en dos pasos", meta: "Seguridad · acción recomendada", to: "/account/security" }] : []),
+    ...openRequests.map((r) => ({ id: r.id, label: r.title, meta: `${t("Solicitud")} · ${t(r.status)}`, to: `/account/requests/${r.id}` })),
+    ...openTickets.filter((t2) => t2.status === "Esperándote").map((t2) => ({ id: t2.id, label: t2.subject, meta: `${t("Ticket")} · ${t(t2.status)}`, to: `/account/support/tickets/${t2.id}` })),
+    ...(!data.profileCompleted ? [{ id: "profile", label: t("Completa tu perfil"), meta: t("Cuenta · acción recomendada"), to: "/account/profile" }] : []),
+    ...(data.security.twoFactor === "No configurado" ? [{ id: "2fa", label: t("Configura la verificación en dos pasos"), meta: t("Seguridad · acción recomendada"), to: "/account/security" }] : []),
   ];
 
   return (
     <>
       <PageHeader
         eyebrow="Tu espacio"
-        title={`Bienvenido de nuevo${data.profileCompleted ? `, ${data.profile.firstName}` : "."}`}
+        title={`${t("Bienvenido de nuevo")}${data.profileCompleted ? `, ${data.profile.firstName}` : "."}`}
         description="Esto es lo que está pasando con tu cuenta de InfiniHon Corp."
         actions={<Button variant="primary" icon={Plus} onClick={() => navigate("/account/requests/new")}>Solicitar un servicio</Button>}
       />
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <DashboardCard label="Servicios activos" value={0} state="empty" hint="Aún no tienes servicios contratados." icon={Boxes} to="/account/services" />
-        <DashboardCard label="Pedidos" value={data.orders.length} state={data.orders.length ? "ok" : "empty"} hint={data.orders.length ? "Consulta el estado de tus compras." : "Tus compras aparecerán aquí."} icon={Package} to="/account/orders" />
-        <DashboardCard label="Solicitudes abiertas" value={openRequests.length} hint={openRequests.length ? "En revisión o en progreso." : "No hay solicitudes abiertas."} icon={Send} to="/account/requests" />
-        <DashboardCard label="Tickets de soporte" value={openTickets.length} hint={openTickets.length ? "Conversaciones activas con soporte." : "Sin conversaciones abiertas."} icon={LifeBuoy} to="/account/support/tickets" />
+        <DashboardCard label={t("Servicios activos")} value={0} state="empty" hint={t("Aún no tienes servicios contratados.")} icon={Boxes} to="/account/services" />
+        <DashboardCard label={t("Pedidos")} value={data.orders.length} state={data.orders.length ? "ok" : "empty"} hint={data.orders.length ? t("Consulta el estado de tus compras.") : t("Tus compras aparecerán aquí.")} icon={Package} to="/account/orders" />
+        <DashboardCard label={t("Solicitudes abiertas")} value={openRequests.length} hint={openRequests.length ? t("En revisión o en progreso.") : t("No hay solicitudes abiertas.")} icon={Send} to="/account/requests" />
+        <DashboardCard label={t("Tickets de soporte")} value={openTickets.length} hint={openTickets.length ? t("Conversaciones activas con soporte.") : t("Sin conversaciones abiertas.")} icon={LifeBuoy} to="/account/support/tickets" />
       </div>
 
       <div className="mt-4 grid gap-4 lg:grid-cols-3">
         <div className="space-y-4 lg:col-span-2">
           <Panel title="Acciones rápidas" description="Lo que la mayoría de usuarios necesita primero.">
             <div className="grid gap-3 sm:grid-cols-2">
-              <QuickAction label="Explorar servicios" description="Descubre lo que InfiniHon Corp. puede implementar" icon={Compass} onClick={() => navigate("/account/favorites")} />
-              <QuickAction label="Ver pedidos" description="Consulta el estado de tus compras" icon={Package} onClick={() => navigate("/account/orders")} />
-              <QuickAction label="Solicitar un servicio" description="Cotización, implementación o cambio" icon={Send} onClick={() => navigate("/account/requests/new")} />
-              <QuickAction label="Contactar soporte" description="Abre un ticket con el equipo" icon={Headphones} onClick={() => navigate("/account/support")} />
+              <QuickAction label={t("Explorar servicios")} description={t("Descubre lo que InfiniHon Corp. puede implementar")} icon={Compass} onClick={() => navigate("/account/favorites")} />
+              <QuickAction label={t("Ver pedidos")} description={t("Consulta el estado de tus compras")} icon={Package} onClick={() => navigate("/account/orders")} />
+              <QuickAction label={t("Solicitar un servicio")} description={t("Cotización, implementación o cambio")} icon={Send} onClick={() => navigate("/account/requests/new")} />
+              <QuickAction label={t("Contactar soporte")} description={t("Abre un ticket con el equipo")} icon={Headphones} onClick={() => navigate("/account/support")} />
             </div>
           </Panel>
 
@@ -71,15 +73,14 @@ export function DashboardPage() {
           <Panel title="Tu espacio InfiniHon Corp." description="Vista conceptual de las áreas de tu cuenta.">
             <SpaceDiagram counts={{ services: 0, orders: data.orders.length, requests: data.requests.length, support: data.tickets.length }} />
             <p className="mt-3 text-[11.5px] leading-relaxed text-steel">
-              Los números reflejan únicamente lo registrado en tu cuenta. Cuando un servicio se activa o un pedido se procesa,
-              aparece aquí automáticamente.
+              {t("Los números reflejan únicamente lo registrado en tu cuenta. Cuando un servicio se activa o un pedido se procesa, aparece aquí automáticamente.")}
             </p>
           </Panel>
         </div>
 
         <div className="space-y-4">
           <Panel title="Notificaciones" description="Novedades de tu cuenta." padded={false}
-            action={unread.length > 0 && <Button size="sm" variant="ghost" onClick={() => navigate("/account/notifications")}>{unread.length} sin leer</Button>}>
+            action={unread.length > 0 && <Button size="sm" variant="ghost" onClick={() => navigate("/account/notifications")}>{unread.length} {t("sin leer")}</Button>}>
             {data.notifications.length ? (
               <ul className="divide-y divide-white/[0.05]">
                 {data.notifications.slice(0, 5).map((n) => (
@@ -95,9 +96,9 @@ export function DashboardPage() {
 
           <Panel title="Tu cuenta">
             <dl className="space-y-3 text-sm">
-              <div><dt className="text-[11px] uppercase tracking-[0.12em] text-steel/70">Nombre</dt><dd className="mt-0.5">{displayName(data.profile)}</dd></div>
-              <div><dt className="text-[11px] uppercase tracking-[0.12em] text-steel/70">Correo</dt><dd className="mt-0.5 break-all text-steel">{data.profile.email || "Sin confirmar"}</dd></div>
-              <div><dt className="text-[11px] uppercase tracking-[0.12em] text-steel/70">Tipo de cuenta</dt><dd className="mt-0.5">Individual</dd></div>
+              <div><dt className="text-[11px] uppercase tracking-[0.12em] text-steel/70">{t("Nombre")}</dt><dd className="mt-0.5">{displayName(data.profile)}</dd></div>
+              <div><dt className="text-[11px] uppercase tracking-[0.12em] text-steel/70">{t("Correo")}</dt><dd className="mt-0.5 break-all text-steel">{data.profile.email || t("Sin confirmar")}</dd></div>
+              <div><dt className="text-[11px] uppercase tracking-[0.12em] text-steel/70">{t("Tipo de cuenta")}</dt><dd className="mt-0.5">{t("Individual")}</dd></div>
             </dl>
             <div className="mt-4 flex flex-wrap gap-2">
               <Button size="sm" icon={User} onClick={() => navigate("/account/profile")}>Mi perfil</Button>
@@ -114,6 +115,7 @@ export function DashboardPage() {
 
 export function ServicesPage() {
   const { navigate } = useAccount();
+  const { t } = useLocale();
   return (
     <>
       <PageHeader eyebrow="Mi InfiniHon Corp." title="Mis servicios" description="Gestiona y consulta tus servicios de InfiniHon Corp."
@@ -128,7 +130,7 @@ export function ServicesPage() {
           </div>} />
       </Panel>
       <div className="mt-4"><DemoNote>
-        InfiniHon Corp. no simula servicios que no existen. Esta sección se llena desde el backend cuando un servicio se activa para tu cuenta.
+        {t("InfiniHon Corp. no simula servicios que no existen. Esta sección se llena desde el backend cuando un servicio se activa para tu cuenta.")}
       </DemoNote></div>
     </>
   );
@@ -153,10 +155,11 @@ export function ServiceDetailPage() {
 
 export function OrdersPage() {
   const { data, navigate } = useAccount();
+  const { t } = useLocale();
   const columns: Column<PortalOrder>[] = [
     { key: "id", header: "Pedido", render: (o) => (
       <div><div className="font-mono text-[11px] text-steel">{o.id}</div>
-        <div className="mt-0.5 text-[12px] text-snow/80">{o.items.reduce((n, i) => n + i.qty, 0)} artículo(s)</div></div>
+        <div className="mt-0.5 text-[12px] text-snow/80">{o.items.reduce((n, i) => n + i.qty, 0)} {t("artículo(s)")}</div></div>
     ) },
     { key: "created", header: "Fecha", render: (o) => <span className="text-steel">{fmtDate(o.created)}</span> },
     { key: "status", header: "Estado", render: (o) => <StatusBadge status={o.status} /> },
@@ -166,13 +169,13 @@ export function OrdersPage() {
       <PageHeader eyebrow="Mi InfiniHon Corp." title="Mis pedidos" description="Consulta el estado de tus compras."
         breadcrumbs={[{ label: "Inicio", to: "/account" }, { label: "Mis pedidos" }]} />
       <Panel padded={false}>
-        <ResourceTable caption="Mis pedidos" columns={columns} rows={data.orders} getKey={(o) => o.id}
+        <ResourceTable caption={t("Mis pedidos")} columns={columns} rows={data.orders} getKey={(o) => o.id}
           onRowClick={(o) => navigate(`/account/orders/${o.id}`)}
           empty={<EmptyState icon={Package} title="Sin pedidos todavía"
             description="Tus pedidos aparecerán aquí, con sus productos, totales y estado de entrega." />} />
       </Panel>
       <div className="mt-4 text-[11.5px] leading-relaxed text-steel">
-        Los pedidos se sincronizan con tu cuenta. Cuando realices una compra, aparecerá aquí automáticamente.
+        {t("Los pedidos se sincronizan con tu cuenta. Cuando realices una compra, aparecerá aquí automáticamente.")}
       </div>
     </>
   );
@@ -180,6 +183,7 @@ export function OrdersPage() {
 
 export function OrderDetailPage({ id }: { id: string }) {
   const { data, navigate } = useAccount();
+  const { t } = useLocale();
   const order = data.orders.find((o) => o.id === id);
   if (!order) {
     return (
@@ -198,12 +202,12 @@ export function OrderDetailPage({ id }: { id: string }) {
     <>
       <PageHeader eyebrow={`Pedido ${order.id}`} title={`Pedido ${order.id}`}
         breadcrumbs={[{ label: "Mis pedidos", to: "/account/orders" }, { label: order.id }]}
-        description={<span className="flex flex-wrap items-center gap-2"><StatusBadge status={order.status} /><span className="text-xs text-steel">Creado {fmtDate(order.created)}</span></span>}
+        description={<span className="flex flex-wrap items-center gap-2"><StatusBadge status={order.status} /><span className="text-xs text-steel">{t("Creado")} {fmtDate(order.created)}</span></span>}
         actions={<Button variant="ghost" icon={ArrowLeft} onClick={() => navigate("/account/orders")}>Volver</Button>} />
 
       <div className="grid gap-4 lg:grid-cols-3">
         <div className="space-y-4 lg:col-span-2">
-          <Panel title="Artículos" description={`${count} artículo(s) en este pedido.`} padded={false}>
+          <Panel title="Artículos" description={`${count} ${t("artículo(s) en este pedido.")}`} padded={false}>
             {order.items.length ? (
               <ul className="divide-y divide-white/[0.05]">
                 {order.items.map((i, idx) => (
@@ -213,7 +217,7 @@ export function OrderDetailPage({ id }: { id: string }) {
                   </li>
                 ))}
               </ul>
-            ) : <p className="px-5 py-6 text-sm text-steel">Este pedido no tiene artículos registrados.</p>}
+            ) : <p className="px-5 py-6 text-sm text-steel">{t("Este pedido no tiene artículos registrados.")}</p>}
           </Panel>
           {order.notes && <Panel title="Notas"><p className="whitespace-pre-line text-sm leading-relaxed text-snow/90">{order.notes}</p></Panel>}
         </div>
@@ -221,14 +225,14 @@ export function OrderDetailPage({ id }: { id: string }) {
         <div className="space-y-4">
           <Panel title="Detalles">
             <dl className="space-y-3 text-sm">
-              <div className="flex justify-between gap-3"><dt className="text-steel">Pedido</dt><dd className="font-mono text-right">{order.id}</dd></div>
-              <div className="flex justify-between gap-3"><dt className="text-steel">Estado</dt><dd><StatusBadge status={order.status} /></dd></div>
-              <div className="flex justify-between gap-3"><dt className="text-steel">Fecha</dt><dd className="text-right">{fmtDate(order.created)}</dd></div>
-              <div className="flex justify-between gap-3"><dt className="text-steel">Artículos</dt><dd className="text-right">{count}</dd></div>
+              <div className="flex justify-between gap-3"><dt className="text-steel">{t("Pedido")}</dt><dd className="font-mono text-right">{order.id}</dd></div>
+              <div className="flex justify-between gap-3"><dt className="text-steel">{t("Estado")}</dt><dd><StatusBadge status={order.status} /></dd></div>
+              <div className="flex justify-between gap-3"><dt className="text-steel">{t("Fecha")}</dt><dd className="text-right">{fmtDate(order.created)}</dd></div>
+              <div className="flex justify-between gap-3"><dt className="text-steel">{t("Artículos")}</dt><dd className="text-right">{count}</dd></div>
             </dl>
           </Panel>
           <Panel title="¿Necesitas ayuda con este pedido?">
-            <p className="text-[13px] leading-relaxed text-steel">Cuéntanos qué pasa y el equipo de soporte lo revisará.</p>
+            <p className="text-[13px] leading-relaxed text-steel">{t("Cuéntanos qué pasa y el equipo de soporte lo revisará.")}</p>
             <Button size="sm" className="mt-3 w-full" onClick={() => navigate("/account/support")}>Contactar soporte</Button>
           </Panel>
         </div>
@@ -241,6 +245,7 @@ export function OrderDetailPage({ id }: { id: string }) {
 
 export function FavoritesPage() {
   const { data, toggleFavorite, navigate, toast } = useAccount();
+  const { t } = useLocale();
   const catalog = data.catalog;
   const saved = data.favorites.map((id) => catalog.find((s) => s.id === id)).filter(Boolean);
   return (
@@ -253,12 +258,12 @@ export function FavoritesPage() {
             <div key={s.id} className="flex flex-col rounded-2xl border border-white/[0.07] bg-ink/70 p-5">
               <div className="flex items-start justify-between gap-3">
                 <div><h3 className="text-base font-bold text-snow">{s.name}</h3><p className="mt-0.5 text-[11.5px] uppercase tracking-[0.12em] text-steel">{s.category}</p></div>
-                <button onClick={() => { toggleFavorite(s.id); toast("Eliminado de favoritos.", "info"); }} aria-label={`Quitar ${s.name} de favoritos`} className="text-steel hover:text-snow"><Heart className="h-4 w-4 fill-current text-volt" /></button>
+                <button onClick={() => { toggleFavorite(s.id); toast("Eliminado de favoritos.", "info"); }} aria-label={`${t("Quitar")} ${s.name} ${t("de favoritos")}`} className="text-steel hover:text-snow"><Heart className="h-4 w-4 fill-current text-volt" /></button>
               </div>
               <p className="mt-2 text-sm leading-relaxed text-steel">{s.description}</p>
               <div className="mt-auto flex gap-2 pt-4">
                 <Button size="sm" variant="primary" onClick={() => navigate(`/account/requests/new?service=${s.id}`)}>Solicitar</Button>
-                <Button size="sm" variant="ghost" onClick={() => toast(`Vista detallada de ${s.name} disponible en el sitio público.`, "info")}>Ver</Button>
+                <Button size="sm" variant="ghost" onClick={() => toast(`${t("Vista detallada de")} ${s.name} ${t("disponible en el sitio público.")}`, "info")}>Ver</Button>
               </div>
             </div>
           ))}
@@ -297,29 +302,31 @@ export function FavoritesPage() {
 
 export function BillingPage() {
   const { navigate } = useAccount();
+  const { t } = useLocale();
   return (
     <>
       <PageHeader eyebrow="Cuenta" title="Facturación" description="Información de facturación, métodos de pago, facturas y transacciones."
         breadcrumbs={[{ label: "Inicio", to: "/account" }, { label: "Facturación" }]} />
       <div className="grid gap-4 lg:grid-cols-2">
         <Panel title="Información de facturación" description="Datos fiscales usados en tus documentos.">
-          <p className="text-sm text-steel">Aún no hay información de facturación guardada.</p>
+          <p className="text-sm text-steel">{t("Aún no hay información de facturación guardada.")}</p>
           <Button size="sm" className="mt-4" icon={Settings2} onClick={() => navigate("/account/profile")}>Completar mis datos</Button>
         </Panel>
         <Panel title="Métodos de pago">
-          <p className="text-sm text-steel">No hay métodos de pago registrados.</p>
-          <DemoNote>Los pagos no están integrados. InfiniHon Corp. no simula un proceso de pago.</DemoNote>
+          <p className="text-sm text-steel">{t("No hay métodos de pago registrados.")}</p>
+          <DemoNote>{t("Los pagos no están integrados. InfiniHon Corp. no simula un proceso de pago.")}</DemoNote>
         </Panel>
         <Panel title="Facturas" padded={false}><EmptyState icon={FileText} title="Sin facturas" description="Tus facturas aparecerán cuando tu cuenta tenga actividad de facturación." /></Panel>
         <Panel title="Transacciones" padded={false}><EmptyState icon={CreditCard} title="Sin transacciones" description="No hay movimientos registrados en tu cuenta." /></Panel>
       </div>
-      <div className="mt-4"><DemoNote>Las funciones de facturación aparecerán aquí cuando tu cuenta tenga actividad de facturación.</DemoNote></div>
+      <div className="mt-4"><DemoNote>{t("Las funciones de facturación aparecerán aquí cuando tu cuenta tenga actividad de facturación.")}</DemoNote></div>
     </>
   );
 }
 
 export function OrganizationPage() {
   const { navigate } = useAccount();
+  const { t } = useLocale();
   return (
     <>
       <PageHeader eyebrow="Cuenta" title="Organización" description="Gestiona la organización a la que perteneces, sus miembros y servicios."
@@ -329,7 +336,7 @@ export function OrganizationPage() {
           description="Tu cuenta es individual. Si tu empresa tiene una cuenta empresarial de InfiniHon Corp., pídele al administrador que te invite con tu correo."
           action={<Button variant="primary" icon={Headphones} onClick={() => navigate("/account/support")}>Consultar a soporte</Button>} />
       </Panel>
-      <div className="mt-4"><DemoNote>Esta sección solo se muestra a usuarios que pertenecen a una organización. Un usuario individual no debería verla.</DemoNote></div>
+      <div className="mt-4"><DemoNote>{t("Esta sección solo se muestra a usuarios que pertenecen a una organización. Un usuario individual no debería verla.")}</DemoNote></div>
     </>
   );
 }
@@ -360,6 +367,7 @@ const helpTopics = [
 export function HelpPage() {
   const [open, setOpen] = useState<number | null>(0);
   const { navigate } = useAccount();
+  const { t } = useLocale();
   return (
     <>
       <PageHeader eyebrow="Soporte" title="Centro de ayuda" description="Respuestas rápidas sobre tu cuenta y tus servicios."
@@ -367,13 +375,13 @@ export function HelpPage() {
         actions={<Button variant="primary" icon={Headphones} onClick={() => navigate("/account/support")}>Contactar soporte</Button>} />
       <Panel padded={false}>
         <ul className="divide-y divide-white/[0.05]">
-          {helpTopics.map((t, i) => (
-            <li key={t.q}>
+          {helpTopics.map((topic, i) => (
+            <li key={topic.q}>
               <button onClick={() => setOpen(open === i ? null : i)} aria-expanded={open === i} className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left">
-                <span className="text-sm font-semibold text-snow">{t.q}</span>
+                <span className="text-sm font-semibold text-snow">{t(topic.q)}</span>
                 <span className={`shrink-0 text-lg text-steel transition-transform ${open === i ? "rotate-45 text-volt" : ""}`} aria-hidden>+</span>
               </button>
-              {open === i && <p className="px-5 pb-4 text-[13px] leading-relaxed text-steel">{t.a}</p>}
+              {open === i && <p className="px-5 pb-4 text-[13px] leading-relaxed text-steel">{t(topic.a)}</p>}
             </li>
           ))}
         </ul>

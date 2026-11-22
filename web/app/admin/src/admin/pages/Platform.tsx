@@ -8,6 +8,7 @@ import {
   SearchInput, Select, StatusBadge, Toggle, inputCls, type Column,
 } from "../ui";
 import { cn } from "../../utils/cn";
+import { useLocale } from "../locale";
 
 const emailOk = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.trim());
 
@@ -15,6 +16,7 @@ const emailOk = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.trim());
 
 export function UsersPage() {
   const { data, mutate, can, toast } = useAdmin();
+  const { t } = useLocale();
   const [q, setQ] = useState("");
   const [status, setStatus] = useState("all");
   const [viewing, setViewing] = useState<PlatformUser | null>(null);
@@ -31,9 +33,9 @@ export function UsersPage() {
   const columns: Column<PlatformUser>[] = [
     { key: "name", header: "Name", render: (u) => <div className="flex items-center gap-2"><span className="font-semibold">{u.name}</span>{u.demo && <DemoTag />}</div> },
     { key: "email", header: "Email", render: (u) => <span className="text-steel">{u.email}</span> },
-    { key: "role", header: "Role", render: (u) => u.role },
+    { key: "role", header: "Role", render: (u) => t(u.role) },
     { key: "status", header: "Status", render: (u) => <StatusBadge status={u.status} /> },
-    { key: "last", header: "Last active", render: (u) => <span className="text-xs text-steel">{u.lastActive ? fmtDate(u.lastActive) : "Never"}</span> },
+    { key: "last", header: "Last active", render: (u) => <span className="text-xs text-steel">{u.lastActive ? fmtDate(u.lastActive) : t("Never")}</span> },
     { key: "created", header: "Created", render: (u) => <span className="text-xs text-steel">{fmtDate(u.created)}</span>, hideOnMobile: true },
   ];
 
@@ -62,10 +64,10 @@ export function UsersPage() {
         {viewing && (
           <dl className="space-y-4 text-sm">
             <div className="flex items-center gap-2 text-lg font-bold">{viewing.name}{viewing.demo && <DemoTag />}</div>
-            {[["Email", viewing.email], ["Role", viewing.role], ["Last active", viewing.lastActive ? fmtDate(viewing.lastActive) : "Never"], ["Created", fmtDate(viewing.created)]].map(([k, v]) => (
-              <div key={k}><dt className="text-xs text-steel">{k}</dt><dd className="mt-0.5">{v}</dd></div>
+            {[["Email", viewing.email], ["Role", t(viewing.role)], ["Last active", viewing.lastActive ? fmtDate(viewing.lastActive) : t("Never")], ["Created", fmtDate(viewing.created)]].map(([k, v]) => (
+              <div key={k}><dt className="text-xs text-steel">{t(k)}</dt><dd className="mt-0.5">{v}</dd></div>
             ))}
-            <div><dt className="text-xs text-steel">Status</dt><dd className="mt-1"><StatusBadge status={viewing.status} /></dd></div>
+            <div><dt className="text-xs text-steel">{t("Status")}</dt><dd className="mt-1"><StatusBadge status={viewing.status} /></dd></div>
           </dl>
         )}
       </Drawer>
@@ -99,6 +101,7 @@ export function UsersPage() {
 
 export function AdministratorsPage() {
   const { data, mutate, can, toast, navigate } = useAdmin();
+  const { t } = useLocale();
   const [editing, setEditing] = useState<Administrator | null>(null);
   const [confirm, setConfirm] = useState<{ admin: Administrator; kind: "suspend" | "remove" } | null>(null);
   const [touched, setTouched] = useState(false);
@@ -127,7 +130,7 @@ export function AdministratorsPage() {
     { key: "email", header: "Email", render: (a) => <span className="text-steel">{a.email}</span> },
     { key: "role", header: "Role", render: (a) => <span className={cn("inline-flex items-center gap-1.5", a.roleId === "super" && "text-[#9cc6ff]")}>{a.roleId === "super" && <KeyRound className="h-3 w-3" aria-hidden />}{roleName(a.roleId)}</span> },
     { key: "status", header: "Status", render: (a) => <StatusBadge status={a.status} /> },
-    { key: "login", header: "Last login", render: (a) => <span className="text-xs text-steel">{a.lastLogin ? fmtDate(a.lastLogin) : "Never"}</span> },
+    { key: "login", header: "Last login", render: (a) => <span className="text-xs text-steel">{a.lastLogin ? fmtDate(a.lastLogin) : t("Never")}</span> },
     { key: "created", header: "Created", render: (a) => <span className="text-xs text-steel">{fmtDate(a.created)}</span>, hideOnMobile: true },
   ];
 
@@ -153,7 +156,7 @@ export function AdministratorsPage() {
             ]} />;
           }} />
       </Panel>
-      <p className="mt-3 text-[11px] text-steel">The last active Super Administrator cannot be suspended or removed, to prevent losing access to the Control Center.</p>
+      <p className="mt-3 text-[11px] text-steel">{t("The last active Super Administrator cannot be suspended or removed, to prevent losing access to the Control Center.")}</p>
 
       <Modal open={!!editing} onClose={() => setEditing(null)} title={isNew ? "Add administrator" : "Edit administrator"}
         description={isNew ? "The new administrator will appear as Pending until they accept an invitation (requires email integration)." : undefined}
@@ -163,13 +166,13 @@ export function AdministratorsPage() {
             <Field label="Full name" htmlFor="ad-name" error={touched && !editing.name.trim() ? "Name is required." : undefined}><input id="ad-name" autoFocus className={inputCls} value={editing.name} onChange={(e) => setEditing({ ...editing, name: e.target.value })} /></Field>
             <Field label="Work email" htmlFor="ad-email" error={touched && !emailOk(editing.email) ? "Enter a valid email address." : emailTaken ? "An administrator with this email already exists." : undefined}><input id="ad-email" type="email" className={inputCls} value={editing.email} onChange={(e) => setEditing({ ...editing, email: e.target.value })} /></Field>
             <div>
-              <div className="mb-1.5 text-xs font-semibold text-snow/90">Role</div>
-              <div className="grid gap-2" role="radiogroup" aria-label="Role">
+              <div className="mb-1.5 text-xs font-semibold text-snow/90">{t("Role")}</div>
+              <div className="grid gap-2" role="radiogroup" aria-label={t("Role")}>
                 {data.roles.filter((r) => r.id !== "super" || can("roles.edit")).map((r) => (
                   <button key={r.id} type="button" role="radio" aria-checked={editing.roleId === r.id} onClick={() => setEditing({ ...editing, roleId: r.id })}
                     className={cn("flex items-start justify-between gap-3 rounded-lg border p-3 text-left transition-colors", editing.roleId === r.id ? "border-tech bg-tech/10" : "border-white/10 hover:border-white/20")}>
-                    <span><span className="block text-sm font-semibold">{r.name}</span><span className="mt-0.5 block text-[11px] text-steel">{r.description}</span></span>
-                    <span className="shrink-0 font-mono text-[10px] text-steel">{r.permissions.length} perms</span>
+                    <span><span className="block text-sm font-semibold">{t(r.name)}</span><span className="mt-0.5 block text-[11px] text-steel">{t(r.description)}</span></span>
+                    <span className="shrink-0 font-mono text-[10px] text-steel">{r.permissions.length} {t("perms")}</span>
                   </button>
                 ))}
               </div>
@@ -195,6 +198,7 @@ export function AdministratorsPage() {
 
 export function RolesPage() {
   const { data, mutate, can, toast } = useAdmin();
+  const { t } = useLocale();
   const [selected, setSelected] = useState("admin");
   const [draft, setDraft] = useState<string[] | null>(null);
   const [creating, setCreating] = useState(false);
@@ -225,21 +229,21 @@ export function RolesPage() {
                 <button onClick={() => { setSelected(r.id); setDraft(null); }} aria-current={selected === r.id}
                   className={cn("w-full rounded-lg px-3 py-2.5 text-left transition-colors", selected === r.id ? "bg-hn/40" : "hover:bg-white/[0.03]")}>
                   <span className="flex items-center justify-between gap-2">
-                    <span className="flex items-center gap-2 text-sm font-semibold">{r.locked && <Lock className="h-3 w-3 text-volt" aria-label="Locked role" />}{r.name}</span>
-                    <span className="font-mono text-[10px] text-steel">{assigned(r.id)} admin{assigned(r.id) === 1 ? "" : "s"}</span>
+                    <span className="flex items-center gap-2 text-sm font-semibold">{r.locked && <Lock className="h-3 w-3 text-volt" aria-label={t("Locked role")} />}{t(r.name)}</span>
+                    <span className="font-mono text-[10px] text-steel">{assigned(r.id)} {assigned(r.id) === 1 ? t("admin") : t("admins")}</span>
                   </span>
-                  <span className="mt-0.5 block text-[11px] leading-snug text-steel">{r.description}</span>
+                  <span className="mt-0.5 block text-[11px] leading-snug text-steel">{t(r.description)}</span>
                 </button>
               </li>
             ))}
           </ul>
         </Panel>
 
-        <Panel padded={false} title={<span className="flex items-center gap-2">{role.name}{role.locked && <span className="font-mono text-[10px] font-normal uppercase tracking-[0.12em] text-volt">Full access · locked</span>}</span>}
-          description={`${perms.length} of ${permissionModules.reduce((s, m) => s + m.actions.length, 0)} permissions`}
+        <Panel padded={false} title={<span className="flex items-center gap-2">{t(role.name)}{role.locked && <span className="font-mono text-[10px] font-normal uppercase tracking-[0.12em] text-volt">{t("Full access · locked")}</span>}</span>}
+          description={`${perms.length} ${t("of")} ${permissionModules.reduce((s, m) => s + m.actions.length, 0)} ${t("permissions")}`}
           action={editable && (
             <div className="flex gap-2">
-              {!["admin", "manager", "editor", "support"].includes(role.id) && <Button size="sm" variant="ghost" icon={Trash2} disabled={assigned(role.id) > 0} title={assigned(role.id) ? "Reassign administrators first" : undefined} onClick={() => setToDelete(role)}>Delete</Button>}
+              {!["admin", "manager", "editor", "support"].includes(role.id) && <Button size="sm" variant="ghost" icon={Trash2} disabled={assigned(role.id) > 0} title={assigned(role.id) ? t("Reassign administrators first") : undefined} onClick={() => setToDelete(role)}>Delete</Button>}
               <Button size="sm" variant="ghost" disabled={!draft} onClick={() => setDraft(null)}>Discard</Button>
               <Button size="sm" variant="primary" icon={Check} disabled={!draft} onClick={() => { mutate("roles", (l) => l.map((r) => r.id === role.id ? { ...r, permissions: perms } : r), { action: "Changed permissions", module: "Roles", target: role.name }); setDraft(null); toast(`Permissions updated for ${role.name}.`); }}>Save</Button>
             </div>
@@ -251,7 +255,7 @@ export function RolesPage() {
               return (
                 <div key={m.module} className="grid gap-3 px-5 py-3.5 sm:grid-cols-[200px_1fr] sm:items-center">
                   <div className="flex items-center justify-between sm:justify-start sm:gap-3">
-                    <span className="text-sm font-semibold">{m.label}</span>
+                    <span className="text-sm font-semibold">{t(m.label)}</span>
                     <button disabled={!editable} onClick={() => toggleModule(m.module, m.actions)} className="font-mono text-[10px] text-steel hover:text-snow disabled:hover:text-steel">{on}/{keys.length}</button>
                   </div>
                   <div className="flex flex-wrap gap-1.5">
@@ -272,7 +276,7 @@ export function RolesPage() {
               );
             })}
           </div>
-          {!editable && <p className="border-t border-white/[0.06] px-5 py-3 text-[11px] text-steel">{role.locked ? "Super Administrator always has every permission and cannot be edited." : "Your role cannot edit permissions."}</p>}
+          {!editable && <p className="border-t border-white/[0.06] px-5 py-3 text-[11px] text-steel">{role.locked ? t("Super Administrator always has every permission and cannot be edited.") : t("Your role cannot edit permissions.")}</p>}
         </Panel>
       </div>
 
@@ -295,16 +299,17 @@ export function RolesPage() {
 
 /** Lista de etiquetas editable: se escribe y se confirma con Enter. */
 function TagInput({ label, hint, value, onChange, placeholder }: { label: string; hint?: string; value: string[]; onChange: (next: string[]) => void; placeholder: string }) {
+  const { t } = useLocale();
   const [text, setText] = useState("");
   return (
     <div>
-      <label className="mb-1.5 block text-xs font-semibold text-snow/90">{label}</label>
-      <input className={inputCls} value={text} placeholder={placeholder} aria-label={label}
+      <label className="mb-1.5 block text-xs font-semibold text-snow/90">{t(label)}</label>
+      <input className={inputCls} value={text} placeholder={t(placeholder)} aria-label={t(label)}
         onChange={(e) => setText(e.target.value)}
         onKeyDown={(e) => { if (e.key === "Enter" && text.trim()) { e.preventDefault(); onChange([...value, text.trim()]); setText(""); } }} />
-      {hint && <p className="mt-1 text-[11px] text-steel">{hint}</p>}
+      {hint && <p className="mt-1 text-[11px] text-steel">{t(hint)}</p>}
       <div className="mt-2 flex flex-wrap gap-1.5">
-        {value.map((f, i) => <button key={f + i} type="button" onClick={() => onChange(value.filter((_, j) => j !== i))} className="rounded border border-white/10 px-2 py-0.5 text-xs text-snow/90 hover:border-red-300/40" aria-label={`Remove ${f}`}>{f} ×</button>)}
+        {value.map((f, i) => <button key={f + i} type="button" onClick={() => onChange(value.filter((_, j) => j !== i))} className="rounded border border-white/10 px-2 py-0.5 text-xs text-snow/90 hover:border-red-300/40" aria-label={`${t("Remove")} ${f}`}>{f} ×</button>)}
       </div>
     </div>
   );
@@ -312,6 +317,7 @@ function TagInput({ label, hint, value, onChange, placeholder }: { label: string
 
 export function ServicesPage() {
   const { data, mutate, can, toast } = useAdmin();
+  const { t } = useLocale();
   const [editing, setEditing] = useState<Service | null>(null);
   const [toDelete, setToDelete] = useState<Service | null>(null);
   if (!can("services.view")) return <Forbidden permission="services.view" />;
@@ -335,7 +341,7 @@ export function ServicesPage() {
             <article key={s.id} className="group flex flex-col rounded-xl border border-white/[0.07] bg-ink/80 p-5 transition-colors hover:border-tech/40">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex h-9 w-9 items-center justify-center rounded-md border border-white/[0.08] bg-obsidian text-steel group-hover:text-volt"><Briefcase className="h-4 w-4" aria-hidden /></div>
-                <RowMenu label={`Actions for ${s.name}`} actions={[
+                <RowMenu label={`${t("Actions for")} ${s.name}`} actions={[
                   { label: "Edit", icon: Pencil, onClick: () => setEditing({ ...s }), hidden: !can("services.edit") },
                   { label: "Duplicate", icon: Copy, onClick: () => { mutate("services", (l) => [{ ...s, id: newId("s"), name: `${s.name} (copy)`, status: "Draft", visible: false, demo: false }, ...l], { action: "Duplicated service", module: "Services", target: s.name }); toast("Service duplicated as draft."); }, hidden: !can("services.create") },
                   { label: "Delete", icon: Trash2, danger: true, onClick: () => setToDelete(s), hidden: !can("services.delete") },
@@ -343,16 +349,16 @@ export function ServicesPage() {
               </div>
               <h3 className="mt-4 flex items-center gap-2 text-base font-bold">{s.name}{s.demo && <DemoTag />}</h3>
               <p className="mt-1 text-sm leading-relaxed text-steel">{s.description}</p>
-              {s.duration && <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.14em] text-steel">Duration: {s.duration}</p>}
+              {s.duration && <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.14em] text-steel">{t("Duration:")} {s.duration}</p>}
               {s.scope.length > 0 && (
                 <div className="mt-3">
-                  <div className="font-mono text-[9.5px] uppercase tracking-[0.16em] text-steel/70">Scope</div>
+                  <div className="font-mono text-[9.5px] uppercase tracking-[0.16em] text-steel/70">{t("Scope")}</div>
                   <ul className="mt-1 space-y-0.5 text-xs text-steel">{s.scope.slice(0, 3).map((x) => <li key={x}>· {x}</li>)}</ul>
                 </div>
               )}
               {s.deliverables.length > 0 && (
                 <div className="mt-2">
-                  <div className="font-mono text-[9.5px] uppercase tracking-[0.16em] text-steel/70">Deliverables</div>
+                  <div className="font-mono text-[9.5px] uppercase tracking-[0.16em] text-steel/70">{t("Deliverables")}</div>
                   <ul className="mt-1 space-y-0.5 text-xs text-steel">{s.deliverables.slice(0, 3).map((x) => <li key={x}>· {x}</li>)}</ul>
                 </div>
               )}
@@ -360,8 +366,8 @@ export function ServicesPage() {
                 {s.tech.slice(0, 6).map((f) => <span key={f} className="rounded border border-white/10 px-1.5 py-0.5 font-mono text-[10px] text-steel">{f}</span>)}
               </div>
               <div className="mt-auto flex items-center justify-between gap-2 border-t border-white/[0.06] pt-3 mt-4 text-xs">
-                <span className="text-steel">{categoryLabel(s.category)} · CTA: <span className="text-snow/90">{s.cta}</span></span>
-                <span className="flex items-center gap-2">{!s.visible && <span className="text-steel">Hidden</span>}<StatusBadge status={s.status} /></span>
+                <span className="text-steel">{categoryLabel(s.category)} · {t("CTA:")} <span className="text-snow/90">{t(s.cta)}</span></span>
+                <span className="flex items-center gap-2">{!s.visible && <span className="text-steel">{t("Hidden")}</span>}<StatusBadge status={s.status} /></span>
               </div>
             </article>
           ))}
@@ -380,7 +386,7 @@ export function ServicesPage() {
             </div>
             <Field label="Estimated duration" htmlFor="sv-dur" hint="Shown on the public service page."><input id="sv-dur" className={inputCls} value={editing.duration} onChange={(e) => setEditing({ ...editing, duration: e.target.value })} placeholder="e.g. 2-4 weeks" /></Field>
             <Select hideLabel={false} label="Call to action" value={editing.cta} onChange={(v) => setEditing({ ...editing, cta: v })} options={["Request a Quote", "Talk to an expert", "Book a consultation"]} />
-            <Field label="Image" htmlFor="sv-img" hint="Requires object storage integration (not configured)."><button id="sv-img" type="button" disabled className={cn(inputCls, "text-left text-steel")}>Upload image</button></Field>
+            <Field label="Image" htmlFor="sv-img" hint="Requires object storage integration (not configured)."><button id="sv-img" type="button" disabled className={cn(inputCls, "text-left text-steel")}>{t("Upload image")}</button></Field>
             <TagInput label="Scope" hint="Shown as the first bullets of the public service card." value={editing.scope} onChange={(next) => setEditing({ ...editing, scope: next })} placeholder="Add a scope item and press Enter" />
             <TagInput label="Deliverables" hint="What the customer receives at the end." value={editing.deliverables} onChange={(next) => setEditing({ ...editing, deliverables: next })} placeholder="Add a deliverable and press Enter" />
             <TagInput label="Technologies" hint="Tags rendered on the public service card." value={editing.tech} onChange={(next) => setEditing({ ...editing, tech: next })} placeholder="Add a technology and press Enter" />
@@ -401,6 +407,7 @@ const contentTypes = ["Homepage", "Services", "Store", "Insights", "Announcement
 
 export function ContentPage() {
   const { data, mutate, can, toast } = useAdmin();
+  const { t } = useLocale();
   const [type, setType] = useState("all");
   const [status, setStatus] = useState("all");
   const [q, setQ] = useState("");
@@ -413,7 +420,7 @@ export function ContentPage() {
 
   const columns: Column<ContentItem>[] = [
     { key: "title", header: "Title", render: (c) => <div className="flex items-center gap-2"><FileText className="h-4 w-4 shrink-0 text-steel" aria-hidden /><span className="font-semibold">{c.title}</span>{c.demo && <DemoTag />}</div> },
-    { key: "type", header: "Type", render: (c) => <span className="font-mono text-xs text-steel">{c.type}</span> },
+    { key: "type", header: "Type", render: (c) => <span className="font-mono text-xs text-steel">{t(c.type)}</span> },
     { key: "status", header: "Status", render: (c) => <StatusBadge status={c.status} /> },
     { key: "author", header: "Author", render: (c) => <span className="text-steel">{c.author}</span> },
     { key: "updated", header: "Updated", render: (c) => <span className="text-xs text-steel">{fmtDate(c.updated)}</span> },
@@ -427,7 +434,7 @@ export function ContentPage() {
       <div className="mb-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
         {(["Published", "Draft", "Scheduled", "Archived"] as PublishStatus[]).map((s) => (
           <button key={s} onClick={() => setStatus(status === s ? "all" : s)} aria-pressed={status === s} className={cn("rounded-xl border p-4 text-left transition-colors", status === s ? "border-tech bg-tech/10" : "border-white/[0.07] bg-ink/80 hover:border-white/15")}>
-            <div className="text-xs text-steel">{s}</div><div className="mt-1 text-2xl font-extrabold tabular-nums">{data.content.filter((c) => c.status === s).length}</div>
+            <div className="text-xs text-steel">{t(s)}</div><div className="mt-1 text-2xl font-extrabold tabular-nums">{data.content.filter((c) => c.status === s).length}</div>
           </button>
         ))}
       </div>
@@ -457,7 +464,7 @@ export function ContentPage() {
               <Select hideLabel={false} label="Type" value={editing.type} onChange={(v) => setEditing({ ...editing, type: v })} options={contentTypes} />
               <Select hideLabel={false} label="Status" value={editing.status} onChange={(v) => setEditing({ ...editing, status: v as PublishStatus })} options={["Draft", "Published", "Scheduled", "Archived"]} />
             </div>
-            {editing.status === "Scheduled" && <p className="text-[11px] text-steel">Scheduled publishing runs on the server. Without a backend, scheduled items stay unpublished.</p>}
+            {editing.status === "Scheduled" && <p className="text-[11px] text-steel">{t("Scheduled publishing runs on the server. Without a backend, scheduled items stay unpublished.")}</p>}
           </div>
         )}
       </Modal>

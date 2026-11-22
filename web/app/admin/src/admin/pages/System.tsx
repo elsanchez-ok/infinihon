@@ -5,6 +5,7 @@ import { fmtDateTime, fmtDay, fmtTime, useAdmin } from "../store";
 import { Button, DemoTag, EmptyState, Field, FilterBar, Forbidden, PageHeader, Panel, SearchInput, Select, StatusBadge, Tabs, Toggle, inputCls } from "../ui";
 import { useTheme } from "../../components/ui";
 import { cn } from "../../utils/cn";
+import { useLocale } from "../locale";
 
 /* ─────────── Notifications ─────────── */
 
@@ -12,6 +13,7 @@ const noticeTypes = ["All", "System", "Security", "Orders", "Inventory", "Users"
 
 export function NotificationsPage() {
   const { data, mutate, can } = useAdmin();
+  const { t } = useLocale();
   const [tab, setTab] = useState("All");
   const [unreadOnly, setUnreadOnly] = useState(false);
   if (!can("notifications.view")) return <Forbidden permission="notifications.view" />;
@@ -25,7 +27,7 @@ export function NotificationsPage() {
       <Panel padded={false}>
         <div className="flex flex-col gap-2 px-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
           <Tabs tabs={noticeTypes} value={tab} onChange={setTab} />
-          <label className="flex items-center gap-2 px-2 py-2 text-xs text-steel"><input type="checkbox" checked={unreadOnly} onChange={(e) => setUnreadOnly(e.target.checked)} className="accent-[#0066FF]" />Unread only</label>
+          <label className="flex items-center gap-2 px-2 py-2 text-xs text-steel"><input type="checkbox" checked={unreadOnly} onChange={(e) => setUnreadOnly(e.target.checked)} className="accent-[#0066FF]" />{t("Unread only")}</label>
         </div>
         {rows.length ? (
           <ul className="divide-y divide-white/[0.05]">
@@ -33,8 +35,8 @@ export function NotificationsPage() {
               <li key={n.id} className={cn("flex items-start gap-4 px-5 py-4", !n.read && "bg-hn/[0.12]")}>
                 <span className={cn("mt-1.5 h-2 w-2 shrink-0 rounded-full", n.read ? "border border-steel/50" : "bg-volt")} aria-hidden />
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm text-snow/90">{n.title}</p>
-                  <p className="mt-1 flex flex-wrap items-center gap-2 text-[11px] text-steel"><span className="font-mono uppercase tracking-[0.1em]">{n.type}</span>·<time dateTime={n.date}>{fmtDateTime(n.date)}</time>·<span>{n.read ? "Read" : "Unread"}</span></p>
+                  <p className="text-sm text-snow/90">{t(n.title)}</p>
+                  <p className="mt-1 flex flex-wrap items-center gap-2 text-[11px] text-steel"><span className="font-mono uppercase tracking-[0.1em]">{t(n.type)}</span>·<time dateTime={n.date}>{fmtDateTime(n.date)}</time>·<span>{n.read ? t("Read") : t("Unread")}</span></p>
                 </div>
                 <Button size="sm" variant="ghost" onClick={() => mutate("notifications", (l) => l.map((x) => x.id === n.id ? { ...x, read: !x.read } : x))}>{n.read ? "Mark unread" : "Mark read"}</Button>
               </li>
@@ -52,6 +54,7 @@ const DAY = 86400000;
 
 export function ActivityPage() {
   const { data, can } = useAdmin();
+  const { t } = useLocale();
   const [user, setUser] = useState("all");
   const [module, setModule] = useState("all");
   const [range, setRange] = useState("all");
@@ -89,15 +92,15 @@ export function ActivityPage() {
                 <ol className="space-y-2">
                   {items.map((a) => (
                     <li key={a.id} className="grid gap-3 rounded-lg border border-white/[0.06] bg-obsidian/40 p-4 sm:grid-cols-[1.1fr_1.1fr_1.3fr_auto] sm:items-center">
-                      {[["Administrator", a.actor], ["Action", a.action], [a.module, a.target]].map(([k, v]) => (
+                      {[["Administrator", a.actor], ["Action", t(a.action)], [t(a.module), a.target]].map(([k, v]) => (
                         <div key={k} className="min-w-0">
-                          <div className="font-mono text-[9.5px] uppercase tracking-[0.16em] text-steel/80">{k}</div>
+                          <div className="font-mono text-[9.5px] uppercase tracking-[0.16em] text-steel/80">{t(k)}</div>
                           <div className="mt-0.5 truncate text-sm font-medium text-snow">{v}</div>
                         </div>
                       ))}
                       <div className="flex items-center gap-2 sm:flex-col sm:items-end">
                         <time dateTime={a.date} className="font-mono text-[11px] text-steel">{fmtTime(a.date)}</time>
-                        {a.demo ? <DemoTag /> : <span className="rounded border border-tech/40 px-1.5 font-mono text-[9px] uppercase tracking-[0.12em] text-[#9cc6ff]">This session</span>}
+                        {a.demo ? <DemoTag /> : <span className="rounded border border-tech/40 px-1.5 font-mono text-[9px] uppercase tracking-[0.12em] text-[#9cc6ff]">{t("This session")}</span>}
                       </div>
                     </li>
                   ))}
@@ -122,13 +125,14 @@ function browserLabel() {
 
 export function SecurityPage() {
   const { data, can, navigate, user } = useAdmin();
+  const { t } = useLocale();
   if (!can("security.view")) return <Forbidden permission="security.view" />;
   const s = data.settings;
   const events = data.activity.filter((a) => ["Roles", "Administrators", "Security", "Settings"].includes(a.module)).slice(0, 8);
   const controls = [
-    { icon: KeyRound, label: "Password policy", value: `Minimum ${s.minPasswordLength} characters`, status: "Configured" },
+    { icon: KeyRound, label: "Password policy", value: `${t("Minimum")} ${s.minPasswordLength} ${t("characters")}`, status: "Configured" },
     { icon: ShieldCheck, label: "Two-factor authentication", value: s.require2fa ? "Required for administrators" : "Optional", status: s.require2fa ? "Configured" : "Not required" },
-    { icon: Timer, label: "Session timeout", value: `${s.sessionTimeout} minutes of inactivity`, status: "Configured" },
+    { icon: Timer, label: "Session timeout", value: `${s.sessionTimeout} ${t("minutes of inactivity")}`, status: "Configured" },
     { icon: LogIn, label: "Public registration", value: s.allowRegistration ? "Enabled" : "Disabled", status: s.allowRegistration ? "Enabled" : "Disabled" },
   ];
   return (
@@ -138,14 +142,14 @@ export function SecurityPage() {
         actions={can("settings.view") && <Button icon={KeyRound} onClick={() => navigate("/admin/settings")}>Edit policies</Button>} />
       <div className="mb-4 flex items-start gap-3 rounded-xl border border-emerald-300/20 bg-emerald-300/[0.04] p-4 text-sm">
         <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-emerald-200" aria-hidden />
-        <p className="text-steel"><span className="font-semibold text-snow">Access is enforced on the server.</span> This panel is only reachable with a Supabase session whose profile has <span className="font-mono text-xs">is_admin</span>, and row level security rejects unauthorized reads and writes. The interface below mirrors that state; it is not the enforcement point.</p>
+        <p className="text-steel"><span className="font-semibold text-snow">{t("Access is enforced on the server.")}</span> {t("This panel is only reachable with a Supabase session whose profile has")} <span className="font-mono text-xs">is_admin</span>{t(", and row level security rejects unauthorized reads and writes. The interface below mirrors that state; it is not the enforcement point.")}</p>
       </div>
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {controls.map((c) => (
           <div key={c.label} className="rounded-xl border border-white/[0.07] bg-ink/80 p-4">
             <div className="flex items-center justify-between"><c.icon className="h-4 w-4 text-steel" aria-hidden /><StatusBadge status={c.status} /></div>
-            <div className="mt-4 text-sm font-semibold">{c.label}</div>
-            <div className="mt-0.5 text-xs text-steel">{c.value}</div>
+            <div className="mt-4 text-sm font-semibold">{t(c.label)}</div>
+            <div className="mt-0.5 text-xs text-steel">{t(c.value)}</div>
           </div>
         ))}
       </div>
@@ -153,10 +157,10 @@ export function SecurityPage() {
         <Panel title="Active sessions" description="Sessions are issued by Supabase Auth.">
           <div className="flex items-center gap-3 rounded-lg border border-white/[0.07] bg-obsidian/40 p-3">
             <Monitor className="h-5 w-5 text-steel" aria-hidden />
-            <div className="flex-1"><div className="text-sm font-semibold">{browserLabel()}</div><div className="text-xs text-steel">This browser · {user?.email ?? "authenticated session"}</div></div>
+            <div className="flex-1"><div className="text-sm font-semibold">{browserLabel()}</div><div className="text-xs text-steel">{t("This browser")} · {user?.email ?? t("authenticated session")}</div></div>
             <StatusBadge status="Current" />
           </div>
-          <p className="mt-3 text-[11px] text-steel">Sign out from the profile menu to revoke this session; other sessions are revoked in Supabase Auth.</p>
+          <p className="mt-3 text-[11px] text-steel">{t("Sign out from the profile menu to revoke this session; other sessions are revoked in Supabase Auth.")}</p>
         </Panel>
         <Panel title="Login activity">
           <EmptyState icon={LogIn} title="No login activity recorded." description="Sign-in attempts, successes and failures will appear here once Supabase Auth logs are enabled." />
@@ -166,8 +170,8 @@ export function SecurityPage() {
             <ul className="divide-y divide-white/[0.05]">
               {events.map((e) => (
                 <li key={e.id} className="flex flex-col gap-1 py-3 sm:flex-row sm:items-center sm:gap-4">
-                  <span className="w-28 font-mono text-[10px] uppercase tracking-[0.12em] text-steel">{e.module}</span>
-                  <span className="flex-1 text-sm"><span className="font-semibold">{e.actor}</span> <span className="text-steel">{e.action.toLowerCase()}</span> {e.target}</span>
+                  <span className="w-28 font-mono text-[10px] uppercase tracking-[0.12em] text-steel">{t(e.module)}</span>
+                  <span className="flex-1 text-sm"><span className="font-semibold">{e.actor}</span> <span className="text-steel">{t(e.action).toLowerCase()}</span> {e.target}</span>
                   <span className="flex items-center gap-2 text-xs text-steel">{fmtDateTime(e.date)}{e.demo && <DemoTag />}</span>
                 </li>
               ))}
@@ -185,6 +189,7 @@ const settingsTabs = ["General", "Commerce", "Authentication", "Notifications", 
 
 export function SettingsPage() {
   const { data, mutate, can, toast } = useAdmin();
+  const { t } = useLocale();
   const [tab, setTab] = useState("General");
   const [activeTheme, setTheme] = useTheme();
   const [form, setForm] = useState<Settings>(data.settings);
@@ -217,9 +222,9 @@ export function SettingsPage() {
           <Panel title="Company" description="Shown across the site, emails and invoices.">
             <div className="grid gap-4 sm:grid-cols-2">
               <Field label="Company name" htmlFor="st-name" error={errors.companyName}><input id="st-name" className={inputCls} value={form.companyName} onChange={(e) => set("companyName", e.target.value)} /></Field>
-              <Field label="Logo" htmlFor="st-logo" hint="Requires object storage (not configured)."><button id="st-logo" type="button" disabled className={cn(inputCls, "text-left text-steel")}>Upload logo</button></Field>
-              <Field label="Contact email" htmlFor="st-email" error={errors.contactEmail}><input id="st-email" type="email" className={inputCls} placeholder="Not set" value={form.contactEmail} onChange={(e) => set("contactEmail", e.target.value)} /></Field>
-              <Field label="Contact phone" htmlFor="st-phone"><input id="st-phone" type="tel" className={inputCls} placeholder="Not set" value={form.contactPhone} onChange={(e) => set("contactPhone", e.target.value)} /></Field>
+              <Field label="Logo" htmlFor="st-logo" hint="Requires object storage (not configured)."><button id="st-logo" type="button" disabled className={cn(inputCls, "text-left text-steel")}>{t("Upload logo")}</button></Field>
+              <Field label="Contact email" htmlFor="st-email" error={errors.contactEmail}><input id="st-email" type="email" className={inputCls} placeholder={t("Not set")} value={form.contactEmail} onChange={(e) => set("contactEmail", e.target.value)} /></Field>
+              <Field label="Contact phone" htmlFor="st-phone"><input id="st-phone" type="tel" className={inputCls} placeholder={t("Not set")} value={form.contactPhone} onChange={(e) => set("contactPhone", e.target.value)} /></Field>
             </div>
           </Panel>
         )}
@@ -227,7 +232,7 @@ export function SettingsPage() {
           <Panel title="Commerce">
             <div className="grid gap-4 sm:grid-cols-2">
               <Select hideLabel={false} label="Currency" value={form.currency} onChange={(v) => set("currency", v)} options={[{ value: "", label: "Not set" }, { value: "HNL", label: "HNL — Honduran lempira" }, { value: "USD", label: "USD — US dollar" }]} />
-              <Field label="Default tax (%)" htmlFor="st-tax" error={errors.taxRate} hint="Confirm with your accountant before publishing prices."><input id="st-tax" inputMode="decimal" className={inputCls} placeholder="Not set" value={form.taxRate} onChange={(e) => set("taxRate", e.target.value)} /></Field>
+              <Field label="Default tax (%)" htmlFor="st-tax" error={errors.taxRate} hint="Confirm with your accountant before publishing prices."><input id="st-tax" inputMode="decimal" className={inputCls} placeholder={t("Not set")} value={form.taxRate} onChange={(e) => set("taxRate", e.target.value)} /></Field>
             </div>
             <div className="mt-2 divide-y divide-white/[0.05]">
               <Toggle label="Low stock alerts" description="Create a notification when an adjustment drops stock to or below the minimum." checked={form.lowStockAlerts} onChange={(v) => set("lowStockAlerts", v)} disabled={!editable} />
@@ -260,20 +265,20 @@ export function SettingsPage() {
             <div className="divide-y divide-white/[0.05]">
               <Toggle label="Require two-factor authentication for administrators" checked={form.require2fa} onChange={(v) => set("require2fa", v)} disabled={!editable} />
             </div>
-            <p className="mt-3 text-[11px] text-steel">Role permissions are managed in Roles & Permissions. The frontend only hides actions — the backend must reject unauthorized requests.</p>
+            <p className="mt-3 text-[11px] text-steel">{t("Role permissions are managed in Roles & Permissions. The frontend only hides actions — the backend must reject unauthorized requests.")}</p>
           </Panel>
         )}
         {tab === "Appearance" && (
           <Panel title="Appearance">
-            <div role="radiogroup" aria-label="Theme" className="grid gap-3 sm:grid-cols-2">
-              {[{ id: "Obsidian", note: "Default InfiniHon Corp. dark theme." }, { id: "Light", note: "Bright theme for daytime use." }].map((t) => {
-                const checked = (t.id === "Light") === (activeTheme === "light");
+            <div role="radiogroup" aria-label={t("Theme")} className="grid gap-3 sm:grid-cols-2">
+              {[{ id: "Obsidian", note: "Default InfiniHon Corp. dark theme." }, { id: "Light", note: "Bright theme for daytime use." }].map((theme) => {
+                const checked = (theme.id === "Light") === (activeTheme === "light");
                 return (
-                <button key={t.id} type="button" role="radio" aria-checked={checked}
-                  onClick={() => setTheme(t.id === "Light" ? "light" : "dark")}
+                <button key={theme.id} type="button" role="radio" aria-checked={checked}
+                  onClick={() => setTheme(theme.id === "Light" ? "light" : "dark")}
                   className={cn("rounded-lg border p-3 text-left", checked ? "border-tech bg-tech/10" : "border-white/10")}>
-                  <div className={cn("mb-3 h-14 rounded border border-white/10", t.id === "Obsidian" ? "bg-[linear-gradient(135deg,#05070A,#0A0F14_60%,#003B73)]" : "bg-[#F5F7FA]")} />
-                  <div className="text-sm font-semibold">{t.id}</div><div className="text-[11px] text-steel">{t.note}</div>
+                  <div className={cn("mb-3 h-14 rounded border border-white/10", theme.id === "Obsidian" ? "bg-[linear-gradient(135deg,#05070A,#0A0F14_60%,#003B73)]" : "bg-[#F5F7FA]")} />
+                  <div className="text-sm font-semibold">{t(theme.id)}</div><div className="text-[11px] text-steel">{t(theme.note)}</div>
                 </button>
                 );
               })}
@@ -282,7 +287,7 @@ export function SettingsPage() {
             <p className="mt-2 text-[11px] text-steel">Branding: InfiniHon Corp. · Technology & Infrastructure · Hecho en Honduras.</p>
           </Panel>
         )}
-        {!editable && <p className="text-xs text-steel">Read-only: your role cannot edit settings.</p>}
+        {!editable && <p className="text-xs text-steel">{t("Read-only: your role cannot edit settings.")}</p>}
       </fieldset>
     </>
   );

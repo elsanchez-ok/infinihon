@@ -6,11 +6,13 @@ import { uploadProductImage } from "../supabaseSync";
 import { RowMenu } from "../RowMenu";
 import { Button, ConfirmDialog, DataTable, DemoTag, EmptyState, Field, FilterBar, Forbidden, PageHeader, Panel, SearchInput, Select, StatusBadge, inputCls, type Column } from "../ui";
 import { cn } from "../../utils/cn";
+import { useLocale } from "../locale";
 
 const DAY = 86400000;
 
 export function ProductsPage() {
   const { data, mutate, navigate, can, toast } = useAdmin();
+  const { t } = useLocale();
   const [q, setQ] = useState("");
   const [category, setCategory] = useState("all");
   const [status, setStatus] = useState("all");
@@ -19,7 +21,7 @@ export function ProductsPage() {
   const [date, setDate] = useState("all");
   const [toDelete, setToDelete] = useState<Product | null>(null);
 
-  const catName = (id: string) => data.categories.find((c) => c.id === id)?.name ?? "Uncategorized";
+  const catName = (id: string) => data.categories.find((c) => c.id === id)?.name ?? t("Uncategorized");
   const rows = useMemo(() => data.products.filter((p) => {
     const text = `${p.name} ${p.sku} ${p.brand}`.toLowerCase();
     const display = productDisplayStatus(p);
@@ -54,7 +56,7 @@ export function ProductsPage() {
     { key: "sku", header: "SKU", render: (p) => <span className="font-mono text-xs text-steel">{p.sku}</span> },
     { key: "category", header: "Category", render: (p) => catName(p.category) },
     { key: "price", header: "Price", render: (p) => <span className={p.price === null ? "text-steel" : ""}>{fmtMoney(p.price, data.settings.currency)}</span> },
-    { key: "stock", header: "Stock", render: (p) => p.stock === null ? <span className="text-steel">Digital</span> : <span className={cn("tabular-nums", productStockState(p) !== "In stock" && "text-amber-100")}>{p.stock}</span> },
+    { key: "stock", header: "Stock", render: (p) => p.stock === null ? <span className="text-steel">{t("Digital")}</span> : <span className={cn("tabular-nums", productStockState(p) !== "In stock" && "text-amber-100")}>{p.stock}</span> },
     { key: "status", header: "Status", render: (p) => <StatusBadge status={productDisplayStatus(p)} /> },
     { key: "updated", header: "Updated", render: (p) => <span className="text-xs text-steel">{fmtDate(p.updated)}</span>, hideOnMobile: true },
   ];
@@ -82,7 +84,7 @@ export function ProductsPage() {
             ? <EmptyState title="No products match these filters." description="Try adjusting or clearing the filters." />
             : <EmptyState icon={Package} title="No products yet." description="Create your first product to get started." action={can("products.create") && <Button variant="primary" icon={Plus} onClick={() => navigate("/admin/products/new")}>Create product</Button>} />}
           rowActions={(p) => (
-            <RowMenu label={`Actions for ${p.name}`} actions={[
+            <RowMenu label={`${t("Actions for")} ${p.name}`} actions={[
               { label: "Edit", icon: Pencil, onClick: () => navigate(`/admin/products/${p.id}`), hidden: !can("products.edit") },
               { label: "Duplicate", icon: Copy, onClick: () => duplicate(p), hidden: !can("products.create") },
               p.status === "Archived"
@@ -114,22 +116,24 @@ const sections: [string, string][] = [
 ];
 
 function NumberInput({ id, value, onChange, disabled, placeholder = "Not set" }: { id: string; value: number | null; onChange: (v: number | null) => void; disabled?: boolean; placeholder?: string }) {
-  return <input id={id} type="number" min={0} step="any" inputMode="decimal" disabled={disabled} className={inputCls} placeholder={placeholder}
+  const { t } = useLocale();
+  return <input id={id} type="number" min={0} step="any" inputMode="decimal" disabled={disabled} className={inputCls} placeholder={t(placeholder)}
     value={value ?? ""} onChange={(e) => onChange(e.target.value === "" ? null : Number(e.target.value))} />;
 }
 
 /** Lista de etiquetas de la ficha pública: se escribe y se confirma con Enter. */
 function ProductTags({ label, hint, value, onChange, placeholder }: { label: string; hint?: string; value: string[]; onChange: (next: string[]) => void; placeholder: string }) {
+  const { t } = useLocale();
   const [text, setText] = useState("");
   return (
     <div>
-      <label className="mb-1.5 block text-xs font-semibold text-snow/90">{label}</label>
-      <input className={inputCls} value={text} placeholder={placeholder} aria-label={label}
+      <label className="mb-1.5 block text-xs font-semibold text-snow/90">{t(label)}</label>
+      <input className={inputCls} value={text} placeholder={t(placeholder)} aria-label={t(label)}
         onChange={(e) => setText(e.target.value)}
         onKeyDown={(e) => { if (e.key === "Enter" && text.trim()) { e.preventDefault(); onChange([...value, text.trim()]); setText(""); } }} />
-      {hint && <p className="mt-1 text-[11px] text-steel">{hint}</p>}
+      {hint && <p className="mt-1 text-[11px] text-steel">{t(hint)}</p>}
       <div className="mt-2 flex flex-wrap gap-1.5">
-        {value.map((v, i) => <button key={v + i} type="button" onClick={() => onChange(value.filter((_, j) => j !== i))} className="rounded border border-white/10 px-2 py-0.5 text-xs text-snow/90 hover:border-red-300/40" aria-label={`Remove ${v}`}>{v} ×</button>)}
+        {value.map((v, i) => <button key={v + i} type="button" onClick={() => onChange(value.filter((_, j) => j !== i))} className="rounded border border-white/10 px-2 py-0.5 text-xs text-snow/90 hover:border-red-300/40" aria-label={`${t("Remove")} ${v}`}>{v} ×</button>)}
       </div>
     </div>
   );
@@ -141,6 +145,7 @@ const IMAGE_MAX_MB = 5;
 /** Galería de imágenes del producto: sube archivos reales a Supabase Storage (bucket `product-images`). */
 function ProductImages({ productId, value, onChange }: { productId: string; value: string[]; onChange: (next: string[]) => void }) {
   const { toast } = useAdmin();
+  const { t } = useLocale();
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(0);
 
@@ -167,8 +172,8 @@ function ProductImages({ productId, value, onChange }: { productId: string; valu
         {value.map((url, i) => (
           <div key={url + i} className="group relative aspect-square overflow-hidden rounded-lg border border-white/10 bg-obsidian/40">
             <img src={url} alt="" className="h-full w-full object-cover" loading="lazy" />
-            {i === 0 && <span className="absolute left-1.5 top-1.5 rounded bg-black/70 px-1.5 py-0.5 text-[10px] font-semibold text-snow">Primary</span>}
-            <button type="button" onClick={() => onChange(value.filter((_, j) => j !== i))} aria-label={`Remove image ${i + 1}`}
+            {i === 0 && <span className="absolute left-1.5 top-1.5 rounded bg-black/70 px-1.5 py-0.5 text-[10px] font-semibold text-snow">{t("Primary")}</span>}
+            <button type="button" onClick={() => onChange(value.filter((_, j) => j !== i))} aria-label={`${t("Remove image")} ${i + 1}`}
               className="absolute right-1.5 top-1.5 rounded bg-black/70 p-1 text-snow opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100 hover:bg-red-500/80">
               <X className="h-3.5 w-3.5" aria-hidden />
             </button>
@@ -176,23 +181,24 @@ function ProductImages({ productId, value, onChange }: { productId: string; valu
         ))}
         {Array.from({ length: uploading }).map((_, i) => (
           <div key={`uploading-${i}`} className="flex aspect-square flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-white/10 bg-obsidian/40 text-[11px] text-steel">
-            <Loader2 className="h-5 w-5 animate-spin" aria-hidden />Uploading…
+            <Loader2 className="h-5 w-5 animate-spin" aria-hidden />{t("Uploading…")}
           </div>
         ))}
         <button type="button" onClick={() => inputRef.current?.click()}
           className="flex aspect-square flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-white/15 bg-obsidian/40 text-center text-[11px] text-steel transition-colors hover:border-volt hover:text-snow">
-          <ImagePlus className="h-5 w-5" aria-hidden />{value.length === 0 ? "Add primary image" : "Add image"}
+          <ImagePlus className="h-5 w-5" aria-hidden />{value.length === 0 ? t("Add primary image") : t("Add image")}
         </button>
       </div>
       <input ref={inputRef} type="file" accept={IMAGE_TYPES.join(",")} multiple className="hidden"
         onChange={(e) => { void handleFiles(e.target.files); e.target.value = ""; }} />
-      <p className="mt-3 text-[11px] text-steel">PNG, JPG, WebP or GIF, up to {IMAGE_MAX_MB} MB each. The first image is used as the product’s primary photo.</p>
+      <p className="mt-3 text-[11px] text-steel">{t("PNG, JPG, WebP or GIF, up to")} {IMAGE_MAX_MB} {t("MB each. The first image is used as the product’s primary photo.")}</p>
     </div>
   );
 }
 
 export function ProductEditor({ id }: { id: string }) {
   const { data, mutate, navigate, can, toast } = useAdmin();
+  const { t } = useLocale();
   const existing = data.products.find((p) => p.id === id);
   const isNew = id === "new";
   const [form, setForm] = useState<Product>(() => existing ?? blank());
@@ -231,7 +237,7 @@ export function ProductEditor({ id }: { id: string }) {
     <>
       <PageHeader eyebrow={isNew ? "New product" : "Product editor"} title={isNew ? "Create product" : form.name || "Untitled product"}
         breadcrumbs={[{ label: "Products", to: "/admin/products" }, ...(catName ? [{ label: catName }] : []), { label: isNew ? "New" : existing!.name }]}
-        description={<span className="flex flex-wrap items-center gap-2"><StatusBadge status={productDisplayStatus(form)} />{form.demo && <DemoTag />}{dirty && <span className="text-xs text-amber-100">Unsaved changes</span>}</span>}
+        description={<span className="flex flex-wrap items-center gap-2"><StatusBadge status={productDisplayStatus(form)} />{form.demo && <DemoTag />}{dirty && <span className="text-xs text-amber-100">{t("Unsaved changes")}</span>}</span>}
         actions={canEdit && (
           <>
             {!isNew && form.status !== "Archived" && <Button icon={Archive} onClick={() => save("Archived")}>Archive</Button>}
@@ -239,12 +245,12 @@ export function ProductEditor({ id }: { id: string }) {
             <Button variant="primary" icon={Save} onClick={() => save(isNew ? "Active" : undefined)}>{isNew ? "Save & publish" : "Save changes"}</Button>
           </>
         )} />
-      {!canEdit && <p className="mb-4 rounded-md border border-white/10 bg-white/[0.03] px-3 py-2 text-xs text-steel">Read-only: your role cannot edit products.</p>}
+      {!canEdit && <p className="mb-4 rounded-md border border-white/10 bg-white/[0.03] px-3 py-2 text-xs text-steel">{t("Read-only: your role cannot edit products.")}</p>}
 
       <div className="grid gap-6 lg:grid-cols-[180px_1fr]">
-        <nav className="hidden lg:block" aria-label="Editor sections">
+        <nav className="hidden lg:block" aria-label={t("Editor sections")}>
           <ul className="sticky top-24 space-y-0.5 border-l border-white/[0.07]">
-            {sections.map(([id, label]) => <li key={id}><a href={`#sec-${id}`} className="-ml-px block border-l border-transparent py-1.5 pl-4 text-sm text-steel hover:border-volt hover:text-snow">{label}</a></li>)}
+            {sections.map(([id, label]) => <li key={id}><a href={`#sec-${id}`} className="-ml-px block border-l border-transparent py-1.5 pl-4 text-sm text-steel hover:border-volt hover:text-snow">{t(label)}</a></li>)}
           </ul>
         </nav>
 
@@ -255,7 +261,7 @@ export function ProductEditor({ id }: { id: string }) {
               <Field label="SKU" htmlFor="pe-sku" error={errors.sku} hint="Unique internal identifier."><input id="pe-sku" className={cn(inputCls, "font-mono")} value={form.sku} onChange={(e) => set("sku", e.target.value.toUpperCase())} placeholder="INH-NET-000" /></Field>
               <Field label="Category" htmlFor="pe-category" error={errors.category}>
                 <select id="pe-category" className={cn(inputCls, "[&>option]:bg-ink")} value={form.category} onChange={(e) => set("category", e.target.value)}>
-                  <option value="">Select a category</option>{data.categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+                  <option value="">{t("Select a category")}</option>{data.categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
                 </select>
               </Field>
               <Field label="Brand" htmlFor="pe-brand"><input id="pe-brand" className={inputCls} value={form.brand} onChange={(e) => set("brand", e.target.value)} placeholder="Manufacturer or brand" /></Field>
@@ -266,11 +272,11 @@ export function ProductEditor({ id }: { id: string }) {
           <Panel title="Pricing" description="Leave empty until commercial pricing is confirmed."><div id="sec-Pricing" className="-mt-24 pt-24" />
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
               <Field label={`Price${data.settings.currency ? ` (${data.settings.currency})` : ""}`} htmlFor="pe-price"><NumberInput id="pe-price" value={form.price} onChange={(v) => set("price", v)} /></Field>
-              <Field label="Cost" htmlFor="pe-cost" hint={margin !== null ? `Margin ${margin}%` : undefined}><NumberInput id="pe-cost" value={form.cost} onChange={(v) => set("cost", v)} /></Field>
+              <Field label="Cost" htmlFor="pe-cost" hint={margin !== null ? `${t("Margin")} ${margin}%` : undefined}><NumberInput id="pe-cost" value={form.cost} onChange={(v) => set("cost", v)} /></Field>
               <Field label="Discount (%)" htmlFor="pe-discount"><NumberInput id="pe-discount" value={form.discount} onChange={(v) => set("discount", v)} placeholder="0" /></Field>
               <Field label="Tax (%)" htmlFor="pe-tax"><NumberInput id="pe-tax" value={form.tax} onChange={(v) => set("tax", v)} placeholder="Use default" /></Field>
             </div>
-            {!data.settings.currency && <p className="mt-3 text-[11px] text-steel">No store currency configured yet — set it in Settings → Commerce.</p>}
+            {!data.settings.currency && <p className="mt-3 text-[11px] text-steel">{t("No store currency configured yet — set it in Settings → Commerce.")}</p>}
           </Panel>
 
           <Panel title="Inventory"><div id="sec-Inventory" className="-mt-24 pt-24" />
@@ -298,7 +304,7 @@ export function ProductEditor({ id }: { id: string }) {
                   </div>
                 ))}
               </div>
-            ) : <p className="text-sm text-steel">No specifications yet.</p>}
+            ) : <p className="text-sm text-steel">{t("No specifications yet.")}</p>}
           </Panel>
 
           <Panel title="Public page" description="These blocks appear on the product page of the public store."><div id="sec-Public-page" className="-mt-24 pt-24" />
@@ -310,7 +316,7 @@ export function ProductEditor({ id }: { id: string }) {
               <ProductTags label="What's included" hint="Checklist rendered under the description." value={form.includes} onChange={(v) => set("includes", v)} placeholder="e.g. Power supply" />
               <div>
                 <div className="mb-1.5 flex items-center justify-between">
-                  <label className="text-xs font-semibold text-snow/90">Documentation</label>
+                  <label className="text-xs font-semibold text-snow/90">{t("Documentation")}</label>
                   <Button size="sm" icon={Plus} onClick={() => set("docs", [...form.docs, { t: "", note: "" }])}>Add document</Button>
                 </div>
                 {form.docs.length ? (
@@ -323,7 +329,7 @@ export function ProductEditor({ id }: { id: string }) {
                       </div>
                     ))}
                   </div>
-                ) : <p className="text-sm text-steel">No documents linked.</p>}
+                ) : <p className="text-sm text-steel">{t("No documents linked.")}</p>}
               </div>
             </fieldset>
           </Panel>
@@ -337,12 +343,12 @@ export function ProductEditor({ id }: { id: string }) {
           </Panel>
 
           <Panel title="Visibility"><div id="sec-Visibility" className="-mt-24 pt-24" />
-            <div role="radiogroup" aria-label="Visibility" className="grid gap-2 sm:grid-cols-3">
+            <div role="radiogroup" aria-label={t("Visibility")} className="grid gap-2 sm:grid-cols-3">
               {(["Active", "Draft", "Archived"] as ProductStatus[]).map((s) => (
                 <button key={s} type="button" role="radio" aria-checked={form.status === s} onClick={() => set("status", s)}
                   className={cn("rounded-lg border p-3 text-left transition-colors", form.status === s ? "border-tech bg-tech/10" : "border-white/10 hover:border-white/20")}>
-                  <div className="text-sm font-semibold">{s === "Active" ? "Published" : s}</div>
-                  <div className="mt-0.5 text-[11px] text-steel">{s === "Active" ? "Visible in the store." : s === "Draft" ? "Hidden, still editable." : "Retired from catalog."}</div>
+                  <div className="text-sm font-semibold">{s === "Active" ? t("Published") : t(s)}</div>
+                  <div className="mt-0.5 text-[11px] text-steel">{t(s === "Active" ? "Visible in the store." : s === "Draft" ? "Hidden, still editable." : "Retired from catalog.")}</div>
                 </button>
               ))}
             </div>
@@ -351,7 +357,7 @@ export function ProductEditor({ id }: { id: string }) {
           {!isNew && can("products.delete") && (
             <Panel title="Danger zone">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-sm text-steel">Deleting removes the product permanently from the catalog.</p>
+                <p className="text-sm text-steel">{t("Deleting removes the product permanently from the catalog.")}</p>
                 <Button variant="danger" icon={Trash2} onClick={() => setConfirmDelete(true)}>Delete product</Button>
               </div>
             </Panel>

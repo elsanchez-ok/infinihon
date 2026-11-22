@@ -8,11 +8,13 @@ import {
   SearchInput, Select, StatCard, StatusBadge, Tabs, inputCls, type Column,
 } from "../ui";
 import { cn } from "../../utils/cn";
+import { useLocale } from "../locale";
 
 /* ─────────── Categories ─────────── */
 
 export function CategoriesPage() {
   const { data, mutate, can, toast } = useAdmin();
+  const { t } = useLocale();
   const [editing, setEditing] = useState<Category | null>(null);
   const [toDelete, setToDelete] = useState<Category | null>(null);
   const [error, setError] = useState("");
@@ -29,7 +31,7 @@ export function CategoriesPage() {
   };
 
   const columns: Column<Category>[] = [
-    { key: "name", header: "Category", render: (c) => <div><div className="flex items-center gap-2 font-semibold">{c.name}{c.demo && <DemoTag />}</div><div className="mt-0.5 text-xs text-steel">{c.description || "No description"}</div></div> },
+    { key: "name", header: "Category", render: (c) => <div><div className="flex items-center gap-2 font-semibold">{c.name}{c.demo && <DemoTag />}</div><div className="mt-0.5 text-xs text-steel">{c.description || t("No description")}</div></div> },
     { key: "products", header: "Products", render: (c) => <span className="tabular-nums">{count(c.id)}</span> },
     { key: "id", header: "Identifier", render: (c) => <span className="font-mono text-xs text-steel">{c.id}</span> },
   ];
@@ -68,6 +70,7 @@ const movementTypes = ["Stock in", "Stock out", "Correction"];
 
 export function InventoryPage() {
   const { data, mutate, notify, can, toast, navigate } = useAdmin();
+  const { t } = useLocale();
   const [q, setQ] = useState("");
   const [state, setState] = useState("all");
   const [adjusting, setAdjusting] = useState(false);
@@ -150,7 +153,7 @@ export function InventoryPage() {
               return (
                 <li key={m.id} className="flex flex-col gap-1 px-5 py-3 sm:flex-row sm:items-center sm:gap-4">
                   <span className={cn("w-14 font-mono text-sm tabular-nums", m.quantity >= 0 ? "text-[#9cc6ff]" : "text-amber-100")}>{m.quantity >= 0 ? "+" : ""}{m.quantity}</span>
-                  <span className="flex-1 text-sm"><span className="font-semibold">{p?.name ?? "Deleted product"}</span> <span className="text-steel">· {m.type} · {m.reason}</span>{m.notes && <span className="block text-xs text-steel">{m.notes}</span>}</span>
+                  <span className="flex-1 text-sm"><span className="font-semibold">{p?.name ?? t("Deleted product")}</span> <span className="text-steel">· {t(m.type)} · {m.reason}</span>{m.notes && <span className="block text-xs text-steel">{m.notes}</span>}</span>
                   <span className="text-xs text-steel">{m.location || "—"} · {fmtDateTime(m.date)}</span>
                 </li>
               );
@@ -164,9 +167,9 @@ export function InventoryPage() {
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="sm:col-span-2"><Field label="Product" htmlFor="adj-p" error={errors.productId}>
             <select id="adj-p" className={cn(inputCls, "[&>option]:bg-ink")} value={form.productId} onChange={(e) => { const p = data.products.find((x) => x.id === e.target.value); setForm({ ...form, productId: e.target.value, location: p?.warehouse ?? form.location }); }}>
-              <option value="">Select a product</option>{tracked.map((p) => <option key={p.id} value={p.id}>{p.name} — {p.stock} in stock</option>)}
+              <option value="">{t("Select a product")}</option>{tracked.map((p) => <option key={p.id} value={p.id}>{p.name} — {p.stock} {t("in stock")}</option>)}
             </select></Field></div>
-          <Field label="Movement type" htmlFor="adj-t"><select id="adj-t" className={cn(inputCls, "[&>option]:bg-ink")} value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })}>{movementTypes.map((t) => <option key={t}>{t}</option>)}</select></Field>
+          <Field label="Movement type" htmlFor="adj-t"><select id="adj-t" className={cn(inputCls, "[&>option]:bg-ink")} value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })}>{movementTypes.map((mt) => <option key={mt} value={mt}>{t(mt)}</option>)}</select></Field>
           <Field label={form.type === "Correction" ? "Counted quantity" : "Quantity"} htmlFor="adj-q" error={errors.quantity}><input id="adj-q" type="number" min={0} step={1} inputMode="numeric" className={inputCls} value={form.quantity} onChange={(e) => setForm({ ...form, quantity: e.target.value })} /></Field>
           <Field label="Reason" htmlFor="adj-r" error={errors.reason}><input id="adj-r" className={inputCls} placeholder="e.g. Supplier delivery" value={form.reason} onChange={(e) => setForm({ ...form, reason: e.target.value })} /></Field>
           <Field label="Location" htmlFor="adj-l"><input id="adj-l" className={inputCls} value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} /></Field>
@@ -194,6 +197,7 @@ function useOrderHelpers() {
 
 export function OrdersPage() {
   const { data, navigate, can } = useAdmin();
+  const { t } = useLocale();
   const { customer, itemCount, total } = useOrderHelpers();
   const [q, setQ] = useState("");
   const [status, setStatus] = useState("all");
@@ -202,9 +206,9 @@ export function OrdersPage() {
 
   const columns: Column<Order>[] = [
     { key: "id", header: "Order ID", render: (o) => <div className="flex items-center gap-2"><span className="font-mono font-semibold">{o.id}</span>{o.demo && <DemoTag />}</div> },
-    { key: "customer", header: "Customer", render: (o) => customer(o.customerId)?.name ?? "Unknown customer" },
+    { key: "customer", header: "Customer", render: (o) => customer(o.customerId)?.name ?? t("Unknown customer") },
     { key: "items", header: "Items", render: (o) => <span className="tabular-nums">{itemCount(o)}</span> },
-    { key: "total", header: "Total", render: (o) => <span className="text-steel">{total(o) === null ? "Pending pricing" : fmtMoney(total(o), data.settings.currency)}</span> },
+    { key: "total", header: "Total", render: (o) => <span className="text-steel">{total(o) === null ? t("Pending pricing") : fmtMoney(total(o), data.settings.currency)}</span> },
     { key: "status", header: "Status", render: (o) => <StatusBadge status={o.status} /> },
     { key: "date", header: "Date", render: (o) => <span className="text-xs text-steel">{fmtDate(o.date)}</span> },
   ];
@@ -215,7 +219,7 @@ export function OrdersPage() {
       <div className="mb-4 flex gap-2 overflow-x-auto pb-1">
         {["all", ...orderStatuses].map((s) => (
           <button key={s} onClick={() => setStatus(s)} className={cn("whitespace-nowrap rounded-full border px-3 py-1.5 text-xs transition-colors", status === s ? "border-tech bg-tech/15 text-snow" : "border-white/10 text-steel hover:text-snow")}>
-            {s === "all" ? "All" : s} <span className="ml-1 font-mono text-[10px] text-steel">{s === "all" ? data.orders.length : data.orders.filter((o) => o.status === s).length}</span>
+            {s === "all" ? t("All") : t(s)} <span className="ml-1 font-mono text-[10px] text-steel">{s === "all" ? data.orders.length : data.orders.filter((o) => o.status === s).length}</span>
           </button>
         ))}
       </div>
@@ -230,6 +234,7 @@ export function OrdersPage() {
 
 export function OrderDetail({ id }: { id: string }) {
   const { data, mutate, navigate, can, toast } = useAdmin();
+  const { t } = useLocale();
   const { customer, itemCount, total } = useOrderHelpers();
   const order = data.orders.find((o) => o.id === id);
   if (!can("orders.view")) return <Forbidden permission="orders.view" />;
@@ -259,7 +264,7 @@ export function OrderDetail({ id }: { id: string }) {
                 return (
                   <li key={i.productId} className="flex items-center justify-between gap-4 px-5 py-3">
                     <div className="min-w-0">
-                      <button className="truncate text-left text-sm font-semibold hover:text-volt" onClick={() => p && navigate(`/admin/products/${p.id}`)}>{p?.name ?? "Deleted product"}</button>
+                      <button className="truncate text-left text-sm font-semibold hover:text-volt" onClick={() => p && navigate(`/admin/products/${p.id}`)}>{p?.name ?? t("Deleted product")}</button>
                       <div className="font-mono text-[11px] text-steel">{p?.sku}</div>
                     </div>
                     <div className="text-right text-sm"><div className="tabular-nums">× {i.qty}</div><div className="text-xs text-steel">{fmtMoney(p?.price ?? null, data.settings.currency)}</div></div>
@@ -267,7 +272,7 @@ export function OrderDetail({ id }: { id: string }) {
                 );
               })}
             </ul>
-            <div className="flex justify-between border-t border-white/[0.06] px-5 py-3 text-sm"><span className="text-steel">{itemCount(order)} item(s) · Total</span><span className="font-semibold">{total(order) === null ? "Pending pricing" : fmtMoney(total(order), data.settings.currency)}</span></div>
+            <div className="flex justify-between border-t border-white/[0.06] px-5 py-3 text-sm"><span className="text-steel">{itemCount(order)} {t("item(s) · Total")}</span><span className="font-semibold">{total(order) === null ? t("Pending pricing") : fmtMoney(total(order), data.settings.currency)}</span></div>
           </Panel>
           <Panel title="Timeline">
             <ul>
@@ -279,14 +284,14 @@ export function OrderDetail({ id }: { id: string }) {
         <div className="space-y-4">
           <Panel title="Order information">
             <dl className="space-y-2.5 text-sm">
-              {[["Order ID", order.id], ["Placed", fmtDateTime(order.date)], ["Status", order.status]].map(([k, v]) => <div key={k} className="flex justify-between gap-3"><dt className="text-steel">{k}</dt><dd className="font-medium">{v}</dd></div>)}
+              {[["Order ID", order.id], ["Placed", fmtDateTime(order.date)], ["Status", t(order.status)]].map(([k, v]) => <div key={k} className="flex justify-between gap-3"><dt className="text-steel">{t(k)}</dt><dd className="font-medium">{v}</dd></div>)}
             </dl>
           </Panel>
           <Panel title="Customer" action={c && can("customers.view") ? <Button size="sm" variant="ghost" onClick={() => navigate(`/admin/customers/${c.id}`)}>View</Button> : undefined}>
-            {c ? <div className="text-sm"><div className="font-semibold">{c.name}</div><div className="mt-0.5 text-steel">{c.email}</div></div> : <p className="text-sm text-steel">Customer record not found.</p>}
+            {c ? <div className="text-sm"><div className="font-semibold">{c.name}</div><div className="mt-0.5 text-steel">{c.email}</div></div> : <p className="text-sm text-steel">{t("Customer record not found.")}</p>}
           </Panel>
-          <Panel title="Payment status"><StatusBadge status="Not integrated" /><p className="mt-2 text-xs text-steel">No payment provider is connected. Payment state cannot be verified.</p></Panel>
-          <Panel title="Shipping"><StatusBadge status="Not configured" /><p className="mt-2 text-xs text-steel">Shipping carriers and rates are not configured.</p></Panel>
+          <Panel title="Payment status"><StatusBadge status="Not integrated" /><p className="mt-2 text-xs text-steel">{t("No payment provider is connected. Payment state cannot be verified.")}</p></Panel>
+          <Panel title="Shipping"><StatusBadge status="Not configured" /><p className="mt-2 text-xs text-steel">{t("Shipping carriers and rates are not configured.")}</p></Panel>
         </div>
       </div>
     </>
@@ -328,6 +333,7 @@ export function CustomersPage() {
 
 export function CustomerDetail({ id }: { id: string }) {
   const { data, mutate, navigate, can, toast } = useAdmin();
+  const { t } = useLocale();
   const c = data.customers.find((x) => x.id === id);
   const [tab, setTab] = useState("Overview");
   const [reveal, setReveal] = useState(false);
@@ -346,13 +352,13 @@ export function CustomerDetail({ id }: { id: string }) {
         {tab === "Overview" && (
           <Panel title="Basic information">
             <dl className="grid gap-4 text-sm sm:grid-cols-2">
-              <div><dt className="text-xs text-steel">Email</dt><dd className="mt-1 flex items-center gap-2">{reveal ? c.email : maskEmail(c.email)}
-                <button className="text-steel hover:text-snow" onClick={() => { setReveal(!reveal); if (!reveal) mutate("activity", (l) => l, { action: "Viewed customer email", module: "Customers", target: c.name }); }} aria-label={reveal ? "Hide email" : "Reveal email"}>{reveal ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}</button></dd></div>
-              <div><dt className="text-xs text-steel">Customer since</dt><dd className="mt-1">{fmtDate(c.created)}</dd></div>
-              <div><dt className="text-xs text-steel">Orders</dt><dd className="mt-1 tabular-nums">{orders.length}</dd></div>
-              <div><dt className="text-xs text-steel">Location</dt><dd className="mt-1">{c.city}</dd></div>
+              <div><dt className="text-xs text-steel">{t("Email")}</dt><dd className="mt-1 flex items-center gap-2">{reveal ? c.email : maskEmail(c.email)}
+                <button className="text-steel hover:text-snow" onClick={() => { setReveal(!reveal); if (!reveal) mutate("activity", (l) => l, { action: "Viewed customer email", module: "Customers", target: c.name }); }} aria-label={reveal ? t("Hide email") : t("Reveal email")}>{reveal ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}</button></dd></div>
+              <div><dt className="text-xs text-steel">{t("Customer since")}</dt><dd className="mt-1">{fmtDate(c.created)}</dd></div>
+              <div><dt className="text-xs text-steel">{t("Orders")}</dt><dd className="mt-1 tabular-nums">{orders.length}</dd></div>
+              <div><dt className="text-xs text-steel">{t("Location")}</dt><dd className="mt-1">{c.city}</dd></div>
             </dl>
-            <p className="mt-4 text-[11px] text-steel">Revealing contact data is recorded in the activity log.</p>
+            <p className="mt-4 text-[11px] text-steel">{t("Revealing contact data is recorded in the activity log.")}</p>
           </Panel>
         )}
         {tab === "Orders" && (
@@ -366,7 +372,7 @@ export function CustomerDetail({ id }: { id: string }) {
         {tab === "Addresses" && <Panel><EmptyState title="No addresses on file." description="Shipping addresses are stored once checkout is connected." /></Panel>}
         {tab === "Notes" && (
           <Panel title="Administrative notes" description="Internal only. Never visible to the customer.">
-            <textarea aria-label="Administrative notes" rows={5} className={cn(inputCls, "h-auto py-2")} value={notes} disabled={!can("customers.edit")} onChange={(e) => setNotes(e.target.value)} placeholder="Add context for your team…" />
+            <textarea aria-label={t("Administrative notes")} rows={5} className={cn(inputCls, "h-auto py-2")} value={notes} disabled={!can("customers.edit")} onChange={(e) => setNotes(e.target.value)} placeholder={t("Add context for your team…")} />
             {can("customers.edit") && <div className="mt-3 flex justify-end"><Button variant="primary" onClick={() => { mutate("customers", (l) => l.map((x) => x.id === c.id ? { ...x, notes } : x), { action: "Updated customer notes", module: "Customers", target: c.name }); toast("Notes saved."); }}>Save notes</Button></div>}
           </Panel>
         )}
