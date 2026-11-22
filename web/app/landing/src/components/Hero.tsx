@@ -45,7 +45,18 @@ export default function Hero() {
   }, [typedWord]);
 
   return (
-    <section id="inicio" className={cn("relative isolate min-h-[100svh] overflow-hidden", ready && "in hero-in")}>
+    // data-theme="light" fija el Hero siempre en la paleta e imagen de fondo
+    // del tema claro, sin importar el tema activo en el resto del sitio
+    // (ThemeToggle en Navbar): las variables --color-obsidian/snow/steel/
+    // volt/white que define [data-theme="light"] en index.css, y las reglas
+    // .hero-ambient-glow / .hero-ambient-blob específicas de ese tema, se
+    // heredan en todo este subárbol — así el Hero se ve igual aunque el
+    // usuario tenga el tema oscuro activo en el resto de la página.
+    <section
+      id="inicio"
+      data-theme="light"
+      className={cn("relative isolate min-h-[100svh] overflow-hidden", ready && "in hero-in")}
+    >
       {/* background layers */}
       <div className="absolute inset-0 -z-20 bg-obsidian" />
       <div

@@ -82,11 +82,27 @@ body {
    sitio al pulsar el botón de tema. Se excluyen transform/opacity para no
    interferir con animaciones de scroll-reveal. El usuario prefiere que
    este efecto (como el resto del sitio) corra siempre, así que NO se
-   condiciona a prefers-reduced-motion. */
-*, *::before, *::after {
-  transition-property: background-color, border-color, color, fill, stroke, box-shadow, text-decoration-color;
-  transition-duration: 320ms;
-  transition-timing-function: ease;
+   condiciona a prefers-reduced-motion.
+   Va dentro de @layer base (no suelta/"unlayered") a propósito: Tailwind
+   v4 da a cualquier CSS fuera de @layer más prioridad que SUS PROPIAS
+   utilidades (capas theme/base/components/utilities), sin importar
+   especificidad. Suelta, esta regla pisaba por completo el
+   "transition-property"/"transition-duration" de utilidades como
+   "transition-all duration-700" en otros elementos (p. ej. el hover de
+   cada tarjeta en "El problema": la barra que se desliza en ancho y el
+   número que pierde el grayscale) — "width"/"opacity"/"filter" no están
+   en la lista de arriba, así que con la regla suelta esas propiedades no
+   transicionaban en absoluto y el hover se veía de golpe. Dentro de
+   @layer base, esta regla sigue aplicando como transición por defecto en
+   todo el sitio, pero cualquier utilidad de Tailwind (capa "utilities",
+   de mayor prioridad) la sobreescribe normalmente cuando un elemento
+   define su propia transición. */
+@layer base {
+  *, *::before, *::after {
+    transition-property: background-color, border-color, color, fill, stroke, box-shadow, text-decoration-color;
+    transition-duration: 320ms;
+    transition-timing-function: ease;
+  }
 }
 ::selection { background: var(--color-tech); color: var(--color-snow); }
 
