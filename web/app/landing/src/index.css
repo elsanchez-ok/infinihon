@@ -65,7 +65,16 @@ body {
   color: var(--color-snow);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  /* Nota: el scroll horizontal del sitio ya lo evita el wrapper raíz de
+     cada página (overflow-x-clip en App.tsx), no este `body`. Si aquí se
+     pone overflow-x:hidden/clip, el navegador lo usa como el recorte del
+     propio viewport (caso especial html/body), y eso recorta cualquier
+     elemento position:fixed que se acerque al borde de la pantalla —
+     incluida la mascota Zuri (ScrollMascot), que se monta con un portal a
+     document.body precisamente para escapar del overflow-x-clip del
+     wrapper. Con overflow-x:hidden aquí, ese portal no sirve de nada: se
+     veía "recortándose" por los lados hasta desaparecer al acercarse al
+     final del recorrido horizontal. */
 }
 
 /* Transición suave entre tema claro/oscuro: sin esto, el cambio de

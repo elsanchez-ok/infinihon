@@ -9,11 +9,13 @@ import {
   Button, ConfirmDialog, EmptyState, Field, PageHeader, Panel,
   ResourceTable, StatusBadge, Timeline, inputCls, type Column,
 } from "../ui";
+import { useLocale } from "../locale";
 
 /* ─────────── Mis solicitudes ─────────── */
 
 export function RequestsPage() {
   const { data, navigate } = useAccount();
+  const { t } = useLocale();
   const [filter, setFilter] = useState("Todas");
   const rows = filter === "Todas" ? data.requests : data.requests.filter((r) => r.status === filter);
   const columns: Column<typeof data.requests[number]>[] = [
@@ -33,13 +35,13 @@ export function RequestsPage() {
         {["Todas", ...requestStatuses].map((s) => (
           <button key={s} onClick={() => setFilter(s)} aria-pressed={filter === s}
             className={`whitespace-nowrap rounded-full border px-3 py-1.5 text-xs transition-colors ${filter === s ? "border-tech bg-tech/15 text-snow" : "border-white/10 text-steel hover:text-snow"}`}>
-            {s} <span className="ml-1 font-mono text-[10px] text-steel">{s === "Todas" ? data.requests.length : data.requests.filter((r) => r.status === s).length}</span>
+            {t(s)} <span className="ml-1 font-mono text-[10px] text-steel">{s === "Todas" ? data.requests.length : data.requests.filter((r) => r.status === s).length}</span>
           </button>
         ))}
       </div>
 
       <Panel padded={false}>
-        <ResourceTable caption="Mis solicitudes" columns={columns} rows={rows} getKey={(r) => r.id} onRowClick={(r) => navigate(`/account/requests/${r.id}`)}
+        <ResourceTable caption={t("Mis solicitudes")} columns={columns} rows={rows} getKey={(r) => r.id} onRowClick={(r) => navigate(`/account/requests/${r.id}`)}
           empty={<EmptyState icon={Inbox} title={data.requests.length ? "Ninguna solicitud con este estado." : "Aún no tienes solicitudes"}
             description={data.requests.length ? "Prueba con otro filtro." : "¿Necesitas algo de InfiniHon Corp.? Crea una solicitud y el equipo te responderá."}
             action={!data.requests.length && <Button variant="primary" icon={Plus} onClick={() => navigate("/account/requests/new")}>Solicitar un servicio</Button>} />} />
@@ -50,6 +52,7 @@ export function RequestsPage() {
 
 export function RequestFormPage() {
   const { createRequest, navigate, toast, data } = useAccount();
+  const { t } = useLocale();
   const [form, setForm] = useState({ title: "", type: "Cotización" as RequestType, description: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -76,7 +79,7 @@ export function RequestFormPage() {
             </Field>
             <Field label="Tipo de solicitud" htmlFor="rq-type" required>
               <select id="rq-type" className={`${inputCls} [&>option]:bg-ink`} value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value as RequestType })}>
-                {requestTypeOptions.map((t) => <option key={t}>{t}</option>)}
+                {requestTypeOptions.map((opt) => <option key={opt} value={opt}>{t(opt)}</option>)}
               </select>
             </Field>
             <Field label="Descripción" htmlFor="rq-desc" required error={errors.description} hint="Contexto, tamaño de la operación, plazos y cualquier restricción.">
@@ -84,7 +87,7 @@ export function RequestFormPage() {
             </Field>
             <Field label="Adjunto" htmlFor="rq-file" hint="Requiere almacenamiento de archivos conectado.">
               <div className="flex items-center gap-2">
-                <button id="rq-file" type="button" disabled className={`${inputCls} text-left text-steel`} onClick={() => undefined}>Adjuntar archivo</button>
+                <button id="rq-file" type="button" disabled className={`${inputCls} text-left text-steel`} onClick={() => undefined}>{t("Adjuntar archivo")}</button>
               </div>
               
             </Field>
@@ -97,9 +100,9 @@ export function RequestFormPage() {
         <div className="space-y-4">
           <Panel title="Qué pasa después">
             <Timeline entries={[
-              { label: "Envías la solicitud", date: new Date().toISOString(), note: "Queda registrada en tu cuenta." },
-              { label: "El equipo la revisa", date: new Date(Date.now() + 864e5).toISOString(), note: "Podemos pedirte más detalles." },
-              { label: "Recibes una propuesta", date: new Date(Date.now() + 3 * 864e5).toISOString(), note: "Con alcance y siguientes pasos." },
+              { label: t("Envías la solicitud"), date: new Date().toISOString(), note: t("Queda registrada en tu cuenta.") },
+              { label: t("El equipo la revisa"), date: new Date(Date.now() + 864e5).toISOString(), note: t("Podemos pedirte más detalles.") },
+              { label: t("Recibes una propuesta"), date: new Date(Date.now() + 3 * 864e5).toISOString(), note: t("Con alcance y siguientes pasos.") },
             ]} />
           </Panel>
           <Panel title="Servicios relacionados">
@@ -115,6 +118,7 @@ export function RequestFormPage() {
 
 export function RequestDetailPage({ id }: { id: string }) {
   const { data, cancelRequest, navigate, toast } = useAccount();
+  const { t } = useLocale();
   const request = data.requests.find((r) => r.id === id);
   const [reply, setReply] = useState("");
   const [confirm, setConfirm] = useState(false);
@@ -137,15 +141,15 @@ export function RequestDetailPage({ id }: { id: string }) {
     <>
       <PageHeader eyebrow={`Solicitud ${request.id}`} title={request.title}
         breadcrumbs={[{ label: "Mis solicitudes", to: "/account/requests" }, { label: request.id }]}
-        description={<span className="flex flex-wrap items-center gap-2"><StatusBadge status={request.status} /><span className="text-xs text-steel">Creada {fmtDate(request.created)}</span></span>}
+        description={<span className="flex flex-wrap items-center gap-2"><StatusBadge status={request.status} /><span className="text-xs text-steel">{t("Creada")} {fmtDate(request.created)}</span></span>}
         actions={<Button variant="ghost" icon={ArrowLeft} onClick={() => navigate("/account/requests")}>Volver</Button>} />
 
       <div className="grid gap-4 lg:grid-cols-3">
         <div className="space-y-4 lg:col-span-2">
           <Panel title="Descripción"><p className="whitespace-pre-line text-sm leading-relaxed text-snow/90">{request.description}</p>
             <div className="mt-4 flex flex-wrap gap-2 border-t border-white/[0.06] pt-4 text-xs text-steel">
-              <span className="rounded border border-white/10 px-2 py-1">Tipo: {request.type}</span>
-              {request.attachments.length === 0 && <span className="rounded border border-dashed border-white/10 px-2 py-1">Sin archivos adjuntos</span>}
+              <span className="rounded border border-white/10 px-2 py-1">{t("Tipo")}: {t(request.type)}</span>
+              {request.attachments.length === 0 && <span className="rounded border border-dashed border-white/10 px-2 py-1">{t("Sin archivos adjuntos")}</span>}
             </div>
           </Panel>
 
@@ -159,11 +163,11 @@ export function RequestDetailPage({ id }: { id: string }) {
                   </li>
                 ))}
               </ul>
-            ) : <p className="text-sm text-steel">Todavía no hay mensajes. El equipo de InfiniHon Corp. te escribirá aquí.</p>}
+            ) : <p className="text-sm text-steel">{t("Todavía no hay mensajes. El equipo de InfiniHon Corp. te escribirá aquí.")}</p>}
 
             {!canCancel && (
               <div className="mt-4">
-                <label htmlFor="rq-reply" className="mb-1.5 block text-[13px] font-semibold text-snow/90">Añadir información</label>
+                <label htmlFor="rq-reply" className="mb-1.5 block text-[13px] font-semibold text-snow/90">{t("Añadir información")}</label>
                 <textarea id="rq-reply" rows={3} className={`${inputCls} h-auto py-3`} value={reply} onChange={(e) => setReply(e.target.value)} placeholder="Escribe un mensaje…" />
                 <div className="mt-2 flex justify-end"><Button size="sm" variant="primary" icon={Send} disabled={reply.trim().length < 2}
                   onClick={() => { setReply(""); toast("Mensaje registrado. Se enviará cuando el backend de mensajería esté conectado.", "info"); }}>Enviar</Button></div>
@@ -173,7 +177,7 @@ export function RequestDetailPage({ id }: { id: string }) {
         </div>
 
         <div className="space-y-4">
-          <Panel title="Estado"><div className="flex flex-col gap-3"><StatusBadge status={request.status} /><p className="text-xs leading-relaxed text-steel">Última actualización {fmtDateTime(request.updated)}.</p></div></Panel>
+          <Panel title="Estado"><div className="flex flex-col gap-3"><StatusBadge status={request.status} /><p className="text-xs leading-relaxed text-steel">{t("Última actualización")} {fmtDateTime(request.updated)}.</p></div></Panel>
           <Panel title="Actividad"><Timeline entries={request.timeline} /></Panel>
           <Panel title="Acciones">
             <div className="flex flex-col gap-2">
@@ -196,6 +200,7 @@ export function RequestDetailPage({ id }: { id: string }) {
 
 export function SupportPage() {
   const { data, createTicket, navigate, toast } = useAccount();
+  const { t } = useLocale();
   const [form, setForm] = useState({ subject: "", category: "Cuenta" as TicketCategory, priority: "Normal" as Priority, description: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -225,12 +230,12 @@ export function SupportPage() {
             <div className="grid gap-4 sm:grid-cols-2">
               <Field label="Categoría" htmlFor="tk-cat" required>
                 <select id="tk-cat" className={`${inputCls} [&>option]:bg-ink`} value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value as TicketCategory })}>
-                  {ticketCategories.map((c) => <option key={c}>{c}</option>)}
+                  {ticketCategories.map((c) => <option key={c} value={c}>{t(c)}</option>)}
                 </select>
               </Field>
               <Field label="Prioridad" htmlFor="tk-pri" hint="La usamos para ordenar la revisión.">
                 <select id="tk-pri" className={`${inputCls} [&>option]:bg-ink`} value={form.priority} onChange={(e) => setForm({ ...form, priority: e.target.value as Priority })}>
-                  {priorities.map((p) => <option key={p}>{p}</option>)}
+                  {priorities.map((p) => <option key={p} value={p}>{t(p)}</option>)}
                 </select>
               </Field>
             </div>
@@ -238,7 +243,7 @@ export function SupportPage() {
               <textarea id="tk-desc" rows={6} className={`${inputCls} h-auto py-3`} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="¿Qué está pasando? ¿Desde cuándo? ¿Qué ya probaste?" />
             </Field>
             <Field label="Adjunto" htmlFor="tk-file" hint="Requiere almacenamiento de archivos conectado.">
-              <button id="tk-file" type="button" disabled className={`${inputCls} text-left text-steel`}>Adjuntar archivo</button>
+              <button id="tk-file" type="button" disabled className={`${inputCls} text-left text-steel`}>{t("Adjuntar archivo")}</button>
             </Field>
             <div className="flex justify-end border-t border-white/[0.06] pt-5"><Button variant="primary" icon={LifeBuoy} onClick={submit}>Crear ticket</Button></div>
           </div>
@@ -255,13 +260,13 @@ export function SupportPage() {
                   </button></li>
                 ))}
               </ul>
-            ) : <p className="px-5 py-6 text-center text-sm text-steel">Sin conversaciones todavía.</p>}
+            ) : <p className="px-5 py-6 text-center text-sm text-steel">{t("Sin conversaciones todavía.")}</p>}
           </Panel>
           <Panel title="Antes de escribir">
             <ul className="space-y-2 text-[13px] leading-relaxed text-steel">
-              <li className="flex gap-2"><span className="text-volt">·</span>Revisa el centro de ayuda: quizá ya hay una respuesta.</li>
-              <li className="flex gap-2"><span className="text-volt">·</span>Incluye capturas o mensajes de error cuando puedas.</li>
-              <li className="flex gap-2"><span className="text-volt">·</span>No compartas contraseñas ni datos de tarjeta.</li>
+              <li className="flex gap-2"><span className="text-volt">·</span>{t("Revisa el centro de ayuda: quizá ya hay una respuesta.")}</li>
+              <li className="flex gap-2"><span className="text-volt">·</span>{t("Incluye capturas o mensajes de error cuando puedas.")}</li>
+              <li className="flex gap-2"><span className="text-volt">·</span>{t("No compartas contraseñas ni datos de tarjeta.")}</li>
             </ul>
           </Panel>
         </div>
@@ -272,6 +277,7 @@ export function SupportPage() {
 
 export function TicketsPage() {
   const { data, navigate } = useAccount();
+  const { t } = useLocale();
   const [filter, setFilter] = useState("Todos");
   const rows = filter === "Todos" ? data.tickets : data.tickets.filter((t) => t.status === filter);
   const columns: Column<typeof data.tickets[number]>[] = [
@@ -289,12 +295,12 @@ export function TicketsPage() {
         {["Todos", ...ticketStatuses].map((s) => (
           <button key={s} onClick={() => setFilter(s)} aria-pressed={filter === s}
             className={`whitespace-nowrap rounded-full border px-3 py-1.5 text-xs transition-colors ${filter === s ? "border-tech bg-tech/15 text-snow" : "border-white/10 text-steel hover:text-snow"}`}>
-            {s} <span className="ml-1 font-mono text-[10px] text-steel">{s === "Todos" ? data.tickets.length : data.tickets.filter((t) => t.status === s).length}</span>
+            {t(s)} <span className="ml-1 font-mono text-[10px] text-steel">{s === "Todos" ? data.tickets.length : data.tickets.filter((tk) => tk.status === s).length}</span>
           </button>
         ))}
       </div>
       <Panel padded={false}>
-        <ResourceTable caption="Mis tickets de soporte" columns={columns} rows={rows} getKey={(t) => t.id} onRowClick={(t) => navigate(`/account/support/tickets/${t.id}`)}
+        <ResourceTable caption={t("Mis tickets de soporte")} columns={columns} rows={rows} getKey={(tk) => tk.id} onRowClick={(tk) => navigate(`/account/support/tickets/${tk.id}`)}
           empty={<EmptyState icon={LifeBuoy} title={data.tickets.length ? "Ningún ticket con este estado." : "Sin conversaciones de soporte"}
             description={data.tickets.length ? "Prueba con otro filtro." : "Cuando contactes a soporte, tus tickets aparecerán aquí."}
             action={!data.tickets.length && <Button variant="primary" onClick={() => navigate("/account/support")}>Contactar soporte</Button>} />} />
@@ -305,7 +311,8 @@ export function TicketsPage() {
 
 export function TicketDetailPage({ id }: { id: string }) {
   const { data, replyTicket, navigate, toast } = useAccount();
-  const ticket = data.tickets.find((t) => t.id === id);
+  const { t } = useLocale();
+  const ticket = data.tickets.find((tk) => tk.id === id);
   const [text, setText] = useState("");
 
   if (!ticket) {
@@ -334,7 +341,7 @@ export function TicketDetailPage({ id }: { id: string }) {
     <>
       <PageHeader eyebrow={`Ticket ${ticket.id}`} title={ticket.subject}
         breadcrumbs={[{ label: "Mis tickets", to: "/account/support/tickets" }, { label: ticket.id }]}
-        description={<span className="flex flex-wrap items-center gap-2"><StatusBadge status={ticket.status} /><span className="text-xs text-steel">{ticket.category} · prioridad {ticket.priority.toLowerCase()} · abierto {fmtDate(ticket.created)}</span></span>}
+        description={<span className="flex flex-wrap items-center gap-2"><StatusBadge status={ticket.status} /><span className="text-xs text-steel">{t(ticket.category)} · {t("prioridad")} {t(ticket.priority).toLowerCase()} · {t("abierto")} {fmtDate(ticket.created)}</span></span>}
         actions={<Button variant="ghost" icon={ArrowLeft} onClick={() => navigate("/account/support/tickets")}>Volver</Button>} />
 
       <div className="grid gap-4 lg:grid-cols-3">
@@ -350,10 +357,10 @@ export function TicketDetailPage({ id }: { id: string }) {
             </ul>
 
             <div className="mt-5 border-t border-white/[0.06] pt-4">
-              <label htmlFor="tk-reply" className="mb-1.5 block text-[13px] font-semibold text-snow/90">Responder</label>
+              <label htmlFor="tk-reply" className="mb-1.5 block text-[13px] font-semibold text-snow/90">{t("Responder")}</label>
               <textarea id="tk-reply" rows={4} className={`${inputCls} h-auto py-3`} value={text} onChange={(e) => setText(e.target.value)} placeholder="Escribe tu respuesta…" />
               <div className="mt-2.5 flex items-center justify-between gap-3">
-                <button type="button" disabled className="flex items-center gap-1.5 text-xs text-steel" title="Requiere almacenamiento de archivos conectado"><Paperclip className="h-3.5 w-3.5" />Adjuntar</button>
+                <button type="button" disabled className="flex items-center gap-1.5 text-xs text-steel" title={t("Requiere almacenamiento de archivos conectado")}><Paperclip className="h-3.5 w-3.5" />{t("Adjuntar")}</button>
                 <Button size="sm" variant="primary" icon={Send} disabled={text.trim().length < 2} onClick={() => void send()}>Enviar respuesta</Button>
               </div>
             </div>
@@ -363,17 +370,17 @@ export function TicketDetailPage({ id }: { id: string }) {
         <div className="space-y-4">
           <Panel title="Detalles">
             <dl className="space-y-3 text-sm">
-              {[["Ticket", ticket.id], ["Categoría", ticket.category], ["Prioridad", ticket.priority], ["Creado", fmtDateTime(ticket.created)], ["Actualizado", fmtDateTime(ticket.updated)]].map(([k, v]) => (
+              {[[t("Ticket"), ticket.id], [t("Categoría"), t(ticket.category)], [t("Prioridad"), t(ticket.priority)], [t("Creado"), fmtDateTime(ticket.created)], [t("Actualizado"), fmtDateTime(ticket.updated)]].map(([k, v]) => (
                 <div key={k} className="flex justify-between gap-3"><dt className="text-steel">{k}</dt><dd className="text-right font-medium">{v}</dd></div>
               ))}
             </dl>
           </Panel>
           <Panel title="Archivos adjuntos">
             {ticket.attachments.length ? <ul className="space-y-2 text-sm">{ticket.attachments.map((a) => <li key={a.name} className="flex items-center gap-2"><Paperclip className="h-3.5 w-3.5 text-steel" />{a.name}</li>)}</ul>
-              : <p className="text-sm text-steel">Sin archivos adjuntos.</p>}
+              : <p className="text-sm text-steel">{t("Sin archivos adjuntos.")}</p>}
           </Panel>
           <Panel title="¿Necesitas más ayuda?">
-            <p className="text-[13px] leading-relaxed text-steel">Si el problema es urgente, abre un nuevo ticket marcándolo con prioridad alta.</p>
+            <p className="text-[13px] leading-relaxed text-steel">{t("Si el problema es urgente, abre un nuevo ticket marcándolo con prioridad alta.")}</p>
             <Button size="sm" className="mt-3 w-full" onClick={() => navigate("/account/support")}>Nuevo ticket</Button>
           </Panel>
         </div>
@@ -386,8 +393,9 @@ export function TicketDetailPage({ id }: { id: string }) {
 
 export function MessagesPage() {
   const { data, navigate } = useAccount();
+  const { t } = useLocale();
   const [openId, setOpenId] = useState<string | null>(data.tickets[0]?.id ?? null);
-  const open = data.tickets.find((t) => t.id === openId) ?? null;
+  const open = data.tickets.find((tk) => tk.id === openId) ?? null;
 
   return (
     <>
@@ -426,7 +434,7 @@ export function MessagesPage() {
                   </li>
                 ))}
               </ul>
-              <p className="mt-5 border-t border-white/[0.06] pt-4 text-[11.5px] text-steel">Responde desde el ticket para añadir mensajes a esta conversación.</p>
+              <p className="mt-5 border-t border-white/[0.06] pt-4 text-[11.5px] text-steel">{t("Responde desde el ticket para añadir mensajes a esta conversación.")}</p>
               <div className="mt-3 flex gap-2">
                 <Button size="sm" icon={ArrowLeft} onClick={() => navigate(`/account/support/tickets/${open.id}`)}>Abrir ticket</Button>
               </div>

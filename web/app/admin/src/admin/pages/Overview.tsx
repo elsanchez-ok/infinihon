@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Activity as ActivityIcon, ArrowUpRight, BarChart3, Boxes, CircleDollarSign, Network, Package, Plus, ShoppingCart, Users, UsersRound } from "lucide-react";
 import { useAdmin, productStockState } from "../store";
 import { ActivityItem, Button, ChartCard, DemoTag, EmptyState, NoData, PageHeader, Panel, Select, StatCard, StatusBadge } from "../ui";
+import { useLocale } from "../locale";
 
 function greeting() {
   const h = new Date().getHours();
@@ -11,27 +12,28 @@ function greeting() {
 const layers = ["Network", "Servers", "Cloud", "Applications", "Monitoring"];
 
 function SystemDiagram() {
+  const { t } = useLocale();
   return (
     <div className="relative overflow-hidden rounded-xl border border-white/[0.07] bg-ink/80">
       <div className="absolute inset-0 opacity-60 [background-image:linear-gradient(rgba(139,150,165,.06)_1px,transparent_1px),linear-gradient(90deg,rgba(139,150,165,.06)_1px,transparent_1px)] [background-size:28px_28px] [mask-image:radial-gradient(ellipse_at_70%_50%,#000,transparent_75%)]" aria-hidden />
       <div className="relative grid gap-6 p-5 lg:grid-cols-[260px_1fr] lg:p-6">
         <div>
           <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-volt">InfiniHon Corp. Control Center</div>
-          <div className="mt-4 font-mono text-[10px] uppercase tracking-[0.18em] text-steel">System</div>
+          <div className="mt-4 font-mono text-[10px] uppercase tracking-[0.18em] text-steel">{t("System")}</div>
           <div className="mt-2 h-px bg-white/[0.08]" />
           <ul className="mt-2">
             {layers.map((l) => (
               <li key={l} className="flex items-center justify-between border-b border-dashed border-white/[0.06] py-2 text-sm">
-                <span className="text-snow/90">{l}</span>
+                <span className="text-snow/90">{t(l)}</span>
                 <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.1em] text-steel">
-                  Not monitored <span className="h-2 w-2 rounded-full border border-steel/60" aria-hidden />
+                  {t("Not monitored")} <span className="h-2 w-2 rounded-full border border-steel/60" aria-hidden />
                 </span>
               </li>
             ))}
           </ul>
-          <p className="mt-3 text-[11px] leading-relaxed text-steel">Conceptual view. Live status requires a monitoring integration.</p>
+          <p className="mt-3 text-[11px] leading-relaxed text-steel">{t("Conceptual view. Live status requires a monitoring integration.")}</p>
         </div>
-        <svg viewBox="0 0 640 220" className="h-auto w-full" role="img" aria-label="Conceptual diagram: users connect through network to servers, which host applications, database and storage, observed by monitoring">
+        <svg viewBox="0 0 640 220" className="h-auto w-full" role="img" aria-label={t("Conceptual diagram: users connect through network to servers, which host applications, database and storage, observed by monitoring")}>
           <defs>
             <linearGradient id="ov-line" x1="0" x2="1"><stop stopColor="#003B73" /><stop offset=".5" stopColor="#0066FF" /><stop offset="1" stopColor="#003B73" /></linearGradient>
           </defs>
@@ -55,10 +57,10 @@ function SystemDiagram() {
             <g key={n.label} transform={`translate(${n.x} ${n.y})`}>
               <rect width={n.w} height={n.h ?? 40} rx="5" fill="var(--color-obsidian)" stroke={n.core ? "var(--color-tech)" : "var(--color-steel)"} />
               <circle cx="10" cy="10" r="2.2" fill={n.core ? "var(--color-volt)" : "var(--color-steel)"} className={n.core ? "admin-pulse" : ""} />
-              <text x={n.w / 2} y={(n.h ?? 40) / 2 + 3.5} textAnchor="middle" fill="var(--color-snow)" fontSize="9.5" letterSpacing="1.4" fontFamily="JetBrains Mono, monospace">{n.label}</text>
+              <text x={n.w / 2} y={(n.h ?? 40) / 2 + 3.5} textAnchor="middle" fill="var(--color-snow)" fontSize="9.5" letterSpacing="1.4" fontFamily="JetBrains Mono, monospace">{t(n.label)}</text>
             </g>
           ))}
-          <text x="485" y="212" fill="var(--color-steel)" fontSize="8.5" letterSpacing="1.4" fontFamily="JetBrains Mono, monospace">MONITORING · OBSERVES ALL LAYERS</text>
+          <text x="485" y="212" fill="var(--color-steel)" fontSize="8.5" letterSpacing="1.4" fontFamily="JetBrains Mono, monospace">{t("MONITORING · OBSERVES ALL LAYERS")}</text>
         </svg>
       </div>
     </div>
@@ -67,6 +69,7 @@ function SystemDiagram() {
 
 export function OverviewPage() {
   const { data, navigate, can } = useAdmin();
+  const { t } = useLocale();
   const lowStock = data.products.filter((p) => ["Low stock", "Out of stock"].includes(productStockState(p)) && p.status !== "Archived");
   const pending = data.orders.filter((o) => o.status === "Pending" || o.status === "Processing");
 
@@ -122,7 +125,7 @@ export function OverviewPage() {
                   </button>
                 </li>
               ))}
-              {!lowStock.length && !pending.length && <li className="text-sm text-steel">Nothing needs attention.</li>}
+              {!lowStock.length && !pending.length && <li className="text-sm text-steel">{t("Nothing needs attention.")}</li>}
             </ul>
           </Panel>
           <Panel title="Quick actions">
@@ -133,7 +136,7 @@ export function OverviewPage() {
                 { label: "Edit content", to: "/admin/content", p: "content.edit" },
                 { label: "Review security", to: "/admin/security", p: "security.view" },
               ].filter((a) => can(a.p)).map((a) => (
-                <button key={a.label} onClick={() => navigate(a.to)} className="rounded-md border border-white/[0.07] bg-obsidian/50 px-3 py-3 text-left text-xs font-medium text-snow/90 transition-colors hover:border-tech/40 hover:text-snow">{a.label}</button>
+                <button key={a.label} onClick={() => navigate(a.to)} className="rounded-md border border-white/[0.07] bg-obsidian/50 px-3 py-3 text-left text-xs font-medium text-snow/90 transition-colors hover:border-tech/40 hover:text-snow">{t(a.label)}</button>
               ))}
             </div>
           </Panel>
@@ -144,6 +147,7 @@ export function OverviewPage() {
 }
 
 export function AnalyticsPage() {
+  const { t } = useLocale();
   const [range, setRange] = useState("Last 30 days");
   const metrics = ["Sales", "Orders", "Customers", "Products", "Traffic", "Conversion", "Service requests"];
   return (
@@ -154,9 +158,9 @@ export function AnalyticsPage() {
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-7">
         {metrics.map((m) => (
           <div key={m} className="rounded-xl border border-white/[0.07] bg-ink/80 p-4">
-            <div className="text-xs text-steel">{m}</div>
+            <div className="text-xs text-steel">{t(m)}</div>
             <div className="mt-2 text-2xl font-extrabold text-snow/40">—</div>
-            <div className="mt-2 font-mono text-[10px] text-steel">{range}</div>
+            <div className="mt-2 font-mono text-[10px] text-steel">{t(range)}</div>
           </div>
         ))}
       </div>

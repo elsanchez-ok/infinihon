@@ -32,9 +32,10 @@ export function Button({ variant = "secondary", size = "md", icon: Icon, classNa
 }
 
 export function DemoTag({ label = "Demo" }: { label?: string }) {
+  const { t } = useLocale();
   return (
-    <span className="inline-flex items-center rounded border border-dashed border-steel/40 px-1.5 py-px font-mono text-[9px] uppercase tracking-[0.12em] text-steel" title="Illustrative sample data — not a real record">
-      {label}
+    <span className="inline-flex items-center rounded border border-dashed border-steel/40 px-1.5 py-px font-mono text-[9px] uppercase tracking-[0.12em] text-steel" title={t("Illustrative sample data — not a real record")}>
+      {t(label)}
     </span>
   );
 }
@@ -118,18 +119,19 @@ export function Panel({ title, description, action, children, className, padded 
 }
 
 export function StatCard({ label, value, change, period, icon: Icon, status, demo, onClick }: { label: string; value: ReactNode; change?: string; period: string; icon: LucideIcon; status?: string; demo?: boolean; onClick?: () => void }) {
+  const { t } = useLocale();
   const Tag = onClick ? "button" : "div";
   return (
     <Tag onClick={onClick} className={cn("group relative flex flex-col overflow-hidden rounded-xl border border-white/[0.07] bg-ink/80 p-4 text-left transition-colors", onClick && "hover:border-tech/40 hover:bg-[#0c131b]")}>
       <div className="flex items-center justify-between">
-        <span className="text-xs font-medium text-steel">{label}</span>
+        <span className="text-xs font-medium text-steel">{t(label)}</span>
         <span className="flex h-7 w-7 items-center justify-center rounded-md border border-white/[0.07] bg-obsidian text-steel transition-colors group-hover:text-volt"><Icon className="h-3.5 w-3.5" aria-hidden /></span>
       </div>
       <div className="mt-3 text-[26px] font-extrabold leading-none tracking-tight text-snow tabular-nums">{value}</div>
       <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px] text-steel">
         <span className="font-mono">{change ?? "—"}</span>
         <span className="text-steel/40">·</span>
-        <span>{period}</span>
+        <span>{t(period)}</span>
         {status && <span className="ml-auto"><StatusBadge status={status} /></span>}
         {demo && !status && <span className="ml-auto"><DemoTag /></span>}
       </div>
@@ -145,6 +147,7 @@ export function DataTable<T>({ columns, rows, getKey, onRowClick, empty, rowActi
   columns: Column<T>[]; rows: T[]; getKey: (row: T) => string; onRowClick?: (row: T) => void; empty?: ReactNode;
   rowActions?: (row: T) => ReactNode; pageSize?: number; caption: string;
 }) {
+  const { t } = useLocale();
   const [page, setPage] = useState(0);
   const rowSignature = rows.map(getKey).join("\0");
   const pages = Math.max(1, Math.ceil(rows.length / pageSize));
@@ -158,11 +161,11 @@ export function DataTable<T>({ columns, rows, getKey, onRowClick, empty, rowActi
     <div>
       <div className="hidden overflow-x-auto md:block">
         <table className="w-full min-w-[720px] text-left text-sm">
-          <caption className="sr-only">{caption}</caption>
+          <caption className="sr-only">{t(caption)}</caption>
           <thead>
             <tr className="border-b border-white/[0.06]">
-              {columns.map((c) => <th key={c.key} scope="col" className={cn("px-4 py-2.5 font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-steel", c.className)}>{c.header}</th>)}
-              {rowActions && <th scope="col" className="w-12 px-4"><span className="sr-only">Actions</span></th>}
+              {columns.map((c) => <th key={c.key} scope="col" className={cn("px-4 py-2.5 font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-steel", c.className)}>{t(c.header)}</th>)}
+              {rowActions && <th scope="col" className="w-12 px-4"><span className="sr-only">{t("Actions")}</span></th>}
             </tr>
           </thead>
           <tbody>
@@ -180,7 +183,7 @@ export function DataTable<T>({ columns, rows, getKey, onRowClick, empty, rowActi
         </table>
       </div>
 
-      <ul className="divide-y divide-white/[0.05] md:hidden" aria-label={caption}>
+      <ul className="divide-y divide-white/[0.05] md:hidden" aria-label={t(caption)}>
         {visible.map((row) => (
           <li key={getKey(row)} className="relative p-4">
             <div className="flex items-start justify-between gap-3">
@@ -192,7 +195,7 @@ export function DataTable<T>({ columns, rows, getKey, onRowClick, empty, rowActi
             <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2">
               {rest.filter((c) => !c.hideOnMobile).map((c) => (
                 <div key={c.key} className="min-w-0">
-                  <dt className="font-mono text-[9px] uppercase tracking-[0.14em] text-steel/70">{c.header}</dt>
+                  <dt className="font-mono text-[9px] uppercase tracking-[0.14em] text-steel/70">{t(c.header)}</dt>
                   <dd className="mt-0.5 truncate text-[13px] text-snow/90">{c.render(row)}</dd>
                 </div>
               ))}
@@ -307,7 +310,7 @@ export function Modal({ open, onClose, title, description, children, footer, siz
   useEscape(open, onClose);
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-[80] flex items-end justify-center p-0 sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-label={title}>
+    <div className="fixed inset-0 z-[80] flex items-end justify-center p-0 sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-label={t(title)}>
       <div className="admin-fade absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
       <div className={cn("admin-pop relative flex max-h-[92svh] w-full flex-col rounded-t-2xl border border-white/10 bg-ink shadow-2xl sm:rounded-xl", size === "sm" ? "sm:max-w-md" : size === "md" ? "sm:max-w-lg" : "sm:max-w-3xl")}>
         <div className="flex items-start justify-between gap-4 border-b border-white/[0.06] px-5 py-4">
@@ -315,7 +318,7 @@ export function Modal({ open, onClose, title, description, children, footer, siz
             <h2 className="text-base font-bold text-snow">{t(title)}</h2>
             {description && <p className="mt-1 text-xs leading-relaxed text-steel">{t(description)}</p>}
           </div>
-          <Button variant="ghost" size="sm" icon={X} onClick={onClose} aria-label="Close" />
+          <Button variant="ghost" size="sm" icon={X} onClick={onClose} aria-label={t("Close")} />
         </div>
         <div className="overflow-y-auto px-5 py-5">{children}</div>
         {footer && <div className="flex justify-end gap-2 border-t border-white/[0.06] px-5 py-3">{footer}</div>}
@@ -330,11 +333,11 @@ export function Drawer({ open, onClose, title, children, footer }: { open: boole
   return (
     <>
       <div className={cn("fixed inset-0 z-[70] bg-black/60 backdrop-blur-sm transition-opacity", open ? "opacity-100" : "pointer-events-none opacity-0")} onClick={onClose} />
-      <aside role="dialog" aria-modal="true" aria-label={title} aria-hidden={!open}
+      <aside role="dialog" aria-modal="true" aria-label={t(title)} aria-hidden={!open}
         className={cn("fixed inset-y-0 right-0 z-[75] flex w-full max-w-md flex-col border-l border-white/10 bg-ink shadow-2xl transition-transform duration-300", open ? "translate-x-0" : "translate-x-full")}>
         <div className="flex items-center justify-between border-b border-white/[0.06] px-5 py-4">
           <h2 className="text-base font-bold">{t(title)}</h2>
-          <Button variant="ghost" size="sm" icon={X} onClick={onClose} aria-label="Close" />
+          <Button variant="ghost" size="sm" icon={X} onClick={onClose} aria-label={t("Close")} />
         </div>
         <div className="flex-1 overflow-y-auto p-5">{open && children}</div>
         {footer && <div className="flex justify-end gap-2 border-t border-white/[0.06] px-5 py-3">{footer}</div>}
@@ -344,25 +347,27 @@ export function Drawer({ open, onClose, title, children, footer }: { open: boole
 }
 
 export function ConfirmDialog({ open, title, message, confirmLabel = "Delete", onConfirm, onClose }: { open: boolean; title: string; message: string; confirmLabel?: string; onConfirm: () => void; onClose: () => void }) {
+  const { t } = useLocale();
   return (
     <Modal open={open} onClose={onClose} title={title} size="sm"
       footer={<><Button variant="ghost" onClick={onClose}>Cancel</Button><Button variant="danger" icon={AlertTriangle} onClick={() => { onConfirm(); onClose(); }}>{confirmLabel}</Button></>}>
-      <p className="text-sm leading-relaxed text-steel">{message}</p>
+      <p className="text-sm leading-relaxed text-steel">{t(message)}</p>
     </Modal>
   );
 }
 
 export function Toaster() {
   const { toasts, dismissToast } = useAdmin();
+  const { t } = useLocale();
   return (
     <div className="pointer-events-none fixed bottom-4 right-4 z-[100] flex w-[calc(100%-2rem)] max-w-sm flex-col gap-2" aria-live="polite">
-      {toasts.map((t) => {
-        const Icon = t.tone === "error" ? AlertTriangle : t.tone === "info" ? Info : CheckCircle2;
+      {toasts.map((toast) => {
+        const Icon = toast.tone === "error" ? AlertTriangle : toast.tone === "info" ? Info : CheckCircle2;
         return (
-          <div key={t.id} className="admin-pop pointer-events-auto flex items-start gap-3 rounded-lg border border-white/10 bg-[#0d141c] px-4 py-3 text-sm shadow-xl">
-            <Icon className={cn("mt-0.5 h-4 w-4 shrink-0", t.tone === "error" ? "text-red-200" : "text-volt")} aria-hidden />
-            <span className="flex-1 text-snow/90">{t.message}</span>
-            <button onClick={() => dismissToast(t.id)} className="text-steel hover:text-snow" aria-label="Dismiss"><X className="h-3.5 w-3.5" /></button>
+          <div key={toast.id} className="admin-pop pointer-events-auto flex items-start gap-3 rounded-lg border border-white/10 bg-[#0d141c] px-4 py-3 text-sm shadow-xl">
+            <Icon className={cn("mt-0.5 h-4 w-4 shrink-0", toast.tone === "error" ? "text-red-200" : "text-volt")} aria-hidden />
+            <span className="flex-1 text-snow/90">{t(toast.message)}</span>
+            <button onClick={() => dismissToast(toast.id)} className="text-steel hover:text-snow" aria-label={t("Dismiss")}><X className="h-3.5 w-3.5" /></button>
           </div>
         );
       })}
@@ -388,12 +393,13 @@ export function EmptyState({ icon: Icon = Inbox, title, description, action }: {
 }
 
 export function ErrorState({ title = "Something could not be loaded.", description, onRetry }: { title?: string; description: string; onRetry?: () => void }) {
+  const { t } = useLocale();
   return (
     <div className="flex items-start gap-3 rounded-lg border border-red-300/20 bg-red-400/[0.05] p-4" role="alert">
       <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-200" aria-hidden />
       <div className="flex-1">
-        <div className="text-sm font-semibold text-snow">{title}</div>
-        <p className="mt-0.5 text-xs text-steel">{description}</p>
+        <div className="text-sm font-semibold text-snow">{t(title)}</div>
+        <p className="mt-0.5 text-xs text-steel">{t(description)}</p>
       </div>
       {onRetry && <Button size="sm" onClick={onRetry}>Retry</Button>}
     </div>
@@ -404,8 +410,9 @@ export function Skeleton({ className }: { className?: string }) {
   return <div className={cn("admin-shimmer rounded-md bg-white/[0.04]", className)} />;
 }
 export function LoadingState() {
+  const { t } = useLocale();
   return (
-    <div aria-busy="true" aria-label="Loading">
+    <div aria-busy="true" aria-label={t("Loading")}>
       <Skeleton className="mb-2 h-3 w-32" />
       <Skeleton className="mb-7 h-8 w-64" />
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{[0, 1, 2, 3].map((i) => <Skeleton key={i} className="h-28" />)}</div>
@@ -415,14 +422,15 @@ export function LoadingState() {
 }
 
 export function NoData({ label = "No data available yet." }: { label?: string }) {
+  const { t } = useLocale();
   return (
     <div className="relative h-44 overflow-hidden rounded-lg border border-dashed border-white/10">
       <svg className="absolute inset-0 h-full w-full" preserveAspectRatio="none" aria-hidden>
         {[0.25, 0.5, 0.75].map((y) => <line key={y} x1="0" x2="100%" y1={`${y * 100}%`} y2={`${y * 100}%`} stroke="rgba(139,150,165,.1)" strokeDasharray="3 5" />)}
       </svg>
       <div className="relative flex h-full flex-col items-center justify-center gap-1 text-center">
-        <span className="text-sm font-semibold text-snow/90">{label}</span>
-        <span className="text-[11px] text-steel">Connect an analytics source to populate this chart.</span>
+        <span className="text-sm font-semibold text-snow/90">{t(label)}</span>
+        <span className="text-[11px] text-steel">{t("Connect an analytics source to populate this chart.")}</span>
       </div>
     </div>
   );
@@ -433,19 +441,20 @@ export function ChartCard({ title, description, children, action }: { title: str
 }
 
 export function ActivityItem({ actor, action, target, module, date, demo, compact }: { actor: string; action: string; target: string; module: string; date: string; demo?: boolean; compact?: boolean }) {
+  const { t } = useLocale();
   return (
     <li className="relative flex gap-3 pb-5 pl-1 last:pb-0">
       <span className="absolute left-[7px] top-4 bottom-0 w-px bg-white/[0.07] [li:last-child_&]:hidden" aria-hidden />
       <span className="relative mt-1.5 h-[9px] w-[9px] shrink-0 rounded-full border border-tech bg-obsidian" aria-hidden />
       <div className="min-w-0 flex-1">
         <p className="text-sm text-snow/90">
-          <span className="font-semibold text-snow">{actor}</span> <span className="text-steel">{action.toLowerCase()}</span> <span className="font-medium text-snow">{target}</span>
+          <span className="font-semibold text-snow">{actor}</span> <span className="text-steel">{t(action).toLowerCase()}</span> <span className="font-medium text-snow">{target}</span>
         </p>
         <div className="mt-1 flex flex-wrap items-center gap-2 text-[11px] text-steel">
-          <span className="font-mono uppercase tracking-[0.1em]">{module}</span>
+          <span className="font-mono uppercase tracking-[0.1em]">{t(module)}</span>
           <span className="text-steel/40">·</span>
           <time dateTime={date}>{(() => { const d = new Date(date); return Number.isNaN(d.getTime()) ? "—" : new Intl.DateTimeFormat("en-US", compact ? { month: "short", day: "numeric" } : { month: "short", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit" }).format(d); })()}</time>
-          {demo ? <DemoTag /> : <span className="rounded border border-tech/40 px-1.5 font-mono text-[9px] uppercase tracking-[0.12em] text-[#9cc6ff]">This session</span>}
+          {demo ? <DemoTag /> : <span className="rounded border border-tech/40 px-1.5 font-mono text-[9px] uppercase tracking-[0.12em] text-[#9cc6ff]">{t("This session")}</span>}
         </div>
       </div>
     </li>
@@ -461,10 +470,11 @@ export function useFiltered<T>(rows: T[], query: string, fields: (row: T) => str
 }
 
 export function Forbidden({ permission }: { permission: string }) {
+  const { t } = useLocale();
   return (
     <Panel>
       <EmptyState icon={AlertTriangle} title="You don't have access to this module."
-        description={`Your current role is missing the "${permission}" permission. Ask a Super Administrator to update your role.`} />
+        description={`${t('Your current role is missing the "')}${permission}${t('" permission. Ask a Super Administrator to update your role.')}`} />
     </Panel>
   );
 }

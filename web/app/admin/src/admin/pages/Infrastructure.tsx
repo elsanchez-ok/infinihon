@@ -3,6 +3,7 @@ import { integrations } from "../data";
 import { useAdmin } from "../store";
 import { Button, EmptyState, Forbidden, PageHeader, Panel, StatusBadge } from "../ui";
 import { cn } from "../../utils/cn";
+import { useLocale } from "../locale";
 
 const submodules = [
   { label: "Servers", to: "/admin/infrastructure/servers", icon: Server, text: "Physical and virtual hosts." },
@@ -50,6 +51,7 @@ function Topology() {
 
 export function InfrastructurePage() {
   const { can, navigate } = useAdmin();
+  const { t } = useLocale();
   if (!can("infrastructure.view")) return <Forbidden permission="infrastructure.view" />;
   return (
     <>
@@ -67,8 +69,8 @@ export function InfrastructurePage() {
           {submodules.map((m) => (
             <button key={m.label} onClick={() => navigate(m.to)} className="group flex items-center gap-3 rounded-xl border border-white/[0.07] bg-ink/80 p-4 text-left transition-colors hover:border-tech/40">
               <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-white/[0.08] bg-obsidian text-steel group-hover:text-volt"><m.icon className="h-4 w-4" aria-hidden /></span>
-              <span className="min-w-0 flex-1"><span className="block text-sm font-semibold">{m.label}</span><span className="block text-xs text-steel">{m.text}</span></span>
-              <span className="font-mono text-[10px] text-steel">0 resources</span>
+              <span className="min-w-0 flex-1"><span className="block text-sm font-semibold">{t(m.label)}</span><span className="block text-xs text-steel">{t(m.text)}</span></span>
+              <span className="font-mono text-[10px] text-steel">{t("0 resources")}</span>
             </button>
           ))}
         </div>
@@ -79,14 +81,15 @@ export function InfrastructurePage() {
 
 function ResourcePage({ title, icon: Icon, description, source }: { title: string; icon: typeof Server; description: string; source: string }) {
   const { can, navigate } = useAdmin();
+  const { t } = useLocale();
   if (!can("infrastructure.view")) return <Forbidden permission="infrastructure.view" />;
   return (
     <>
       <PageHeader eyebrow="Infrastructure" title={title} description={description}
         breadcrumbs={[{ label: "Infrastructure", to: "/admin/infrastructure" }, { label: title }]} />
       <Panel>
-        <EmptyState icon={Icon} title={`No ${title.toLowerCase()} connected.`}
-          description={`${title} are discovered from a ${source}. InfiniHon Corp. does not simulate resources that aren't connected.`}
+        <EmptyState icon={Icon} title={`${t("No")} ${t(title).toLowerCase()} ${t("connected.")}`}
+          description={`${t(title)} ${t("are discovered from a")} ${t(source)}. ${t("InfiniHon Corp. does not simulate resources that aren't connected.")}`}
           action={can("integrations.view") && <Button variant="primary" icon={Plug} onClick={() => navigate("/admin/integrations")}>Configure integration</Button>} />
       </Panel>
     </>
@@ -103,6 +106,7 @@ const indicators = [
 
 export function MonitoringPage() {
   const { can, navigate } = useAdmin();
+  const { t } = useLocale();
   if (!can("infrastructure.view")) return <Forbidden permission="infrastructure.view" />;
   return (
     <>
@@ -112,10 +116,10 @@ export function MonitoringPage() {
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
         {indicators.map((m) => (
           <div key={m.label} className="rounded-xl border border-white/[0.07] bg-ink/80 p-4">
-            <div className="flex items-center justify-between text-xs text-steel"><span>{m.label}</span><m.icon className="h-3.5 w-3.5" aria-hidden /></div>
+            <div className="flex items-center justify-between text-xs text-steel"><span>{t(m.label)}</span><m.icon className="h-3.5 w-3.5" aria-hidden /></div>
             <div className="mt-3 text-2xl font-extrabold text-snow/35">—</div>
             <div className="mt-3 h-1 rounded-full bg-white/[0.05]" aria-hidden />
-            <div className="mt-2 font-mono text-[10px] text-steel">Awaiting data</div>
+            <div className="mt-2 font-mono text-[10px] text-steel">{t("Awaiting data")}</div>
           </div>
         ))}
       </div>
@@ -126,7 +130,7 @@ export function MonitoringPage() {
         <Panel title="Status legend">
           <ul className="space-y-3 text-sm">
             {[["Operational", "Responding within thresholds."], ["Warning", "Degraded or near a threshold."], ["Offline", "Not responding."]].map(([s, d]) => (
-              <li key={s} className="flex items-start justify-between gap-3"><span className="text-steel">{d}</span><StatusBadge status={s} /></li>
+              <li key={s} className="flex items-start justify-between gap-3"><span className="text-steel">{t(d)}</span><StatusBadge status={s} /></li>
             ))}
           </ul>
         </Panel>
@@ -137,6 +141,7 @@ export function MonitoringPage() {
 
 export function IntegrationsPage() {
   const { can, toast } = useAdmin();
+  const { t } = useLocale();
   if (!can("integrations.view")) return <Forbidden permission="integrations.view" />;
   const categories = [...new Set(integrations.map((i) => i.category))];
   const connectedCount = integrations.filter((i) => i.status === "Connected").length;
@@ -144,25 +149,25 @@ export function IntegrationsPage() {
     <>
       <PageHeader eyebrow="Infrastructure" title="Integrations"
         description={connectedCount
-          ? `External services the Control Center can connect to. ${connectedCount} of ${integrations.length} integrations are connected in this environment.`
-          : "External services the Control Center can connect to. No integration is connected in this environment."}
+          ? `${t("External services the Control Center can connect to.")} ${connectedCount} ${t("of")} ${integrations.length} ${t("integrations are connected in this environment.")}`
+          : `${t("External services the Control Center can connect to.")} ${t("No integration is connected in this environment.")}`}
         breadcrumbs={[{ label: "Overview", to: "/admin" }, { label: "Integrations" }]} />
       <div className="mb-4 grid grid-cols-3 gap-3">
         {(["Connected", "Not configured", "Unavailable"] as const).map((s) => (
-          <div key={s} className="rounded-xl border border-white/[0.07] bg-ink/80 p-4"><div className="text-xs text-steel">{s}</div><div className="mt-1 text-2xl font-extrabold tabular-nums">{integrations.filter((i) => i.status === s).length}</div></div>
+          <div key={s} className="rounded-xl border border-white/[0.07] bg-ink/80 p-4"><div className="text-xs text-steel">{t(s)}</div><div className="mt-1 text-2xl font-extrabold tabular-nums">{integrations.filter((i) => i.status === s).length}</div></div>
         ))}
       </div>
       <div className="space-y-6">
         {categories.map((c) => (
           <section key={c}>
-            <h2 className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-steel">{c}</h2>
+            <h2 className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-steel">{t(c)}</h2>
             <div className="grid gap-3 md:grid-cols-2">
               {integrations.filter((i) => i.category === c).map((i) => (
                 <div key={i.name} className="flex items-start gap-4 rounded-xl border border-white/[0.07] bg-ink/80 p-4">
                   <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-dashed border-white/15 text-steel"><Plug className="h-4 w-4" aria-hidden /></span>
                   <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-center gap-2"><span className="text-sm font-semibold">{i.name}</span><StatusBadge status={i.status} /></div>
-                    <p className="mt-1 text-xs text-steel">{i.description}</p>
+                    <div className="flex flex-wrap items-center gap-2"><span className="text-sm font-semibold">{t(i.name)}</span><StatusBadge status={i.status} /></div>
+                    <p className="mt-1 text-xs text-steel">{t(i.description)}</p>
                   </div>
                   {i.status === "Connected" ? (
                     <Button size="sm" disabled>Connected</Button>

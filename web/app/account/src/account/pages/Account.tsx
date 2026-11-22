@@ -15,6 +15,7 @@ const emailOk = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
 
 export function ProfilePage() {
   const { data, toast, persistProfile } = useAccount();
+  const { t } = useLocale();
   const [form, setForm] = useState(data.profile);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [photo, setPhoto] = useState<string | null>(null);
@@ -61,7 +62,7 @@ export function ProfilePage() {
               <input id="pf-position" className={inputCls} value={form.position} onChange={(e) => setForm({ ...form, position: e.target.value })} autoComplete="organization-title" />
             </Field>
           </div>
-          {capabilities.profileUpdate && <div className="mt-5 text-[11px] text-steel">Los cambios se guardan en tu cuenta y quedan disponibles en cualquier dispositivo.</div>}
+          {capabilities.profileUpdate && <div className="mt-5 text-[11px] text-steel">{t("Los cambios se guardan en tu cuenta y quedan disponibles en cualquier dispositivo.")}</div>}
         </Panel>
 
         <div className="space-y-4">
@@ -69,16 +70,16 @@ export function ProfilePage() {
             <div className="flex flex-col items-center gap-4">
               <UserAvatar name={displayName(form)} size="lg" src={photo} />
               <div className="flex flex-col gap-2 w-full">
-                <Button size="sm" disabled={!capabilities.fileUpload} title={capabilities.fileUpload ? undefined : "Requiere almacenamiento de archivos conectado."}>Subir foto</Button>
-                <Button size="sm" variant="ghost" disabled={!photo || !capabilities.fileUpload} onClick={() => setPhoto(null)}>Quitar</Button>
+                <Button size="sm" disabled={!capabilities.fileUpload} title={capabilities.fileUpload ? undefined : t("Requiere almacenamiento de archivos conectado.")}>{t("Subir foto")}</Button>
+                <Button size="sm" variant="ghost" disabled={!photo || !capabilities.fileUpload} onClick={() => setPhoto(null)}>{t("Quitar")}</Button>
               </div>
-              <p className="text-center text-[11px] leading-relaxed text-steel">Formatos habituales de imagen. InfiniHon Corp. no asigna una foto automática.</p>
+              <p className="text-center text-[11px] leading-relaxed text-steel">{t("Formatos habituales de imagen. InfiniHon Corp. no asigna una foto automática.")}</p>
             </div>
           </Panel>
           <Panel title="Estado de la cuenta">
             <dl className="space-y-3 text-sm">
-              <div className="flex items-center justify-between gap-3"><dt className="text-steel">Perfil</dt><dd><StatusBadge status={data.profileCompleted ? "Completo" : "Incompleto"} /></dd></div>
-              <div className="flex items-center justify-between gap-3"><dt className="text-steel">Tipo de cuenta</dt><dd className="font-medium">Individual</dd></div>
+              <div className="flex items-center justify-between gap-3"><dt className="text-steel">{t("Perfil")}</dt><dd><StatusBadge status={data.profileCompleted ? "Completo" : "Incompleto"} /></dd></div>
+              <div className="flex items-center justify-between gap-3"><dt className="text-steel">{t("Tipo de cuenta")}</dt><dd className="font-medium">{t("Individual")}</dd></div>
             </dl>
           </Panel>
         </div>
@@ -89,6 +90,7 @@ export function ProfilePage() {
 /* ─────────── Seguridad ─────────── */
 export function SecurityPage() {
   const { data, patch, toast } = useAccount();
+  const { t } = useLocale();
   const [confirmSignOut, setConfirmSignOut] = useState(false);
   const sec = data.security;
   const activity = data.notifications.filter((n) => n.group === "Seguridad");
@@ -102,36 +104,36 @@ export function SecurityPage() {
         <Panel title="Contraseña" description="Última actualización de tu contraseña.">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <div className="text-sm font-semibold text-snow">Contraseña</div>
-              <div className="mt-0.5 text-xs text-steel">{sec.passwordUpdatedAt ? `Actualizada el ${fmtDate(sec.passwordUpdatedAt)}` : "Nunca actualizada en esta sesión"}</div>
+              <div className="text-sm font-semibold text-snow">{t("Contraseña")}</div>
+              <div className="mt-0.5 text-xs text-steel">{sec.passwordUpdatedAt ? `${t("Actualizada el")} ${fmtDate(sec.passwordUpdatedAt)}` : t("Nunca actualizada en esta sesión")}</div>
             </div>
             <KeyRound className="h-5 w-5 shrink-0 text-steel" aria-hidden />
           </div>
           <Button className="mt-4 w-full" disabled={!capabilities.passwordChange}
-            title={capabilities.passwordChange ? undefined : "Requiere un backend de autenticación."}
+            title={capabilities.passwordChange ? undefined : t("Requiere un backend de autenticación.")}
             onClick={() => {
               if (!data.profile.email) { toast("Completa tu perfil con tu correo primero.", "info"); return; }
               void authRecover(data.profile.email)
                 .then(() => toast("Te enviamos las instrucciones por correo."))
                 .catch(() => toast("No pudimos enviar el correo. Inténtalo de nuevo.", "error"));
-            }}>Enviar instrucciones de cambio</Button>
-          <p className="mt-3 text-[11px] leading-relaxed text-steel">Te enviaremos instrucciones por correo para restablecerla de forma segura.</p>
+            }}>{t("Enviar instrucciones de cambio")}</Button>
+          <p className="mt-3 text-[11px] leading-relaxed text-steel">{t("Te enviaremos instrucciones por correo para restablecerla de forma segura.")}</p>
         </Panel>
 
         <Panel title="Verificación en dos pasos" description="Una capa extra al iniciar sesión.">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <div className="text-sm font-semibold text-snow">{sec.twoFactor === "Habilitado" ? "Habilitada" : "No configurada"}</div>
+              <div className="text-sm font-semibold text-snow">{sec.twoFactor === "Habilitado" ? t("Habilitada") : t("No configurada")}</div>
               <div className="mt-0.5 text-xs leading-relaxed text-steel">
-                {sec.twoFactor === "Habilitado" ? "Tu cuenta pide un segundo factor al iniciar sesión." : "Añade una capa más de protección a tu cuenta."}
+                {t(sec.twoFactor === "Habilitado" ? "Tu cuenta pide un segundo factor al iniciar sesión." : "Añade una capa más de protección a tu cuenta.")}
               </div>
             </div>
             <ShieldCheck className={`h-5 w-5 shrink-0 ${sec.twoFactor === "Habilitado" ? "text-volt" : "text-steel"}`} aria-hidden />
           </div>
           <Button className="mt-4 w-full" disabled={!capabilities.twoFactor}
-            title={capabilities.twoFactor ? undefined : "Requiere un backend de autenticación."}
+            title={capabilities.twoFactor ? undefined : t("Requiere un backend de autenticación.")}
             onClick={() => toast("La verificación en dos pasos requiere un backend de autenticación.", "info")}>
-            {sec.twoFactor === "Habilitado" ? "Administrar" : "Configurar ahora"}
+            {sec.twoFactor === "Habilitado" ? t("Administrar") : t("Configurar ahora")}
           </Button>
         </Panel>
 
@@ -142,13 +144,13 @@ export function SecurityPage() {
                 <Monitor className="h-5 w-5 shrink-0 text-steel" aria-hidden />
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2"><span className="text-sm font-semibold text-snow">{s.device}</span>{s.current && <StatusBadge status="Sesión actual" />}</div>
-                  <div className="mt-0.5 text-[11.5px] text-steel">{s.lastActive ? `Activa ${fmtRelative(s.lastActive)}` : "Sin actividad registrada"}</div>
+                  <div className="mt-0.5 text-[11.5px] text-steel">{s.lastActive ? `${t("Activa")} ${fmtRelative(s.lastActive)}` : t("Sin actividad registrada")}</div>
                 </div>
                 {!s.current && <Button size="sm" variant="danger">Cerrar sesión</Button>}
               </li>
             ))}
           </ul>
-          <div className="border-t border-white/[0.06] p-5"><DemoNote>Solo se muestra la sesión local de demostración. Las sesiones reales las lista el backend de autenticación.</DemoNote></div>
+          <div className="border-t border-white/[0.06] p-5"><DemoNote>{t("Solo se muestra la sesión local de demostración. Las sesiones reales las lista el backend de autenticación.")}</DemoNote></div>
         </Panel>
 
         <Panel title="Actividad de seguridad" description="Inicios de sesión y cambios importantes." className="lg:col-span-2" padded={false}>
@@ -166,7 +168,7 @@ export function SecurityPage() {
 
         <Panel title="Cerrar sesión" className="lg:col-span-2 border-amber-200/15">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm leading-relaxed text-steel">Cierra la sesión en este dispositivo. Tendrás que volver a autenticarte para entrar a tu espacio.</p>
+            <p className="text-sm leading-relaxed text-steel">{t("Cierra la sesión en este dispositivo. Tendrás que volver a autenticarte para entrar a tu espacio.")}</p>
             <Button variant="danger" icon={AlertTriangle} onClick={() => setConfirmSignOut(true)}>Cerrar sesión</Button>
           </div>
         </Panel>
@@ -188,7 +190,7 @@ const timezones = ["America/Tegucigalpa", "America/Mexico_City", "America/Bogota
 
 export function SettingsPage() {
   const { data, patch, toast } = useAccount();
-  const { locale, setLocale } = useLocale();
+  const { locale, setLocale, t } = useLocale();
   const [prefs, setPrefs] = useState({ ...data.preferences, language: locale });
   const dirty = prefs.language !== locale || JSON.stringify({ ...prefs, language: data.preferences.language }) !== JSON.stringify(data.preferences);
   const set = <K extends keyof typeof prefs>(k: K, v: (typeof prefs)[K]) => setPrefs({ ...prefs, [k]: v });
@@ -207,7 +209,7 @@ export function SettingsPage() {
                 <option value="es-HN">Español (Honduras)</option><option value="en-US">Inglés (Estados Unidos)</option>
             </select></Field>
             <Field label="Zona horaria" htmlFor="st-tz"><select id="st-tz" className={`${inputCls} [&>option]:bg-ink`} value={prefs.timezone} onChange={(e) => set("timezone", e.target.value)}>
-              {timezones.map((t) => <option key={t}>{t}</option>)}
+              {timezones.map((tz) => <option key={tz}>{tz}</option>)}
             </select></Field>
           </div>
           <div className="mt-2 divide-y divide-white/[0.05]">
@@ -223,12 +225,12 @@ export function SettingsPage() {
             <Toggle label="Respuestas de soporte" description="Cuando el equipo responde un ticket." checked={prefs.supportNotifications} onChange={(v) => set("supportNotifications", v)} />
             <Toggle label="Comunicaciones comerciales" description="Novedades y contenido de InfiniHon Corp. Puedes desactivarlo cuando quieras." checked={prefs.marketing} onChange={(v) => set("marketing", v)} />
           </div>
-          <div className="mt-4 flex items-center gap-2 text-[11px] text-steel"><Check className="h-3.5 w-3.5 text-volt" aria-hidden />Nunca vendemos ni compartimos tus datos.</div>
+          <div className="mt-4 flex items-center gap-2 text-[11px] text-steel"><Check className="h-3.5 w-3.5 text-volt" aria-hidden />{t("Nunca vendemos ni compartimos tus datos.")}</div>
         </Panel>
 
         <Panel title="Restablecer" description="Vuelve a los valores iniciales del portal de demostración." className="lg:col-span-2">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-[13px] leading-relaxed text-steel">Borra las solicitudes, tickets y favoritos creados en esta sesión.</p>
+            <p className="text-[13px] leading-relaxed text-steel">{t("Borra las solicitudes, tickets y favoritos creados en esta sesión.")}</p>
             <Button variant="danger" icon={Trash2} onClick={() => { patch({ preferences: initialPreferences, security: initialSecurity, requests: [], tickets: [], favorites: [], notifications: [] }); toast("Se restableció el portal.", "info"); }}>Restablecer portal</Button>
           </div>
         </Panel>
@@ -243,6 +245,7 @@ const groups = ["Todas", "Sin leer", "Pedidos", "Servicios", "Seguridad", "Sopor
 
 export function NotificationsPage() {
   const { data, markAllRead, markRead, navigate } = useAccount();
+  const { t } = useLocale();
   const [group, setGroup] = useState<(typeof groups)[number]>("Todas");
   const rows = data.notifications.filter((n) =>
     group === "Todas" ? true : group === "Sin leer" ? !n.read : n.group === group);
@@ -256,7 +259,7 @@ export function NotificationsPage() {
       <div className="mb-4 flex gap-2 overflow-x-auto pb-1">
         {groups.map((g) => (
           <button key={g} onClick={() => setGroup(g)} aria-pressed={group === g}
-            className={`whitespace-nowrap rounded-full border px-3 py-1.5 text-xs transition-colors ${group === g ? "border-tech bg-tech/15 text-snow" : "border-white/10 text-steel hover:text-snow"}`}>{g}</button>
+            className={`whitespace-nowrap rounded-full border px-3 py-1.5 text-xs transition-colors ${group === g ? "border-tech bg-tech/15 text-snow" : "border-white/10 text-steel hover:text-snow"}`}>{t(g)}</button>
         ))}
       </div>
 
@@ -270,7 +273,7 @@ export function NotificationsPage() {
                   <div className="text-sm font-medium text-snow">{n.title}</div>
                   <div className="mt-0.5 text-[12.5px] leading-relaxed text-steel">{n.description}</div>
                   <div className="mt-1.5 flex flex-wrap items-center gap-2 text-[11px] text-steel">
-                    <span className="font-mono uppercase tracking-[0.12em]">{n.group}</span>·<time dateTime={n.date}>{fmtRelative(n.date)}</time>·<span>{n.read ? "Leída" : "Sin leer"}</span>
+                    <span className="font-mono uppercase tracking-[0.12em]">{t(n.group)}</span>·<time dateTime={n.date}>{fmtRelative(n.date)}</time>·<span>{n.read ? t("Leída") : t("Sin leer")}</span>
                   </div>
                 </div>
                 {!n.read && <Button size="sm" variant="ghost" onClick={() => markRead(n.id)}>Marcar leída</Button>}
