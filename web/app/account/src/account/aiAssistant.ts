@@ -25,6 +25,9 @@ export async function askAssistant(messages: ChatMessage[]): Promise<AskResult> 
     return { ok: true, reply };
   } catch (e) {
     if (e instanceof SupabaseError) {
+      // El mensaje puede traer el detalle real del error ascendente (NVIDIA)
+      // para diagnóstico; no se muestra al usuario, solo queda en consola.
+      console.error("Zuri IA:", e.status, e.message);
       if (e.status === 429) return { ok: false, reason: "rate-limited" };
       if (e.status === 0) return { ok: false, reason: "network" };
     }
