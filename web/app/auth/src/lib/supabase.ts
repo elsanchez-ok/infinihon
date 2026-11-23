@@ -119,6 +119,47 @@ export async function getSessionUser(): Promise<SessionUser | null> {
   }
 }
 
+/* ─────────── OAuth (Google / Microsoft) ─────────── */
+
+export type OAuthProvider = "google" | "azure";
+
+/**
+ * Construye la URL de autorización de GoTrue para iniciar el flujo OAuth.
+ * Es una redirección de página completa: el navegador sale del sitio hacia
+ * el proveedor (Google/Microsoft) y luego Supabase trae de vuelta al usuario
+ * a `redirectTo`, con los tokens de sesión en el fragmento `#` de la URL.
+ * No funciona hasta que el provider correspondiente esté activado con sus
+ * credenciales en Supabase → Authentication → Providers.
+ */
+export function oauthAuthorizeUrl(provider: OAuthProvider, redirectTo: string): string {
+  const params = new URLSearchParams({ provider, redirect_to: redirectTo });
+  return `${SUPABASE_URL}/auth/v1/authorize?${params.toString()}`;
+}
+
+export type OAuthCallbackOutcome = "signed-in" | "error" | "none";
+
+/**
+ * Si la URL actual trae el fragmento que GoTrue añade al volver de un login
+ * OAuth (`#access_token=...` o `#error=...`), guarda la sesión (o detecta el
+ * fallo) y limpia el fragmento de la URL. Debe llamarse una sola vez al
+ * montar la página de destino (`/auth`).
+ */
+export function consumeOAuthRedirect(): OAuthCallbackOutcome {
+  const hash = window.location.hash;
+  if (hash.length < 2) return "none";
+  const params = new URLSearchParams(hash.slice(1));
+  const accessToken = params.get("access_token");
+  const refreshToken = params.get("refresh_token");
+  const hasOAuthParams = accessToken || params.has("error") || params.has("error_description");
+  if (!hasOAuthParams) return "none";
+  // Limpia el fragmento para no dejar tokens ni errores visibles en la URL/historial.
+  window.history.replaceState(null, "", window.location.pathname + window.location.search);
+  if (!accessToken || !refreshToken) return "error";
+  const expiresIn = Number(params.get("expires_in") ?? 3600);
+  writeStorage({ access_token: accessToken, refresh_token: refreshToken, expires_at: Date.now() + expiresIn * 1000 }, true);
+  return "signed-in";
+}
+
 /* ─────────── Auth ─────────── */
 
 export type AuthOutcome =

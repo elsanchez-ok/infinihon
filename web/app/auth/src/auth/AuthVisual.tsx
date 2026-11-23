@@ -14,11 +14,16 @@ export function AuthMark({ compact = false }: { compact?: boolean }) {
    dejar únicamente una imagen. Hay una imagen distinta para cada tema (el
    tema activo vive en <html data-theme="dark|light">); el CSS decide cuál
    de las dos se muestra, así no hay parpadeo al alternar tema. */
+// Cache-bust: cambia este sufijo cada vez que se reemplacen los archivos de
+// imagen (mismo nombre de archivo) para que los navegadores no sigan
+// mostrando una copia vieja cacheada bajo la misma URL.
+const BRAND_IMAGE_VERSION = "v3";
+
 export function AuthBrandPanel({ children }: { children?: ReactNode }) {
   return (
     <aside className="auth-brand-panel" aria-label="Identidad InfiniHon Corp.">
-      <img src="/assets/auth-brand-light.webp" alt="" aria-hidden="true" className="auth-brand-image auth-brand-image-light" />
-      <img src="/assets/auth-brand-dark.webp" alt="" aria-hidden="true" className="auth-brand-image auth-brand-image-dark" />
+      <img src={`/assets/auth-brand-light.webp?${BRAND_IMAGE_VERSION}`} alt="" aria-hidden="true" className="auth-brand-image auth-brand-image-light" />
+      <img src={`/assets/auth-brand-dark.webp?${BRAND_IMAGE_VERSION}`} alt="" aria-hidden="true" className="auth-brand-image auth-brand-image-dark" />
       {children}
     </aside>
   );
