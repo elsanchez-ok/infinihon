@@ -17,7 +17,7 @@ export function AuthMark({ compact = false }: { compact?: boolean }) {
 // Cache-bust: cambia este sufijo cada vez que se reemplacen los archivos de
 // imagen (mismo nombre de archivo) para que los navegadores no sigan
 // mostrando una copia vieja cacheada bajo la misma URL.
-const BRAND_IMAGE_VERSION = "v3";
+const BRAND_IMAGE_VERSION = "v4";
 
 export function AuthBrandPanel({ children }: { children?: ReactNode }) {
   return (
