@@ -7,6 +7,12 @@ aplican con la Supabase CLI o el MCP de Supabase, no copiando estos archivos.
 - `migrations/` — espejo de las migraciones SQL aplicadas al proyecto.
 - `functions/contact-form/` — copia de referencia de la Edge Function que
   recibe los envíos de `/contacto` (ver comentarios en el propio archivo).
+- `functions/ai-chat/` — copia de referencia de la Edge Function que atiende
+  el asistente "Zuri IA" del portal de usuario (`/account`): recibe el
+  historial de chat de un usuario autenticado, arma un contexto con SUS
+  propios datos (perfil, pedidos, solicitudes, tickets — vía su propio JWT,
+  filtrado por las políticas RLS de cada tabla) y llama a la API de NVIDIA
+  NIM del lado del servidor. La clave de NVIDIA nunca llega al navegador.
 
 ## Secrets del proyecto
 
@@ -14,6 +20,7 @@ aplican con la Supabase CLI o el MCP de Supabase, no copiando estos archivos.
 | ------------------ | ----------------------------------------------------------- |
 | `RESEND_API_KEY`   | API key de [resend.com](https://resend.com) para enviar el correo de notificación de `/contacto`. |
 | `CONTACT_TO_EMAIL` | Buzón de destino de esas notificaciones (`infinihon.hn@gmail.com`). |
+| `NVIDIA_API_KEY`   | API key de [build.nvidia.com](https://build.nvidia.com) (`nvapi-...`) para el asistente "Zuri IA" de `/account` (función `ai-chat`). |
 
 ## Auth
 
