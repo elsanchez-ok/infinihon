@@ -1,5 +1,6 @@
-import { useState, type InputHTMLAttributes, type MouseEvent, type ReactNode } from "react";
+import { useEffect, useRef, useState, type InputHTMLAttributes, type MouseEvent, type ReactNode } from "react";
 import { authCapabilities } from "./authService";
+import { GOOGLE_CLIENT_ID, generateNonce, loadGoogleIdentityScript } from "./googleIdentity";
 import { passwordRequirements, passwordScore } from "./validation";
 
 type FieldProps = Omit<InputHTMLAttributes<HTMLInputElement>, "id"> & {
@@ -89,18 +90,81 @@ export function PasswordStrength({ value, expanded }: { value: string; expanded:
   );
 }
 
-export function SocialAuth({ onProvider, pendingProvider }: {
-  onProvider: (provider: "google" | "microsoft") => void;
+/**
+ * Celda del botón de Google: usa el widget real de Google Identity Services
+ * (GIS), renderizado en el propio navegador. Así la pantalla de Google dice
+ * "para continuar a <tu dominio>" en vez del dominio del proyecto de
+ * Supabase, y el inicio de sesión no depende del Client Secret del provider.
+ */
+function GoogleButtonCell({ onCredential, pending }: {
+  onCredential: (idToken: string, nonce: string) => void;
+  pending: boolean;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
+  const onCredentialRef = useRef(onCredential);
+  onCredentialRef.current = onCredential;
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        await loadGoogleIdentityScript();
+        const { nonce, hashedNonce } = await generateNonce();
+        if (cancelled || !containerRef.current || !window.google) return;
+        window.google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: (response) => onCredentialRef.current(response.credential, nonce),
+          nonce: hashedNonce,
+          use_fedcm_for_prompt: true,
+        });
+        window.google.accounts.id.renderButton(containerRef.current, {
+          type: "standard",
+          theme: "filled_black",
+          size: "large",
+          text: "continue_with",
+          shape: "rectangular",
+          logo_alignment: "left",
+          width: 260,
+        });
+        if (!cancelled) setStatus("ready");
+      } catch {
+        if (!cancelled) setStatus("error");
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
+  return (
+    <div className="auth-google-cell">
+      <div ref={containerRef} className="auth-google-button" hidden={status !== "ready" || pending} />
+      {(status !== "ready" || pending) && (
+        <button className="auth-social-button" type="button" disabled aria-busy={pending}>
+          <span className="auth-social-monogram" aria-hidden="true">G</span>
+          <span>{pending ? "Conectando..." : status === "error" ? "Google no disponible" : "Cargando Google..."}</span>
+        </button>
+      )}
+    </div>
+  );
+}
+
+export function SocialAuth({ onMicrosoft, onGoogleCredential, pendingProvider }: {
+  onMicrosoft: () => void;
+  onGoogleCredential: (idToken: string, nonce: string) => void;
   pendingProvider: "google" | "microsoft" | null;
 }) {
   return (
     <div className="auth-social-area">
       <div className="auth-social-grid">
-        <button className="auth-social-button" type="button" disabled={!authCapabilities.google || pendingProvider !== null} aria-busy={pendingProvider === "google"} onClick={() => onProvider("google")} title={!authCapabilities.google ? "Integración con Google pendiente" : undefined} aria-label={!authCapabilities.google ? "Continuar con Google, próximamente" : "Continuar con Google"}>
-          <span className="auth-social-monogram" aria-hidden="true">G</span>
-          <span>{pendingProvider === "google" ? "Conectando..." : "Continuar con Google"}</span>
-        </button>
-        <button className="auth-social-button" type="button" disabled={!authCapabilities.microsoft || pendingProvider !== null} aria-busy={pendingProvider === "microsoft"} onClick={() => onProvider("microsoft")} title={!authCapabilities.microsoft ? "Integración con Microsoft pendiente" : undefined} aria-label={!authCapabilities.microsoft ? "Continuar con Microsoft, próximamente" : "Continuar con Microsoft"}>
+        {authCapabilities.google ? (
+          <GoogleButtonCell onCredential={onGoogleCredential} pending={pendingProvider === "google"} />
+        ) : (
+          <button className="auth-social-button" type="button" disabled title="Integración con Google pendiente" aria-label="Continuar con Google, próximamente">
+            <span className="auth-social-monogram" aria-hidden="true">G</span>
+            <span>Continuar con Google</span>
+          </button>
+        )}
+        <button className="auth-social-button" type="button" disabled={!authCapabilities.microsoft || pendingProvider !== null} aria-busy={pendingProvider === "microsoft"} onClick={onMicrosoft} title={!authCapabilities.microsoft ? "Integración con Microsoft pendiente" : undefined} aria-label={!authCapabilities.microsoft ? "Continuar con Microsoft, próximamente" : "Continuar con Microsoft"}>
           <span className="auth-social-monogram" aria-hidden="true">M</span>
           <span>{pendingProvider === "microsoft" ? "Conectando..." : "Continuar con Microsoft"}</span>
         </button>

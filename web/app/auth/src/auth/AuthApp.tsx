@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { AuthBrandPanel, AuthMark } from "./AuthVisual";
 import { ThemeToggle } from "../components/ui";
-import { AuthFeedback } from "./AuthFields";
 import { ForgotPasswordForm, LoginForm, RegisterForm } from "./AuthForms";
 import { consumeOAuthRedirect, isAdminUser, postLoginPath } from "../lib/supabase";
 import "./auth.css";
@@ -14,8 +13,21 @@ function modeFromPath(pathname: string): AuthMode {
   return "login";
 }
 
-/** "checking"/"redirecting" mientras se procesa una vuelta de Google/Microsoft, "error" si falló. */
-type OAuthStatus = "idle" | "checking" | "redirecting" | "error";
+/** "checking"/"redirecting" mientras se procesa una vuelta de Microsoft (redirección completa). */
+type OAuthStatus = "idle" | "checking" | "redirecting";
+
+/** Aviso flotante sobre el escenario (fuera de la tarjeta de cristal) para
+ * fallos de login social, tanto el de Google (ID token, sin redirección)
+ * como el de Microsoft (redirección completa, ver consumeOAuthRedirect). */
+function SocialAuthErrorToast({ onDismiss }: { onDismiss: () => void }) {
+  return (
+    <div className="auth-toast auth-toast-error" role="alert">
+      <span className="auth-toast-icon" aria-hidden="true">!</span>
+      <p>No pudimos completar el acceso con ese proveedor. Inténtalo de nuevo o usa tu correo y contraseña.</p>
+      <button type="button" className="auth-toast-dismiss" onClick={onDismiss} aria-label="Cerrar aviso">×</button>
+    </div>
+  );
+}
 
 export default function AuthApp({ pathname, navigate }: { pathname: string; navigate: (to: string) => void }) {
   const mode = modeFromPath(pathname);
@@ -23,6 +35,7 @@ export default function AuthApp({ pathname, navigate }: { pathname: string; navi
   const [oauthStatus, setOauthStatus] = useState<OAuthStatus>(
     () => (window.location.hash.length > 1 ? "checking" : "idle"),
   );
+  const [socialAuthError, setSocialAuthError] = useState(false);
 
   useEffect(() => {
     if (oauthStatus !== "checking") return;
@@ -30,7 +43,7 @@ export default function AuthApp({ pathname, navigate }: { pathname: string; navi
     (async () => {
       const outcome = consumeOAuthRedirect();
       if (outcome === "none") { if (!cancelled) setOauthStatus("idle"); return; }
-      if (outcome === "error") { if (!cancelled) setOauthStatus("error"); return; }
+      if (outcome === "error") { if (!cancelled) { setOauthStatus("idle"); setSocialAuthError(true); } return; }
       if (!cancelled) setOauthStatus("redirecting");
       const admin = await isAdminUser();
       window.location.assign(admin ? "/admin" : postLoginPath());
@@ -72,6 +85,10 @@ export default function AuthApp({ pathname, navigate }: { pathname: string; navi
       <main className="auth-stage">
         <AuthBrandPanel />
 
+        {/* Aviso de fallo de login social: vive sobre el escenario, fuera de
+            la tarjeta, para no interferir con el formulario. */}
+        {socialAuthError && <SocialAuthErrorToast onDismiss={() => setSocialAuthError(false)} />}
+
         <section className="auth-panel" id="auth-form" aria-label="Acceso a InfiniHon Corp.">
           <div className="auth-panel-inner">
             <div className="auth-panel-topbar">
@@ -89,12 +106,7 @@ export default function AuthApp({ pathname, navigate }: { pathname: string; navi
               </div>
             ) : (
               <div key={mode} className="auth-view-transition">
-                {oauthStatus === "error" && (
-                  <AuthFeedback type="error">
-                    No pudimos completar el acceso con ese proveedor. Inténtalo de nuevo o usa tu correo y contraseña.
-                  </AuthFeedback>
-                )}
-                {mode === "login" && <LoginForm navigate={navigate} />}
+                {mode === "login" && <LoginForm navigate={navigate} onSocialAuthError={() => setSocialAuthError(true)} />}
                 {mode === "register" && <RegisterForm navigate={navigate} />}
                 {mode === "recovery" && <ForgotPasswordForm navigate={navigate} />}
               </div>

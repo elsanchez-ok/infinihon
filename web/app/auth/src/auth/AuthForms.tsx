@@ -104,22 +104,39 @@ function Completion({ title, description, navigate, destination = "/auth", actio
   );
 }
 
-export function LoginForm({ navigate }: { navigate: Navigate }) {
+export function LoginForm({ navigate, onSocialAuthError }: { navigate: Navigate; onSocialAuthError: () => void }) {
   const form = useValidatedForm<LoginValues>({ email: "", password: "", remember: false }, validateLogin, "login");
   const [state, setState] = useState<SubmitState>("idle");
   const [message, setMessage] = useState("");
   const [providerLoading, setProviderLoading] = useState<"google" | "microsoft" | null>(null);
 
-  async function signInWithProvider(provider: "google" | "microsoft") {
-    setMessage("");
-    setProviderLoading(provider);
+  // Los fallos de login social se avisan con el aviso flotante fuera de la
+  // tarjeta (ver AuthApp), no con el mensaje inline del formulario.
+  async function signInWithMicrosoft() {
+    setProviderLoading("microsoft");
     try {
-      const result = await authService.oauth(provider);
-      if (result.ok) setState("success");
-      else { setState("error"); setMessage(failureText(result.reason, "login")); }
+      const result = await authService.oauth("microsoft");
+      if (result.ok) {
+        setState("success");
+        if (result.redirect) window.setTimeout(() => window.location.assign(result.redirect!), 500);
+      } else { onSocialAuthError(); }
     } catch {
-      setState("error");
-      setMessage(failureText("network", "login"));
+      onSocialAuthError();
+    } finally {
+      setProviderLoading(null);
+    }
+  }
+
+  async function signInWithGoogleCredential(idToken: string, nonce: string) {
+    setProviderLoading("google");
+    try {
+      const result = await authService.oauthIdToken("google", idToken, nonce);
+      if (result.ok) {
+        setState("success");
+        if (result.redirect) window.setTimeout(() => window.location.assign(result.redirect!), 500);
+      } else { onSocialAuthError(); }
+    } catch {
+      onSocialAuthError();
     } finally {
       setProviderLoading(null);
     }
@@ -153,7 +170,7 @@ export function LoginForm({ navigate }: { navigate: Navigate }) {
   return (
     <div className="auth-view">
       <FormHeading step="01" title="Bienvenido de nuevo." description="Accede a tu cuenta de InfiniHon Corp." />
-      <SocialAuth onProvider={signInWithProvider} pendingProvider={providerLoading} />
+      <SocialAuth onMicrosoft={signInWithMicrosoft} onGoogleCredential={signInWithGoogleCredential} pendingProvider={providerLoading} />
       <ServiceNotice />
       <form className="auth-form" onSubmit={submit} noValidate>
         <FormField

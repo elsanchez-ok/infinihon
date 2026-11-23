@@ -205,6 +205,23 @@ export async function authSignUp(input: { firstName: string; lastName: string; e
   }
 }
 
+/**
+ * Inicia sesión con el ID token que entrega Google Identity Services en el
+ * propio navegador (sin redirección completa de página). GoTrue valida la
+ * firma del token y el `nonce` directamente; no depende del Client Secret
+ * configurado en el provider.
+ */
+export async function authSignInWithIdToken(provider: "google", idToken: string, nonce: string, remember: boolean): Promise<AuthOutcome> {
+  try {
+    const j = await sb("/auth/v1/token?grant_type=id_token", { method: "POST", body: { provider, id_token: idToken, nonce } });
+    const t: Tokens = { access_token: j.access_token, refresh_token: j.refresh_token, expires_at: Date.now() + (j.expires_in ?? 3600) * 1000 };
+    writeStorage(t, remember);
+    return { ok: true };
+  } catch (e) {
+    return e instanceof SupabaseError ? mapAuthError(e.status, e.message) : { ok: false, reason: "network" };
+  }
+}
+
 export async function authRecover(email: string): Promise<AuthOutcome> {
   try {
     await sb("/auth/v1/recover", { method: "POST", body: { email } });
