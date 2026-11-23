@@ -19,6 +19,7 @@ import ContactPage from "./components/ContactPage";
 import { TerminosPage, PrivacidadPage, CookiesPage } from "./components/LegalPages";
 import Footer from "./components/Footer";
 import ScrollMascot from "./components/ScrollMascot";
+import { useSmoothScroll } from "./hooks/useSmoothScroll";
 
 /* Páginas estáticas adicionales que este SPA sirve bajo index.html (ver
    rewrites en vercel.json: cada una de estas rutas apunta a /index.html,
@@ -34,6 +35,10 @@ const staticPages: Record<string, { title: string; Component: () => JSX.Element 
 export default function App() {
   const path = window.location.pathname.replace(/\/+$/, "") || "/";
   const page = staticPages[path];
+
+  // Scroll suave en todo el sitio (rueda, teclado y anclas del menú) —
+  // ver hooks/useSmoothScroll.ts para el detalle de cómo funciona.
+  useSmoothScroll();
 
   useEffect(() => {
     if (!page) return;
