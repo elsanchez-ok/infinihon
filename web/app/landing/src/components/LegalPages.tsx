@@ -266,9 +266,13 @@ export function CookiesPage() {
             items={[
               "Esenciales: necesarias para iniciar sesión, mantener tu carrito y navegar de forma segura. No se pueden desactivar.",
               "Preferencias: recuerdan tu tema (claro/oscuro) y otras configuraciones de interfaz.",
-              "Analíticas: nos ayudan a entender el uso del sitio de forma agregada, para mejorar contenido y rendimiento.",
             ]}
           />
+          <p className="mt-4">
+            Actualmente no usamos cookies ni herramientas de analítica o publicidad de terceros. Si en el futuro
+            incorporamos alguna, la añadiremos a esta lista antes de activarla y actualizaremos la fecha de esta
+            página.
+          </p>
         </LegalSection>
         <LegalSection n="03" title="Cómo controlar las cookies">
           <p>

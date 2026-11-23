@@ -16,7 +16,7 @@ import { cn } from "../../utils/cn";
 
 /* ------------------------------------------------------------ shared bits */
 
-const DOCS_VERSION = "v1.0 · septiembre 2026";
+const DOCS_VERSION = "v1.1 · noviembre 2026";
 
 function PageHead({ kicker, title, sub }: { kicker: string; title: string; sub: string }) {
   return (
@@ -182,14 +182,16 @@ export function PrivacidadPage() {
       <PageHead
         kicker="Legal"
         title="Privacidad y cookies"
-        sub="Qué datos pedimos, para qué, cuánto tiempo viven y por qué esta tienda hoy no usa ni una sola cookie de seguimiento."
+        sub="Qué datos pedimos, para qué, cuánto tiempo viven y por qué esta tienda no usa ni una sola cookie de seguimiento o publicidad."
       />
       <div className="mt-10">
         <DocSection n="01" title="Resumen honesto">
           <p>
-            El catálogo que ves es real y lo mantiene nuestro equipo, pero todavía no procesamos pagos en línea: los datos de los
-            formularios no se envían a ningún servidor.
-            Cuando la operación sea real, la regla no cambiará: pedimos lo mínimo, lo usamos solo para lo que lo pedimos y
+            El catálogo que ves es real y lo mantiene nuestro equipo. Al enviar el formulario de checkout, tus datos de
+            contacto, facturación y entrega sí se guardan en nuestro servidor (base de datos protegida, con acceso
+            restringido por rol) para que el equipo pueda darle seguimiento a tu pedido — hoy no procesamos pagos en
+            línea, pero el pedido en sí queda registrado desde que lo envías.
+            La regla no cambia cuando activemos pagos en línea: pedimos lo mínimo, lo usamos solo para lo que lo pedimos y
             nunca lo vendemos. Eso no es un eslogan — es la arquitectura.
           </p>
         </DocSection>
