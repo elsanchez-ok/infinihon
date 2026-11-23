@@ -1,7 +1,9 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AuthBrandPanel, AuthMark } from "./AuthVisual";
 import { ThemeToggle } from "../components/ui";
+import { AuthFeedback } from "./AuthFields";
 import { ForgotPasswordForm, LoginForm, RegisterForm } from "./AuthForms";
+import { consumeOAuthRedirect, isAdminUser, postLoginPath } from "../lib/supabase";
 import "./auth.css";
 
 type AuthMode = "login" | "register" | "recovery";
@@ -12,9 +14,29 @@ function modeFromPath(pathname: string): AuthMode {
   return "login";
 }
 
+/** "checking"/"redirecting" mientras se procesa una vuelta de Google/Microsoft, "error" si falló. */
+type OAuthStatus = "idle" | "checking" | "redirecting" | "error";
+
 export default function AuthApp({ pathname, navigate }: { pathname: string; navigate: (to: string) => void }) {
   const mode = modeFromPath(pathname);
   const lastMode = useRef<AuthMode>(mode);
+  const [oauthStatus, setOauthStatus] = useState<OAuthStatus>(
+    () => (window.location.hash.length > 1 ? "checking" : "idle"),
+  );
+
+  useEffect(() => {
+    if (oauthStatus !== "checking") return;
+    let cancelled = false;
+    (async () => {
+      const outcome = consumeOAuthRedirect();
+      if (outcome === "none") { if (!cancelled) setOauthStatus("idle"); return; }
+      if (outcome === "error") { if (!cancelled) setOauthStatus("error"); return; }
+      if (!cancelled) setOauthStatus("redirecting");
+      const admin = await isAdminUser();
+      window.location.assign(admin ? "/admin" : postLoginPath());
+    })();
+    return () => { cancelled = true; };
+  }, [oauthStatus]);
 
   useEffect(() => {
     const pageTitles: Record<AuthMode, string> = {
@@ -44,38 +66,40 @@ export default function AuthApp({ pathname, navigate }: { pathname: string; navi
     <div className="auth-page">
       <a className="auth-skip" href="#auth-form">Saltar al formulario</a>
 
-      <header className="auth-header">
-        <AuthMark compact />
-        <div className="auth-header-actions">
-          <ThemeToggle />
-          <a className="auth-exit-link" href="/">Volver al sitio <span aria-hidden="true">↗</span></a>
-        </div>
-      </header>
-
-      <main className="auth-shell">
+      {/* Escenario de pantalla completa: la imagen de marca cubre todo el
+          fondo y la tarjeta de cristal flota centrada sobre ella, con
+          espacio holgado alrededor en cualquier tamaño de pantalla. */}
+      <main className="auth-stage">
         <AuthBrandPanel />
+
         <section className="auth-panel" id="auth-form" aria-label="Acceso a InfiniHon Corp.">
           <div className="auth-panel-inner">
-            <div className="auth-panel-brand">
-              <AuthMark />
-              <span className="auth-panel-brand-index">/ CUENTA</span>
+            <div className="auth-panel-topbar">
+              <AuthMark compact />
+              <div className="auth-panel-topbar-actions">
+                <ThemeToggle />
+                <a className="auth-exit-link" href="/">Volver al sitio <span aria-hidden="true">↗</span></a>
+              </div>
             </div>
 
-            <div key={mode} className="auth-view-transition">
-              {mode === "login" && <LoginForm navigate={navigate} />}
-              {mode === "register" && <RegisterForm navigate={navigate} />}
-              {mode === "recovery" && <ForgotPasswordForm navigate={navigate} />}
-            </div>
-
-            <div className="auth-panel-footnote">
-              <span className="auth-footnote-dash" />
-              Un espacio para gestionar tu acceso al ecosistema InfiniHon Corp.
-            </div>
+            {(oauthStatus === "checking" || oauthStatus === "redirecting") ? (
+              <div className="auth-oauth-loading" role="status" aria-live="polite">
+                <span className="auth-oauth-spinner" aria-hidden="true" />
+                <p>Conectando tu cuenta...</p>
+              </div>
+            ) : (
+              <div key={mode} className="auth-view-transition">
+                {oauthStatus === "error" && (
+                  <AuthFeedback type="error">
+                    No pudimos completar el acceso con ese proveedor. Inténtalo de nuevo o usa tu correo y contraseña.
+                  </AuthFeedback>
+                )}
+                {mode === "login" && <LoginForm navigate={navigate} />}
+                {mode === "register" && <RegisterForm navigate={navigate} />}
+                {mode === "recovery" && <ForgotPasswordForm navigate={navigate} />}
+              </div>
+            )}
           </div>
-          <footer className="auth-panel-footer">
-            <span>© {new Date().getFullYear()} InfiniHon Corp.</span>
-            <span>PORTAL DIGITAL <span className="auth-footer-separator">/</span> HONDURAS</span>
-          </footer>
         </section>
       </main>
     </div>

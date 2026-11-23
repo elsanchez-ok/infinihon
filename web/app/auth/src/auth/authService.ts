@@ -1,4 +1,7 @@
-import { authSignIn, authSignUp, authRecover, authSignOut, isAdminUser, postLoginPath } from "../lib/supabase";
+import { authSignIn, authSignUp, authRecover, authSignOut, isAdminUser, postLoginPath, oauthAuthorizeUrl, type OAuthProvider } from "../lib/supabase";
+
+/** Nombre del provider tal como lo espera Supabase (Microsoft se registra como "azure"). */
+const SUPABASE_PROVIDER: Record<"google" | "microsoft", OAuthProvider> = { google: "google", microsoft: "azure" };
 
 export type AuthFailureReason =
   | "unavailable"
@@ -36,7 +39,16 @@ export const authService: AuthService = {
     const r = await authRecover(email);
     return r.ok ? { ok: true } : r;
   },
-  oauth: async () => ({ ok: false, reason: "unavailable" }),
+  oauth: async (provider) => {
+    // Flujo de redirección completa: GoTrue entrega el control al proveedor
+    // (Google/Microsoft) y luego vuelve a esta misma página con la sesión en
+    // el fragmento de la URL (ver consumeOAuthRedirect en AuthApp). El
+    // navegador abandona la SPA, así que esta promesa no se resuelve en el
+    // caso feliz; solo existe para cumplir el tipo de retorno.
+    const redirectTo = `${window.location.origin}/auth${window.location.search}`;
+    window.location.assign(oauthAuthorizeUrl(SUPABASE_PROVIDER[provider], redirectTo));
+    return new Promise<AuthResult>(() => {});
+  },
   logout: async () => {
     await authSignOut();
     return { ok: true };
@@ -45,7 +57,9 @@ export const authService: AuthService = {
 
 export const authCapabilities = {
   emailPassword: true,
-  google: false,
+  // Google ya está configurado en Supabase (Authentication → Providers) con
+  // client_id/secret reales. Microsoft (Azure) aún no tiene credenciales.
+  google: true,
   microsoft: false,
   legalTermsPublished: false,
 } as const;

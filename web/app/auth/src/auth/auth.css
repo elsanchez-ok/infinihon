@@ -31,29 +31,9 @@
 }
 .auth-skip:focus { top: 12px; }
 
-.auth-header {
-  position: relative;
-  z-index: 20;
-  flex: none;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 82px;
-  padding: 0 clamp(28px, 3.8vw, 70px);
-  border-bottom: 1px solid color-mix(in srgb, var(--color-snow) 7%, transparent);
-  background: color-mix(in srgb, var(--color-obsidian) 74%, transparent);
-  -webkit-backdrop-filter: blur(18px);
-  backdrop-filter: blur(18px);
-}
 .auth-mark { display: inline-flex; flex-direction: column; align-items: center; gap: 6px; width: max-content; color: var(--color-snow); text-decoration: none; }
 .auth-mark-symbol { display: block; width: auto; height: 37px; flex: none; }
 .auth-mark-word { display: block; font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 8px; font-weight: 400; line-height: 1; letter-spacing: .28em; text-transform: uppercase; white-space: nowrap; color: var(--color-steel); }
-.auth-header-actions {
-  display: inline-flex;
-  align-items: center;
-  gap: 18px;
-}
-.auth-header-actions .relative { color: var(--color-steel); }
 .auth-exit-link {
   display: inline-flex;
   align-items: center;
@@ -69,17 +49,28 @@
 .auth-exit-link:hover { color: var(--color-snow); }
 .auth-exit-link:hover span { transform: translate(2px, -2px); }
 
-.auth-shell { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1.06fr) minmax(490px, .94fr); overflow: hidden; }
-
-/* El panel de marca ahora solo muestra la imagen provista: sin copy, sin
-   diagrama. Se usa la misma imagen en modo claro y oscuro (decisión del
-   usuario). Se mantiene un fondo claro de respaldo mientras la imagen
-   carga, según lo pedido. */
-.auth-brand-panel {
+/* Escenario de pantalla completa: la imagen de marca cubre todo el fondo
+   (ya no hay columnas) y la tarjeta de cristal flota centrada encima, con
+   espacio holgado alrededor en cualquier tamaño de pantalla. */
+.auth-stage {
   position: relative;
-  height: 100%;
+  flex: 1;
+  min-height: 0;
   overflow: hidden;
-  border-right: 1px solid color-mix(in srgb, var(--color-snow) 8%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(24px, 5vh, 64px) clamp(20px, 6vw, 96px);
+}
+
+/* El panel de marca ahora solo muestra la imagen provista, a pantalla
+   completa detrás de la tarjeta. Se usa una imagen distinta por tema
+   (misma pieza, versión clara/oscura). */
+.auth-brand-panel {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
   background: #F5F7FA;
 }
 .auth-brand-image { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
@@ -89,33 +80,38 @@
 html[data-theme="dark"] .auth-brand-image-light { display: none; }
 html[data-theme="dark"] .auth-brand-image-dark { display: block; }
 
+/* La tarjeta de cristal (glassmorphism): translúcida, con blur de fondo
+   que deja ver la imagen detrás, borde claro y sombra profunda para que
+   flote centrada sobre el escenario. */
 .auth-panel {
   position: relative;
-  height: 100%;
+  z-index: 1;
+  width: 100%;
+  max-width: 588px;
+  max-height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
   min-width: 0;
   overflow-y: auto;
-  padding: 32px clamp(34px, 6vw, 106px) 24px;
-  background: var(--color-ink);
-  isolation: isolate;
-}
-.auth-panel::before {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background-image: linear-gradient(rgba(139, 150, 165, .025) 1px, transparent 1px), linear-gradient(90deg, rgba(139, 150, 165, .025) 1px, transparent 1px);
-  background-size: 26px 26px;
-  mask-image: radial-gradient(ellipse at 80% 20%, #000, transparent 65%);
-  content: "";
-  pointer-events: none;
+  padding: 30px clamp(28px, 4vw, 64px) 26px;
+  border-radius: 28px;
+  border: 1px solid color-mix(in srgb, var(--color-snow) 16%, transparent);
+  background: color-mix(in srgb, var(--color-ink) 46%, transparent);
+  box-shadow: 0 34px 70px -26px rgba(0, 0, 0, .55), inset 0 1px 0 color-mix(in srgb, var(--color-snow) 12%, transparent);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  backdrop-filter: blur(24px) saturate(150%);
 }
 .auth-panel-inner { width: min(100%, 452px); margin: auto 0; }
-.auth-panel-brand { display: flex; align-items: center; gap: 16px; margin-bottom: 39px; }
-.auth-panel-brand .auth-mark-symbol { height: 34px; }.auth-panel-brand .auth-mark-word { font-size: 7px; letter-spacing: .24em; }
-.auth-panel-brand-index { padding-left: 16px; border-left: 1px solid color-mix(in srgb, var(--color-snow) 15%, transparent); color: var(--color-steel); font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 10px; letter-spacing: .14em; white-space: nowrap; }
+
+/* Barra superior dentro de la tarjeta: logo + alternador de tema + enlace
+   de salida, todo dentro del cristal (antes vivía en un header aparte). */
+.auth-panel-topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 30px; }
+.auth-panel-topbar .auth-mark-symbol { height: 30px; }
+.auth-panel-topbar-actions { display: inline-flex; align-items: center; gap: 16px; }
+.auth-panel-topbar-actions .relative { color: var(--color-steel); }
+
 .auth-view-transition { animation: auth-form-enter .48s cubic-bezier(.2, .7, .2, 1) both; }
 .auth-form-eyebrow { display: flex; align-items: center; gap: 10px; color: var(--color-steel); font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 10px; font-weight: 500; letter-spacing: .18em; white-space: nowrap; }
 .auth-form-eyebrow-line { width: 21px; height: 1px; background: var(--color-tech); }
@@ -187,6 +183,8 @@ html[data-theme="dark"] .auth-brand-image-dark { display: block; }
 .auth-submit-arrow { font-size: 17px; font-weight: 400; transition: transform .2s ease; }
 .auth-submit:hover .auth-submit-arrow { transform: translate(2px, -2px); }
 .auth-submit-spinner { width: 14px; height: 14px; border: 2px solid color-mix(in srgb, var(--color-snow) 40%, transparent); border-top-color: var(--color-snow); border-radius: 50%; animation: auth-spinner .7s linear infinite; }
+.auth-oauth-loading { display: flex; flex-direction: column; align-items: center; gap: 18px; padding: 56px 0; text-align: center; color: var(--color-steel); font-size: 14px; }
+.auth-oauth-spinner { width: 28px; height: 28px; border: 3px solid color-mix(in srgb, var(--color-snow) 16%, transparent); border-top-color: var(--color-tech); border-radius: 50%; animation: auth-spinner .7s linear infinite; }
 .auth-form-switch { margin-top: 28px; padding-top: 24px; border-top: 1px solid color-mix(in srgb, var(--color-snow) 10%, transparent); color: var(--color-steel); font-size: 13px; }
 .auth-form-switch a { margin-left: 5px; color: var(--color-snow); font-weight: 800; text-decoration: none; transition: color .2s ease; }
 .auth-form-switch a:hover { color: var(--color-volt); }
@@ -221,37 +219,28 @@ html[data-theme="dark"] .auth-brand-image-dark { display: block; }
 .auth-completion p { max-width: 400px; margin: 18px 0 0; color: var(--color-steel); font-size: 15px; line-height: 1.7; }
 .auth-completion-action { display: inline-flex; align-items: center; gap: 13px; margin-top: 34px; padding: 16px 21px; background: #0066FF; color: #F5F7FA; font-size: 13px; font-weight: 800; text-decoration: none; transition: background .2s ease; }
 .auth-completion-action:hover { background: #005ae2; }
-.auth-panel-footnote { display: flex; align-items: flex-start; gap: 10px; margin-top: 48px; padding-top: 16px; border-top: 1px solid color-mix(in srgb, var(--color-snow) 7.5%, transparent); color: var(--color-steel); font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 10px; line-height: 1.7; }
-.auth-footnote-dash { width: 12px; height: 1px; flex: none; margin-top: 8px; background: var(--color-tech); }
-.auth-panel-footer { display: flex; justify-content: space-between; gap: 12px; width: 100%; margin-top: 52px; color: var(--color-steel); font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 9px; letter-spacing: .12em; white-space: nowrap; }
-.auth-footer-separator { color: var(--color-tech); }
-
 @keyframes auth-form-enter { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
 @keyframes auth-spinner { to { transform: rotate(360deg); } }
 
 @media (max-width: 1160px) {
-  .auth-shell { grid-template-columns: minmax(0, .83fr) minmax(480px, 1.17fr); }
-  .auth-panel { padding-right: 45px; padding-left: 45px; }
+  .auth-stage { padding-left: 32px; padding-right: 32px; }
+  .auth-panel { padding-right: 36px; padding-left: 36px; }
 }
 
 @media (max-width: 900px) {
-  .auth-header { height: 64px; padding: 0 22px; }
-  .auth-shell { display: block; }
-  .auth-brand-panel { display: none; }
-  .auth-panel { height: 100%; padding: 22px 22px 18px; }
-  .auth-panel-inner { width: min(100%, 460px); margin: 0 auto; }
-  .auth-panel-brand { margin-bottom: 24px; }
+  .auth-stage { padding: 16px; }
+  .auth-panel { max-width: 460px; border-radius: 22px; padding: 22px 22px 18px; }
+  .auth-panel-inner { width: 100%; margin: auto 0; }
+  .auth-panel-topbar { margin-bottom: 24px; }
   .auth-form-heading h1, .auth-completion h1 { font-size: 33px; }
-  .auth-panel-footer { width: min(100%, 460px); }
 }
 
+
 @media (max-width: 520px) {
-  .auth-header { padding: 0 18px; }
-  .auth-header .auth-mark-symbol { height: 30px; }
-  .auth-header .auth-mark-word { font-size: 7px; }
   .auth-exit-link { gap: 6px; font-size: 11px; }
-  .auth-panel { padding: 18px 18px 16px; }
-  .auth-panel-brand { display: none; }
+  .auth-stage { padding: 10px; }
+  .auth-panel { border-radius: 18px; padding: 18px 16px 16px; }
+  .auth-panel-topbar .auth-mark-symbol { height: 26px; }
   .auth-form-heading h1, .auth-completion h1 { font-size: clamp(28px, 8vw, 33px); }
   .auth-form-heading p { font-size: 13px; }
   .auth-social-area { margin-top: 20px; }
@@ -263,8 +252,6 @@ html[data-theme="dark"] .auth-brand-image-dark { display: block; }
   .auth-name-row { grid-template-columns: 1fr 1fr; gap: 10px; }
   .auth-name-row .auth-input { padding-left: 10px; padding-right: 10px; font-size: 13px; }
   .auth-form-switch { margin-top: 18px; }
-  .auth-panel-footnote { margin-top: 24px; }
-  .auth-panel-footer { flex-wrap: wrap; margin-top: 24px; line-height: 1.7; }
 }
 
 @media (max-width: 365px) {
