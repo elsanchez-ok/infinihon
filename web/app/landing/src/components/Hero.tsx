@@ -77,16 +77,6 @@ export default function Hero() {
 
       <div className="mx-auto flex min-h-[100svh] max-w-[1440px] flex-col items-center justify-center px-5 pb-28 pt-32 text-center md:px-10">
         <div className="flex max-w-[780px] flex-col items-center">
-          <div className="reveal mb-8 flex items-center gap-4 md:mb-10" style={{ "--d": "100ms" } as CSSProperties}>
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inset-0 rounded-full bg-volt ring" />
-              <span className="relative h-2 w-2 rounded-full bg-volt" />
-            </span>
-            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-steel">
-              INFINIHON CORP. <span className="text-steel/40">/</span> Corporativo de Proyectos &amp; IT
-            </span>
-          </div>
-
           <div className="reveal -mb-2 md:-mb-4" style={{ "--d": "160ms" } as CSSProperties}>
             <img
               src="/assets/mascot-hero.png"
