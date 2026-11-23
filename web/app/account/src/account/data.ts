@@ -98,6 +98,7 @@ export interface AccountNotification {
 
 export interface Profile {
   firstName: string; lastName: string; email: string; phone: string; company: string; position: string;
+  avatarUrl?: string;
 }
 
 export interface Preferences {

@@ -180,7 +180,7 @@ function Topbar({ onMenu }: { onMenu: () => void }) {
 
           <div ref={menuRef} className="relative ml-1">
             <button onClick={() => setMenuOpen((v) => !v)} aria-expanded={menuOpen} aria-haspopup="menu" className="flex items-center gap-2.5 rounded-lg py-1 pl-1 pr-2 hover:bg-white/[0.04]">
-              <UserAvatar name={displayName(data.profile)} />
+              <UserAvatar name={displayName(data.profile)} src={data.profile.avatarUrl} />
               <span className="hidden text-left leading-tight sm:block">
                 <span className="block text-[13px] font-semibold text-snow">{session ? (data.profileCompleted ? displayName(data.profile) : session.email.split("@")[0]) : "Cuenta"}</span>
                 <span className="block text-[11px] text-steel">{isAdmin ? "Administrador" : "Cliente"}</span>

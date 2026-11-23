@@ -115,7 +115,7 @@ export function AccountProvider({ children, pathname, navigate }: { children: Re
           setIsAdmin(profile.isAdmin);
           setData((d) => ({
             ...d,
-            profile: { firstName: profile.firstName, lastName: profile.lastName, email: profile.email || user.email, phone: profile.phone, company: profile.company, position: profile.position },
+            profile: { firstName: profile.firstName, lastName: profile.lastName, email: profile.email || user.email, phone: profile.phone, company: profile.company, position: profile.position, avatarUrl: profile.avatarUrl },
             profileCompleted: Boolean(profile.firstName || profile.lastName),
             preferences: { ...d.preferences },
           }));
