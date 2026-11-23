@@ -406,7 +406,13 @@ export async function deleteCatalogCategory(id: string): Promise<void> {
 /* ─────────── Módulos: lectura ─────────── */
 
 interface RemoteCustomer { id: string; name: string; email: string; status: string; city: string; notes: string; created_at: string; demo: boolean }
-interface RemoteOrder { id: string; customer_id: string; items: { productId: string; qty: number }[]; status: string; notes: string; created_at: string; demo: boolean }
+interface RemoteOrder {
+  id: string; customer_id: string; items: { productId: string; qty: number }[]; status: string; notes: string;
+  created_at: string; demo: boolean;
+  contact_name: string | null; company: string | null; email: string | null; phone: string | null;
+  tax_id: string | null; address: string | null; city: string | null; department: string | null;
+  delivery_method: string | null; payment_method: string | null; customer_notes: string | null;
+}
 interface RemoteRole { id: string; name: string; description: string; permissions: string[]; locked: boolean; sort: number }
 interface RemoteContent { id: string; title: string; type: string; status: string; author: string; updated_at: string; demo: boolean }
 interface RemoteActivity { id: string; actor: string; action: string; module: string; target: string; created_at: string; demo: boolean }
@@ -420,6 +426,10 @@ export async function fetchOrders(): Promise<Order[]> {
   return (rows ?? []).map((r) => ({
     id: r.id, customerId: r.customer_id, items: r.items, status: r.status as OrderStatus,
     date: r.created_at, notes: r.notes, demo: r.demo,
+    contactName: r.contact_name ?? undefined, company: r.company ?? undefined, email: r.email ?? undefined,
+    phone: r.phone ?? undefined, taxId: r.tax_id ?? undefined, address: r.address ?? undefined,
+    city: r.city ?? undefined, department: r.department ?? undefined, deliveryMethod: r.delivery_method ?? undefined,
+    paymentMethod: r.payment_method ?? undefined, customerNotes: r.customer_notes ?? undefined,
   }));
 }
 

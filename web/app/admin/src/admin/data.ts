@@ -30,6 +30,9 @@ export type OrderStatus = "Pending" | "Processing" | "Shipped" | "Completed" | "
 export interface Order {
   id: string; customerId: string; items: { productId: string; qty: number }[];
   status: OrderStatus; date: string; notes: string; demo: boolean;
+  contactName?: string; company?: string; email?: string; phone?: string; taxId?: string;
+  address?: string; city?: string; department?: string; deliveryMethod?: string;
+  paymentMethod?: string; customerNotes?: string;
 }
 export interface Customer {
   id: string; name: string; email: string; status: "Active" | "Inactive"; created: string;
