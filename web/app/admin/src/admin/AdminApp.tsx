@@ -114,7 +114,7 @@ function Forbidden({ email }: { email: string }) {
   );
 }
 
-export default function AdminApp({ pathname, navigate }: { pathname: string; navigate: (to: string) => void }) {
+function AdminGate({ pathname, navigate }: { pathname: string; navigate: (to: string) => void }) {
   const gate = useAdminGate();
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -130,12 +130,26 @@ export default function AdminApp({ pathname, navigate }: { pathname: string; nav
 
   return (
     <AdminProvider pathname={pathname} navigate={navigate} user={gate.user}>
-      <LocaleProvider defaultLocale="en-US">
-        <AdminLayout>
-          {loading ? <LoadingState /> : <div key={pathname} className="admin-enter"><Router pathname={pathname} navigate={navigate} /></div>}
-        </AdminLayout>
-        <Toaster />
-      </LocaleProvider>
+      <AdminLayout>
+        {loading ? <LoadingState /> : <div key={pathname} className="admin-enter"><Router pathname={pathname} navigate={navigate} /></div>}
+      </AdminLayout>
+      <Toaster />
     </AdminProvider>
+  );
+}
+
+/**
+ * LocaleProvider envuelve TODO el árbol (incluidas las pantallas de
+ * carga/sin sesión/sin permisos), no solo la vista ya autenticada: esas
+ * pantallas también usan componentes de ./ui que llaman a useLocale(), y
+ * "checking" es el primer estado que se pinta en cada carga de /admin —
+ * sin el provider ahí, la app crasheaba de inmediato con
+ * "useLocale must be used inside LocaleProvider" (pantalla negra).
+ */
+export default function AdminApp({ pathname, navigate }: { pathname: string; navigate: (to: string) => void }) {
+  return (
+    <LocaleProvider defaultLocale="en-US">
+      <AdminGate pathname={pathname} navigate={navigate} />
+    </LocaleProvider>
   );
 }
