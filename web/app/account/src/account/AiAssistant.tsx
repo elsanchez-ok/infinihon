@@ -17,30 +17,6 @@ const WELCOME: Bubble = {
   content: "¡Hola! Soy Zuri, el asistente de InfiniHon Corp. Puedo ayudarte con dudas sobre tu cuenta, servicios, pedidos o soporte. ¿En qué te ayudo?",
 };
 
-/** Saludo especial que Zuri muestra justo después de iniciar sesión (por
- * correo/contraseña o con Google) — ver JUST_LOGGED_IN_KEY más abajo. */
-const WELCOME_LOGIN: Bubble = {
-  id: 0,
-  role: "assistant",
-  content: "¡Hola! ¿Qué tal? Soy Zuri, el asistente de la plataforma InfiniHon Corp. Bienvenido(a) a tu cuenta — puedo ayudarte con tus pedidos, solicitudes, servicios o cualquier duda que tengas. ¿En qué te ayudo hoy?",
-};
-
-// /auth marca esta clave justo antes de redirigir tras un inicio de sesión
-// exitoso (por correo/contraseña o con Google). La leemos una sola vez al
-// montar el portal y la borramos de inmediato, así el saludo de bienvenida
-// no vuelve a aparecer en cada recarga — solo la primera vez que se entra.
-const JUST_LOGGED_IN_KEY = "infinihon.justLoggedIn";
-
-function consumeJustLoggedIn(): boolean {
-  try {
-    const was = window.sessionStorage.getItem(JUST_LOGGED_IN_KEY) === "1";
-    if (was) window.sessionStorage.removeItem(JUST_LOGGED_IN_KEY);
-    return was;
-  } catch {
-    return false;
-  }
-}
-
 function errorText(reason: "unauthenticated" | "network" | "rate-limited" | "server") {
   if (reason === "unauthenticated") return "Tu sesión expiró. Vuelve a iniciar sesión para usar el asistente.";
   if (reason === "rate-limited") return "Hay demasiadas solicitudes en este momento. Espera un poco e inténtalo de nuevo.";
@@ -62,10 +38,8 @@ function Avatar({ role }: { role: "user" | "assistant" }) {
   return <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] text-snow" aria-hidden>Tú</span>;
 }
 
-function AiAssistantPanel({ open, onClose, launcherRef, welcome }: {
-  open: boolean; onClose: () => void; launcherRef: React.RefObject<HTMLButtonElement | null>; welcome: Bubble;
-}) {
-  const [messages, setMessages] = useState<Bubble[]>(() => [welcome]);
+function AiAssistantPanel({ open, onClose, launcherRef }: { open: boolean; onClose: () => void; launcherRef: React.RefObject<HTMLButtonElement | null> }) {
+  const [messages, setMessages] = useState<Bubble[]>([WELCOME]);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
@@ -197,22 +171,8 @@ function AiAssistantPanel({ open, onClose, launcherRef, welcome }: {
 /** Botón flotante + panel del asistente. Vive una sola vez en el portal, por
  * encima de cualquier página de /account. */
 export function AiAssistantLauncher() {
-  // Se calcula una sola vez, de forma síncrona, en el primer render: así el
-  // panel recibe el saludo correcto (de login o el genérico) desde su
-  // propio primer render, sin parpadeos ni condiciones de carrera con el
-  // efecto que abre el panel automáticamente.
-  const [justLoggedIn] = useState(() => consumeJustLoggedIn());
   const [open, setOpen] = useState(false);
   const launcherRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    if (!justLoggedIn) return;
-    // Pequeña espera para que el saludo no aparezca de golpe antes de que
-    // el resto del portal (topbar, datos de la cuenta) termine de montarse.
-    const timer = window.setTimeout(() => setOpen(true), 900);
-    return () => window.clearTimeout(timer);
-  }, [justLoggedIn]);
-
   return (
     <>
       <button
@@ -227,7 +187,7 @@ export function AiAssistantLauncher() {
       >
         <img src="/assets/zuri-head.png" alt="" className="h-full w-full object-cover" />
       </button>
-      <AiAssistantPanel open={open} onClose={() => setOpen(false)} launcherRef={launcherRef} welcome={justLoggedIn ? WELCOME_LOGIN : WELCOME} />
+      <AiAssistantPanel open={open} onClose={() => setOpen(false)} launcherRef={launcherRef} />
     </>
   );
 }
