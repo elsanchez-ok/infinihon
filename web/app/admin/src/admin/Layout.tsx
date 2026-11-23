@@ -7,7 +7,7 @@ import {
 import { cn } from "../utils/cn";
 import { useAdmin } from "./store";
 import { signOutAndGo } from "./supabaseSync";
-import { Modal } from "./ui";
+import { ConfirmDialog, Modal } from "./ui";
 import { ThemeToggle } from "../components/ui";
 import { useLocale } from "./locale";
 
@@ -197,6 +197,7 @@ function Topbar({ onMenu }: { onMenu: () => void }) {
   const [bellOpen, setBellOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
+  const [signOutConfirm, setSignOutConfirm] = useState(false);
   const bellRef = useOutside(() => setBellOpen(false));
   const profileRef = useOutside(() => setProfileOpen(false));
   const unread = data.notifications.filter((n) => !n.read).length;
@@ -294,13 +295,17 @@ function Topbar({ onMenu }: { onMenu: () => void }) {
                   <i.icon className="h-4 w-4 text-steel" aria-hidden />{t(i.label)}
                 </button>
               ))}
-              <a role="menuitem" href="/auth" onClick={(e) => { e.preventDefault(); void signOutAndGo(); }} className="flex w-full items-center gap-3 border-t border-white/[0.06] px-4 py-2.5 text-sm text-snow/90 hover:bg-white/[0.04]">
+              <a role="menuitem" href="/auth" onClick={(e) => { e.preventDefault(); setProfileOpen(false); setSignOutConfirm(true); }} className="flex w-full items-center gap-3 border-t border-white/[0.06] px-4 py-2.5 text-sm text-snow/90 hover:bg-white/[0.04]">
                 <LogOut className="h-4 w-4 text-steel" aria-hidden />{t("Sign out")}
               </a>
             </div>
           )}
         </div>
       </div>
+
+      <ConfirmDialog open={signOutConfirm} onClose={() => setSignOutConfirm(false)} title={t("Sign out")} confirmLabel={t("Sign out")}
+        message={t("Do you want to sign out on this device?")}
+        onConfirm={() => void signOutAndGo()} />
 
       <GlobalSearch open={searchOpen} onClose={() => setSearchOpen(false)} />
       <Modal open={helpOpen} onClose={() => setHelpOpen(false)} title={t("Help & documentation")} description={t("Guidance for operating the InfiniHon Corp. Control Center.")}>
