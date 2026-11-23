@@ -21,6 +21,7 @@ import { ProfilePage, SecurityPage, SettingsPage, NotificationsPage } from "./pa
 import { LocaleProvider } from "./locale";
 import { EmptyState, PageHeader, Panel } from "./ui";
 import { ThemeToggle } from "../components/ui";
+import { AiAssistantLauncher } from "./AiAssistant";
 import "./account.css";
 
 interface NavItem { label: string; to: string; icon: React.ComponentType<{ className?: string }> }
@@ -343,6 +344,7 @@ function PortalShell({ pathname, navigate }: { pathname: string; navigate: (to: 
       </div>
       <Onboarding />
       <Toaster />
+      <AiAssistantLauncher />
       </div>
   );
 }
