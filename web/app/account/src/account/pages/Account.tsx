@@ -18,7 +18,7 @@ export function ProfilePage() {
   const { t } = useLocale();
   const [form, setForm] = useState(data.profile);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [photo, setPhoto] = useState<string | null>(null);
+  const [photo, setPhoto] = useState<string | null>(data.profile.avatarUrl ?? null);
   const dirty = JSON.stringify(form) !== JSON.stringify(data.profile);
 
   const save = () => {
@@ -73,7 +73,11 @@ export function ProfilePage() {
                 <Button size="sm" disabled={!capabilities.fileUpload} title={capabilities.fileUpload ? undefined : t("Requiere almacenamiento de archivos conectado.")}>{t("Subir foto")}</Button>
                 <Button size="sm" variant="ghost" disabled={!photo || !capabilities.fileUpload} onClick={() => setPhoto(null)}>{t("Quitar")}</Button>
               </div>
-              <p className="text-center text-[11px] leading-relaxed text-steel">{t("Formatos habituales de imagen. InfiniHon Corp. no asigna una foto automática.")}</p>
+              <p className="text-center text-[11px] leading-relaxed text-steel">
+                {data.profile.avatarUrl
+                  ? t("Esta es la foto de tu cuenta de Google. Subir una propia requiere almacenamiento de archivos conectado.")
+                  : t("Formatos habituales de imagen. InfiniHon Corp. no asigna una foto automática.")}
+              </p>
             </div>
           </Panel>
           <Panel title="Estado de la cuenta">

@@ -21,7 +21,7 @@ export interface FullProfile extends Profile { id: string; isAdmin: boolean }
 
 interface ProfileRow {
   id: string; email: string; first_name: string; last_name: string;
-  phone: string; company: string; position: string; is_admin: boolean;
+  phone: string; company: string; position: string; is_admin: boolean; avatar_url: string | null;
 }
 
 export async function fetchProfile(): Promise<FullProfile | null> {
@@ -32,7 +32,7 @@ export async function fetchProfile(): Promise<FullProfile | null> {
   return {
     id: r.id, firstName: r.first_name ?? "", lastName: r.last_name ?? "", email: r.email ?? "",
     phone: r.phone ?? "", company: r.company ?? "", position: r.position ?? "",
-    isAdmin: Boolean(r.is_admin),
+    isAdmin: Boolean(r.is_admin), avatarUrl: r.avatar_url ?? undefined,
   };
 }
 
