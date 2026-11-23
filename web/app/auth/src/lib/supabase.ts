@@ -261,16 +261,25 @@ export function postLoginPath(): string {
   return getSafeRedirect() ?? (window.location.pathname.startsWith("/admin") ? "/admin" : "/account");
 }
 
-const JUST_LOGGED_IN_KEY = "infinihon.justLoggedIn";
-
 /**
- * Marca que la sesión que se acaba de crear es "fresca" (justo se inició
- * sesión, por correo/contraseña o con Google). /account lee esta marca una
- * sola vez al cargar — y la borra de inmediato — para que Zuri salude al
- * usuario sin que ese saludo vuelva a aparecer en cada recarga de página.
+ * Dispara (sin esperar su resultado) el correo de bienvenida de Zuri tras un
+ * login exitoso, por correo/contraseña o con Google. La función de
+ * servidor (`welcome-email`) es idempotente: solo envía el correo la
+ * PRIMERA vez que se llama para cada cuenta — en cada inicio de sesión
+ * posterior no hace nada. Por eso es seguro llamarla en todo login, sin
+ * tener que distinguir aquí si es la primera vez.
+ *
+ * Se llama "a fuego y olvido" (no se espera la respuesta) para no retrasar
+ * la redirección al portal: si falla, el usuario ya entró a su cuenta sin
+ * problema, solo no recibió el correo.
  */
-export function markJustLoggedIn() {
-  try { window.sessionStorage.setItem(JUST_LOGGED_IN_KEY, "1"); } catch { /* almacenamiento no disponible */ }
+export function triggerWelcomeEmail(accessToken: string) {
+  try {
+    void fetch(`${SUPABASE_URL}/functions/v1/welcome-email`, {
+      method: "POST",
+      headers: { apikey: PUBLISHABLE_KEY, Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
+    }).catch(() => { /* best-effort: no bloquea el login si falla */ });
+  } catch { /* noop */ }
 }
 
 /** Consulta si la sesión actual pertenece a un administrador (profiles.is_admin). */
