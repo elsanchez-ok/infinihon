@@ -453,6 +453,19 @@ const legalLinks: [string, string][] = [
   ["Política de privacidad", "/privacidad"],
   ["Garantías", "/garantias"],
 ];
+const socialLinks = [
+  { label: "Instagram", href: "https://www.instagram.com/infinihon/" },
+];
+
+function InstagramIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="h-4 w-4" aria-hidden="true">
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.2" cy="6.8" r="0.9" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
 
 /** Mismo diseño que el footer del sitio principal (components/Footer.tsx),
  * adaptado al router interno de la tienda (Link en vez de <a>). */
@@ -488,6 +501,20 @@ export function StoreFooter() {
             {legalLinks.map(([l, h]) => (
               <li key={l}>
                 <Link to={h} className="text-[12.5px] text-steel/80 transition-colors hover:text-volt">{l}</Link>
+              </li>
+            ))}
+            {socialLinks.map(({ label, href }) => (
+              <li key={label}>
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="me noopener noreferrer"
+                  aria-label={`InfiniHon Corp. en ${label}`}
+                  className="flex items-center gap-1.5 text-[12.5px] text-steel/80 transition-colors hover:text-volt"
+                >
+                  <InstagramIcon />
+                  {label}
+                </a>
               </li>
             ))}
           </ul>
