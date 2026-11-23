@@ -196,6 +196,7 @@ export function SettingsPage() {
   const { data, patch, toast } = useAccount();
   const { locale, setLocale, t } = useLocale();
   const [prefs, setPrefs] = useState({ ...data.preferences, language: locale });
+  const [confirmReset, setConfirmReset] = useState(false);
   const dirty = prefs.language !== locale || JSON.stringify({ ...prefs, language: data.preferences.language }) !== JSON.stringify(data.preferences);
   const set = <K extends keyof typeof prefs>(k: K, v: (typeof prefs)[K]) => setPrefs({ ...prefs, [k]: v });
 
@@ -235,10 +236,14 @@ export function SettingsPage() {
         <Panel title="Restablecer" description="Vuelve a los valores iniciales del portal de demostración." className="lg:col-span-2">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-[13px] leading-relaxed text-steel">{t("Borra las solicitudes, tickets y favoritos creados en esta sesión.")}</p>
-            <Button variant="danger" icon={Trash2} onClick={() => { patch({ preferences: initialPreferences, security: initialSecurity, requests: [], tickets: [], favorites: [], notifications: [] }); toast("Se restableció el portal.", "info"); }}>Restablecer portal</Button>
+            <Button variant="danger" icon={Trash2} onClick={() => setConfirmReset(true)}>Restablecer portal</Button>
           </div>
         </Panel>
       </div>
+
+      <ConfirmDialog open={confirmReset} onClose={() => setConfirmReset(false)} title="Restablecer portal" confirmLabel="Restablecer portal"
+        message="Esto borra las solicitudes, tickets, favoritos y preferencias creados en esta sesión y no se puede deshacer. ¿Quieres continuar?"
+        onConfirm={() => { patch({ preferences: initialPreferences, security: initialSecurity, requests: [], tickets: [], favorites: [], notifications: [] }); toast("Se restableció el portal.", "info"); }} />
     </>
   );
 }
