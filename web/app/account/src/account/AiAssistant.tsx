@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { Bot, Loader2, Send, Sparkles, X } from "lucide-react";
+import { Loader2, Send, X } from "lucide-react";
 import { cn } from "../utils/cn";
 import { askAssistant, type ChatMessage } from "./aiAssistant";
 
@@ -14,37 +14,49 @@ let nextId = 1;
 const WELCOME: Bubble = {
   id: 0,
   role: "assistant",
-  content: "Hola, soy el asistente de InfiniHon Corp. Puedo ayudarte con dudas sobre tu cuenta, servicios, pedidos o soporte. ¿En qué te ayudo?",
+  content: "¡Hola! Soy Zuri, el asistente de InfiniHon Corp. Puedo ayudarte con dudas sobre tu cuenta, servicios, pedidos o soporte. ¿En qué te ayudo?",
 };
 
 function errorText(reason: "unauthenticated" | "network" | "rate-limited" | "server") {
   if (reason === "unauthenticated") return "Tu sesión expiró. Vuelve a iniciar sesión para usar el asistente.";
   if (reason === "rate-limited") return "Hay demasiadas solicitudes en este momento. Espera un poco e inténtalo de nuevo.";
   if (reason === "network") return "No pudimos conectar con el asistente. Revisa tu conexión e inténtalo de nuevo.";
-  return "El asistente no pudo responder en este momento. Inténtalo de nuevo en unos segundos.";
+  return "Zuri no pudo responder en este momento. Inténtalo de nuevo en unos segundos.";
+}
+
+function ZuriAvatar({ size = "md" }: { size?: "sm" | "md" }) {
+  const dim = size === "sm" ? "h-7 w-7" : "h-8 w-8";
+  return (
+    <span className={cn("flex shrink-0 items-center justify-center overflow-hidden rounded-full border border-tech/40 bg-hn/40", dim)} aria-hidden>
+      <img src="/assets/zuri-head.png" alt="" className="h-full w-full object-cover" />
+    </span>
+  );
 }
 
 function Avatar({ role }: { role: "user" | "assistant" }) {
-  if (role === "assistant") {
-    return (
-      <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-tech/40 bg-hn/40 text-volt" aria-hidden>
-        <Bot className="h-4 w-4" />
-      </span>
-    );
-  }
+  if (role === "assistant") return <ZuriAvatar size="sm" />;
   return <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] text-snow" aria-hidden>Tú</span>;
 }
 
-function AiAssistantPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
+function AiAssistantPanel({ open, onClose, launcherRef }: { open: boolean; onClose: () => void; launcherRef: React.RefObject<HTMLButtonElement | null> }) {
   const [messages, setMessages] = useState<Bubble[]>([WELCOME]);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const panelRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    if (open) requestAnimationFrame(() => inputRef.current?.focus());
-  }, [open]);
+    if (open) {
+      requestAnimationFrame(() => inputRef.current?.focus());
+    } else if (panelRef.current?.contains(document.activeElement)) {
+      // Antes de ocultar el panel con aria-hidden, le quitamos el foco al
+      // elemento activo (p. ej. el botón de cerrar) para no dejar un
+      // elemento enfocado dentro de un contenedor oculto a lectores de
+      // pantalla; lo devolvemos al botón flotante que reabre el chat.
+      launcherRef.current?.focus();
+    }
+  }, [open, launcherRef]);
 
   useEffect(() => {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: "smooth" });
@@ -76,9 +88,10 @@ function AiAssistantPanel({ open, onClose }: { open: boolean; onClose: () => voi
         aria-hidden
       />
       <aside
+        ref={panelRef}
         aria-hidden={!open}
         role="dialog"
-        aria-label="Asistente de IA"
+        aria-label="Zuri IA, asistente del portal"
         className={cn(
           "fixed inset-y-0 right-0 z-[75] flex w-full max-w-[400px] flex-col border-l border-white/[0.08] bg-[#070a0e] shadow-2xl transition-transform duration-300",
           open ? "translate-x-0" : "translate-x-full",
@@ -86,13 +99,13 @@ function AiAssistantPanel({ open, onClose }: { open: boolean; onClose: () => voi
       >
         <div className="flex h-16 shrink-0 items-center justify-between border-b border-white/[0.06] px-5">
           <div className="flex items-center gap-2.5">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-tech/15 text-volt"><Sparkles className="h-4 w-4" /></span>
+            <ZuriAvatar />
             <div>
-              <div className="text-sm font-semibold text-snow">Asistente IA</div>
+              <div className="text-sm font-semibold text-snow">Zuri IA</div>
               <div className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-steel/70">InfiniHon Corp.</div>
             </div>
           </div>
-          <button onClick={onClose} className="rounded-md p-2 text-steel hover:bg-white/[0.05] hover:text-snow" aria-label="Cerrar asistente">
+          <button onClick={onClose} tabIndex={open ? 0 : -1} className="rounded-md p-2 text-steel hover:bg-white/[0.05] hover:text-snow" aria-label="Cerrar asistente">
             <X className="h-4 w-4" />
           </button>
         </div>
@@ -119,7 +132,7 @@ function AiAssistantPanel({ open, onClose }: { open: boolean; onClose: () => voi
             <div className="flex items-start gap-2.5">
               <Avatar role="assistant" />
               <div className="flex items-center gap-2 rounded-2xl rounded-tl-sm border border-white/[0.06] bg-white/[0.04] px-3.5 py-2.5 text-[13px] text-steel">
-                <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />Pensando...
+                <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />Zuri está pensando...
               </div>
             </div>
           )}
@@ -132,21 +145,23 @@ function AiAssistantPanel({ open, onClose }: { open: boolean; onClose: () => voi
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); void send(e); } }}
-              placeholder="Escribe tu pregunta..."
+              placeholder="Escribe tu pregunta a Zuri..."
               rows={1}
               disabled={sending}
+              tabIndex={open ? 0 : -1}
               className="max-h-32 min-h-[36px] flex-1 resize-none bg-transparent px-1.5 py-1.5 text-sm text-snow placeholder:text-steel/60 outline-none"
             />
             <button
               type="submit"
               disabled={sending || !input.trim()}
+              tabIndex={open ? 0 : -1}
               aria-label="Enviar mensaje"
               className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-tech text-snow transition-opacity disabled:opacity-40"
             >
               <Send className="h-4 w-4" />
             </button>
           </div>
-          <p className="mt-2 px-1 text-[10.5px] text-steel/60">El asistente puede cometer errores. Verifica la información importante.</p>
+          <p className="mt-2 px-1 text-[10.5px] text-steel/60">Zuri puede cometer errores. Verifica la información importante.</p>
         </form>
       </aside>
     </>
@@ -157,19 +172,22 @@ function AiAssistantPanel({ open, onClose }: { open: boolean; onClose: () => voi
  * encima de cualquier página de /account. */
 export function AiAssistantLauncher() {
   const [open, setOpen] = useState(false);
+  const launcherRef = useRef<HTMLButtonElement>(null);
   return (
     <>
-      {!open && (
-        <button
-          onClick={() => setOpen(true)}
-          className="fixed bottom-5 right-5 z-[55] flex h-14 w-14 items-center justify-center rounded-full bg-tech text-snow shadow-[0_10px_30px_rgba(0,102,255,0.45)] transition-transform hover:scale-105"
-          aria-label="Abrir asistente de IA"
-          title="Asistente de IA"
-        >
-          <Sparkles className="h-6 w-6" />
-        </button>
-      )}
-      <AiAssistantPanel open={open} onClose={() => setOpen(false)} />
+      <button
+        ref={launcherRef}
+        onClick={() => setOpen(true)}
+        className={cn(
+          "fixed bottom-5 right-5 z-[55] flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-tech shadow-[0_10px_30px_rgba(0,102,255,0.45)] transition-all hover:scale-105",
+          open && "pointer-events-none scale-0 opacity-0",
+        )}
+        aria-label="Abrir Zuri, el asistente de IA"
+        title="Zuri IA"
+      >
+        <img src="/assets/zuri-head.png" alt="" className="h-full w-full object-cover" />
+      </button>
+      <AiAssistantPanel open={open} onClose={() => setOpen(false)} launcherRef={launcherRef} />
     </>
   );
 }
