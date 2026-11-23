@@ -110,16 +110,26 @@ function GoogleButtonCell({ onCredential, pending }: {
     let ready = false;
     let resizeObserver: ResizeObserver | null = null;
     let frame = 0;
+    let lastWidth = -1;
 
     // El botón oficial de Google se dibuja dentro de un iframe con un ancho
     // fijo en píxeles (no admite "100%"): si se le pasa un número que no
     // quepa en su celda, se desborda de la tarjeta. Por eso medimos el
     // espacio real disponible y lo volvemos a pintar cada vez que cambia
     // (al redimensionar la ventana, al rotar el teléfono, etc.).
-    function paintButton() {
+    //
+    // Repintar reemplaza el iframe por uno nuevo, lo que puede alterar por
+    // un instante el tamaño del propio contenedor observado — sin este
+    // umbral, ese cambio mínimo dispara otra vez el ResizeObserver, que
+    // vuelve a repintar, y así en bucle: eso es lo que se veía como el
+    // botón "rebotando". Solo repintamos si el ancho cambió de verdad
+    // (más de 4px), que es lo que pasa en un resize real, no en un redibujo.
+    function paintButton(force = false) {
       if (cancelled || !containerRef.current || !window.google) return;
       const available = containerRef.current.getBoundingClientRect().width;
       const width = Math.max(200, Math.min(400, Math.floor(available) || 260));
+      if (!force && Math.abs(width - lastWidth) <= 4) return;
+      lastWidth = width;
       window.google.accounts.id.renderButton(containerRef.current, {
         type: "standard",
         theme: "filled_black",
@@ -142,14 +152,14 @@ function GoogleButtonCell({ onCredential, pending }: {
           nonce: hashedNonce,
           use_fedcm_for_prompt: true,
         });
-        paintButton();
+        paintButton(true);
         ready = true;
         if (!cancelled) setStatus("ready");
         if (containerRef.current && "ResizeObserver" in window) {
           resizeObserver = new ResizeObserver(() => {
             if (!ready) return;
             window.cancelAnimationFrame(frame);
-            frame = window.requestAnimationFrame(paintButton);
+            frame = window.requestAnimationFrame(() => paintButton(false));
           });
           resizeObserver.observe(containerRef.current);
         }
