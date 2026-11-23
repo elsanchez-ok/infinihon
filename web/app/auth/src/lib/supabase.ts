@@ -261,6 +261,18 @@ export function postLoginPath(): string {
   return getSafeRedirect() ?? (window.location.pathname.startsWith("/admin") ? "/admin" : "/account");
 }
 
+const JUST_LOGGED_IN_KEY = "infinihon.justLoggedIn";
+
+/**
+ * Marca que la sesión que se acaba de crear es "fresca" (justo se inició
+ * sesión, por correo/contraseña o con Google). /account lee esta marca una
+ * sola vez al cargar — y la borra de inmediato — para que Zuri salude al
+ * usuario sin que ese saludo vuelva a aparecer en cada recarga de página.
+ */
+export function markJustLoggedIn() {
+  try { window.sessionStorage.setItem(JUST_LOGGED_IN_KEY, "1"); } catch { /* almacenamiento no disponible */ }
+}
+
 /** Consulta si la sesión actual pertenece a un administrador (profiles.is_admin). */
 export async function isAdminUser(token?: string | null): Promise<boolean> {
   try {

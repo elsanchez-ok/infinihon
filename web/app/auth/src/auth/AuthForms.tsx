@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { authService, type AuthFailureReason } from "./authService";
-import { getSafeRedirect } from "../lib/supabase";
+import { getSafeRedirect, markJustLoggedIn } from "../lib/supabase";
 import { AuthFeedback, AuthLink, FormField, PasswordField, PasswordStrength, ServiceNotice, SocialAuth, SubmitButton } from "./AuthFields";
 import {
   emailError,
@@ -118,7 +118,7 @@ export function LoginForm({ navigate, onSocialAuthError }: { navigate: Navigate;
       const result = await authService.oauth("microsoft");
       if (result.ok) {
         setState("success");
-        if (result.redirect) window.setTimeout(() => window.location.assign(result.redirect!), 500);
+        if (result.redirect) { markJustLoggedIn(); window.setTimeout(() => window.location.assign(result.redirect!), 500); }
       } else { onSocialAuthError(); }
     } catch {
       onSocialAuthError();
@@ -133,7 +133,7 @@ export function LoginForm({ navigate, onSocialAuthError }: { navigate: Navigate;
       const result = await authService.oauthIdToken("google", idToken, nonce);
       if (result.ok) {
         setState("success");
-        if (result.redirect) window.setTimeout(() => window.location.assign(result.redirect!), 500);
+        if (result.redirect) { markJustLoggedIn(); window.setTimeout(() => window.location.assign(result.redirect!), 500); }
       } else { onSocialAuthError(); }
     } catch {
       onSocialAuthError();
@@ -156,7 +156,7 @@ export function LoginForm({ navigate, onSocialAuthError }: { navigate: Navigate;
       if (result.ok) {
         setState("success");
         // sesión real: ve al portal correspondiente (cuenta o admin)
-        if (result.redirect) window.setTimeout(() => window.location.assign(result.redirect!), 500);
+        if (result.redirect) { markJustLoggedIn(); window.setTimeout(() => window.location.assign(result.redirect!), 500); }
       }
       else { setState("error"); setMessage(failureText(result.reason, "login")); }
     } catch {
@@ -223,6 +223,7 @@ export function RegisterForm({ navigate }: { navigate: Navigate }) {
       });
       if (result.ok && "session" in result && result.session) {
         setState("success");
+        markJustLoggedIn();
         window.setTimeout(() => window.location.assign(getSafeRedirect() ?? "/account"), 500);
       }
       else if (result.ok) setState("success");
