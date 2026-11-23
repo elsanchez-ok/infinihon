@@ -438,52 +438,60 @@ export function Toaster() {
 
 /* ------------------------------------------------------------------- footer */
 
-const COLS: { t: string; items: [string, string][] }[] = [
-  { t: "Tienda", items: [["Productos", "/catalogo"], ["Categorías", "/catalogo"], ["Destacados", "/"], ["Novedades", "/insights"]] },
-  { t: "Soluciones", items: [["Networking", "/servicios"], ["Cloud", "/servicios"], ["Security", "/servicios"], ["DevOps", "/servicios"], ["Monitoring", "/servicios"]] },
-  { t: "Empresa", items: [["Nosotros", "/nosotros"], ["Contacto", "/contacto"], ["Soporte", "/soporte"], ["Tech Insights", "/insights"]] },
-  { t: "Ayuda", items: [["Preguntas frecuentes", "/faq"], ["Envíos", "/envios"], ["Pagos", "/pagos"], ["Seguimiento", "/seguimiento"], ["Mis solicitudes", "/solicitudes"]] },
-  { t: "Legal", items: [["Privacidad", "/privacidad"], ["Términos", "/terminos"], ["Garantías", "/garantias"]] },
+const navCol1: [string, string][] = [
+  ["Catálogo", "/catalogo"],
+  ["Soluciones", "/soluciones"],
+  ["Sitio corporativo", "/sitio"],
+];
+const navCol2: [string, string][] = [
+  ["Nosotros", "/nosotros"],
+  ["Soporte", "/soporte"],
+  ["Contacto", "/contacto"],
+];
+const legalLinks: [string, string][] = [
+  ["Términos y condiciones", "/terminos"],
+  ["Política de privacidad", "/privacidad"],
+  ["Garantías", "/garantias"],
 ];
 
+/** Mismo diseño que el footer del sitio principal (components/Footer.tsx),
+ * adaptado al router interno de la tienda (Link en vez de <a>). */
 export function StoreFooter() {
   return (
-    <footer className="relative overflow-hidden border-t border-white/[0.08] bg-obsidian">
-      <div className="mx-auto max-w-[1500px] px-4 pt-16 md:px-8 md:pt-20">
-        <div className="grid gap-12 md:grid-cols-12">
-          <div className="md:col-span-6 lg:col-span-2">
-            <StoreLogo />
-            <p className="mt-5 max-w-xs text-[14px] leading-relaxed text-steel">
-              Tecnología que puedes adquirir. Infraestructura que puedes construir.
-            </p>
-            <div className="mt-6 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.2em] text-steel">
-              <span className="h-2 w-5 bg-hn" /> Hecho en Honduras.
-            </div>
-          </div>
-          {COLS.map((c) => (
-            <nav key={c.t} className="md:col-span-3 lg:col-span-2" aria-label={c.t}>
-              <h3 className="font-mono text-[10px] uppercase tracking-[0.22em] text-steel/60">{c.t}</h3>
-              <ul className="mt-4 space-y-2.5">
-                {c.items.map(([l, to]) => (
-                  <li key={l}>
-                    <Link to={to} className="text-[14px] text-snow/75 transition-colors hover:text-volt">{l}</Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          ))}
-        </div>
+    <footer className="footer-glow relative overflow-hidden rounded-t-[32px] sm:rounded-t-[40px]">
+      <div className="relative z-10 mx-auto flex max-w-[1440px] flex-col gap-10 px-6 pb-16 pt-20 sm:px-10 md:flex-row md:items-end md:justify-between md:pb-20 md:pt-28">
+        <Link to="/" className="flex shrink-0 items-center gap-4" aria-label="InfiniHon Corp. — inicio">
+          <img src="/favicon.png" alt="" aria-hidden="true" className="h-16 w-16 shrink-0 sm:h-20 sm:w-20" />
+          <img src="/assets/infinihon.png" alt="InfiniHon Corp." className="h-10 w-auto sm:h-12" />
+        </Link>
 
-        <div className="mt-14 flex flex-col gap-4 border-t border-white/[0.06] py-7 font-mono text-[10px] uppercase tracking-[0.2em] text-steel md:flex-row md:items-center md:justify-between">
-          <span>© {new Date().getFullYear()} InfiniHon Corp. · Corporativo Tecnológico</span>
-          <span className="flex flex-wrap items-center gap-4">
-            <span>Catálogo sincronizado en vivo</span>
-            <Link to="/sitio" className="text-snow/80 hover:text-volt">Sitio corporativo →</Link>
-          </span>
+        <div className="grid grid-cols-2 gap-x-14 gap-y-3 text-[15px] sm:gap-x-20">
+          <ul className="space-y-3">
+            {navCol1.map(([l, h]) => (
+              <li key={l}><Link to={h} className="text-snow/80 transition-colors hover:text-volt">{l}</Link></li>
+            ))}
+          </ul>
+          <ul className="space-y-3">
+            {navCol2.map(([l, h]) => (
+              <li key={l}><Link to={h} className="text-snow/80 transition-colors hover:text-volt">{l}</Link></li>
+            ))}
+          </ul>
         </div>
       </div>
-      <div aria-hidden className="select-none overflow-hidden px-2 pb-2 text-center text-[13vw] font-extrabold leading-[0.78] tracking-[-0.06em] text-transparent [-webkit-text-stroke:1px_rgba(0,102,255,0.22)] md:text-[11vw]">
-        INFINIHON CORP.
+
+      <div className="relative z-10 border-t border-white/[0.06] px-6 py-6 sm:px-10">
+        <div className="mx-auto flex max-w-[1440px] flex-col items-center gap-4 sm:flex-row sm:justify-between">
+          <p className="text-[13px] text-steel/80">
+            © InfiniHon Corp. {new Date().getFullYear()}. Todos los derechos reservados.
+          </p>
+          <ul className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+            {legalLinks.map(([l, h]) => (
+              <li key={l}>
+                <Link to={h} className="text-[12.5px] text-steel/80 transition-colors hover:text-volt">{l}</Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </footer>
   );
