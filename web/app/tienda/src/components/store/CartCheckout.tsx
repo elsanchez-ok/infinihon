@@ -4,7 +4,7 @@ import { bySlug, categoryLabel, products, registerOrder } from "../../store/cata
 import { ProductVisual } from "./ProductVisual";
 import { Breadcrumb, EmptyState, StatusDot } from "./cards";
 import { AuthGateModal, AuthGateNotice } from "./AuthGate";
-import { hasStoredSession } from "../../auth/session";
+import { hasStoredSession, getStoredAccessToken } from "../../auth/session";
 import { cn } from "../../utils/cn";
 
 /* ------------------------------------------------------------- cart page */
@@ -200,32 +200,44 @@ export function CheckoutPage() {
       const met = formData.get("met") as string;
       const notas = formData.get("notas") as string;
 
-      // Build order payload
+      // El checkout exige sesión iniciada (ver guard de "authed" más arriba),
+      // así que debe existir un token; si venció, se le pide iniciar sesión de nuevo.
+      const token = getStoredAccessToken();
+      if (!token) {
+        setErr("Tu sesión expiró. Vuelve a iniciar sesión para registrar el pedido.");
+        return;
+      }
+
+      // Build order payload: datos de contacto/envío/pago en columnas propias,
+      // no mezclados en un solo texto libre.
       const payload = {
         id: orderId,
-        customerId: email, // use email as customer identifier
+        customerId: email, // identificador de referencia para mostrar en el panel de administración
         items: cartLines.map(({ product: p, qty }) => ({ productId: p.slug, qty })),
         status: "Pending",
-        notes: [
-          `Cliente: ${nombre}`,
-          empresa ? `Empresa: ${empresa}` : null,
-          `Email: ${email}`,
-          `Teléfono: ${tel}`,
-          rtn ? `RTN: ${rtn}` : null,
-          `Dirección: ${dir}, ${ciudad}, ${dep}`,
-          `Método de entrega: ${met}`,
-          `Método de pago: ${PAY.find((x) => x.id === pay)?.l ?? pay}`,
-          notas ? `Notas: ${notas}` : null,
-        ].filter(Boolean).join("\n"),
+        notes: "",
+        contactName: nombre,
+        company: empresa,
+        email,
+        phone: tel,
+        taxId: rtn,
+        address: dir,
+        city: ciudad,
+        department: dep,
+        deliveryMethod: met,
+        paymentMethod: PAY.find((x) => x.id === pay)?.l ?? pay,
+        customerNotes: notas,
         created_at: new Date().toISOString(),
       };
 
       // Register order in Supabase
-      const success = await registerOrder(payload);
-      if (success) {
+      const result = await registerOrder(payload, token);
+      if (result.ok) {
         clear();
         setStep(3);
         notify("Solicitud registrada (referencia " + orderId + ")", "Tu pedido se ha guardado en el servidor. Nuestro equipo te contactará para confirmar precio, entrega y forma de pago.", "info");
+      } else if (result.reason === "auth") {
+        setErr("Tu sesión expiró. Vuelve a iniciar sesión para registrar el pedido.");
       } else {
         setErr("No se pudo registrar el pedido en el servidor. Verifica tu conexión e inténtalo de nuevo.");
       }

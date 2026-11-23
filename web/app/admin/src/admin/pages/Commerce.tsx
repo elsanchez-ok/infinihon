@@ -288,10 +288,39 @@ export function OrderDetail({ id }: { id: string }) {
             </dl>
           </Panel>
           <Panel title="Customer" action={c && can("customers.view") ? <Button size="sm" variant="ghost" onClick={() => navigate(`/admin/customers/${c.id}`)}>View</Button> : undefined}>
-            {c ? <div className="text-sm"><div className="font-semibold">{c.name}</div><div className="mt-0.5 text-steel">{c.email}</div></div> : <p className="text-sm text-steel">{t("Customer record not found.")}</p>}
+            {order.contactName || order.email ? (
+              <dl className="space-y-2 text-sm">
+                {order.contactName && <div className="font-semibold">{order.contactName}</div>}
+                {order.company && <div className="text-steel">{order.company}</div>}
+                {order.email && <div className="text-steel">{order.email}</div>}
+                {order.phone && <div className="text-steel">{order.phone}</div>}
+                {order.taxId && <div className="text-xs text-steel">RTN: {order.taxId}</div>}
+              </dl>
+            ) : c ? (
+              <div className="text-sm"><div className="font-semibold">{c.name}</div><div className="mt-0.5 text-steel">{c.email}</div></div>
+            ) : (
+              <p className="text-sm text-steel">{t("Customer record not found.")}</p>
+            )}
           </Panel>
-          <Panel title="Payment status"><StatusBadge status="Not integrated" /><p className="mt-2 text-xs text-steel">{t("No payment provider is connected. Payment state cannot be verified.")}</p></Panel>
-          <Panel title="Shipping"><StatusBadge status="Not configured" /><p className="mt-2 text-xs text-steel">{t("Shipping carriers and rates are not configured.")}</p></Panel>
+          <Panel title="Shipping">
+            {order.address ? (
+              <dl className="space-y-2 text-sm">
+                <div>{order.address}</div>
+                <div className="text-steel">{[order.city, order.department].filter(Boolean).join(", ")}</div>
+                {order.deliveryMethod && <div className="mt-2 flex justify-between gap-3"><dt className="text-steel">{t("Delivery method")}</dt><dd className="font-medium">{order.deliveryMethod}</dd></div>}
+              </dl>
+            ) : (
+              <><StatusBadge status="Not configured" /><p className="mt-2 text-xs text-steel">{t("Shipping carriers and rates are not configured.")}</p></>
+            )}
+          </Panel>
+          <Panel title="Payment status">
+            <StatusBadge status="Not integrated" />
+            {order.paymentMethod && <div className="mt-2 flex justify-between gap-3 text-sm"><dt className="text-steel">{t("Requested method")}</dt><dd className="font-medium">{order.paymentMethod}</dd></div>}
+            <p className="mt-2 text-xs text-steel">{t("No payment provider is connected. Payment state cannot be verified.")}</p>
+          </Panel>
+          {order.customerNotes && (
+            <Panel title="Customer notes"><p className="text-sm text-steel">{order.customerNotes}</p></Panel>
+          )}
         </div>
       </div>
     </>

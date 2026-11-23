@@ -720,29 +720,72 @@ function refreshFeatured() {
 
 /* ------------------------------------------------ pedidos (Supabase) */
 
-/** Registra un pedido en la tabla orders de Supabase. */
+/**
+ * Registra un pedido en la tabla orders de Supabase.
+ * Campos de contacto/envío/pago van en columnas propias (no en un solo
+ * texto libre) para poder cumplir el derecho de acceso/rectificación/
+ * borrado que promete la política de privacidad.
+ */
 export interface OrderPayload {
   id: string;
   customerId: string;
   items: { productId: string; qty: number }[];
   status: string;
   notes: string;
+  contactName: string;
+  company: string;
+  email: string;
+  phone: string;
+  taxId: string;
+  address: string;
+  city: string;
+  department: string;
+  deliveryMethod: string;
+  paymentMethod: string;
+  customerNotes: string;
   created_at: string;
 }
 
-export async function registerOrder(payload: OrderPayload): Promise<boolean> {
+export type RegisterOrderResult = { ok: true } | { ok: false; reason: "auth" | "network" };
+
+/**
+ * RLS exige que el pedido quede ligado al usuario que lo crea (auth.uid() =
+ * user_id, con default auth.uid() en la columna), así que la llamada debe
+ * ir autenticada con el access token de la sesión del cliente.
+ */
+export async function registerOrder(payload: OrderPayload, accessToken: string): Promise<RegisterOrderResult> {
   try {
     const res = await fetch(`${SUPABASE_URL}/orders?on_conflict=id`, {
       method: "POST",
       headers: {
         apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
         Prefer: "resolution=merge-duplicates",
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({
+        id: payload.id,
+        customer_id: payload.customerId,
+        items: payload.items,
+        status: payload.status,
+        notes: payload.notes,
+        contact_name: payload.contactName,
+        company: payload.company,
+        email: payload.email,
+        phone: payload.phone,
+        tax_id: payload.taxId,
+        address: payload.address,
+        city: payload.city,
+        department: payload.department,
+        delivery_method: payload.deliveryMethod,
+        payment_method: payload.paymentMethod,
+        customer_notes: payload.customerNotes,
+        created_at: payload.created_at,
+      }),
     });
-    return res.ok;
+    if (res.ok) return { ok: true };
+    return { ok: false, reason: res.status === 401 || res.status === 403 ? "auth" : "network" };
   } catch {
-    return false;
+    return { ok: false, reason: "network" };
   }
 }

@@ -36,6 +36,15 @@ export function hasStoredSession(): boolean {
   return readTokens() !== null;
 }
 
+/**
+ * Access token guardado por /auth o /account, si existe. La tienda no lo
+ * refresca (eso lo hacen /auth y /account al usarlo), así que puede estar
+ * vencido; quien llama debe manejar un 401 pidiendo iniciar sesión de nuevo.
+ */
+export function getStoredAccessToken(): string | null {
+  return readTokens()?.access_token ?? null;
+}
+
 /** Construye la URL de /auth con un retorno seguro al paso de checkout de la tienda. */
 export function authUrl(mode: "login" | "register", redirectTo: string): string {
   const path = mode === "register" ? "/auth/register" : "/auth";
