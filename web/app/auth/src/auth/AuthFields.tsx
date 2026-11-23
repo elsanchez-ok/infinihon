@@ -107,6 +107,30 @@ function GoogleButtonCell({ onCredential, pending }: {
 
   useEffect(() => {
     let cancelled = false;
+    let ready = false;
+    let resizeObserver: ResizeObserver | null = null;
+    let frame = 0;
+
+    // El botón oficial de Google se dibuja dentro de un iframe con un ancho
+    // fijo en píxeles (no admite "100%"): si se le pasa un número que no
+    // quepa en su celda, se desborda de la tarjeta. Por eso medimos el
+    // espacio real disponible y lo volvemos a pintar cada vez que cambia
+    // (al redimensionar la ventana, al rotar el teléfono, etc.).
+    function paintButton() {
+      if (cancelled || !containerRef.current || !window.google) return;
+      const available = containerRef.current.getBoundingClientRect().width;
+      const width = Math.max(200, Math.min(400, Math.floor(available) || 260));
+      window.google.accounts.id.renderButton(containerRef.current, {
+        type: "standard",
+        theme: "filled_black",
+        size: "large",
+        text: "continue_with",
+        shape: "rectangular",
+        logo_alignment: "left",
+        width,
+      });
+    }
+
     (async () => {
       try {
         await loadGoogleIdentityScript();
@@ -118,21 +142,22 @@ function GoogleButtonCell({ onCredential, pending }: {
           nonce: hashedNonce,
           use_fedcm_for_prompt: true,
         });
-        window.google.accounts.id.renderButton(containerRef.current, {
-          type: "standard",
-          theme: "filled_black",
-          size: "large",
-          text: "continue_with",
-          shape: "rectangular",
-          logo_alignment: "left",
-          width: 260,
-        });
+        paintButton();
+        ready = true;
         if (!cancelled) setStatus("ready");
+        if (containerRef.current && "ResizeObserver" in window) {
+          resizeObserver = new ResizeObserver(() => {
+            if (!ready) return;
+            window.cancelAnimationFrame(frame);
+            frame = window.requestAnimationFrame(paintButton);
+          });
+          resizeObserver.observe(containerRef.current);
+        }
       } catch {
         if (!cancelled) setStatus("error");
       }
     })();
-    return () => { cancelled = true; };
+    return () => { cancelled = true; window.cancelAnimationFrame(frame); resizeObserver?.disconnect(); };
   }, []);
 
   return (
