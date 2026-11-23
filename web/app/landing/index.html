@@ -112,12 +112,13 @@
       "@context": "https://schema.org",
       "@graph": [
         {
-          "@type": "Organization",
+          "@type": ["Organization", "ProfessionalService"],
           "@id": "https://infinihon.vercel.app/#org",
           "name": "InfiniHon Corp.",
           "alternateName": "Corporativo InfiniHon",
           "url": "https://infinihon.vercel.app/",
           "logo": "https://infinihon.vercel.app/og.png",
+          "image": "https://infinihon.vercel.app/og.png",
           "description": "Corporativo tecnológico hondureño: proyectos propios de software, motores experimentales, infraestructura IT, tienda de hardware y servidores. Diseñamos, implementamos y protegemos la infraestructura tecnológica de empresas.",
           "email": "infinihon.hn@gmail.com",
           "address": { "@type": "PostalAddress", "addressLocality": "Tegucigalpa", "addressRegion": "Francisco Morazán", "addressCountry": "HN" },
@@ -132,6 +133,37 @@
           "name": "InfiniHon Corp.",
           "inLanguage": "es",
           "publisher": { "@id": "https://infinihon.vercel.app/#org" }
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://infinihon.vercel.app/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "¿Qué tipo de empresas pueden trabajar con InfiniHon Corp.?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Empresas de cualquier tamaño que necesiten infraestructura tecnológica estable: desde una pyme que quiere ordenar su red y su primer servidor, hasta operaciones con varias sedes que necesitan redes, cloud y seguridad integradas." }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Cuánto tiempo toma implementar un proyecto de infraestructura?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Depende del alcance. Un diagnóstico y diseño inicial puede tomar entre 1 y 2 semanas; la implementación varía de unos días para una red pequeña a varios meses para una migración a cloud o un rediseño completo de infraestructura." }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Dan soporte y mantenimiento después de la implementación?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Sí. Todo proyecto incluye documentación completa y ofrecemos acompañamiento continuo: monitorización, mantenimiento y soporte técnico para que tu infraestructura siga funcionando bien con el tiempo." }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Trabajan con infraestructura ya existente o solo proyectos nuevos?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Ambos. Podemos auditar y mejorar lo que ya tienes (redes, servidores, cloud) o diseñar una infraestructura nueva desde cero, según lo que tu operación necesite." }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Cómo empiezo a trabajar con ustedes?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Escríbenos desde la página de contacto contándonos qué necesitas. Agendamos una conversación inicial, hacemos un diagnóstico y te proponemos una arquitectura y un plan de implementación." }
+            }
+          ]
         }
       ]
     }
