@@ -195,10 +195,14 @@ export function BundleCard({ b }: { b: Bundle }) {
 
 /* --------------------------------------------------------------- empty state */
 
-export function EmptyState({ title, text, cta, onCta, icon }: { title: string; text: string; cta?: string; onCta?: () => void; icon?: ReactNode }) {
+export function EmptyState({ title, text, cta, onCta, icon, image }: { title: string; text: string; cta?: string; onCta?: () => void; icon?: ReactNode; image?: string }) {
   return (
     <div className="flex flex-col items-center justify-center border border-dashed border-white/[0.1] bg-ink/40 px-6 py-20 text-center">
-      <div className="flex h-14 w-14 items-center justify-center border border-white/10 text-steel">{icon ?? "∅"}</div>
+      {image ? (
+        <img src={image} alt="" aria-hidden="true" className="h-24 w-auto" />
+      ) : (
+        <div className="flex h-14 w-14 items-center justify-center border border-white/10 text-steel">{icon ?? "∅"}</div>
+      )}
       <h3 className="mt-6 text-2xl font-extrabold uppercase tracking-tight text-snow md:text-3xl">{title}</h3>
       <p className="mt-3 max-w-md text-[14.5px] leading-relaxed text-steel">{text}</p>
       {cta && (

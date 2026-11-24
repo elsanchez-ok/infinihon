@@ -73,7 +73,8 @@ export default function ContactForm({ className }: { className?: string }) {
       </div>
       {sent ? (
         <div className="py-10 text-center">
-          <div className="font-mono text-xs uppercase tracking-[0.22em] text-volt">Mensaje enviado</div>
+          <img src="/assets/zuri-cheer.png" alt="" aria-hidden="true" className="mx-auto h-28 w-auto drop-shadow-[0_18px_40px_rgba(0,102,255,0.4)]" />
+          <div className="mt-4 font-mono text-xs uppercase tracking-[0.22em] text-volt">Mensaje enviado</div>
           <p className="mt-4 text-2xl font-bold">Recibimos tu solicitud.</p>
           <p className="mt-2 text-steel">
             Te responderemos pronto. Si prefieres escribirnos directamente, hazlo a{" "}

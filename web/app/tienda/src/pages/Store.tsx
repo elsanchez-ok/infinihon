@@ -42,7 +42,8 @@ function StoreHome() {
 function NotFound({ path }: { path: string }) {
   return (
     <div className="mx-auto max-w-[1500px] px-4 py-24 md:px-8">
-      <div className="font-mono text-[10.5px] uppercase tracking-[0.24em] text-volt">Error 404</div>
+      <img src="/assets/zuri-sleep.png" alt="" aria-hidden="true" className="h-28 w-auto" />
+      <div className="mt-6 font-mono text-[10.5px] uppercase tracking-[0.24em] text-volt">Error 404</div>
       <h1 className="mt-6 text-[12vw] font-extrabold uppercase leading-[0.9] tracking-[-0.045em] text-snow sm:text-6xl lg:text-[5rem]">
         Ruta no encontrada.
       </h1>
