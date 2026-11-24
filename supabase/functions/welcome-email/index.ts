@@ -259,9 +259,16 @@ Deno.serve(async (req: Request) => {
       <v:fill type="frame" src="${BG_URL}" color="#0B1E3A" />
     </v:background>
     <![endif]-->
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#0B1E3A;background-image:url('${BG_URL}');background-repeat:no-repeat;background-position:center top;background-size:cover;padding:40px 16px;">
+    <!-- El atributo HTML "background" (ademas del background-image por CSS
+         de abajo) es la tecnica clasica para maxima compatibilidad movil:
+         varias apps de correo en Android/iOS (Samsung Email, cuentas no-
+         Google dentro de la app de Gmail, Outlook.com en ciertas versiones)
+         ignoran background-image en CSS pero si respetan este atributo
+         heredado de HTML. Con los dos puestos, el fondo se ve en mas
+         clientes; donde ninguno de los dos funcione, cae en bgcolor. -->
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" background="${BG_URL}" bgcolor="#0B1E3A" style="background-color:#0B1E3A;background-image:url('${BG_URL}');background-repeat:no-repeat;background-position:center top;background-size:cover;padding:40px 16px;">
       <tr>
-        <td align="center">
+        <td align="center" background="${BG_URL}" bgcolor="#0B1E3A" style="background-image:url('${BG_URL}');background-repeat:no-repeat;background-position:center top;background-size:cover;">
           <!--[if mso]>
           <table role="presentation" width="560" cellpadding="0" cellspacing="0"><tr><td>
           <![endif]-->
