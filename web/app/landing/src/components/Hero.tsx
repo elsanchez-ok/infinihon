@@ -44,6 +44,29 @@ export default function Hero() {
     return () => window.removeEventListener("resize", measure);
   }, [typedWord]);
 
+  // "Ingeniería de ___" cabe en una sola línea con palabras cortas ("IA",
+  // "nube") pero se parte en dos con las largas ("seguridad",
+  // "monitoreo") en el mismo ancho de pantalla. Eso hace que, al cambiar
+  // de palabra, el <h1> cambie de alto y toda la página "rebote"
+  // (sube/baja) porque el Hero centra su contenido verticalmente. Para
+  // evitarlo, se miden de antemano (con clones invisibles, uno por cada
+  // palabra posible) todas las alturas que puede tomar esa primera línea
+  // y se reserva como min-height la más alta de todas: así el <h1> nunca
+  // cambia de tamaño sin importar qué palabra esté escrita.
+  const firstLineSizerRefs = useRef<Record<string, HTMLSpanElement | null>>({});
+  const [firstLineMinHeight, setFirstLineMinHeight] = useState<number>();
+  useEffect(() => {
+    const measure = () => {
+      const heights = HEADLINE_WORDS.map((word) => firstLineSizerRefs.current[word]?.getBoundingClientRect().height ?? 0);
+      const max = Math.max(...heights);
+      if (max > 0) setFirstLineMinHeight(max);
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    document.fonts?.ready?.then(measure).catch(() => {});
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+
   return (
     // data-theme="light" fija el Hero siempre en la paleta e imagen de fondo
     // del tema claro, sin importar el tema activo en el resto del sitio
@@ -77,8 +100,31 @@ export default function Hero() {
 
       <div className="mx-auto flex min-h-[100svh] max-w-[1440px] flex-col items-center justify-center px-5 pb-28 pt-32 text-center md:px-10">
         <div className="flex max-w-[780px] flex-col items-center">
-          <h1 className="text-[12vw] font-extrabold uppercase leading-[0.98] tracking-[-0.03em] text-[#F5F7FA] sm:text-[8vw] lg:text-[4.6rem] xl:text-[5.2rem]">
-            <span className="line-reveal pb-[0.05em]" style={{ "--d": "260ms" } as CSSProperties}>
+          <h1 className="relative text-[12vw] font-extrabold uppercase leading-[0.98] tracking-[-0.03em] text-[#F5F7FA] sm:text-[8vw] lg:text-[4.6rem] xl:text-[5.2rem]">
+            {/* Clones invisibles (uno por cada palabra posible) usados solo
+                para medir, en el useEffect de arriba, cuál es la altura
+                máxima que puede ocupar "Ingeniería de ___" en el ancho
+                actual de pantalla. position: absolute + invisible: no
+                afectan el layout real ni se ven, pero sí se renderizan con
+                el mismo ancho que la línea real (heredado del <h1>). */}
+            <span className="pointer-events-none invisible absolute inset-x-0 top-0" aria-hidden="true">
+              {HEADLINE_WORDS.map((word) => (
+                <span
+                  key={word}
+                  ref={(el) => {
+                    firstLineSizerRefs.current[word] = el;
+                  }}
+                  className="block pb-[0.05em]"
+                >
+                  Ingeniería de <span className="inline-block rounded-2xl px-[0.35em] py-[0.05em]">{word}</span>
+                </span>
+              ))}
+            </span>
+
+            <span
+              className="line-reveal pb-[0.05em]"
+              style={{ "--d": "260ms", minHeight: firstLineMinHeight } as CSSProperties}
+            >
               <span>
                 Ingeniería de{" "}
                 {/* text-left: el contenedor del Hero tiene text-center, y sin
