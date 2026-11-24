@@ -114,14 +114,18 @@ export default function Hero() {
             className="pointer-events-none invisible fixed left-[-9999px] top-0 inline-block whitespace-nowrap rounded-2xl px-[0.35em] py-[0.05em] text-[12vw] font-extrabold uppercase tracking-[-0.03em] sm:text-[8vw] lg:text-[4.6rem] xl:text-[5.2rem]"
           >
             {typedWord}
+            {/* Mismo ancho que el cursor parpadeante real (ml + w de abajo):
+                sin esto la píldora se mide solo por el texto y el cursor
+                queda recortado/asomado justo en la esquina redondeada. */}
+            <span className="-mb-[0.08em] ml-[0.02em] inline-block h-[0.82em] w-[0.06em] translate-y-[0.08em]" />
           </span>
 
           <p
-            className="reveal mt-8 max-w-[560px] text-base leading-relaxed text-steel md:mt-10 md:text-lg"
-            style={{ "--d": "650ms" } as CSSProperties}
+            className="reveal mt-8 max-w-[560px] text-base leading-relaxed text-white/80 md:mt-10 md:text-lg"
+            style={{ "--d": "650ms", textShadow: "0 2px 16px rgba(1,8,15,0.65)" } as CSSProperties}
           >
-            Diseñamos, implementamos y protegemos la <span className="text-snow">infraestructura tecnológica</span> que mantiene
-            conectadas a las empresas modernas. Y publicamos los <span className="text-snow">proyectos de software y plataformas</span>{" "}
+            Diseñamos, implementamos y protegemos la <span className="text-white">infraestructura tecnológica</span> que mantiene
+            conectadas a las empresas modernas. Y publicamos los <span className="text-white">proyectos de software y plataformas</span>{" "}
             que construimos dentro del corporativo.
           </p>
 
