@@ -1,6 +1,6 @@
 import { StoreProvider, useStore } from "../store/app";
 import { CartDrawer, FloatingBars, SearchOverlay, StoreFooter, StoreNavbar, Toaster } from "../components/store/chrome";
-import { AlsoViewed, BundlesSection, CategoryGrid, FeaturedProducts, HondurasStore, SolutionsSection, StoreHero, SupportSection, TechInsights, TrustSection } from "../components/store/home";
+import { AlsoViewed, BundlesSection, CategoryGrid, FeaturedProducts, HondurasStore, SolutionsSection, SupportSection, TechInsights, TrustSection } from "../components/store/home";
 import CatalogPage from "../components/store/CatalogPage";
 import ProductPage from "../components/store/ProductPage";
 import { CartPage, CheckoutPage, ComparePage } from "../components/store/CartCheckout";
@@ -24,7 +24,8 @@ import {
 function StoreHome() {
   return (
     <>
-      <StoreHero />
+      {/* El hero anterior se quitó: ahora la sección de categorías (la que
+          estaba justo debajo) abre la página. */}
       <CategoryGrid />
       <FeaturedProducts />
       <SolutionsSection />
