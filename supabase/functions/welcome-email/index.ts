@@ -244,6 +244,7 @@ Deno.serve(async (req: Request) => {
   // nunca tocan los pixeles de una imagen — por eso antes el logo blanco
   // "desaparecia" cuando el cuadro de fondo se volvia blanco.
   const SITE_URL = "https://infinihon.vercel.app";
+  const BG_URL = `${SITE_URL}/assets/email-bg.jpg`;
   const safeGreeting = escapeHtml(greeting);
   const html = `<!doctype html>
 <html lang="es">
@@ -252,11 +253,19 @@ Deno.serve(async (req: Request) => {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Bienvenido a InfiniHon</title>
   </head>
-  <body style="margin:0;padding:0;background-color:#F5F7FA;">
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F5F7FA;padding:32px 16px;">
+  <body style="margin:0;padding:0;background-color:#0B1E3A;">
+    <!--[if mso]>
+    <v:background xmlns:v="urn:schemas-microsoft-com:vml" fill="t">
+      <v:fill type="frame" src="${BG_URL}" color="#0B1E3A" />
+    </v:background>
+    <![endif]-->
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#0B1E3A;background-image:url('${BG_URL}');background-repeat:no-repeat;background-position:center top;background-size:cover;padding:40px 16px;">
       <tr>
         <td align="center">
-          <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background-color:#FFFFFF;border-radius:12px;overflow:hidden;border:1px solid #E5E9EF;">
+          <!--[if mso]>
+          <table role="presentation" width="560" cellpadding="0" cellspacing="0"><tr><td>
+          <![endif]-->
+          <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background-color:#FFFFFF;background-color:rgba(255,255,255,0.95);border-radius:16px;overflow:hidden;box-shadow:0 20px 50px rgba(5,7,10,0.35);">
             <tr>
               <td align="center" style="background-color:#05070A;line-height:0;font-size:0;">
                 <img src="${SITE_URL}/assets/email-header-banner.png" width="560" alt="InfiniHon" style="display:block;border:0;outline:none;width:100%;max-width:560px;height:auto;color:#ffffff;" />
@@ -291,9 +300,12 @@ Deno.serve(async (req: Request) => {
               </td>
             </tr>
           </table>
+          <!--[if mso]>
+          </td></tr></table>
+          <![endif]-->
           <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;">
             <tr>
-              <td align="center" style="padding:20px 24px;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.5;color:#8B96A5;">
+              <td align="center" style="padding:20px 24px;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.5;color:#F5F7FA;">
                 InfiniHon Corp. · Tegucigalpa, Honduras<br />
                 Recibiste este correo porque creaste una cuenta en infinihon.vercel.app
               </td>
