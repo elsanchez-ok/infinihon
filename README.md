@@ -1,5 +1,8 @@
 # InfiniHon Corp.
 
+[![Desplegado en Vercel](https://img.shields.io/badge/deploy-vercel-black?logo=vercel)](https://infinihon.vercel.app/)
+[![Licencia](https://img.shields.io/badge/licencia-propietaria-blue)](./LICENSE)
+
 **InfiniHon Corp.** (también conocido como *Corporativo InfiniHon*) es un corporativo
 tecnológico hondureño con sede en Tegucigalpa, Honduras. Diseñamos, implementamos y
 protegemos la infraestructura tecnológica de empresas — redes, servidores, cloud,
@@ -31,6 +34,20 @@ Este repositorio contiene el código fuente de todas las apps que sirven
 usuario (`/account`) y panel de control (`/admin`). Cada app vive en `web/app/<nombre>` y
 se compila a un único HTML estático servido por Vercel. Detalles técnicos de build y
 despliegue en [`web/README.md`](web/README.md).
+
+## Stack técnico
+
+- **Frontend:** React + TypeScript + Vite + Tailwind CSS, una app independiente por sección (`web/app/<nombre>`), cada una compilada a un único HTML estático.
+- **Backend / datos:** Supabase (Postgres, Auth, Storage, Row Level Security) y Edge Functions en Deno para correo y formularios.
+- **Hosting:** Vercel, con despliegue automático a producción al fusionar a `main`.
+
+## Seguridad
+
+¿Encontraste una vulnerabilidad? Repórtala de forma privada siguiendo la guía en [`SECURITY.md`](SECURITY.md). No abras un issue público para temas de seguridad.
+
+## Licencia
+
+Código y contenido con todos los derechos reservados — ver [`LICENSE`](LICENSE). No es un proyecto de código abierto: su publicación en GitHub tiene fines de referencia y transparencia, no de reutilización.
 
 ## Contacto
 
