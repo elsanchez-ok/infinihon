@@ -77,15 +77,6 @@ export default function Hero() {
 
       <div className="mx-auto flex min-h-[100svh] max-w-[1440px] flex-col items-center justify-center px-5 pb-28 pt-32 text-center md:px-10">
         <div className="flex max-w-[780px] flex-col items-center">
-          <div className="reveal -mb-2 md:-mb-4" style={{ "--d": "160ms" } as CSSProperties}>
-            <img
-              src="/assets/mascot-hero.png"
-              alt=""
-              aria-hidden="true"
-              className="relative z-10 mx-auto h-32 w-32 drop-shadow-[0_18px_40px_rgba(0,102,255,0.55)] sm:h-40 sm:w-40 md:h-48 md:w-48"
-            />
-          </div>
-
           <h1 className="text-[12vw] font-extrabold uppercase leading-[0.98] tracking-[-0.03em] text-[#F5F7FA] sm:text-[8vw] lg:text-[4.6rem] xl:text-[5.2rem]">
             <span className="line-reveal pb-[0.05em]" style={{ "--d": "260ms" } as CSSProperties}>
               <span>
@@ -134,7 +125,16 @@ export default function Hero() {
             que construimos dentro del corporativo.
           </p>
 
-          <div className="reveal mt-10 flex flex-col gap-3 sm:flex-row" style={{ "--d": "800ms" } as CSSProperties}>
+          <div className="reveal mt-8 md:mt-10" style={{ "--d": "725ms" } as CSSProperties}>
+            <img
+              src="/assets/zuri-sparkle.png"
+              alt=""
+              aria-hidden="true"
+              className="mx-auto h-28 w-auto drop-shadow-[0_18px_40px_rgba(0,102,255,0.45)] sm:h-32 md:h-36"
+            />
+          </div>
+
+          <div className="reveal mt-8 flex flex-col gap-3 sm:flex-row md:mt-10" style={{ "--d": "800ms" } as CSSProperties}>
             <PrimaryButton href="/contacto">Construir mi infraestructura</PrimaryButton>
             <GhostButton href="#servicios">Explorar servicios</GhostButton>
             <GhostButton href="/proyectos">Ver proyectos</GhostButton>
