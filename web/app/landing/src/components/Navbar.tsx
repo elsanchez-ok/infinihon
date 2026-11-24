@@ -228,18 +228,18 @@ export default function Navbar() {
             </li>
           ))}
           <li className="mt-6 flex items-center gap-3">
-            <a href="/contacto" onClick={() => setOpen(false)} className="flex flex-1 items-center justify-center rounded-full bg-tech py-4 font-semibold">
-              Hablar con InfiniHon Corp.
+            <a href="/auth" onClick={() => setOpen(false)} className="flex flex-1 items-center justify-center rounded-full bg-tech py-4 font-semibold">
+              Iniciar sesión
             </a>
             <ThemeToggle className="h-[54px] w-14 shrink-0 rounded-full" />
           </li>
           <li className="mt-3">
             <a
-              href="/auth"
+              href="/contacto"
               onClick={() => setOpen(false)}
               className="flex items-center justify-center gap-2 rounded-full border border-white/10 py-4 font-semibold text-snow"
             >
-              Iniciar sesión
+              Hablar con InfiniHon Corp.
             </a>
           </li>
         </ul>
