@@ -92,7 +92,11 @@ export default function Hero() {
                 >
                   <span aria-hidden="true">
                     {typedWord}
-                    <span className="blink -mb-[0.08em] ml-[0.02em] inline-block h-[0.82em] w-[0.06em] translate-y-[0.08em] bg-white/90" />
+                    {/* bg-[#F5F7FA] en vez de bg-white: "white" está
+                        redefinido a casi-negro en este Hero (ver nota de
+                        --color-white más abajo), así que el cursor se
+                        vería oscuro/apagado sobre la píldora azul. */}
+                    <span className="blink -mb-[0.08em] ml-[0.02em] inline-block h-[0.82em] w-[0.06em] translate-y-[0.08em] bg-[#F5F7FA]/90" />
                   </span>
                   <span className="sr-only">{HEADLINE_WORD_A11Y}</span>
                 </span>
@@ -117,15 +121,23 @@ export default function Hero() {
             {/* Mismo ancho que el cursor parpadeante real (ml + w de abajo):
                 sin esto la píldora se mide solo por el texto y el cursor
                 queda recortado/asomado justo en la esquina redondeada. */}
-            <span className="-mb-[0.08em] ml-[0.02em] inline-block h-[0.82em] w-[0.06em] translate-y-[0.08em]" />
+            {/* Un poco más ancho que el cursor real (0.06em) a propósito:
+                deja un pequeño margen de seguridad para que el cursor nunca
+                quede justo al borde del redondeo de la píldora. */}
+            <span className="-mb-[0.08em] ml-[0.02em] inline-block h-[0.82em] w-[0.1em] translate-y-[0.08em]" />
           </span>
 
+          {/* Nota: aquí NO se puede usar la clase "text-white" — dentro de
+              este Hero (data-theme="light" fijo) esa variable se redefine a
+              casi-negro a propósito, para los bordes/superficies "glass"
+              (border-white/10, etc.). Por eso se usa el mismo hex fijo que
+              ya usa el <h1> (#F5F7FA), que no depende de esa variable. */}
           <p
-            className="reveal mt-8 max-w-[560px] text-base leading-relaxed text-white/80 md:mt-10 md:text-lg"
+            className="reveal mt-8 max-w-[560px] text-base leading-relaxed text-[#F5F7FA]/80 md:mt-10 md:text-lg"
             style={{ "--d": "650ms", textShadow: "0 2px 16px rgba(1,8,15,0.65)" } as CSSProperties}
           >
-            Diseñamos, implementamos y protegemos la <span className="text-white">infraestructura tecnológica</span> que mantiene
-            conectadas a las empresas modernas. Y publicamos los <span className="text-white">proyectos de software y plataformas</span>{" "}
+            Diseñamos, implementamos y protegemos la <span className="text-[#F5F7FA]">infraestructura tecnológica</span> que mantiene
+            conectadas a las empresas modernas. Y publicamos los <span className="text-[#F5F7FA]">proyectos de software y plataformas</span>{" "}
             que construimos dentro del corporativo.
           </p>
 
