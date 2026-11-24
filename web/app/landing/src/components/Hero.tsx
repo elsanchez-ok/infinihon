@@ -125,16 +125,16 @@ export default function Hero() {
             que construimos dentro del corporativo.
           </p>
 
-          <div className="reveal -mb-6 mt-4 md:-mb-10 md:mt-6" style={{ "--d": "725ms" } as CSSProperties}>
+          <div className="reveal -mb-4 mt-4 md:-mb-6 md:mt-6" style={{ "--d": "725ms" } as CSSProperties}>
             <img
               src="/assets/zuri-sparkle.png"
               alt=""
               aria-hidden="true"
-              className="relative z-10 mx-auto h-52 w-auto drop-shadow-[0_18px_40px_rgba(0,102,255,0.45)] sm:h-64 md:h-72 lg:h-80"
+              className="relative z-10 mx-auto h-44 w-auto drop-shadow-[0_18px_40px_rgba(0,102,255,0.45)] sm:h-52 md:h-60"
             />
           </div>
 
-          <div className="reveal mt-8 flex flex-col gap-3 sm:flex-row md:mt-10" style={{ "--d": "800ms" } as CSSProperties}>
+          <div className="reveal flex flex-col gap-3 sm:flex-row" style={{ "--d": "800ms" } as CSSProperties}>
             <PrimaryButton href="/contacto">Construir mi infraestructura</PrimaryButton>
             <GhostButton href="#servicios">Explorar servicios</GhostButton>
             <GhostButton href="/proyectos">Ver proyectos</GhostButton>
