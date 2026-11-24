@@ -4,17 +4,19 @@ import { categories, categoryLabel, products, services, statusLabel, bySlug } fr
 import { ProductVisual } from "./ProductVisual";
 import { cn } from "../../utils/cn";
 import { ArrowIcon, Corners, ThemeToggle } from "../ui";
-import { authUrl, hasStoredSession } from "../../auth/session";
+import { hasStoredSession } from "../../auth/session";
 
 /**
  * "Cuenta" es una sub-app aparte (/account, fuera del router interno de la
  * tienda), así que no se navega con el `navigate()` de la tienda (ese solo
  * mueve el historial dentro de /tienda) sino con una navegación real de
  * página. Si ya hay sesión guardada vamos directo a /account; si no, a
- * /auth, que por defecto termina mandando a /account al iniciar sesión.
+ * /auth sin parámetros — por defecto, al iniciar sesión ahí ya termina
+ * mandando a /account (ver postLoginPath en web/app/auth/src/lib/supabase.ts),
+ * así que no hace falta pasarle ?redirect= explícito.
  */
 function goToAccount() {
-  window.location.assign(hasStoredSession() ? "/account" : authUrl("login", "/account"));
+  window.location.assign(hasStoredSession() ? "/account" : "/auth");
 }
 
 /* ------------------------------------------------------------------- logo */
