@@ -4,15 +4,30 @@ import { categories, categoryLabel, products, services, statusLabel, bySlug } fr
 import { ProductVisual } from "./ProductVisual";
 import { cn } from "../../utils/cn";
 import { ArrowIcon, Corners, ThemeToggle } from "../ui";
+import { authUrl, hasStoredSession } from "../../auth/session";
+
+/**
+ * "Cuenta" es una sub-app aparte (/account, fuera del router interno de la
+ * tienda), así que no se navega con el `navigate()` de la tienda (ese solo
+ * mueve el historial dentro de /tienda) sino con una navegación real de
+ * página. Si ya hay sesión guardada vamos directo a /account; si no, a
+ * /auth, que por defecto termina mandando a /account al iniciar sesión.
+ */
+function goToAccount() {
+  window.location.assign(hasStoredSession() ? "/account" : authUrl("login", "/account"));
+}
 
 /* ------------------------------------------------------------------- logo */
 
 /* Logo simplificado a una sola línea (solo el isotipo InfiniHon), igual
    que en la barra de navegación del sitio principal. */
-export function StoreLogo({ compact = false }: { compact?: boolean }) {
+export function StoreLogo() {
+  // Mismo tamaño que el logo de la navbar de la landing (h-9 sm:h-10): las
+  // dos barras miden 68px de alto, así que el logo se ve igual de grande en
+  // ambos sitios en vez de más chico como antes.
   return (
     <Link to="/" className="flex shrink-0 items-center" aria-label="InfiniHon Corp. — tienda">
-      <img src="/assets/infinihon.png" alt="InfiniHon Corp." className={cn("w-auto", compact ? "h-6" : "h-7")} />
+      <img src="/assets/infinihon.png" alt="InfiniHon Corp." className="h-9 w-auto sm:h-10" />
     </Link>
   );
 }
@@ -71,7 +86,7 @@ export function StoreNavbar() {
 
         <div className="bg-obsidian px-3 pt-3 sm:px-4 sm:pt-4">
           <nav aria-label="Principal" className="nav-glow relative mx-auto flex h-[68px] max-w-[1500px] items-center gap-4 rounded-[24px] px-4 md:rounded-[28px] md:px-6">
-            <StoreLogo compact />
+            <StoreLogo />
 
             <ul className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-7 lg:flex">
               {NAV.map((n) => {
@@ -103,7 +118,7 @@ export function StoreNavbar() {
               <IconBtn label="Buscar" onClick={() => setSearch(true)} kbd>
                 <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" {...ICON}><circle cx="11" cy="11" r="6.5" /><path d="M16 16l4 4" /></svg>
               </IconBtn>
-              <IconBtn label="Cuenta" onClick={() => navigate("/soporte")} className="hidden sm:flex">
+              <IconBtn label="Cuenta" onClick={goToAccount} className="hidden sm:flex">
                 <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" {...ICON}><circle cx="12" cy="8.5" r="3.5" /><path d="M5 20c1.2-3.6 4-5 7-5s5.8 1.4 7 5" /></svg>
               </IconBtn>
               <IconBtn label={`Carrito, ${cartCount} productos`} onClick={() => setDrawer(true)} badge={cartCount} anchor>
