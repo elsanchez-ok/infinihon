@@ -236,6 +236,13 @@ Deno.serve(async (req: Request) => {
   // Correo visual: logo + mascota de Zuri alojados en el propio sitio
   // (web/assets, ya publicos en infinihon.vercel.app). No se incrustan
   // como adjuntos: los clientes de correo cargan la imagen por URL.
+  //
+  // email-header-banner.png es el logo YA aplanado sobre su fondo oscuro
+  // en un solo PNG (no texto blanco + background-color por CSS separados).
+  // Varios clientes de correo (Gmail app movil en modo oscuro, Outlook,
+  // etc.) ignoran o invierten los background-color puestos por CSS pero
+  // nunca tocan los pixeles de una imagen — por eso antes el logo blanco
+  // "desaparecia" cuando el cuadro de fondo se volvia blanco.
   const SITE_URL = "https://infinihon.vercel.app";
   const safeGreeting = escapeHtml(greeting);
   const html = `<!doctype html>
@@ -251,8 +258,8 @@ Deno.serve(async (req: Request) => {
         <td align="center">
           <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background-color:#FFFFFF;border-radius:12px;overflow:hidden;border:1px solid #E5E9EF;">
             <tr>
-              <td align="center" style="background-color:#05070A;padding:28px 24px;">
-                <img src="${SITE_URL}/assets/infinihon.png" width="170" alt="InfiniHon" style="display:block;border:0;outline:none;max-width:170px;width:100%;height:auto;" />
+              <td align="center" style="background-color:#05070A;line-height:0;font-size:0;">
+                <img src="${SITE_URL}/assets/email-header-banner.png" width="560" alt="InfiniHon" style="display:block;border:0;outline:none;width:100%;max-width:560px;height:auto;color:#ffffff;" />
               </td>
             </tr>
             <tr>
