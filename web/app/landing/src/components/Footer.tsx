@@ -1,7 +1,7 @@
 const navCol1 = [
   ["Servicios", "/#servicios"],
   ["Infraestructura", "/#infraestructura"],
-  ["Nosotros", "/#nosotros"],
+  ["Nosotros", "/nosotros"],
 ];
 const navCol2 = [
   ["Proyectos", "/proyectos"],

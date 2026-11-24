@@ -13,9 +13,10 @@ import TechnologySection from "./components/TechnologySection";
 import HondurasSection from "./components/HondurasSection";
 import ProcessSection from "./components/ProcessSection";
 import FounderSection from "./components/FounderSection";
-import AboutSection from "./components/AboutSection";
+import AboutTeaser from "./components/AboutTeaser";
 import FAQSection from "./components/FAQSection";
 import ContactPage from "./components/ContactPage";
+import NosotrosPage from "./components/NosotrosPage";
 import { TerminosPage, PrivacidadPage, CookiesPage } from "./components/LegalPages";
 import Footer from "./components/Footer";
 import ScrollMascot from "./components/ScrollMascot";
@@ -27,6 +28,7 @@ import { useSmoothScroll } from "./hooks/useSmoothScroll";
    el <title> y la ruta canónica/OG para esa página. */
 const staticPages: Record<string, { title: string; Component: () => JSX.Element }> = {
   "/contacto": { title: "Contacto — InfiniHon Corp.", Component: ContactPage },
+  "/nosotros": { title: "Nosotros — InfiniHon Corp.", Component: NosotrosPage },
   "/terminos": { title: "Términos y condiciones — InfiniHon Corp.", Component: TerminosPage },
   "/privacidad": { title: "Política de privacidad — InfiniHon Corp.", Component: PrivacidadPage },
   "/cookies": { title: "Política de cookies — InfiniHon Corp.", Component: CookiesPage },
@@ -82,7 +84,7 @@ export default function App() {
         <TechnologySection />
         <HondurasSection />
         <ProcessSection />
-        <AboutSection />
+        <AboutTeaser />
         <FounderSection />
         <FAQSection />
       </main>

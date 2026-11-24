@@ -46,6 +46,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://infinihon.vercel.app/nosotros</loc>
+    <lastmod>2026-11-17</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://infinihon.vercel.app/tienda/contacto</loc>
     <lastmod>2026-11-17</lastmod>
     <priority>0.7</priority>
