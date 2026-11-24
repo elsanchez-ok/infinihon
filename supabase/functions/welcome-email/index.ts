@@ -22,6 +22,10 @@
 // contact-form/index.ts porque el despliegue de cada funcion sube un solo
 // archivo (no hay módulos compartidos entre funciones en este flujo).
 //
+// Nota de entregabilidad: asunto y remitente deliberadamente sin emojis ni
+// signos de exclamacion para reducir la probabilidad de caer en Spam al
+// enviar desde una cuenta de Gmail normal (sin dominio propio verificado).
+//
 // Este archivo es la copia de referencia versionada en git. El despliegue
 // real vive en Supabase (proyecto "Infinihon Vanguard", funcion
 // "welcome-email") y se actualiza con la Supabase CLI o el MCP de Supabase,
@@ -170,7 +174,7 @@ Deno.serve(async (req: Request) => {
   if (!toEmail) return json({ ok: true, sent: false });
   const firstName = (claimed.first_name as string | null)?.trim() || "";
 
-  const greeting = firstName ? `¡Hola, ${firstName}!` : "¡Hola!";
+  const greeting = firstName ? `Hola, ${firstName}.` : "Hola.";
   const textLines = [
     greeting,
     "",
@@ -179,15 +183,15 @@ Deno.serve(async (req: Request) => {
     "",
     "Desde tu portal puedes dar seguimiento a tus solicitudes y pedidos, gestionar",
     "tus datos y resolver dudas sobre nuestros servicios. Y si en algún momento",
-    "necesitas ayuda, solo abre el ícono de chat dentro de tu cuenta — con gusto",
+    "necesitas ayuda, solo abre el ícono de chat dentro de tu cuenta, con gusto",
     "te atiendo ahí mismo.",
     "",
     "Un gusto tenerte con nosotros.",
     "",
-    "— Zuri",
+    "Zuri",
     "Asistente de la plataforma InfiniHon",
   ];
 
-  const sent = await sendGmail(toEmail, "¡Bienvenido(a) a InfiniHon! Soy Zuri 👋", textLines.join("\n"), "Zuri · InfiniHon");
+  const sent = await sendGmail(toEmail, "Bienvenido a InfiniHon", textLines.join("\n"), "InfiniHon");
   return json({ ok: true, sent });
 });
