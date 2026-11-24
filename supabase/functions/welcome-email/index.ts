@@ -86,26 +86,67 @@ async function getGmailAccessToken(): Promise<string | null> {
   }
 }
 
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 function encodeHeaderWord(text: string): string {
   const bytes = new TextEncoder().encode(text);
   return `=?UTF-8?B?${base64UrlEncode(bytes).replace(/-/g, "+").replace(/_/g, "/")}?=`;
 }
 
-async function sendGmail(to: string, subject: string, text: string, fromName?: string): Promise<boolean> {
+async function sendGmail(to: string, subject: string, text: string, fromName?: string, html?: string): Promise<boolean> {
   const accessToken = await getGmailAccessToken();
   if (!accessToken) return false;
   const senderAddress = Deno.env.get("GMAIL_SENDER_ADDRESS") ?? "infinihon.hn@gmail.com";
   const fromHeader = fromName ? `${encodeHeaderWord(fromName)} <${senderAddress}>` : senderAddress;
-  const lines = [
-    `From: ${fromHeader}`,
-    `To: ${to}`,
-    `Subject: ${encodeHeaderWord(subject)}`,
-    "MIME-Version: 1.0",
-    "Content-Type: text/plain; charset=UTF-8",
-    "Content-Transfer-Encoding: 8bit",
-    "",
-    text,
-  ];
+
+  let lines: string[];
+  if (html) {
+    // multipart/alternative: incluye texto plano Y html. Los clientes de
+    // correo modernos muestran la parte html (con logo/diseño); el texto
+    // plano queda como respaldo para clientes antiguos y, ademas, un
+    // correo "multipart" bien formado suele puntuar mejor en los filtros
+    // antispam que uno que es solo HTML sin alternativa de texto.
+    const boundary = `----=_InfiniHon_${crypto.randomUUID().replace(/-/g, "")}`;
+    lines = [
+      `From: ${fromHeader}`,
+      `To: ${to}`,
+      `Subject: ${encodeHeaderWord(subject)}`,
+      "MIME-Version: 1.0",
+      `Content-Type: multipart/alternative; boundary="${boundary}"`,
+      "",
+      `--${boundary}`,
+      "Content-Type: text/plain; charset=UTF-8",
+      "Content-Transfer-Encoding: 8bit",
+      "",
+      text,
+      "",
+      `--${boundary}`,
+      "Content-Type: text/html; charset=UTF-8",
+      "Content-Transfer-Encoding: 8bit",
+      "",
+      html,
+      "",
+      `--${boundary}--`,
+    ];
+  } else {
+    lines = [
+      `From: ${fromHeader}`,
+      `To: ${to}`,
+      `Subject: ${encodeHeaderWord(subject)}`,
+      "MIME-Version: 1.0",
+      "Content-Type: text/plain; charset=UTF-8",
+      "Content-Transfer-Encoding: 8bit",
+      "",
+      text,
+    ];
+  }
   const raw = base64UrlEncode(new TextEncoder().encode(lines.join("\r\n")));
   try {
     const res = await fetch("https://gmail.googleapis.com/gmail/v1/users/me/messages/send", {
@@ -192,6 +233,71 @@ Deno.serve(async (req: Request) => {
     "Asistente de la plataforma InfiniHon",
   ];
 
-  const sent = await sendGmail(toEmail, "Bienvenido a InfiniHon", textLines.join("\n"), "InfiniHon");
+  // Correo visual: logo + mascota de Zuri alojados en el propio sitio
+  // (web/assets, ya publicos en infinihon.vercel.app). No se incrustan
+  // como adjuntos: los clientes de correo cargan la imagen por URL.
+  const SITE_URL = "https://infinihon.vercel.app";
+  const safeGreeting = escapeHtml(greeting);
+  const html = `<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bienvenido a InfiniHon</title>
+  </head>
+  <body style="margin:0;padding:0;background-color:#F5F7FA;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F5F7FA;padding:32px 16px;">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background-color:#FFFFFF;border-radius:12px;overflow:hidden;border:1px solid #E5E9EF;">
+            <tr>
+              <td align="center" style="background-color:#05070A;padding:28px 24px;">
+                <img src="${SITE_URL}/assets/infinihon.png" width="170" alt="InfiniHon" style="display:block;border:0;outline:none;max-width:170px;width:100%;height:auto;" />
+              </td>
+            </tr>
+            <tr>
+              <td align="center" style="padding:28px 24px 0 24px;">
+                <img src="${SITE_URL}/assets/zuri-head.png" width="88" alt="Zuri" style="display:block;border:0;outline:none;width:88px;height:auto;" />
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:16px 32px 8px 32px;font-family:Arial,Helvetica,sans-serif;">
+                <p style="margin:0 0 16px 0;font-size:18px;font-weight:bold;text-align:center;color:#0A0F14;">${safeGreeting}</p>
+                <p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;color:#333C46;">
+                  Soy Zuri, la asistente virtual de la plataforma InfiniHon. Quería darte una bienvenida personal ahora que ya tienes acceso a tu cuenta.
+                </p>
+                <p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;color:#333C46;">
+                  Desde tu portal puedes dar seguimiento a tus solicitudes y pedidos, gestionar tus datos y resolver dudas sobre nuestros servicios. Y si en algún momento necesitas ayuda, solo abre el ícono de chat dentro de tu cuenta, con gusto te atiendo ahí mismo.
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td align="center" style="padding:8px 32px 32px 32px;">
+                <a href="${SITE_URL}/account" style="display:inline-block;background-color:#0066FF;color:#FFFFFF;text-decoration:none;font-size:15px;font-weight:bold;padding:14px 32px;border-radius:8px;font-family:Arial,Helvetica,sans-serif;">Ir a mi cuenta</a>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:0 32px 32px 32px;font-family:Arial,Helvetica,sans-serif;">
+                <p style="margin:0;font-size:15px;line-height:1.6;color:#333C46;">Un gusto tenerte con nosotros.</p>
+                <p style="margin:16px 0 0 0;font-size:15px;line-height:1.6;color:#0A0F14;font-weight:bold;">Zuri</p>
+                <p style="margin:0;font-size:13px;line-height:1.5;color:#8B96A5;">Asistente de la plataforma InfiniHon</p>
+              </td>
+            </tr>
+          </table>
+          <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;">
+            <tr>
+              <td align="center" style="padding:20px 24px;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.5;color:#8B96A5;">
+                InfiniHon Corp. · Tegucigalpa, Honduras<br />
+                Recibiste este correo porque creaste una cuenta en infinihon.vercel.app
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>`;
+
+  const sent = await sendGmail(toEmail, "Bienvenido a InfiniHon", textLines.join("\n"), "InfiniHon", html);
   return json({ ok: true, sent });
 });
