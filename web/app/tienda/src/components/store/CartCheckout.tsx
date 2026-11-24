@@ -24,7 +24,7 @@ export function CartPage() {
         <Breadcrumb items={[{ l: "Carrito" }]} />
         <div className="mt-10">
           <EmptyState
-            icon={<svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.3"><path d="M4 6h16l-1.4 11.2A2 2 0 0 1 16.6 19H7.4a2 2 0 0 1-2-1.8z" /><path d="M9 6V4.8A3 3 0 0 1 15 4.8V6" /></svg>}
+            image="/assets/zuri-wave.png"
             title="Tu infraestructura aún no tiene nada."
             text="Explora nuestra tienda y encuentra tecnología para construir lo que sigue."
             cta="Explorar productos"
@@ -332,7 +332,8 @@ export function CheckoutPage() {
           {step === 3 && (
             <section data-checkout-step="3">
               <div className="border border-tech/40 bg-hn/20 p-6 md:p-8">
-                <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-volt">Confirmación · solicitud registrada</div>
+                <img src="/assets/zuri-cheer.png" alt="" aria-hidden="true" className="h-20 w-auto" />
+                <div className="mt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-volt">Confirmación · solicitud registrada</div>
                 <h2 className="mt-5 text-3xl font-extrabold uppercase leading-tight tracking-tight">Solicitud registrada.</h2>
                 <p className="mt-4 text-[14.5px] leading-relaxed text-steel">
                   Referencia <span className="font-mono text-snow">{orderId}</span>. Tu pedido se ha guardado en el servidor. Nuestro equipo te contactará para confirmar precio, entrega y forma de pago.
