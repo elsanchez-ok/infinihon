@@ -4,13 +4,15 @@
     <meta charset="UTF-8" />
     <script>
       (function () {
+        // /auth siempre usa un único tema (oscuro), sin importar el tema
+        // claro/oscuro que la persona haya elegido en el sitio principal
+        // (compartido vía localStorage "infinihon-theme" entre /, /tienda,
+        // /account, etc.): esta pantalla se diseñó solo para verse en
+        // oscuro (imagen de marca, tarjeta de cristal), así que no debe
+        // heredar ni alternar el tema del resto del sitio.
         try {
-          var t = localStorage.getItem("infinihon-theme");
-          if (t !== "light" && t !== "dark") {
-            t = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
-          }
-          document.documentElement.setAttribute("data-theme", t);
-          document.documentElement.style.colorScheme = t;
+          document.documentElement.setAttribute("data-theme", "dark");
+          document.documentElement.style.colorScheme = "dark";
         } catch (e) {}
       })();
     </script>
