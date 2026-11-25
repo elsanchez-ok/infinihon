@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type InputHTMLAttributes, type MouseEvent, type ReactNode } from "react";
 import { authCapabilities } from "./authService";
-import { GOOGLE_CLIENT_ID, generateNonce, loadGoogleIdentityScript } from "./googleIdentity";
+import { GOOGLE_CLIENT_ID, disableGoogleAutoSelect, generateNonce, loadGoogleIdentityScript } from "./googleIdentity";
 import { passwordRequirements, passwordScore } from "./validation";
 
 type FieldProps = Omit<InputHTMLAttributes<HTMLInputElement>, "id"> & {
@@ -152,6 +152,10 @@ function GoogleButtonCell({ onCredential, pending }: {
           nonce: hashedNonce,
           use_fedcm_for_prompt: true,
         });
+        // Evita que Google reutilice en silencio la última cuenta usada en
+        // este navegador (ver el comentario de disableGoogleAutoSelect):
+        // cada clic en el botón debe mostrar el selector de cuentas real.
+        disableGoogleAutoSelect();
         paintButton(true);
         ready = true;
         if (!cancelled) setStatus("ready");

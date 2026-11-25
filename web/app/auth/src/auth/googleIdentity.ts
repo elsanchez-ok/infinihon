@@ -23,6 +23,7 @@ declare global {
             use_fedcm_for_prompt?: boolean;
           }): void;
           renderButton(parent: HTMLElement, options: Record<string, unknown>): void;
+          disableAutoSelect(): void;
         };
       };
     };
@@ -52,6 +53,34 @@ export function loadGoogleIdentityScript(): Promise<void> {
     document.head.appendChild(script);
   });
   return scriptPromise;
+}
+
+/**
+ * Google Identity Services recuerda, por origen, cuál fue la última cuenta
+ * de Google usada para iniciar sesión y puede reutilizarla automáticamente
+ * ("auto select") la próxima vez — sin mostrar el selector de cuentas —
+ * mientras el navegador conserve una sesión de Google activa con esa cuenta.
+ *
+ * Eso es lo que causaba el reporte de "entré con el Gmail de otra cuenta y
+ * me metió a la cuenta con la que ya había cerrado sesión antes": cerrar
+ * sesión en InfiniHon NO cierra la sesión de Google del navegador (es lo
+ * normal y esperado), así que la próxima vez que alguien hace clic en
+ * "Continuar con Google" — con intención de usar otra cuenta — Google podía
+ * autoseleccionar en silencio la cuenta usada la última vez en este sitio,
+ * sin mostrar el selector. La persona terminaba autenticada con una cuenta
+ * distinta a la que creía estar usando (en este caso, la cuenta
+ * administradora ya usada antes en ese navegador), lo que además explicaba
+ * por qué podía entrar a /admin: no era un fallo de permisos, era la cuenta
+ * equivocada.
+ *
+ * `disableAutoSelect()` apaga ese comportamiento para el resto de la sesión
+ * del navegador: fuerza a que el próximo intento de inicio de sesión con
+ * Google siempre muestre el selector de cuentas explícito, en vez de
+ * reutilizar la última cuenta en silencio. Se llama una vez por carga de
+ * página, justo después de `initialize`.
+ */
+export function disableGoogleAutoSelect(): void {
+  try { window.google?.accounts.id.disableAutoSelect(); } catch { /* GIS aún no cargó: nada que apagar */ }
 }
 
 /**
