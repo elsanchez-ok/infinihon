@@ -55,6 +55,8 @@ export interface Settings {
   lowStockAlerts: boolean; allowRegistration: boolean; minPasswordLength: number; sessionTimeout: number;
   require2fa: boolean; emailNotifications: boolean; systemNotifications: boolean; theme: string;
 }
+/** Correo automático editable desde /admin/emails (plantilla real en Supabase: public.email_templates). */
+export interface EmailTemplate { id: "welcome" | "verification_code"; subject: string; body: string; updatedAt: string | null }
 
 /* ─────────── Permissions ─────────── */
 
@@ -76,6 +78,7 @@ export const permissionModules: { module: string; label: string; actions: string
   { module: "activity", label: "Activity Log", actions: ["view"] },
   { module: "security", label: "Security", actions: ["view", "edit"] },
   { module: "settings", label: "Settings", actions: ["view", "edit"] },
+  { module: "emails", label: "Emails", actions: ["view", "edit"] },
 ];
 
 export const allPermissions = permissionModules.flatMap((m) => m.actions.map((a) => `${m.module}.${a}`));
@@ -193,6 +196,20 @@ export const seedSettings: Settings = {
   lowStockAlerts: true, allowRegistration: false, minPasswordLength: 12, sessionTimeout: 30,
   require2fa: true, emailNotifications: false, systemNotifications: true, theme: "Obsidian",
 };
+
+/** Respaldo mientras carga Supabase (o si la tabla es inaccesible). El contenido real vive en public.email_templates. */
+export const seedEmailTemplates: EmailTemplate[] = [
+  {
+    id: "welcome", updatedAt: null,
+    subject: "Bienvenido a InfiniHon",
+    body: "Hola, {{firstName}}.\n\nSoy Zuri, la asistente virtual de la plataforma InfiniHon. Quería darte una bienvenida personal ahora que ya tienes acceso a tu cuenta.\n\nDesde tu portal puedes dar seguimiento a tus solicitudes y pedidos, gestionar tus datos y resolver dudas sobre nuestros servicios. Y si en algún momento necesitas ayuda, solo abre el ícono de chat dentro de tu cuenta, con gusto te atiendo ahí mismo.\n\nUn gusto tenerte con nosotros.",
+  },
+  {
+    id: "verification_code", updatedAt: null,
+    subject: "Tu código de verificación de InfiniHon",
+    body: "Hola, {{firstName}}.\n\nUsa este código para verificar tu cuenta de InfiniHon:\n\n{{code}}\n\nEste código vence en 10 minutos. Si tú no solicitaste esto, puedes ignorar este correo con confianza: tu cuenta sigue segura.",
+  },
+];
 
 export const integrations: { name: string; category: string; description: string; status: "Connected" | "Not configured" | "Unavailable" }[] = [
   { name: "Payment gateway", category: "Payment", description: "Card and online payments for orders.", status: "Not configured" },

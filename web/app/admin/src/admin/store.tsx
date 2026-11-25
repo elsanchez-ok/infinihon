@@ -1,10 +1,10 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import * as seed from "./data";
-import type { Activity, Administrator, Category, ContentItem, Customer, Movement, Notice, Order, PlatformUser, Product, Role, Service, Settings, SupportTicket } from "./data";
+import type { Activity, Administrator, Category, ContentItem, Customer, EmailTemplate, Movement, Notice, Order, PlatformUser, Product, Role, Service, Settings, SupportTicket } from "./data";
 import {
   fetchAdminData, fetchTicketsForAdmin, replyToTicket, upsertCatalogProduct, createCatalogProduct, deleteCatalogProduct, upsertCatalogCategory, deleteCatalogCategory,
   lastRawItems, isSuperAdmin, upsertCatalogService, createCatalogService, deleteCatalogService, upsertOrder, deleteOrder, upsertCustomer,
-  upsertRole, deleteRole, upsertContent, deleteContent, insertActivity, upsertNotice, insertMovement, saveSettings, updateProfileById,
+  upsertRole, deleteRole, upsertContent, deleteContent, insertActivity, upsertNotice, insertMovement, saveSettings, saveEmailTemplate, updateProfileById,
 } from "./supabaseSync";
 import type { SessionUser } from "../lib/supabase";
 
@@ -19,6 +19,7 @@ export interface AdminData {
   products: Product[]; categories: Category[]; services: Service[]; orders: Order[]; customers: Customer[];
   users: PlatformUser[]; admins: Administrator[]; roles: Role[]; content: ContentItem[];
   activity: Activity[]; notifications: Notice[]; movements: Movement[]; settings: Settings; tickets: SupportTicket[];
+  emailTemplates: EmailTemplate[];
 }
 
 type Tone = "success" | "error" | "info";
@@ -54,6 +55,7 @@ export function AdminProvider({ children, pathname, navigate, user }: { children
     products: seed.seedProducts, categories: seed.seedCategories, services: seed.seedServices, orders: seed.seedOrders,
     customers: seed.seedCustomers, users: seed.seedUsers, admins: seed.seedAdmins, roles: seed.seedRoles,
     content: seed.seedContent, activity: seed.seedActivity, notifications: [], movements: [], settings: seed.seedSettings, tickets: [],
+    emailTemplates: seed.seedEmailTemplates,
   }));
   const [roleId, setRoleId] = useState("super");
   const [toasts, setToasts] = useState<Toast[]>([]);
@@ -95,6 +97,7 @@ export function AdminProvider({ children, pathname, navigate, user }: { children
           admins: remote.admins,
           settings: remote.settings ?? d.settings,
           tickets: remote.tickets,
+          emailTemplates: remote.emailTemplates.length ? remote.emailTemplates : d.emailTemplates,
         }));
         setRoleId(remote.meRoleId ?? "super");
         setBackend("online");
@@ -269,6 +272,16 @@ export function AdminProvider({ children, pathname, navigate, user }: { children
     if (JSON.stringify(prev) !== JSON.stringify(next)) void saveSettings(next).catch(() => undefined);
   }, []);
 
+  const syncEmailTemplates = useCallback((prev: EmailTemplate[], next: EmailTemplate[]) => {
+    const before = new Map(prev.map((t) => [t.id, t] as const));
+    for (const t of next) {
+      const was = before.get(t.id);
+      if (was && (was.subject !== t.subject || was.body !== t.body)) {
+        void saveEmailTemplate(t).catch(() => toast(`No se pudo guardar la plantilla “${t.subject}”.`, "error"));
+      }
+    }
+  }, [toast]);
+
   const syncMovement = useCallback((prev: Movement[], next: Movement[]) => {
     const ids = new Set(prev.map((m) => m.id));
     for (const m of next) {
@@ -298,6 +311,7 @@ export function AdminProvider({ children, pathname, navigate, user }: { children
       if (key === "notifications") syncNotice(current.notifications as Notice[], nextValue as Notice[]);
       if (key === "settings") syncSettings(current.settings as Settings, nextValue as Settings);
       if (key === "movements") syncMovement(current.movements as Movement[], nextValue as Movement[]);
+      if (key === "emailTemplates") syncEmailTemplates(current.emailTemplates as EmailTemplate[], nextValue as EmailTemplate[]);
       const next = { ...current, [key]: nextValue };
       if (log) {
         next.activity = [{ id: newId("ac"), actor: user?.email ?? SESSION_ACTOR, date: new Date().toISOString(), demo: false, ...log }, ...current.activity];
@@ -305,7 +319,7 @@ export function AdminProvider({ children, pathname, navigate, user }: { children
       }
       return next;
     });
-  }, [syncProduct, syncCategory, syncService, syncOrder, syncCustomer, syncRole, syncContent, syncUser, syncAdmin, syncNotice, syncSettings, syncMovement, syncActivityNew, user]);
+  }, [syncProduct, syncCategory, syncService, syncOrder, syncCustomer, syncRole, syncContent, syncUser, syncAdmin, syncNotice, syncSettings, syncMovement, syncEmailTemplates, syncActivityNew, user]);
 
   const notify = useCallback((notice: Omit<Notice, "id" | "date" | "read">) => {
     const full: Notice = { id: newId("n"), date: new Date().toISOString(), read: false, ...notice };

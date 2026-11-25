@@ -12,7 +12,7 @@
  */
 import { getSessionUser, getAccessToken, sb, SupabaseError, authSignOut, uploadStorageFile, deleteStorageFile, type SessionUser } from "../lib/supabase";
 import type {
-  Activity, Administrator, Category, ContentItem, Customer, Doc, Movement, Notice, Order, OrderStatus, PlatformUser,
+  Activity, Administrator, Category, ContentItem, Customer, Doc, EmailTemplate, Movement, Notice, Order, OrderStatus, PlatformUser,
   Product, PublishStatus, Role, Service, Settings, Spec, SupportTicket,
 } from "./data";
 
@@ -489,6 +489,27 @@ export async function fetchSettings(): Promise<Settings | null> {
   return rows?.[0]?.data ?? null;
 }
 
+/* ─────────── Correos automáticos (public.email_templates) ─────────── */
+
+interface RemoteEmailTemplate { id: string; subject: string; body: string; updated_at: string }
+
+export async function fetchEmailTemplates(): Promise<EmailTemplate[]> {
+  const token = await getAccessToken();
+  if (!token) throw new SupabaseError(401, "sin sesión");
+  const rows = await sb("/rest/v1/email_templates?select=id,subject,body,updated_at", { token }) as RemoteEmailTemplate[];
+  return (rows ?? []).map((r) => ({ id: r.id as EmailTemplate["id"], subject: r.subject, body: r.body, updatedAt: r.updated_at }));
+}
+
+/** La fila ya existe (sembrada por la migración): solo se actualiza, nunca se crea desde el panel. */
+export async function saveEmailTemplate(t: EmailTemplate): Promise<void> {
+  const token = await withToken();
+  const me = await currentSession();
+  await sb(`/rest/v1/email_templates?id=eq.${encodeURIComponent(t.id)}`, {
+    method: "PATCH", token,
+    body: { subject: t.subject, body: t.body, updated_at: new Date().toISOString(), updated_by: me?.id ?? null },
+  });
+}
+
 interface RemoteProfile {
   id: string; email: string; first_name: string; last_name: string; is_admin: boolean;
   platform_status: string; last_active: string | null; last_login: string | null;
@@ -526,13 +547,13 @@ export async function fetchProfiles(): Promise<{ users: PlatformUser[]; admins: 
 export async function fetchAdminData(): Promise<{
   products: Product[]; categories: Category[]; services: Service[]; orders: Order[]; customers: Customer[];
   roles: Role[]; content: ContentItem[]; activity: Activity[]; notifications: Notice[]; movements: Movement[]; tickets: SupportTicket[];
-  users: PlatformUser[]; admins: Administrator[]; settings: Settings | null; meRoleId: string | null;
+  users: PlatformUser[]; admins: Administrator[]; settings: Settings | null; meRoleId: string | null; emailTemplates: EmailTemplate[];
 }> {
   const safe = async <T,>(fn: () => Promise<T>, fallback: T): Promise<T> => {
     try { return await fn(); } catch { return fallback; }
   };
 
-  const [catalog, orders, customers, roles, content, activity, notifications, movements, tickets, settings, profiles] = await Promise.all([
+  const [catalog, orders, customers, roles, content, activity, notifications, movements, tickets, settings, profiles, emailTemplates] = await Promise.all([
     safe(fetchCatalog, { products: [], categories: [], services: [] }),
     safe(fetchOrders, []),
     safe(fetchCustomers, []),
@@ -544,9 +565,10 @@ export async function fetchAdminData(): Promise<{
     safe(() => fetchTicketsForAdmin(), []),
     safe(fetchSettings, null),
     safe(fetchProfiles, { users: [], admins: [], meRoleId: null }),
+    safe(fetchEmailTemplates, []),
   ]);
 
-  return { ...catalog, orders, customers, roles, content, activity, notifications, movements, tickets, settings, ...profiles };
+  return { ...catalog, orders, customers, roles, content, activity, notifications, movements, tickets, settings, ...profiles, emailTemplates };
 }
 
 /* ─────────── Módulos: escritura ─────────── */

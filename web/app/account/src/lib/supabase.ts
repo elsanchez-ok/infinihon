@@ -11,6 +11,7 @@ const LS_KEY = "infinihon.auth.session";
 const SS_KEY = "infinihon.auth.session.mem";
 
 interface Tokens { access_token: string; refresh_token: string; expires_at: number }
+export type PendingTokens = Tokens;
 export interface AuthUser { id: string; email: string; firstName: string; lastName: string }
 
 export class SupabaseError extends Error {
@@ -129,27 +130,39 @@ function mapAuthError(status: number): AuthOutcome {
   return { ok: false, reason: "invalid-credentials" };
 }
 
-export async function authSignIn(email: string, password: string, remember: boolean): Promise<AuthOutcome> {
+/**
+ * Guarda en el navegador unos tokens ya obtenidos (login o registro). Se
+ * expone por separado de `authSignIn`/`authSignUp` a propósito: entre
+ * obtener los tokens y persistirlos, el llamador (authService) decide si la
+ * cuenta ya está verificada (ver `isEmailVerified`) — si no lo está, NO se
+ * debe llamar a esta función todavía.
+ */
+export function persistSession(tokens: Tokens, remember: boolean) {
+  writeStorage(tokens, remember);
+}
+
+export async function authSignIn(email: string, password: string): Promise<AuthOutcome & { tokens?: Tokens }> {
   try {
     const j = await sb("/auth/v1/token?grant_type=password", { method: "POST", body: { email, password, gotrue_meta_security: { captcha_token: undefined } } });
     const t: Tokens = { access_token: j.access_token, refresh_token: j.refresh_token, expires_at: Date.now() + (j.expires_in ?? 3600) * 1000 };
-    writeStorage(t, remember);
-    return { ok: true };
+    return { ok: true, tokens: t };
   } catch (e) {
     return e instanceof SupabaseError ? mapAuthError(e.status) : { ok: false, reason: "network" };
   }
 }
 
-export async function authSignUp(input: { firstName: string; lastName: string; email: string; password: string }): Promise<AuthOutcome & { session: boolean }> {
+export async function authSignUp(input: { firstName: string; lastName: string; email: string; password: string }): Promise<AuthOutcome & { session: boolean; tokens?: Tokens }> {
   try {
     const j = await sb("/auth/v1/signup", {
       method: "POST",
       body: { email: input.email, password: input.password, data: { firstName: input.firstName, lastName: input.lastName } },
     });
     if (j?.access_token && j?.refresh_token) {
-      // confirmación de correo desactivada: sesión inmediata
-      writeStorage({ access_token: j.access_token, refresh_token: j.refresh_token, expires_at: Date.now() + (j.expires_in ?? 3600) * 1000 }, true);
-      return { ok: true, session: true };
+      // confirmación de correo (de Supabase) desactivada: tokens inmediatos.
+      // No se persisten aún — ver `persistSession` y el flujo de verificación
+      // por código de 6 dígitos en authService.register.
+      const t: Tokens = { access_token: j.access_token, refresh_token: j.refresh_token, expires_at: Date.now() + (j.expires_in ?? 3600) * 1000 };
+      return { ok: true, session: true, tokens: t };
     }
     return { ok: true, session: false }; // requiere confirmar correo
   } catch (e) {
@@ -189,5 +202,44 @@ export async function isAdminUser(token?: string | null): Promise<boolean> {
     return Boolean(rows?.[0]?.is_admin);
   } catch {
     return false;
+  }
+}
+
+/* ─────────── Verificación de correo por código de 6 dígitos ─────────── */
+
+/** Consulta si profiles.email_verified_at ya está marcado para esta sesión. */
+export async function isEmailVerified(token: string): Promise<boolean> {
+  try {
+    const rows = (await sb("/rest/v1/profiles?select=email_verified_at&limit=1", { token })) as { email_verified_at?: string | null }[];
+    return Boolean(rows?.[0]?.email_verified_at);
+  } catch {
+    return false;
+  }
+}
+
+/** Pide a la función de servidor que genere y envíe un código nuevo de 6 dígitos. */
+export async function sendVerificationCode(token: string): Promise<boolean> {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/send-verification-code`, {
+      method: "POST",
+      headers: { apikey: PUBLISHABLE_KEY, Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
+export type VerifyCodeReason = "invalid-code" | "expired" | "too-many-attempts" | "rate-limited" | "network";
+export type VerifyCodeOutcome = { ok: true } | { ok: false; reason: VerifyCodeReason };
+
+/** Confirma el código de 6 dígitos ingresado por el usuario. */
+export async function verifyEmailCode(token: string, code: string): Promise<VerifyCodeOutcome> {
+  try {
+    const j = await sb("/functions/v1/verify-email-code", { method: "POST", token, body: { code } }) as { ok?: boolean; reason?: VerifyCodeReason };
+    if (j?.ok) return { ok: true };
+    return { ok: false, reason: j?.reason ?? "invalid-code" };
+  } catch {
+    return { ok: false, reason: "network" };
   }
 }

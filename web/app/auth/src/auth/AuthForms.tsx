@@ -1,5 +1,5 @@
-import { useState, type FormEvent } from "react";
-import { authService, type AuthFailureReason } from "./authService";
+import { useEffect, useState, type FormEvent } from "react";
+import { authService, type AuthFailureReason, type PendingTokens } from "./authService";
 import { getSafeRedirect, getAccessToken, triggerWelcomeEmail } from "../lib/supabase";
 import { AuthFeedback, AuthLink, FormField, PasswordField, PasswordStrength, ServiceNotice, SocialAuth, SubmitButton } from "./AuthFields";
 import {
@@ -23,7 +23,87 @@ function fireWelcomeEmail() {
 }
 
 type Navigate = (to: string) => void;
-type SubmitState = "idle" | "loading" | "success" | "error";
+type SubmitState = "idle" | "loading" | "success" | "error" | "verify" | "verified";
+
+function verifyFailureText(reason: "invalid-code" | "expired" | "too-many-attempts" | "rate-limited" | "network"): string {
+  if (reason === "expired") return 'El código venció. Pulsa "Reenviar código" para recibir uno nuevo.';
+  if (reason === "too-many-attempts") return 'Demasiados intentos con este código. Pulsa "Reenviar código" para recibir uno nuevo.';
+  if (reason === "rate-limited") return "Espera un poco antes de pedir otro código.";
+  if (reason === "network") return "No pudimos conectar con el servicio. Comprueba tu conexión e inténtalo de nuevo.";
+  return "Código incorrecto. Revísalo e inténtalo de nuevo.";
+}
+
+/** Paso intermedio obligatorio tras login/registro por correo y contraseña:
+ * confirma el código de 6 dígitos enviado al correo antes de dar acceso. */
+function VerifyCodeStep({ email, pendingTokens, remember, onVerified }: {
+  email: string;
+  pendingTokens: PendingTokens;
+  remember: boolean;
+  onVerified: (redirect: string) => void;
+}) {
+  const [code, setCode] = useState("");
+  const [state, setState] = useState<"idle" | "loading" | "error">("idle");
+  const [message, setMessage] = useState("");
+  const [resendState, setResendState] = useState<"idle" | "sending" | "sent">("idle");
+  const [cooldown, setCooldown] = useState(0);
+
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const timer = window.setTimeout(() => setCooldown((c) => c - 1), 1000);
+    return () => window.clearTimeout(timer);
+  }, [cooldown]);
+
+  async function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setMessage("");
+    if (!/^\d{6}$/.test(code)) { setState("error"); setMessage("Ingresa los 6 dígitos del código."); return; }
+    setState("loading");
+    try {
+      const result = await authService.confirmVerification(pendingTokens, code, remember);
+      if (result.ok) { onVerified(result.redirect); return; }
+      setState("error");
+      setMessage(verifyFailureText(result.reason));
+    } catch {
+      setState("error");
+      setMessage(verifyFailureText("network"));
+    }
+  }
+
+  async function resend() {
+    setResendState("sending");
+    const ok = await authService.resendVerification(pendingTokens);
+    setResendState(ok ? "sent" : "idle");
+    setCooldown(30);
+    window.setTimeout(() => setResendState("idle"), 4000);
+  }
+
+  return (
+    <div className="auth-view">
+      <FormHeading step="02" title="Verifica tu cuenta." description={`Enviamos un código de 6 dígitos a ${email}. Ingrésalo para activar tu cuenta.`} />
+      <form className="auth-form" onSubmit={submit} noValidate>
+        <FormField
+          id="verify-code" label="Código de verificación" type="text" inputMode="numeric" autoComplete="one-time-code"
+          placeholder="123456" maxLength={6} value={code} required disabled={state === "loading"}
+          onChange={(event) => { setMessage(""); setCode(event.target.value.replace(/\D/g, "").slice(0, 6)); }}
+        />
+        {message && <AuthFeedback type="error">{message}</AuthFeedback>}
+        <SubmitButton pending={state === "loading"} pendingText="Verificando...">Verificar código</SubmitButton>
+      </form>
+      <div className="auth-form-switch">
+        ¿No te llegó?{" "}
+        <button
+          type="button"
+          className="auth-inline-link"
+          disabled={resendState === "sending" || cooldown > 0}
+          onClick={resend}
+          style={{ background: "none", border: "none", padding: 0, font: "inherit", cursor: cooldown > 0 || resendState === "sending" ? "default" : "pointer" }}
+        >
+          {resendState === "sending" ? "Enviando..." : resendState === "sent" ? "Código reenviado." : cooldown > 0 ? `Reenviar código (${cooldown}s)` : "Reenviar código"}
+        </button>
+      </div>
+    </div>
+  );
+}
 
 function useValidatedForm<T extends object>(initial: T, validator: (values: T) => FieldErrors<T>, prefix: string) {
   const [values, setValues] = useState<T>(initial);
@@ -118,6 +198,7 @@ export function LoginForm({ navigate, onSocialAuthError }: { navigate: Navigate;
   const [state, setState] = useState<SubmitState>("idle");
   const [message, setMessage] = useState("");
   const [providerLoading, setProviderLoading] = useState<"google" | "microsoft" | null>(null);
+  const [verifyInfo, setVerifyInfo] = useState<{ tokens: PendingTokens; remember: boolean; email: string } | null>(null);
 
   // Los fallos de login social se avisan con el aviso flotante fuera de la
   // tarjeta (ver AuthApp), no con el mensaje inline del formulario.
@@ -125,7 +206,7 @@ export function LoginForm({ navigate, onSocialAuthError }: { navigate: Navigate;
     setProviderLoading("microsoft");
     try {
       const result = await authService.oauth("microsoft");
-      if (result.ok) {
+      if (result.ok && !("needsVerification" in result)) {
         setState("success");
         if (result.redirect) { fireWelcomeEmail(); window.setTimeout(() => window.location.assign(result.redirect!), 500); }
       } else { onSocialAuthError(); }
@@ -140,7 +221,7 @@ export function LoginForm({ navigate, onSocialAuthError }: { navigate: Navigate;
     setProviderLoading("google");
     try {
       const result = await authService.oauthIdToken("google", idToken, nonce);
-      if (result.ok) {
+      if (result.ok && !("needsVerification" in result)) {
         setState("success");
         if (result.redirect) { fireWelcomeEmail(); window.setTimeout(() => window.location.assign(result.redirect!), 500); }
       } else { onSocialAuthError(); }
@@ -162,6 +243,11 @@ export function LoginForm({ navigate, onSocialAuthError }: { navigate: Navigate;
         password: form.values.password,
         remember: form.values.remember,
       });
+      if (result.ok && "needsVerification" in result) {
+        setVerifyInfo({ tokens: result.pendingTokens, remember: result.remember, email: form.values.email.trim() });
+        setState("verify");
+        return;
+      }
       if (result.ok) {
         setState("success");
         // sesión real: ve al portal correspondiente (cuenta o admin)
@@ -172,6 +258,15 @@ export function LoginForm({ navigate, onSocialAuthError }: { navigate: Navigate;
       setState("error");
       setMessage(failureText("network", "login"));
     }
+  }
+
+  if (state === "verify" && verifyInfo) {
+    return (
+      <VerifyCodeStep
+        email={verifyInfo.email} pendingTokens={verifyInfo.tokens} remember={verifyInfo.remember}
+        onVerified={(redirect) => { setState("success"); fireWelcomeEmail(); window.setTimeout(() => window.location.assign(redirect), 500); }}
+      />
+    );
   }
 
   if (state === "success") return <Completion title="Sesión iniciada." description="Tu acceso se verificó correctamente." navigate={navigate} destination="/" action="Continuar al sitio" />;
@@ -217,6 +312,7 @@ export function RegisterForm({ navigate }: { navigate: Navigate }) {
   const [message, setMessage] = useState("");
   const [passwordFocused, setPasswordFocused] = useState(false);
   const [showTermsInfo, setShowTermsInfo] = useState(false);
+  const [verifyInfo, setVerifyInfo] = useState<{ tokens: PendingTokens; remember: boolean; email: string } | null>(null);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -230,6 +326,11 @@ export function RegisterForm({ navigate }: { navigate: Navigate }) {
         email: form.values.email.trim(),
         password: form.values.password,
       });
+      if (result.ok && "needsVerification" in result) {
+        setVerifyInfo({ tokens: result.pendingTokens, remember: result.remember, email: form.values.email.trim() });
+        setState("verify");
+        return;
+      }
       if (result.ok && "session" in result && result.session) {
         setState("success");
         fireWelcomeEmail();
@@ -241,6 +342,28 @@ export function RegisterForm({ navigate }: { navigate: Navigate }) {
       setState("error");
       setMessage(failureText("network", "register"));
     }
+  }
+
+  if (state === "verify" && verifyInfo) {
+    return (
+      <VerifyCodeStep
+        email={verifyInfo.email} pendingTokens={verifyInfo.tokens} remember={verifyInfo.remember}
+        onVerified={(redirect) => { fireWelcomeEmail(); window.setTimeout(() => window.location.assign(redirect), 500); setState("verified"); }}
+      />
+    );
+  }
+
+  if (state === "verified") {
+    // destination="/" fuerza un <a href> normal (en vez de la navegación
+    // interna del SPA vía `navigate`): el redirect real ya está en curso con
+    // window.location.assign de arriba, y puede cruzar a otra app (account,
+    // admin), no solo a rutas dentro de /auth.
+    return (
+      <Completion
+        title="Cuenta verificada." description="Tu cuenta quedó activa. Te llevamos a tu portal."
+        navigate={navigate} destination="/" action="Continuar"
+      />
+    );
   }
 
   if (state === "success") {
