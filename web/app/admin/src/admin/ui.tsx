@@ -105,12 +105,12 @@ export function Panel({ title, description, action, children, className, padded 
   return (
     <section className={cn("rounded-xl border border-white/[0.07] bg-ink/80", className)}>
       {(title || action) && (
-        <div className="flex items-start justify-between gap-4 border-b border-white/[0.06] px-5 py-4">
+        <div className="flex flex-col gap-3 border-b border-white/[0.06] px-5 py-4 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
           <div className="min-w-0">
             {title && <h2 className="text-sm font-bold text-snow">{typeof title === "string" ? t(title) : title}</h2>}
             {description && <p className="mt-0.5 text-xs text-steel">{typeof description === "string" ? t(description) : description}</p>}
           </div>
-          {action}
+          {action && <div className="flex flex-wrap items-center gap-2">{action}</div>}
         </div>
       )}
       <div className={padded ? "p-5" : ""}>{children}</div>

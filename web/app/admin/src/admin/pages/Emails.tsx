@@ -48,10 +48,10 @@ function TemplateEditor({ template, editable }: { template: EmailTemplate; edita
       title={t(meta.title)}
       description={t(meta.description)}
       action={editable && (
-        <div className="flex items-center gap-2">
+        <>
           <Button variant="ghost" disabled={!dirty} onClick={discard}>{t("Discard")}</Button>
           <Button variant="primary" icon={Save} disabled={!dirty} onClick={save}>{t("Save changes")}</Button>
-        </div>
+        </>
       )}
     >
       <fieldset disabled={!editable} className="space-y-4">

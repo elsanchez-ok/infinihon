@@ -242,11 +242,11 @@ export function RolesPage() {
         <Panel padded={false} title={<span className="flex items-center gap-2">{t(role.name)}{role.locked && <span className="font-mono text-[10px] font-normal uppercase tracking-[0.12em] text-volt">{t("Full access · locked")}</span>}</span>}
           description={`${perms.length} ${t("of")} ${permissionModules.reduce((s, m) => s + m.actions.length, 0)} ${t("permissions")}`}
           action={editable && (
-            <div className="flex gap-2">
+            <>
               {!["admin", "manager", "editor", "support"].includes(role.id) && <Button size="sm" variant="ghost" icon={Trash2} disabled={assigned(role.id) > 0} title={assigned(role.id) ? t("Reassign administrators first") : undefined} onClick={() => setToDelete(role)}>Delete</Button>}
               <Button size="sm" variant="ghost" disabled={!draft} onClick={() => setDraft(null)}>Discard</Button>
               <Button size="sm" variant="primary" icon={Check} disabled={!draft} onClick={() => { mutate("roles", (l) => l.map((r) => r.id === role.id ? { ...r, permissions: perms } : r), { action: "Changed permissions", module: "Roles", target: role.name }); setDraft(null); toast(`Permissions updated for ${role.name}.`); }}>Save</Button>
-            </div>
+            </>
           )}>
           <div className="divide-y divide-white/[0.05]">
             {permissionModules.map((m) => {
