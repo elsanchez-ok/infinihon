@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import {
   Activity, BarChart3, Bell, Boxes, Briefcase, ChevronDown, Cloud, FileText, FolderTree, Gauge, HelpCircle, KeyRound,
-  LayoutDashboard, LogOut, Menu, Network, Package, Plug, Search, Server, Settings, Shield, ShieldCheck, ShoppingCart,
+  LayoutDashboard, LogOut, Mail, Menu, Network, Package, Plug, Search, Server, Settings, Shield, ShieldCheck, ShoppingCart,
   User, UserCog, Users, UsersRound, X, type LucideIcon,
 } from "lucide-react";
 import { cn } from "../utils/cn";
@@ -44,6 +44,9 @@ export const navGroups: { label: string; items: NavItem[] }[] = [
     { label: "Activity Log", to: "/admin/activity", icon: Activity, permission: "activity.view" },
     { label: "Security", to: "/admin/security", icon: Shield, permission: "security.view" },
     { label: "Settings", to: "/admin/settings", icon: Settings, permission: "settings.view" },
+  ] },
+  { label: "Emails", items: [
+    { label: "Automated emails", to: "/admin/emails", icon: Mail, permission: "emails.view" },
   ] },
 ];
 

@@ -31,6 +31,12 @@
 // "welcome-email") y se actualiza con la Supabase CLI o el MCP de Supabase,
 // no con el build de este repo.
 //
+// Plantilla editable: el asunto y el cuerpo (parrafos de texto, separados
+// por linea en blanco) salen de public.email_templates (id='welcome'),
+// editable desde /admin/emails. El resto del diseno (logo, imagen de Zuri,
+// boton "Ir a mi cuenta") es fijo. Si la fila no existe, se usa un texto de
+// reserva igual al original para que el flujo nunca se rompa.
+//
 // Secrets requeridos en el proyecto de Supabase:
 //   GMAIL_CLIENT_ID, GMAIL_CLIENT_SECRET, GMAIL_REFRESH_TOKEN,
 //   GMAIL_SENDER_ADDRESS (infinihon.hn@gmail.com)
@@ -99,6 +105,31 @@ function encodeHeaderWord(text: string): string {
   const bytes = new TextEncoder().encode(text);
   return `=?UTF-8?B?${base64UrlEncode(bytes).replace(/-/g, "+").replace(/_/g, "/")}?=`;
 }
+
+function renderTemplate(body: string, vars: Record<string, string>): string {
+  let out = body;
+  for (const [key, value] of Object.entries(vars)) {
+    if (!value) {
+      // Quita con elegancia ", {{key}}" cuando el valor viene vacío
+      // (p.ej. "Hola, {{firstName}}." -> "Hola.") en vez de dejar ", .".
+      out = out.replace(new RegExp(`,?\\s*\\{\\{\\s*${key}\\s*\\}\\}`, "g"), "");
+    } else {
+      out = out.replace(new RegExp(`\\{\\{\\s*${key}\\s*\\}\\}`, "g"), value);
+    }
+  }
+  return out;
+}
+
+const DEFAULT_SUBJECT = "Bienvenido a InfiniHon";
+const DEFAULT_BODY = [
+  "Hola, {{firstName}}.",
+  "",
+  "Soy Zuri, la asistente virtual de la plataforma InfiniHon. Quería darte una bienvenida personal ahora que ya tienes acceso a tu cuenta.",
+  "",
+  "Desde tu portal puedes dar seguimiento a tus solicitudes y pedidos, gestionar tus datos y resolver dudas sobre nuestros servicios. Y si en algún momento necesitas ayuda, solo abre el ícono de chat dentro de tu cuenta, con gusto te atiendo ahí mismo.",
+  "",
+  "Un gusto tenerte con nosotros.",
+].join("\n");
 
 async function sendGmail(to: string, subject: string, text: string, fromName?: string, html?: string): Promise<boolean> {
   const accessToken = await getGmailAccessToken();
@@ -215,20 +246,18 @@ Deno.serve(async (req: Request) => {
   if (!toEmail) return json({ ok: true, sent: false });
   const firstName = (claimed.first_name as string | null)?.trim() || "";
 
-  const greeting = firstName ? `Hola, ${firstName}.` : "Hola.";
+  const { data: template } = await admin.from("email_templates").select("subject, body").eq("id", "welcome").maybeSingle();
+  const subject = template?.subject || DEFAULT_SUBJECT;
+  const bodyTemplate = template?.body || DEFAULT_BODY;
+
+  const renderedBody = renderTemplate(bodyTemplate, { firstName });
+  const paragraphs = renderedBody.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+  const [greeting, ...restParagraphs] = paragraphs.length ? paragraphs : ["Hola."];
+
   const textLines = [
     greeting,
     "",
-    "Soy Zuri, la asistente virtual de la plataforma InfiniHon. Quería darte una",
-    "bienvenida personal ahora que ya tienes acceso a tu cuenta.",
-    "",
-    "Desde tu portal puedes dar seguimiento a tus solicitudes y pedidos, gestionar",
-    "tus datos y resolver dudas sobre nuestros servicios. Y si en algún momento",
-    "necesitas ayuda, solo abre el ícono de chat dentro de tu cuenta, con gusto",
-    "te atiendo ahí mismo.",
-    "",
-    "Un gusto tenerte con nosotros.",
-    "",
+    ...restParagraphs.flatMap((p) => [p, ""]),
     "Zuri",
     "Asistente de la plataforma InfiniHon",
   ];
@@ -246,12 +275,15 @@ Deno.serve(async (req: Request) => {
   const SITE_URL = "https://infinihon.vercel.app";
   const BG_URL = `${SITE_URL}/assets/email-bg.jpg`;
   const safeGreeting = escapeHtml(greeting);
+  const htmlRestParagraphs = restParagraphs
+    .map((p) => `<p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;color:#333C46;">${escapeHtml(p)}</p>`)
+    .join("\n                ");
   const html = `<!doctype html>
 <html lang="es">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Bienvenido a InfiniHon</title>
+    <title>${escapeHtml(subject)}</title>
   </head>
   <body style="margin:0;padding:0;background-color:#0B1E3A;">
     <!--[if mso]>
@@ -286,12 +318,7 @@ Deno.serve(async (req: Request) => {
             <tr>
               <td style="padding:16px 32px 8px 32px;font-family:Arial,Helvetica,sans-serif;">
                 <p style="margin:0 0 16px 0;font-size:18px;font-weight:bold;text-align:center;color:#0A0F14;">${safeGreeting}</p>
-                <p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;color:#333C46;">
-                  Soy Zuri, la asistente virtual de la plataforma InfiniHon. Quería darte una bienvenida personal ahora que ya tienes acceso a tu cuenta.
-                </p>
-                <p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;color:#333C46;">
-                  Desde tu portal puedes dar seguimiento a tus solicitudes y pedidos, gestionar tus datos y resolver dudas sobre nuestros servicios. Y si en algún momento necesitas ayuda, solo abre el ícono de chat dentro de tu cuenta, con gusto te atiendo ahí mismo.
-                </p>
+                ${htmlRestParagraphs}
               </td>
             </tr>
             <tr>
@@ -301,7 +328,6 @@ Deno.serve(async (req: Request) => {
             </tr>
             <tr>
               <td style="padding:0 32px 32px 32px;font-family:Arial,Helvetica,sans-serif;">
-                <p style="margin:0;font-size:15px;line-height:1.6;color:#333C46;">Un gusto tenerte con nosotros.</p>
                 <p style="margin:16px 0 0 0;font-size:15px;line-height:1.6;color:#0A0F14;font-weight:bold;">Zuri</p>
                 <p style="margin:0;font-size:13px;line-height:1.5;color:#8B96A5;">Asistente de la plataforma InfiniHon</p>
               </td>
@@ -324,6 +350,6 @@ Deno.serve(async (req: Request) => {
   </body>
 </html>`;
 
-  const sent = await sendGmail(toEmail, "Bienvenido a InfiniHon", textLines.join("\n"), "InfiniHon", html);
+  const sent = await sendGmail(toEmail, subject, textLines.join("\n"), "InfiniHon", html);
   return json({ ok: true, sent });
 });

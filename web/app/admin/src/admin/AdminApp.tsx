@@ -10,6 +10,7 @@ import { CategoriesPage, CustomerDetail, CustomersPage, InventoryPage, OrderDeta
 import { AdministratorsPage, ContentPage, RolesPage, ServicesPage, UsersPage } from "./pages/Platform";
 import { CloudPage, InfrastructurePage, IntegrationsPage, MonitoringPage, ServersPage } from "./pages/Infrastructure";
 import { ActivityPage, NotificationsPage, SecurityPage, SettingsPage } from "./pages/System";
+import { EmailsPage } from "./pages/Emails";
 import { ProfilePage } from "./pages/Profile";
 import { SupportTicketsPage } from "./pages/SupportTickets";
 import { LocaleProvider } from "./locale";
@@ -49,6 +50,7 @@ function Router({ pathname, navigate }: { pathname: string; navigate: (to: strin
     case "security": return <SecurityPage />;
     case "profile": return <ProfilePage />;
     case "settings": return <SettingsPage />;
+    case "emails": return <EmailsPage />;
     default: return <NotFound navigate={navigate} />;
   }
 }
