@@ -18,7 +18,7 @@ function SystemDiagram() {
       <div className="absolute inset-0 opacity-60 [background-image:linear-gradient(rgba(139,150,165,.06)_1px,transparent_1px),linear-gradient(90deg,rgba(139,150,165,.06)_1px,transparent_1px)] [background-size:28px_28px] [mask-image:radial-gradient(ellipse_at_70%_50%,#000,transparent_75%)]" aria-hidden />
       <div className="relative grid gap-6 p-5 lg:grid-cols-[260px_1fr] lg:p-6">
         <div>
-          <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-volt">InfiniHon Corp. Control Center</div>
+          <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-volt">{t("InfiniHon Corp. Control Center")}</div>
           <div className="mt-4 font-mono text-[10px] uppercase tracking-[0.18em] text-steel">{t("System")}</div>
           <div className="mt-2 h-px bg-white/[0.08]" />
           <ul className="mt-2">

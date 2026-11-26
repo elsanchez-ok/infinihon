@@ -60,6 +60,7 @@ export function Mark({ collapsed }: { collapsed?: boolean }) {
   // Con la barra lateral colapsada (solo íconos, sin espacio para el
   // wordmark completo) se usa el isotipo cuadrado en vez del logo con
   // texto, para que no se vea apretado en el riel angosto.
+  const { t } = useLocale();
   return (
     <span className={cn("flex flex-col items-center gap-1.5", collapsed ? "" : "w-max")}>
       {collapsed ? (
@@ -68,7 +69,7 @@ export function Mark({ collapsed }: { collapsed?: boolean }) {
         <img src="/assets/infinihon.png" alt="InfiniHon Corp." className="h-8 w-auto shrink-0" />
       )}
       {!collapsed && (
-        <span className="block max-w-[200px] text-center font-mono text-[7.5px] uppercase leading-[1.7] tracking-[0.22em] text-volt/90">Infrastructure · Innovation · Honduras</span>
+        <span className="block max-w-[200px] text-center font-mono text-[7.5px] uppercase leading-[1.7] tracking-[0.22em] text-volt/90">{t("Infrastructure · Innovation · Honduras")}</span>
       )}
     </span>
   );
